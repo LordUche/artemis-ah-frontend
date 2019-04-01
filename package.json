@@ -4,9 +4,9 @@
   "description": "Authors Haven - A Social platform for the creative at heart.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --mode development",
+    "start": "webpack --mode production",
     "build": "webpack --mode production",
-    "start:dev": "webpack-dev-server --mode development",
+    "start:dev": "webpack-dev-server --mode development --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
