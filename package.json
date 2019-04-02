@@ -7,8 +7,7 @@
     "start": "webpack --mode production --env.production",
     "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "build": "rm -rf dist && webpack --mode production --env.production",
-    "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build"
   },
   "repository": {
     "type": "git",
