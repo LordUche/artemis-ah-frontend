@@ -7,6 +7,9 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.css']
+  },
   module: {
     rules: [
       {
@@ -33,5 +36,8 @@ module.exports = {
       template: './public/index.html',
       filename: 'index.html'
     })
-  ]
+  ],
+  devServer: {
+    historyApiFallback: true
+  }
 };
