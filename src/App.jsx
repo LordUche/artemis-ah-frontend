@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const App = () => {
-  return(
-    <div>Welcome to Author's haven frontend</div>
-  )
-}
+/**
+ * @description Entry App file
+ * @return {HTMLElement} HTML div
+ */
+const App = () => <div>Welcome to Author&apos;s haven frontend</div>;
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById('app'));
 
-export default App; 
+export default App;
