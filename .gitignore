@@ -45,3 +45,6 @@ package-lock.json
 
 # Dist folder
 dist
+
+# E2E Reports
+tests/e2e/reports
