@@ -8,7 +8,7 @@
     "build": "rm -rf dist && webpack --mode production --env.production",
     "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
-    "test": "jest --coverage",
+    "test": "jest --coverage --no-cache",
     "nightwatch": "nightwatch -c tests/nightwatch.conf.js -e"
   },
   "repository": {
@@ -27,6 +27,7 @@
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",
+    "css-loader": "^2.1.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-loader": "^2.1.2",
@@ -36,7 +37,7 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.5.0",
-    "css-loader": "^2.1.1",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",

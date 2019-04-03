@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-//Views
+// Views
 import LandingPage from './views/LandingPage';
 import ProfilePage from './views/ProfilePage';
 import './assets/scss/style.scss';
