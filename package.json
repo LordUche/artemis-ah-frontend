@@ -4,9 +4,9 @@
   "description": "Authors Haven - A Social platform for the creative at heart.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --mode production",
-    "build": "rm -rf dist && webpack --mode production",
-    "start:dev": "webpack-dev-server --mode development --open",
+    "start": "webpack --mode production --env.production",
+    "build": "rm -rf dist && webpack --mode production --env.production",
+    "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
     "test": "jest --coverage",
     "nightwatch": "nightwatch -c tests/nightwatch.conf.js -e"
@@ -35,6 +35,8 @@
     "eslint-plugin-react": "^7.11.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.5.0",
+    "css-loader": "^2.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
@@ -43,6 +45,9 @@
     "webpack-dev-server": "^3.2.1"
   },
   "devDependencies": {
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
     "babel-jest": "^24.6.0",
     "chromedriver": "^2.46.0",
     "enzyme": "^3.9.0",
