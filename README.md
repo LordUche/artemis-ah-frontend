@@ -1,1 +1,3 @@
-Authors Haven - A Social platform for the creative at heart.
+# Authors Haven - A Social platform for the creative at heart.
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/beb931b0733dc5859f40/test_coverage)](https://codeclimate.com/github/andela/artemis-ah-frontend/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/beb931b0733dc5859f40/maintainability)](https://codeclimate.com/github/andela/artemis-ah-frontend/maintainability)
