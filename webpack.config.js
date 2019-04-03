@@ -1,40 +1,43 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin'); 
+const path = require('path');
 
 module.exports = env => {
   return {
-    entry: "./src/App.jsx",
+    entry: './src/App.jsx',
     output: {
-      filename: "bundle.js",
-      path: path.resolve(__dirname, "dist")
+      filename: 'bundle.js',
+      path: path.resolve(__dirname, 'dist')
     },
     resolve: {
-      extensions: [".js", ".jsx"]
+      extensions: ['.js', '.jsx', '.json', '.css']
     },
     module: {
       rules: [
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          use: {
-            loader: "babel-loader"
-          }
+          use: ['babel-loader', {
+            loader: 'eslint-loader',
+            options: {
+              useEslintrc: true,
+            }
+          }]
         },
         {
-          test:/\.html$/,
+          test: /\.html$/,
           use: {
-            loader: "html-loader",
+            loader: 'html-loader',
             options: { minimize: true }
           }
         },
         {
           test: /\.(css|scss)$/,
           use: [
-            "style-loader",
+            'style-loader',
             MiniCSSExtractPlugin.loader,
-            "css-loader",
-            "sass-loader"
+            'css-loader',
+            'sass-loader'
           ]
         }
       ]
@@ -42,12 +45,12 @@ module.exports = env => {
     devtool: env.production ? 'source-maps' : 'eval',
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./public/index.html",
-        filename: "./index.html"
+        template: './public/index.html',
+        filename: 'index.html'
       }),
       new MiniCSSExtractPlugin({
-        filename: "./style.css"
-      })    
+        filename: './style.css'
+      })   
     ],
     devServer: {
       historyApiFallback: true
