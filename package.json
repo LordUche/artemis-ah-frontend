@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack --mode production --env.production",
-    "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "build": "rm -rf dist && webpack --mode production --env.production",
-    "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build"
+    "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
+    "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
+    "test": "jest --coverage",
+    "nightwatch": "nightwatch -c tests/nightwatch.conf.js -e"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   },
   "homepage": "https://github.com/andela/artemis-ah-frontend#readme",
   "dependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
@@ -44,6 +47,14 @@
   "devDependencies": {
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1"
+    "style-loader": "^0.23.1",
+    "babel-jest": "^24.6.0",
+    "chromedriver": "^2.46.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.11.2",
+    "jest": "^24.6.0",
+    "jest-runner-nightwatch": "^0.3.2",
+    "nightwatch": "^1.0.19",
+    "selenium-server": "^3.141.59"
   }
 }
