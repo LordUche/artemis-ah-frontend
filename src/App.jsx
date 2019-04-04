@@ -14,6 +14,7 @@ import reducers from './redux/reducers';
 // Import views
 import LandingPage from './views/LandingPage';
 import ProfilePage from './views/ProfilePage';
+import defaultComponent from './components/Welcome';
 
 // Create Store
 const store = createStore(reducers, applyMiddleware(ReduxPromise));
@@ -28,6 +29,7 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/profile" component={ProfilePage} />
+        <Route component={defaultComponent} />
       </Switch>
     </BrowserRouter>
   </Provider>

@@ -6,10 +6,15 @@ module.exports = env => ({
   entry: './src/App.jsx',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.css']
+  },
+  node: {
+    net: 'empty',
+    fs: 'empty'
   },
   module: {
     rules: [
