@@ -36,6 +36,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.0",
+    "file-loader": "^3.0.1",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.5.0",
@@ -51,16 +52,16 @@
     "webpack-dev-server": "^3.2.1"
   },
   "devDependencies": {
-    "node-sass": "^4.11.0",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
     "babel-jest": "^24.6.0",
     "chromedriver": "^2.46.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",
     "jest": "^24.6.0",
-    "jest-runner-nightwatch": "^0.3.2",
     "nightwatch": "^1.0.19",
-    "selenium-server": "^3.141.59"
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
+    "selenium-server": "^3.141.59",
+    "style-loader": "^0.23.1",
+    "url-loader": "^1.1.2"
   }
 }
