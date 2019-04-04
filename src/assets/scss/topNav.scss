@@ -1,0 +1,92 @@
+$primary-color: #5863f8;
+
+html {
+ font-size: 10px;
+}
+
+body {
+ padding: 0;
+ color: $primary-color;
+ font-family: "Nunito", sans-serif;
+ margin: 0;
+}
+
+@mixin strip-link-style {
+ li {
+  list-style: none;
+  display: inline-block;
+  padding: 0 25px;
+
+  a {
+   text-decoration: none;
+   color: $primary-color;
+   display: inline-block;
+   font-weight: 600;
+   font-size: 1.6rem;
+   display: flex;
+   align-items: center;
+  }
+ }
+}
+
+.side-nav__first-child__children:hover {
+ background: $primary-color;
+ cursor: pointer;
+
+ a {
+  color: white;
+ }
+}
+
+.ah-header {
+ z-index: 1000;
+ height: 85px;
+ margin-bottom: 2rem;
+}
+
+.ah-nav-article {
+ display: inline-block;
+}
+
+.ah-profile-link {
+ padding-right: 50px;
+}
+
+.default-avatar-class,
+.ah-profile-images {
+ width: 50px;
+ height: 50px;
+ border-radius: 100%;
+}
+.top-nav {
+ background: rgb(255, 255, 255);
+ display: flex;
+ width: 100%;
+ position: fixed;
+ box-shadow: 1px 2px 10px 1px rgb(229, 226, 226);
+ justify-content: space-between;
+}
+
+i.fas.fa-angle-down {
+ cursor: pointer;
+}
+
+.nav-component-container1 {
+ justify-self: flex-start;
+
+ @include strip-link-style();
+}
+
+.nav-component-container2 {
+ justify-self: flex-end;
+ display: flex;
+ align-items: center;
+
+ @include strip-link-style();
+}
+
+@media (max-width: 768px) {
+ .side-nav__first-child__children div{
+  display: none;
+ }
+}

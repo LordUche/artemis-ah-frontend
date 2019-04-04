@@ -7,13 +7,9 @@ import { Link } from 'react-router-dom';
  */
 const LandingPage = () => (
   <div>
-    <header>
-      Welcome to Author&apos;s haven frontend
-    </header>
+    <header>Welcome to Author&apos;s haven frontend</header>
     <section>
-      <Link to="profile">
-          Profile
-      </Link>
+      <Link to="profile">Profile</Link>
     </section>
   </div>
 );

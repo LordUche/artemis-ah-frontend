@@ -1,19 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { TopNav, SideNav } from '../components';
 /**
  * @description profile page view
  * @returns {HTMLDivElement} profile
  */
 const ProfilePage = () => (
   <div>
-    <header>
-        This is your profile page!!
-    </header>
-    <section>
-      <Link to="/">
-          Home
-      </Link>
+    <TopNav />
+    <SideNav />
+    <section style={{ padding: '20px 210px' }}>
+      <h1>This is your profile page!!</h1>
+      <Link to="/">Home</Link>
     </section>
   </div>
 );
