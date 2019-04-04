@@ -1,5 +1,4 @@
-$primary-color: rgb(255, 0, 0);
-
-body {
-  color: $primary-color;
-}
+@import './base.scss';
+@import './LandingPage.scss';
+@import '../scss/components/Button.scss';
+@import '../scss/components/InputField.scss';

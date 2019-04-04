@@ -45,16 +45,18 @@ module.exports = env => ({
         ]
       },
       {
-        test: /\.(png|jpg|gif)$/i,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
           {
             loader: 'url-loader',
             options: {
-              limit: 8192
+              limit: 10000,
+              name: '[name].[ext]',
+              outputPath: './assets/img/'
             }
           }
         ]
-      }
+      },
     ]
   },
   devtool: env.production ? 'source-maps' : 'eval',
