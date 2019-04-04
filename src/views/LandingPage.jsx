@@ -7,7 +7,6 @@ import Hero from '../components/Hero';
 import AboutAH from '../components/AboutAH';
 import FeaturedCategories from '../components/FeaturedCategories';
 import Footer from '../components/Footer';
-import Modal from '../components/Modal';
 
 /**
  * @description landing page
@@ -27,9 +26,6 @@ class LandingPage extends Component {
         <AboutAH />
         <FeaturedCategories />
         <Footer />
-        <Modal modalHeader="hfhh">
-          <p>Test Html data</p>
-        </Modal>
       </React.Fragment>
     );
   }
