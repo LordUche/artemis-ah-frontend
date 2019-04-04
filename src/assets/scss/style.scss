@@ -1,5 +1,9 @@
-$primary-color: rgb(255, 0, 0);
+@import '../scss/components/Button.scss';
+@import '../scss/components/InputField.scss';
+
+$red-color: #FD705E;
 
 body {
-  color: $primary-color;
+  color: $red-color;
+  font-family: 'Nunito', sans-serif;
 }
