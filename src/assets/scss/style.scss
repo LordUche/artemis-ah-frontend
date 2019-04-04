@@ -1,10 +1,5 @@
+@import './base.scss';
+@import './LandingPage.scss';
 @import '../scss/components/Button.scss';
 @import '../scss/components/InputField.scss';
 @import '../scss/components/Modal.scss';
-
-$red-color: #FD705E;
-
-body {
-  color: $red-color;
-  font-family: 'Nunito', sans-serif;
-}

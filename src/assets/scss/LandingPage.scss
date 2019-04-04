@@ -1,0 +1,354 @@
+@import './base.scss';
+
+// Style definitions for the Hero segment of the Landing Page
+.hero {
+    display: flex;
+    background: $primary-color;
+    height: 100vh;
+    position: relative;
+
+    &__header {
+        display: block;
+    }
+
+    &__nav {
+        transform: translate(65%, 45%);
+
+        &--mobile {
+            display: none;
+        }
+    }
+
+    &__description {
+        width: 40%;
+        padding: 7rem 5rem 5rem 12rem;
+    }
+
+    &__illustration {
+        width: 60%;
+        background: url('../img/hero.svg');
+        background-repeat: no-repeat;
+        position: relative;
+
+        & > img {
+            position: relative;
+            transform: translate(80%, 45%);
+        }
+    }
+
+    &__nav {
+        position: absolute;
+        margin-top: 5rem;
+        margin-left: 20rem;
+
+        & > ul li {
+            display: inline-block;
+            margin-right: 3rem;
+            font-weight: $bold-font;
+        }
+    }
+
+    &__text {
+        margin-top: 6.5rem;
+        color: #ffffff;
+
+        &--large {
+            font-weight: $extra-bold-font;
+            font-size: 4.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        &--normal {
+            font-size: 2.1rem;
+            font-weight: $semi-bold-font;
+        }
+    }
+
+    &__cta {
+        margin-top: 8rem;
+    }
+}
+
+// Styles for the animated button on the hero section
+.scroll {
+    position: absolute;
+    width: 8rem;
+    height: 8rem;
+    color: #ffffff;
+    background: transparent;
+    border-radius: 100%;
+    border: 0.3rem solid #ffffff;
+    font-size: 6rem;
+    bottom: 6.5rem;
+    right: 50%;
+}
+
+// Styles for the different sections (About Authors and Featured Sections)
+.segment {
+    &.about {
+        background: $light-grey;
+        height: 70vh;
+
+        & > .segment__title {
+            font-weight: $semi-bold-font;
+            padding-top: 6rem;
+        }
+    }
+
+    &.featured {
+        background: url('../img/section.svg');
+        background-repeat: no-repeat;
+        height: 90vh;
+        margin-top: -7rem;
+        color: $white-color;
+        display: flex;
+        flex-direction: column;
+
+        & > .segment__title {
+            padding-top: 10rem;
+        }
+    }
+
+    &__title, 
+    &__text {
+        text-align: center;
+    }
+
+    &__title {
+        font-size: 3.5rem;
+        margin-bottom: 4.5rem;
+        font-weight: $semi-bold-font;
+    }
+    
+    &__text {
+        font-size: 18px;
+    }
+}
+
+// Specific styles for the Featured categories sections
+.featured {
+    &__articles {
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 7.5rem;
+        margin-bottom: 4rem;
+    }
+
+    &__card {
+        background: url('../img/article-cover.jpg');
+        width: 25rem;
+        height: 32rem;
+        border-radius: 1rem;
+        position: relative;
+
+        & > .category {
+            background: #ffffff;
+            color: #000000;
+            padding: 1rem 2rem;
+            font-size: 1.6rem;
+            max-width: 12rem;
+            position: absolute;
+            top: 15px;
+            left: -2rem;
+        }
+
+        & > .title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background:$transparent-grey;
+            color: #ffffff;
+            width: 100%;
+            border-bottom-left-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            font-size: 1.6rem;
+            padding: 1.5rem;
+        }
+    }
+
+    & > a {
+        align-self: center;
+        line-height: .05rem;
+    }
+}
+
+// Styles for the 'Steps' on the About section
+.steps {
+    display: flex;
+    justify-content: space-around;
+    padding-right: 10rem;
+    margin-top: 10rem;
+}
+
+.step {
+    position: relative;
+
+    &__number {
+        background: $primary-color;
+        color: $white-color;
+        padding: 2rem 1.5rem;
+        font-size: 5.5rem;
+        font-weight: $semi-bold-font;
+    }
+
+    &__title, 
+    &__text {
+        display: block;
+        position: absolute;
+        left: 7.5rem;
+    }
+
+    &__title {
+        top: -15px;
+        font-size: 2.2rem;
+        font-weight: 600;
+    }
+    
+    &__text {
+        top: 2.5rem;
+        width: 10rem;
+        font-size: 1.6rem;
+    }
+}
+
+// Style for Footer
+footer {
+    display: flex;
+    padding: 2rem;
+    font-size: 1.6rem;
+    justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+    .hamburger{
+        color: $white-color;
+        font-size: 3rem;
+    }
+
+    .hero {
+        display: block;
+
+        &__header {
+            display: flex;
+            justify-content: space-between; 
+        }
+
+        &__nav--links {
+            display: none;
+        }
+
+        &__description {
+            width: 100%;
+            padding: 30px;
+        }
+
+        &__illustration {
+            display: none;
+            background: $primary-color;
+
+            & > img {
+                display: none;
+            }
+        }
+
+        &__text {
+            margin-top: 6.5rem;
+            color: #ffffff;
+            text-align: center;
+            
+            &--large, 
+            &--normal {
+                padding: 0 5rem;
+            } 
+
+            &--large {
+                font-size: 3.5rem;
+                margin-bottom: 4.5rem;
+            }
+    
+            &--normal {
+                font-size: 2.1rem;
+            }
+        }
+
+        &__cta {
+            padding: 0 5rem;
+            text-align: center;
+
+            & > a {
+                display: block;
+                line-height: 1.6rem;
+                margin: 0 auto;
+                width: 40px;
+
+                &:not(:last-child) {
+                    margin-bottom: 2rem;
+                }
+            }
+        } 
+    }
+
+    .segment {
+        display: block;
+
+        &__title {
+            font-size: 2.5rem;
+        }
+
+        &__text {
+            font-size: 1.6rem;
+        }
+
+        &.about {
+            background: $light-grey;
+            padding: 0 2.5rem 6.5rem;
+            height: auto;
+        }
+
+        &.featured {
+            background-repeat: no-repeat;
+            height: auto;
+            margin-top: -5rem;
+            display: block;
+        }
+    }
+
+    .steps {
+        flex-direction: column;
+        margin-top: 7rem;
+    }
+
+    .step {
+        margin: 0 auto;
+        margin-bottom: 7rem;
+    }
+
+    .scroll {
+        transform: translateX(50%);
+    }
+
+    .featured {
+        position: relative;
+    
+        &__articles {
+            display: block;
+            margin-bottom: 0;
+            background: $primary-color;
+            height: 150rem;
+        }
+
+        &__card {
+            margin: 0 auto;
+            margin-bottom: 3rem;
+        }
+
+        & > a {
+            position: absolute;
+            margin-right: 0;
+            right: 50%;
+            bottom: 4.5rem;
+            transform: translateX(50%);
+        }
+    }
+    
+}

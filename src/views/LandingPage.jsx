@@ -2,37 +2,37 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import changeNameAction from '../redux/actions';
+import Hero from '../components/Hero';
+import AboutAH from '../components/AboutAH';
+import FeaturedCategories from '../components/FeaturedCategories';
+import Footer from '../components/Footer';
+import Modal from '../components/Modal';
 
 /**
  * @description landing page
  * @returns {HTMLDivElement} landing page
  */
 class LandingPage extends Component {
-    // eslint-disable-next-line react/prop-types
-    login = () => this.props.changeName();
+  // eslint-disable-next-line react/prop-types
+  login = () => this.props.changeName();
 
-    /**
-     * @returns {HTMLElement} div
-     */
-    render() {
-      return (
-        <div>
-          <header>
-          Welcome to Author&apos;s haven frontend
-          </header>
-          <section>
-            <Link to="profile">
-                Profile
-            </Link>
-          </section>
-          <section>
-            <button type="submit" onClick={this.login}>{this.props.name}</button>
-          </section>
-        </div>
-      );
-    }
+  /**
+   * @returns {HTMLElement} div
+   */
+  render() {
+    return (
+      <React.Fragment>
+        <Hero />
+        <AboutAH />
+        <FeaturedCategories />
+        <Footer />
+        <Modal modalHeader="hfhh">
+          <p>Test Html data</p>
+        </Modal>
+      </React.Fragment>
+    );
+  }
 }
 
 /**
