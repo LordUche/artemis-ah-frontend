@@ -1,5 +1,9 @@
 import React from 'react';
 
-const TestComponent = () => <div>Welcome to Author's haven frontend</div>
+/**
+ * @description default component
+ * @returns {HTMLElement} div
+ */
+const TestComponent = () => <div>Welcome to Author&apos;s haven frontend</div>;
 
 export default TestComponent;
