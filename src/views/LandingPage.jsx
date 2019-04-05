@@ -17,12 +17,30 @@ class LandingPage extends Component {
   login = () => this.props.changeName();
 
   /**
+   * @description Fired when the down button is pressed on the homepage to scroll smoothly to 
+   *              the "How it Works" section.
+   */
+  smoothScrollToAbout() {
+    const heroSectionHeight = document.querySelector('.hero').clientHeight;
+
+    try {
+      window.scrollTo({
+        left: 0,
+        top: heroSectionHeight,
+        behavior: 'smooth'
+      });
+    } catch (err) {
+      window.scrollTo(0, heroSectionHeight);
+    }
+  }
+
+  /**
    * @returns {HTMLElement} div
    */
   render() {
     return (
       <React.Fragment>
-        <Hero />
+        <Hero smoothScrollListener={() => this.smoothScrollToAbout()} />
         <AboutAH />
         <FeaturedCategories />
         <Footer />

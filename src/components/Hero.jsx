@@ -6,7 +6,7 @@ import illustration from '../assets/img/illustration.svg';
  * @description Hero - Hero component for Landing Page view
  * @returns {JSX} - JSX component
  */
-const Hero = () => (
+const Hero = (props) => (
   <section className="hero">
     <div className="hero__description">
       <div className="hero__header">
@@ -51,7 +51,7 @@ const Hero = () => (
       </nav>
       <img src={illustration} alt="Illustration of a reader" />
     </div>
-    <button type="button" className="scroll"><i className="fas fa-angle-down" /></button>
+    <button type="button" className="scroll" onClick={props.smoothScrollListener}><i className="fas fa-angle-down" /></button>
   </section>
 );
 

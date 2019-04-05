@@ -74,13 +74,20 @@
     position: absolute;
     width: 8rem;
     height: 8rem;
-    color: #ffffff;
+    color: #c3c6ff;
     background: transparent;
     border-radius: 100%;
-    border: 0.3rem solid #ffffff;
+    border: 0.3rem solid #c3c6ff;
     font-size: 6rem;
     bottom: 6.5rem;
     right: 50%;
+    outline: none;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.scroll:hover {
+    border-color: #ffffff;
+    color: #ffffff;
 }
 
 // Styles for the different sections (About Authors and Featured Sections)
