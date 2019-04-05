@@ -6,25 +6,27 @@ module.exports = env => ({
   entry: './src/App.jsx',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.css']
+  },
+  node: {
+    net: 'empty',
+    fs: 'empty'
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: [
-          'babel-loader',
-          {
-            loader: 'eslint-loader',
-            options: {
-              useEslintrc: true
-            }
+        use: ['babel-loader', {
+          loader: 'eslint-loader',
+          options: {
+            useEslintrc: true,
           }
-        ]
+        }]
       },
       {
         test: /\.html$/,
@@ -35,8 +37,26 @@ module.exports = env => ({
       },
       {
         test: /\.(css|scss)$/,
-        use: ['style-loader', MiniCSSExtractPlugin.loader, 'css-loader', 'sass-loader']
-      }
+        use: [
+          'style-loader',
+          MiniCSSExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              name: '[name].[ext]',
+              outputPath: './assets/img/'
+            }
+          }
+        ]
+      },
     ]
   },
   devtool: env.production ? 'source-maps' : 'eval',

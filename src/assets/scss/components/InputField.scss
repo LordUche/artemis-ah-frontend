@@ -1,0 +1,21 @@
+@import './base.scss';
+
+
+.ah-input{
+    background: #EEEEEE;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    padding: 10px;
+    font-family: inherit;
+
+    &::placeholder{
+        color: #656464;
+    }
+
+    &-required-asterisk{
+        font-size: 15px;
+        margin-right: 5px;
+        color: $red-color;
+    }
+}

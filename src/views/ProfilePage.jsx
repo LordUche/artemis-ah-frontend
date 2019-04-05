@@ -8,11 +8,11 @@ import { TopNav, SideNav } from '../components';
 const ProfilePage = () => (
   <div>
     <TopNav />
-    <SideNav />
     <section style={{ padding: '20px 210px' }}>
       <h1>This is your profile page!!</h1>
       <Link to="/">Home</Link>
     </section>
+    <SideNav />
   </div>
 );
 

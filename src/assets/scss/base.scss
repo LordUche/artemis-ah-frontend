@@ -1,0 +1,44 @@
+// Color variables
+$primary-color: #5863f8;
+$white-color: #ffffff;
+$black-color: #000000;
+$transparent-grey: #21212180;
+$light-grey: #f7f5fa;
+$red-color: #FD705E;
+$bold-font: 700;
+$semi-bold-font: 600;
+$extra-bold-font: 800;
+
+// Project wide base styles
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 10px;
+}
+
+body {
+    font-family: 'Nunito', 'Courier New', Courier, monospace;
+}
+
+a {
+    text-decoration: none;
+    color: $primary-color;
+    font-size: 1.6rem;
+}
+
+a.btn {
+    background: $white-color;
+    margin-right: 3rem;
+    padding: 1.5rem 2rem;
+    min-width: 15rem;
+    height: 4.5rem;
+    border-radius: .5rem;
+}
+
+li {
+    text-decoration: none;
+}

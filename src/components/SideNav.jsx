@@ -5,7 +5,7 @@ import {
   historyIcon,
   readingStatsIcon,
   bookmarkIcon
-} from '../assets/images/icons_svg';
+} from '../assets/img__func/icons_svg';
 
 /**
  * @description side nav class component
@@ -89,6 +89,7 @@ class SideNav extends Component {
         <nav className="side-nav">
           <ul className="side-nav__first-child">
             <li
+              id="bookmarkLink"
               className="side-nav__first-child__children"
               onMouseEnter={() => this.setState({ hoverBookmark: true })}
               onMouseLeave={() => this.setState({ hoverBookmark: false })}
@@ -105,6 +106,7 @@ class SideNav extends Component {
               </NavLink>
             </li>
             <li
+              id="reading-stats-Link"
               className="side-nav__first-child__children"
               onMouseEnter={() => this.setState({ hoverReadingStats: true })}
               onMouseLeave={() => this.setState({ hoverReadingStats: false })}
@@ -121,6 +123,7 @@ class SideNav extends Component {
               </NavLink>
             </li>
             <li
+              id="historyLink"
               className="side-nav__first-child__children"
               onMouseEnter={() => this.setState({ hoverHistory: true })}
               onMouseLeave={() => this.setState({ hoverHistory: false })}
@@ -132,6 +135,7 @@ class SideNav extends Component {
               </NavLink>
             </li>
             <li
+              id="settingsLink"
               className="side-nav__first-child__children"
               onMouseEnter={() => this.setState({ hoverSettings: true })}
               onMouseLeave={() => this.setState({ hoverSettings: false })}
