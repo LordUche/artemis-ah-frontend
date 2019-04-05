@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
+/* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import changeNameAction from '../redux/actions';
@@ -13,12 +14,12 @@ import Footer from '../components/Footer';
  * @returns {HTMLDivElement} landing page
  */
 class LandingPage extends Component {
-  // eslint-disable-next-line react/prop-types
   login = () => this.props.changeName();
 
   /**
-   * @description Fired when the down button is pressed on the homepage to scroll smoothly to 
+   * @description Fired when the down button is pressed on the homepage to scroll smoothly to
    *              the "How it Works" section.
+   * @returns {undefined}
    */
   smoothScrollToAbout() {
     const heroSectionHeight = document.querySelector('.hero').clientHeight;

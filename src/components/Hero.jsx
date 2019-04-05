@@ -1,12 +1,15 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/img/logo.svg';
 import illustration from '../assets/img/illustration.svg';
+
 /**
+ * @param {object} smoothScrollListener - Callback when the down arrow is clicked
  * @description Hero - Hero component for Landing Page view
  * @returns {JSX} - JSX component
  */
-const Hero = (props) => (
+const Hero = ({ smoothScrollListener }) => (
   <section className="hero">
     <div className="hero__description">
       <div className="hero__header">
@@ -51,7 +54,7 @@ const Hero = (props) => (
       </nav>
       <img src={illustration} alt="Illustration of a reader" />
     </div>
-    <button type="button" className="scroll" onClick={props.smoothScrollListener}><i className="fas fa-angle-down" /></button>
+    <button type="button" className="scroll" onClick={smoothScrollListener}><i className="fas fa-angle-down" /></button>
   </section>
 );
 
