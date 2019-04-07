@@ -42,7 +42,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 /**
- * @description mpa state to props
+ * @description map state to props
  * @param {*} param0
  * @returns {object} state
  */

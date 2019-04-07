@@ -8,7 +8,7 @@
     "build": "rm -rf dist && webpack --mode production --env.production",
     "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
-    "test": "jest --coverage --no-cache",
+    "test": "jest ./src/__tests__/components --coverage --no-cache -u",
     "nightwatch": "nightwatch -c tests/nightwatch.conf.js -e"
   },
   "repository": {
@@ -59,6 +59,8 @@
     "jest": "^24.6.0",
     "nightwatch": "^1.0.19",
     "node-sass": "^4.11.0",
+    "react-test-renderer": "^16.8.6",
+    "regenerator-runtime": "^0.13.2",
     "sass-loader": "^7.1.0",
     "selenium-server": "^3.141.59",
     "style-loader": "^0.23.1",
