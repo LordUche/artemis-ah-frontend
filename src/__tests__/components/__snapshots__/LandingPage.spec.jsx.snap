@@ -98,12 +98,12 @@ Array [
           </li>
           <li
             className="dropdown__trigger"
-            onMouseLeave={[Function]}
           >
             <a
               href="/explore"
               id="explore"
               onClick={[Function]}
+              onMouseLeave={[Function]}
             >
               Explore
                
@@ -113,6 +113,8 @@ Array [
             </a>
             <ul
               className="dropdown__body "
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
             >
               <li>
                 <a

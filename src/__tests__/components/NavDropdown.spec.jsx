@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { shallow } from 'enzyme';
+import { createPublicKey } from 'crypto';
 import Navdropdown from '../../components/NavDropdown';
 
 const dropdown = shallow(
@@ -41,7 +42,7 @@ describe('Toggle dropdown', () => {
   it('should show dropdown', () => {
     const parentLink = dropdown.find('#explore');
 
-    parentLink.simulate('click', { target: { id: 'explore' }, preventDefault: () => { } });
+    parentLink.simulate('click', { type: 'click', target: { id: 'explore' }, preventDefault: () => { } });
     const { dropdownShown } = dropdown.state();
     expect(dropdownShown).toEqual(true);
   });
@@ -49,7 +50,7 @@ describe('Toggle dropdown', () => {
   it('should hide dropdown', () => {
     dropdown.state().dropdownShown = true;
 
-    dropdown.find('.dropdown__trigger').simulate('mouseleave', { target: { id: null } });
+    dropdown.find('.dropdown__body').simulate('mouseleave', { type: 'mouseleave', target: { id: null } });
     const { dropdownShown } = dropdown.state();
     expect(dropdownShown).toEqual(false);
   });
