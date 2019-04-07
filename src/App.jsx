@@ -14,6 +14,10 @@ import reducers from './redux/reducers';
 // Import views
 import LandingPage from './views/LandingPage';
 import ProfilePage from './views/ProfilePage';
+import BookmarkPage from './views/BookmarkPage';
+import ReadingStatsPage from './views/ReadingStatsPage';
+import HistoryPage from './views/HistoryPage';
+import SettingsPage from './views/SettingsPage';
 import defaultComponent from './components/Welcome';
 
 // Create Store
@@ -29,6 +33,10 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/profile" component={ProfilePage} />
+        <Route exact path="/bookmarks" component={BookmarkPage} />
+        <Route exact path="/settings" component={SettingsPage} />
+        <Route exact path="/history" component={HistoryPage} />
+        <Route exact path="/reading-stats" component={ReadingStatsPage} />
         <Route component={defaultComponent} />
       </Switch>
     </BrowserRouter>

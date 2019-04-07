@@ -8,6 +8,11 @@ describe('test the side nav', () => {
     expect(topNav.find('div').exists()).toBe(true);
   });
 
+  topNav.setState({ auth: true });
+  it('should return a div', () => {
+    expect(topNav.find('div').exists()).toBe(true);
+  });
+
   it('It should call the componentWillMount method in the header component which in turn checks for screen resize', () => {
     // Test for 500px
     global.innerWidth = 700;
@@ -18,5 +23,48 @@ describe('test the side nav', () => {
     global.innerWidth = 1200;
     global.dispatchEvent(new Event('resize'));
     topNav.instance().componentWillMount();
+  });
+});
+
+describe('test the hamburger menu', () => {
+  const hamburger = shallow(<TopNav />);
+  it('should contain an i tag', () => {
+    expect(hamburger.find('i').exists()).toBe(true);
+  });
+
+  it('It should call the componentDidMount method in the header component which in turn checks for screen resize and onload event handlers', () => {
+    // Test for 500px
+    global.innerWidth = 700;
+    global.dispatchEvent(new Event('resize'));
+    hamburger.instance().componentDidMount();
+
+    global.dispatchEvent(new Event('load'));
+    hamburger.instance().componentDidMount();
+    // Test for 1200px
+    hamburger.setState({ reset: false });
+    global.innerWidth = 1200;
+    global.dispatchEvent(new Event('load'));
+    hamburger.instance().componentDidMount();
+
+    global.dispatchEvent(new Event('resize'));
+    hamburger.instance().componentDidMount();
+  });
+
+  it('Test to simulate menu dropdown click', () => {
+    const hamburgerClose = hamburger.find('i#hamburger');
+    const hamburgerOpen = hamburger.find('span#hamburger-ex');
+    // Resize screen for mobile testing
+    global.innerWidth = 700;
+    global.dispatchEvent(new Event('resize'));
+    // Testing Initial State
+    expect(hamburger.state('hamburgerStateClose')).toBe('inline-block');
+    hamburgerClose.simulate('click');
+
+    // Testing state after mouseleave
+    expect(hamburger.state('hamburgerStateClose')).toBe('none');
+
+    // Testing state after mouseenter
+    hamburgerOpen.simulate('click');
+    expect(hamburger.state('hamburgerStateClose')).toBe('inline-block');
   });
 });

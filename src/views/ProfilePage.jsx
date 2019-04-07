@@ -8,7 +8,45 @@ import { TopNav, SideNav } from '../components';
 const ProfilePage = () => (
   <div>
     <TopNav />
-    <section style={{ padding: '20px 210px' }}>
+    <section style={{ textAlign: 'center' }}>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
+      <h1>This is your profile page!!</h1>
       <h1>This is your profile page!!</h1>
       <Link to="/">Home</Link>
     </section>

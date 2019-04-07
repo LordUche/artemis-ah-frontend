@@ -15,7 +15,7 @@ const UserNavAvatar = (props) => {
     <NavLink to="/profile" className={customLinkClassName}>
       <img src={imgSrc} alt="profile avatar" className={customImageClassName} />
       &nbsp;
-      {username}
+      <span className="username">{username}</span>
       &nbsp;
       <i className="fas fa-angle-down" />
     </NavLink>
