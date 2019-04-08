@@ -181,6 +181,7 @@ Array [
     </div>
     <button
       className="scroll"
+      onClick={[Function]}
       type="button"
     >
       <i

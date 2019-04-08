@@ -21,6 +21,12 @@
             transition: all 400ms ease-in-out;
             height: 26rem;
             overflow: auto;
+            
+            & > li {
+                margin-right: 0;
+                width: 100%;
+                margin-right: 0;
+            }
         }
     }
 }
@@ -58,11 +64,6 @@ ul.dropdown__body li {
     .dropdown__body {
         &.open {
             height: 31rem;
-        }
-
-        &.open > li {
-            margin-right: 0;
-            width: 100%;
         }
     }
 }
