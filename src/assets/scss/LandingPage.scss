@@ -46,6 +46,42 @@
             margin-right: 3rem;
             font-weight: $bold-font;
         }
+
+        &--search {
+            color: #5863f8;
+            cursor: pointer;
+            font-size: 1.6rem;
+            padding: 3px;
+        }
+
+        &--search_wrapper {
+            animation: slidein 0.5s linear;
+            background: #c4cdef;
+            margin-left: 40px;
+            border-radius: 5px;
+            display: flex;
+            width: 225px;
+        }
+
+        &--search_input {
+            
+            width: 220px;
+            font-size: 1.5rem !important;
+            border-radius: 5px 0 0 5px !important;
+            height: 25px;
+            padding-left: 5px!important;
+        }
+        @keyframes slidein {
+          from {
+            margin-left: 500px;
+            width: 300%; 
+          }
+
+          to {
+            margin-left: 150px;
+            width: 100%;
+          }
+        } 
     }
 
     &__text {
