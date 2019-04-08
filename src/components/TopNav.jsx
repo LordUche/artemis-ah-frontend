@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
 import Logo from './logo';
 import UserNavAvatar from './userNavAvartar';
-// import Hamburger from './Hamburger';
 
 /**
  * @description top nav
@@ -26,8 +25,6 @@ class TopNav extends Component {
       reset: false,
       menuClassStyleName: 'link-wrapper'
     };
-    this.renderNavChildren = this.renderNavChildren.bind(this);
-    this.renderHamburgerMenu = this.renderHamburgerMenu.bind(this);
   }
 
   /**
@@ -82,7 +79,7 @@ class TopNav extends Component {
    * @description render hamburger menu method
    * @returns {undefined}
    */
-  renderHamburgerMenu() {
+  renderHamburgerMenu =() => {
     const { hamburgerStateOpen, hamburgerStateClose } = this.state;
     return (
       <React.Fragment>
@@ -121,7 +118,7 @@ class TopNav extends Component {
    * @description returns nav children
    * @returns {JSX} JSX
    */
-  renderNavChildren() {
+  renderNavChildren = () => {
     const { display, auth, menuClassStyleName } = this.state;
     if (auth) {
       return (
