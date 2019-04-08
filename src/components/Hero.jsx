@@ -1,12 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import logo from '../assets/img/logo.svg';
 import illustration from '../assets/img/illustration.svg';
+
 /**
+ * @param {object} smoothScrollListener - Callback when the down arrow is clicked
  * @description Hero - Hero component for Landing Page view
  * @returns {JSX} - JSX component
  */
-const Hero = () => (
+const Hero = ({ smoothScrollListener }) => (
   <section className="hero">
     <div className="hero__description">
       <div className="hero__header">
@@ -51,8 +54,12 @@ const Hero = () => (
       </nav>
       <img src={illustration} alt="Illustration of a reader" />
     </div>
-    <button type="button" className="scroll"><i className="fas fa-angle-down" /></button>
+    <button type="button" className="scroll" onClick={smoothScrollListener}><i className="fas fa-angle-down" /></button>
   </section>
 );
+
+Hero.propTypes = {
+  smoothScrollListener: PropTypes.func.isRequired,
+};
 
 export default Hero;

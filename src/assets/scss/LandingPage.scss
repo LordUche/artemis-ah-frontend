@@ -69,6 +69,25 @@
     }
 }
 
+// Animation for dancing button
+@keyframes btnDance {
+    0% {
+        bottom: 7.7rem;
+    }
+
+    45% {
+        bottom: 7.3rem;
+    }
+
+    90% {
+        bottom: 6.5rem;
+    }
+
+    100% {
+        bottom: 7.7rem;
+    }
+}
+
 // Styles for the animated button on the hero section
 .scroll {
     position: absolute;
@@ -79,8 +98,13 @@
     border-radius: 100%;
     border: 0.3rem solid #ffffff;
     font-size: 6rem;
-    bottom: 6.5rem;
     right: 50%;
+    outline: none;
+    transition:
+      color 0.3s,
+      border-color 0.3s;
+    animation: btnDance 0.9s forwards;
+    animation-iteration-count: infinite;
 }
 
 // Styles for the different sections (About Authors and Featured Sections)
