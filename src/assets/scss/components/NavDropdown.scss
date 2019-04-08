@@ -53,3 +53,16 @@ ul.dropdown__body li {
         }
     }
 }
+
+@media screen and (min-width: 806px) and (max-width: 1300px) {
+    .dropdown__body {
+        &.open {
+            height: 31rem;
+        }
+
+        &.open > li {
+            margin-right: 0;
+            width: 100%;
+        }
+    }
+}

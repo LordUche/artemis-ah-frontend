@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { object, string, arrayOf } from 'prop-types';
 
 /**
  * @description NavDrowndown - Navigation Dropdown component for view
@@ -56,9 +56,9 @@ class NavDropdown extends Component {
 export default NavDropdown;
 
 NavDropdown.propTypes = {
-  parentLinkName: PropTypes.string.isRequired,
-  icon: PropTypes.string,
-  children: PropTypes.arrayOf(PropTypes.object).isRequired
+  parentLinkName: string.isRequired,
+  icon: string,
+  children: arrayOf(object).isRequired
 };
 
 NavDropdown.defaultProps = {
