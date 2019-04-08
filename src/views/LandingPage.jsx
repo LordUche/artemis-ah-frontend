@@ -27,7 +27,7 @@ class LandingPage extends Component {
     } catch (err) {
       window.scrollTo(0, heroSectionHeight);
     }
-  }
+  };
 
   /**
    * @returns {HTMLElement} div

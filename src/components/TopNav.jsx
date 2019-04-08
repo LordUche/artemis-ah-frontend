@@ -162,7 +162,7 @@ class TopNav extends Component {
             <li>
               <NavLink to="/explore">
                 Explore &nbsp;
-                <i className="fas fa-angle-down" />
+                <i className="fas fa-angle-down" id="hide-angle-down" />
               </NavLink>
             </li>
             <li>

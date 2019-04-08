@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { string } from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
 /**
@@ -23,10 +23,10 @@ const UserNavAvatar = (props) => {
 };
 
 UserNavAvatar.propTypes = {
-  username: PropTypes.string.isRequired,
-  imgSrc: PropTypes.string,
-  customLinkClassName: PropTypes.string,
-  customImageClassName: PropTypes.string
+  username: string.isRequired,
+  imgSrc: string,
+  customLinkClassName: string,
+  customImageClassName: string
 };
 
 UserNavAvatar.defaultProps = {

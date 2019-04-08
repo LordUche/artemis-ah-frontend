@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { string } from 'prop-types';
 import { Link } from 'react-router-dom';
 
 /**
@@ -23,9 +23,9 @@ const Logo = (props) => {
 };
 
 Logo.propTypes = {
-  containerCustomClass: PropTypes.string,
-  linkCustomClass: PropTypes.string,
-  logoCustomClass: PropTypes.string
+  containerCustomClass: string,
+  linkCustomClass: string,
+  logoCustomClass: string
 };
 
 Logo.defaultProps = {

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { func, string } from 'prop-types';
 
 /**
  * @description Hamburger component
@@ -33,10 +33,10 @@ const Hamburger = (props) => {
 };
 
 Hamburger.propTypes = {
-  openMenu: PropTypes.func.isRequired,
-  closeMenu: PropTypes.func.isRequired,
-  hamburgerStateOpen: PropTypes.string,
-  hamburgerStateClose: PropTypes.string
+  openMenu: func.isRequired,
+  closeMenu: func.isRequired,
+  hamburgerStateOpen: string,
+  hamburgerStateClose: string
 };
 
 Hamburger.defaultProps = {
