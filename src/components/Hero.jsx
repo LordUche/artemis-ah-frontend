@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import logo from '../assets/img/logo.svg';
 import illustration from '../assets/img/illustration.svg';
@@ -57,5 +57,9 @@ const Hero = ({ smoothScrollListener }) => (
     <button type="button" className="scroll" onClick={smoothScrollListener}><i className="fas fa-angle-down" /></button>
   </section>
 );
+
+Hero.propTypes = {
+  smoothScrollListener: PropTypes.func.isRequired,
+};
 
 export default Hero;
