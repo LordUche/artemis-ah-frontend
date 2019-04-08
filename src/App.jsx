@@ -18,7 +18,6 @@ import BookmarkPage from './views/BookmarkPage';
 import ReadingStatsPage from './views/ReadingStatsPage';
 import HistoryPage from './views/HistoryPage';
 import SettingsPage from './views/SettingsPage';
-import defaultComponent from './components/Welcome';
 
 // Create Store
 const store = createStore(reducers, applyMiddleware(ReduxPromise));
@@ -37,7 +36,6 @@ const App = () => (
         <Route exact path="/settings" component={SettingsPage} />
         <Route exact path="/history" component={HistoryPage} />
         <Route exact path="/reading-stats" component={ReadingStatsPage} />
-        <Route component={defaultComponent} />
       </Switch>
     </BrowserRouter>
   </Provider>

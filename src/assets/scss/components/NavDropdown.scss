@@ -1,0 +1,69 @@
+.dropdown {
+    &__trigger {
+        position: relative;
+    }
+
+    &__body {
+        position: absolute;
+        box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+        left: -2rem;
+        top: 3rem;
+        background: #ffffff;
+        z-index: 1000;
+        opacity: 0;
+        transition: all 400ms ease-in-out;
+        border-radius: .5rem;
+        height: 0;
+        overflow: hidden;
+        
+        &.open {
+            opacity: 1;
+            transition: all 400ms ease-in-out;
+            height: 26rem;
+            overflow: auto;
+            
+            & > li {
+                margin-right: 0;
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+ul.dropdown__body li {
+    margin-right: 0;
+    display: block;
+
+    &:first-child > a {
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
+    } 
+    
+    &:last-child > a {
+        border-bottom-left-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+    }
+
+    & > a {
+        display: block;
+        margin-right: 0;
+        padding: 1.5rem 5rem 1.5rem 2rem;
+        cursor: pointer;
+        width: 100%;
+    
+        &:hover, 
+        &:active {
+            background: $primary-color;
+            color: $white-color;
+        }
+    }
+}
+
+@media screen and (min-width: 806px) and (max-width: 1300px) {
+    .dropdown__body {
+        &.open {
+            height: 31rem;
+        }
+    }
+}

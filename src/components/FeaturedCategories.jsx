@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 /**
  * @description FeaturedCategories - Featured categories component for Landing Page view
@@ -13,7 +13,7 @@ const FeaturedCategories = () => (
     </p>
     <div className="featured__articles">
       <div className="featured__card">
-        <span className="category">Technology</span>
+        <span className="category">Food</span>
         <span className="title">Top recipes to making amazing sandwiches.</span>
       </div>
       <div className="featured__card">
@@ -21,19 +21,25 @@ const FeaturedCategories = () => (
         <span className="title">Top recipes to making amazing sandwiches.</span>
       </div>
       <div className="featured__card">
-        <span className="category">Technology</span>
+        <span className="category">Arts</span>
         <span className="title">Top recipes to making amazing sandwiches.</span>
       </div>
       <div className="featured__card">
-        <span className="category">Technology</span>
+        <span className="category">Health</span>
+        <span className="title">Top recipes to making amazing sandwiches.</span>
+      </div>
+      <div className="featured__card">
+        <span className="category">Finance</span>
         <span className="title">Top recipes to making amazing sandwiches.</span>
       </div>
     </div>
-    <Link to="./explore" className="btn">
-      Explore Stories
-      {' '}
-      <i className="fas fa-angle-right" />
-    </Link>
+    <Router>
+      <Link to="./explore" className="btn">
+        Explore Stories
+        {' '}
+        <i className="fas fa-angle-right" />
+      </Link>
+    </Router>
   </section>
 );
 

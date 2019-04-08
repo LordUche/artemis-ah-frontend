@@ -9,7 +9,7 @@
     "serve": " npm run build && npm run start",
     "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
-    "test": "jest --coverage --no-cache",
+    "test": "jest ./src/__tests__/components --coverage --no-cache -u",
     "nightwatch": "nightwatch -c tests/nightwatch.conf.js -e"
   },
   "repository": {
@@ -53,7 +53,6 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
-    "lodash": "^4.17.11",
     "webpack-dev-server": "^3.2.1"
   },
   "devDependencies": {
@@ -64,9 +63,10 @@
     "jest": "^24.6.0",
     "nightwatch": "^1.0.19",
     "node-sass": "^4.11.0",
+    "react-test-renderer": "^16.8.6",
+    "regenerator-runtime": "^0.13.2",
     "sass-loader": "^7.1.0",
     "selenium-server": "^3.141.59",
-    "style-loader": "^0.23.1",
-    "url-loader": "^1.1.2"
+    "style-loader": "^0.23.1"
   }
 }

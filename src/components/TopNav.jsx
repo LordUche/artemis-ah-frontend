@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
 import Logo from './logo';
 import UserNavAvatar from './userNavAvartar';
+import Hamburger from './Hamburger';
 
 /**
  * @description top nav
@@ -59,7 +60,11 @@ class TopNav extends Component {
           reset: true
         });
       }
-      this.setState({ hamburgerStateClose: 'inline-block', hamburgerStateOpen: 'none', menuClassStyleName: 'link-wrapper' });
+      this.setState({
+        hamburgerStateClose: 'inline-block',
+        hamburgerStateOpen: 'none',
+        menuClassStyleName: 'link-wrapper'
+      });
     };
 
     document.body.onload = () => {
@@ -76,53 +81,40 @@ class TopNav extends Component {
   }
 
   /**
-   * @description render hamburger menu method
+   * @description open hamburger menu method
    * @returns {undefined}
    */
-  renderHamburgerMenu =() => {
-    const { hamburgerStateOpen, hamburgerStateClose } = this.state;
-    return (
-      <React.Fragment>
-        <i
-          className="fas fa-bars"
-          id="hamburger"
-          style={{ display: hamburgerStateClose }}
-          role="presentation"
-          onClick={() => {
-            this.setState({
-              hamburgerStateOpen: 'inline-block',
-              hamburgerStateClose: 'none',
-              menuClassStyleName: 'showHamburgerMenu'
-            });
-          }}
-        />
-        <span
-          id="hamburger-ex"
-          style={{ display: hamburgerStateOpen }}
-          role="presentation"
-          onClick={() => {
-            this.setState({
-              hamburgerStateOpen: 'none',
-              hamburgerStateClose: 'inline-block',
-              menuClassStyleName: 'link-wrapper'
-            });
-          }}
-        >
-          &times;
-        </span>
-      </React.Fragment>
-    );
-  }
+  openMenu = () => this.setState({
+    hamburgerStateOpen: 'inline-block',
+    hamburgerStateClose: 'none',
+    menuClassStyleName: 'showHamburgerMenu'
+  });
+
+  /**
+   * @description close hamburger menu method
+   * @returns {undefined}
+   */
+  closeMenu = () => this.setState({
+    hamburgerStateOpen: 'none',
+    hamburgerStateClose: 'inline-block',
+    menuClassStyleName: 'link-wrapper'
+  });
 
   /**
    * @description returns nav children
    * @returns {JSX} JSX
    */
   renderNavChildren = () => {
-    const { display, auth, menuClassStyleName } = this.state;
+    const {
+      display,
+      auth,
+      menuClassStyleName,
+      hamburgerStateOpen,
+      hamburgerStateClose
+    } = this.state;
     if (auth) {
       return (
-        <React.Fragment>
+        <Fragment>
           <div className="nav-component-container-online1">
             <Logo containerCustomClass="logoContainerClass" logoCustomClass="logoCustomClass" />
             <li>
@@ -151,11 +143,11 @@ class TopNav extends Component {
               />
             </li>
           </ul>
-        </React.Fragment>
+        </Fragment>
       );
     }
     return (
-      <React.Fragment>
+      <Fragment>
         <div className="nav-component-container-offline1">
           <Logo containerCustomClass="logoContainerClass" logoCustomClass="logoCustomClass" />
         </div>
@@ -181,11 +173,16 @@ class TopNav extends Component {
               </NavLink>
             </li>
           </span>
-          {this.renderHamburgerMenu()}
+          <Hamburger
+            closeMenu={this.closeMenu}
+            openMenu={this.openMenu}
+            hamburgerStateClose={hamburgerStateClose}
+            hamburgerStateOpen={hamburgerStateOpen}
+          />
         </ul>
-      </React.Fragment>
+      </Fragment>
     );
-  }
+  };
 
   /**
    * @description top nav

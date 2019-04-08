@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import _ from 'lodash';
 import { TopNav, SideNav } from '../components';
 
 /**
@@ -8,7 +7,12 @@ import { TopNav, SideNav } from '../components';
  * @returns {HTMLDivElement} profile
  */
 const ReadingStats = () => {
-  const test = _.times(40, _.constant(<h1>This is your ReadingStats page!!</h1>));
+  const test = Array(40)
+    .fill(undefined)
+    .map((val, index) => {
+      const i = index;
+      return <h1 key={i}>This is your ReadingStats page!!</h1>;
+    });
   return (
     <div>
       <TopNav />

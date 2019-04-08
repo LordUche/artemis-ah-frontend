@@ -49,22 +49,4 @@ describe('test the hamburger menu', () => {
     global.dispatchEvent(new Event('resize'));
     hamburger.instance().componentDidMount();
   });
-
-  it('Test to simulate menu dropdown click', () => {
-    const hamburgerClose = hamburger.find('i#hamburger');
-    const hamburgerOpen = hamburger.find('span#hamburger-ex');
-    // Resize screen for mobile testing
-    global.innerWidth = 700;
-    global.dispatchEvent(new Event('resize'));
-    // Testing Initial State
-    expect(hamburger.state('hamburgerStateClose')).toBe('inline-block');
-    hamburgerClose.simulate('click');
-
-    // Testing state after mouseleave
-    expect(hamburger.state('hamburgerStateClose')).toBe('none');
-
-    // Testing state after mouseenter
-    hamburgerOpen.simulate('click');
-    expect(hamburger.state('hamburgerStateClose')).toBe('inline-block');
-  });
 });
