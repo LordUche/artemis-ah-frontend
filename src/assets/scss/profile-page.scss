@@ -1,0 +1,231 @@
+$color-blue: #5863F8;
+
+@keyframes borderEffect {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes fadeInDarkOverlay {
+    0% {
+        background: rgba(0,0,0,0);
+    }
+
+    100% {
+        background: rgba(0,0,0,0.5);
+    }
+}
+
+@keyframes spread {
+    0% {
+        left: 50%;
+        right: 50%;
+    }
+
+    100% {
+        left: 0;
+        right: 0;
+    }
+}
+
+.profile-section {
+    &__blue-bg {
+        background: $color-blue;
+        color: #ffffff;
+        padding: 30px 0 60px 0;
+        height: 240px;
+
+        &__user-wrapper {
+            display: flex;
+            justify-content: left;
+        }
+
+        &__picture-section {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border-radius: 5px;
+            overflow: hidden;
+            background: #ffffff;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+
+            &__edit-wrapper {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                animation: fadeInDarkOverlay 0.15s forwards;
+
+                &__edit {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+
+                    button {
+                        position: absolute;
+                        bottom: 5px;
+                        left: 5px;
+                        color: #ffffff;
+                        background: rgba(0,0,0,0);
+                        border: none;
+                        outline: none;
+                        font-size: 19px;
+                        width: 34px;
+                        height: 34px;
+                        text-align: center;
+                        line-height: 34px;
+                        transition: background 0.3s, color 0.3s;
+                        border-radius: 50%;
+                        
+                        &:hover {
+                            background: #ffffff;
+                            color: #111111;
+                        }
+                    }
+                }
+            }
+        }
+
+        &__data {
+            margin-left: 30px;
+            position: relative;
+
+            &__fullname {
+                font-weight: bold;
+                font-size: 17px;
+            }
+
+            &__username {
+                font-size: 13px;
+                margin-top: 1px;
+            }
+
+            &__about {
+                font-size: 15px;
+                margin-top: 9px;
+            }
+
+            &__about--edit {
+                position: relative;
+                outline: none;
+                border: none;
+                background: #ffffff;
+                color: #222222;
+                padding: 3px 5px;
+                border-radius: 5px;
+                width: 510px;
+                height: 62px;
+            }
+
+            &__btn-wrapper {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+
+                button {
+                    height: 34px;
+                    padding: 0 15px;
+                }
+            }
+        }
+    }
+
+    &__body {
+        .user-list {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+            &-item {
+                width: 48.5%;
+            }
+        }
+
+        &__tab-container {
+            background: #ffffff;
+            height: 60px;
+            margin-top: -30px;
+            box-shadow: 0 1px 7px rgba(0,0,0,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            justify-content: left;
+
+            &__tab {
+                height: 60px;
+                box-sizing: border-box;
+                width: 280px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                &__inner {
+                    display: inline-block;
+
+                    &__icon {
+                        vertical-align: top;
+                    }
+                    
+                    &__icon,
+                    &__body {
+                        display: inline-block;
+                    }
+        
+                    &__body {
+                        margin-left: 8px;
+                        line-height: 100%;
+                        text-align: center;
+                        
+                        &__num {
+                            font-size: 23px;
+                            font-weight: bold;
+                        }
+
+                        &__label {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+
+            &__tab--active {
+                position: relative;
+
+                &::after {
+                    display: block;
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    height: 4px;
+                    background: $color-blue;
+                    animation: spread 0.25s forwards;
+                }
+            }
+        }
+
+        &__content {
+            padding-top: 20px;
+
+            &__title {
+                font-weight: bold;
+                text-align: center;
+                font-size: 22px;
+            }
+        }
+    }
+
+    &__container-center {
+        width: 840px;
+        margin: 0 auto;
+    }
+}
