@@ -1,17 +1,20 @@
 import React from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
-import { func } from 'prop-types';
+import { func, bool } from 'prop-types';
 import logo from '../assets/img/logo.svg';
 import illustration from '../assets/img/illustration.svg';
 import NavDropdown from './NavDropdown';
-
+import AHLoginModal from '../views/LoginModal';
 /**
  * @param {object} smoothScrollListener - Callback when the down arrow is clicked
  * @description Hero - Hero component for Landing Page view
  * @returns {JSX} - JSX component
  */
-const Hero = ({ smoothScrollListener }) => (
+const Hero = ({
+  smoothScrollListener, showLoginModal, revealLoginModal, hideLoginModal
+}) => (
   <section className="hero">
+    {showLoginModal && <AHLoginModal onClose={hideLoginModal} />}
     <div className="hero__description">
       <div className="hero__header">
         <Router>
@@ -43,7 +46,7 @@ const Hero = ({ smoothScrollListener }) => (
     <div className="hero__illustration">
       <nav className="hero__nav">
         <ul className="hero__nav--links">
-          <li><Router><Link to="./login">Login</Link></Router></li>
+          <li><span id="login-link" className="link_lookalike" role="presentation" onClick={revealLoginModal}>Login</span></li>
           <li><Router><Link to="./register">Register</Link></Router></li>
           <NavDropdown parentLinkName="Explore">
             <li>
@@ -89,6 +92,9 @@ const Hero = ({ smoothScrollListener }) => (
 
 Hero.propTypes = {
   smoothScrollListener: func.isRequired,
+  showLoginModal: bool.isRequired,
+  revealLoginModal: func.isRequired,
+  hideLoginModal: func.isRequired,
 };
 
 export default Hero;

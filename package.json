@@ -9,7 +9,7 @@
     "serve": " npm run build && npm run start",
     "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
-    "test": "jest ./src/__tests__/components --coverage --no-cache -u",
+    "test": "jest ./src/__tests__ --coverage --no-cache -u",
     "nightwatch": "nightwatch -c tests/nightwatch.conf.js -e"
   },
   "repository": {
@@ -29,8 +29,10 @@
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
+    "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
+    "babel-polyfill": "^6.26.0",
     "css-loader": "^2.1.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.0",

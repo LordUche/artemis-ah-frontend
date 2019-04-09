@@ -32,7 +32,7 @@ a:hover > svg > path {
     fill: #ffffff;
 }
 
-a {
+a, .link_lookalike{
     text-decoration: none;
     color: $primary-color;
     font-size: 1.6rem;

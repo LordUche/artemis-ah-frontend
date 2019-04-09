@@ -7,9 +7,26 @@ import Footer from '../components/Footer';
 
 /**
  * @description landing page
+ * @param {object} e
  * @returns {HTMLDivElement} landing page
  */
 class LandingPage extends Component {
+  state = {
+    showLoginModal: false
+  }
+
+  hideLoginModal = () => {
+    this.setState({
+      showLoginModal: false
+    });
+  }
+
+  revealLoginModal = () => {
+    this.setState({
+      showLoginModal: true
+    });
+  }
+
   /**
    * @description Fired when the down button is pressed on the homepage to scroll smoothly to
    *              the "How it Works" section.
@@ -33,9 +50,16 @@ class LandingPage extends Component {
    * @returns {HTMLElement} div
    */
   render() {
+    const { revealLoginModal, hideLoginModal, state } = this;
+    const { showLoginModal } = state;
     return (
       <React.Fragment>
-        <Hero smoothScrollListener={() => this.smoothScrollToAbout()} />
+        <Hero
+          smoothScrollListener={() => this.smoothScrollToAbout()}
+          showLoginModal={showLoginModal}
+          revealLoginModal={revealLoginModal}
+          hideLoginModal={hideLoginModal}
+        />
         <AboutAH />
         <FeaturedCategories />
         <Footer />

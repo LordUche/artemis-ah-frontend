@@ -12,6 +12,11 @@ button{
             height: 15px;
             margin-right: 10px;
         }
+        
+        &[disabled]{
+            opacity: .5;
+            cursor: not-allowed;
+        }
     }
 
 }
