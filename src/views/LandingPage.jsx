@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Hero from '../components/Hero';
@@ -16,7 +15,7 @@ class LandingPage extends Component {
    *              the "How it Works" section.
    * @returns {undefined}
    */
-  smoothScrollToAbout() {
+  smoothScrollToAbout = () => {
     const heroSectionHeight = document.querySelector('.hero').clientHeight;
 
     try {
@@ -28,7 +27,7 @@ class LandingPage extends Component {
     } catch (err) {
       window.scrollTo(0, heroSectionHeight);
     }
-  }
+  };
 
   /**
    * @returns {HTMLElement} div

@@ -1,17 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { TopNav, SideNav } from '../components';
-
 /**
- * @description profile page view
+ * @description bookmark view page method
  * @returns {HTMLDivElement} profile
  */
-const ProfilePage = () => {
+const Bookmark = () => {
   const test = Array(40)
     .fill(undefined)
     .map((val, index) => {
       const i = index;
-      return <h1 key={i}>This is your PROFILE page!!</h1>;
+      return <h1 key={i}>This is your BOOKMARK page!!</h1>;
     });
   return (
     <div>
@@ -25,4 +24,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default Bookmark;
