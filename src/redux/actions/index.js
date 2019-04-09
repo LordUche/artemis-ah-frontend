@@ -1,5 +1,9 @@
 import actionType from '../actionTypes/index';
 
+
+// Base url
+export const BASE_URL = 'https://authorshaven.herokuapp.com/api';
+
 /**
  * @returns {object} action
  */

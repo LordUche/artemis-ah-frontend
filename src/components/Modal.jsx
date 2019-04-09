@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { string, func, object } from 'prop-types';
 
 /**
  * @description reusable modal component
@@ -11,7 +11,7 @@ const Modal = ({
   <div className="ah_modal_backdrop_wrapper">
     <div className="ah_modal_backdrop" onClick={onClose} onKeyPress={onClose} role="button" tabIndex="0" />
     <div className={`ah_modal ${customClass}`}>
-      <button type="button" className="ah_modal_close" onClick={onClose}>X</button>
+      <button type="button" className="ah_modal_close" onClick={onClose}>&times;</button>
       <header className="ah_modal_header">
         <img src="https://res.cloudinary.com/artemisah/image/upload/v1554320883/authorshaven/AH_logo_white.png" className="ah_modal_header_img" alt="authors haven logo" />
         <h2 className="ah_modal_header_text">
@@ -27,20 +27,20 @@ Modal.propTypes = {
   /**
    * The custom class containing extra styles for the modal
    */
-  customClass: PropTypes.string,
+  customClass: string,
   /**
    * The inner html to be rendered in the modal
    */
   // eslint-disable-next-line react/forbid-prop-types
-  children: PropTypes.object.isRequired,
+  children: object.isRequired,
   /**
    * The function to be fired on close
    */
-  onClose: PropTypes.func.isRequired,
+  onClose: func.isRequired,
   /**
    * The modal's header
    */
-  modalHeader: PropTypes.string.isRequired,
+  modalHeader: string.isRequired,
 };
 
 Modal.defaultProps = {
