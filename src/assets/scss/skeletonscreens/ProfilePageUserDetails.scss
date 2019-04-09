@@ -1,0 +1,49 @@
+$color-blue: #6771ff;
+$border-radius: 5px;
+
+.user-details-skeleton-screen {
+    display: flex;
+    justify-items: left;
+
+    &__img {
+        width: 150px;
+        height: 150px;
+        background: $color-blue;
+        border-radius: $border-radius;
+    }
+
+    &__data {
+        margin-left: 30px;
+
+        &__fullname {
+            width: 390px;
+            background: $color-blue;
+            border-radius: $border-radius;
+            height: 19px;
+        }
+
+        &__username {
+            background: $color-blue;
+            border-radius: $border-radius;
+            height: 11px;
+            margin-top: 3px;
+            width: 190px;
+        }
+
+        &__about {
+            margin-top: 12px;
+            width: 560px;
+
+            &__line1,
+            &__line2 {
+                height: 14px;
+                background: $color-blue;
+                border-radius: $border-radius;
+            }
+
+            &__line2 {
+                margin-top: 5px;
+            }
+        }
+    }
+}

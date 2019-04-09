@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import ArticleItem from '../components/ArticleItem';
 import UserListItem from '../components/UserListItem';
 import Button from '../components/Button';
-import '../assets/scss/profile-page.scss';
+import UserDetailsSkeletonScreen from '../skeletonscreens/ProfilePageUserDetails';
+import ArticleItemSkeletonScreen from '../skeletonscreens/ArticleItem';
+import UserItemSkeletonScreen from '../skeletonscreens/UserItem';
+import '../assets/scss/ProfilePage.scss';
 
 const TAB_ARTICLES = 'tab.articles';
 const TAB_FOLLOWING = 'tab.following';
@@ -37,11 +40,11 @@ class ProfilePage extends Component {
       activeTab: TAB_ARTICLES,
       tabContent: {
         [TAB_ARTICLES]: {
-          count: 1,
+          count: 0,
           icon: 'fa-sticky-note',
           menuLabel: 'Articles',
           articles: [...Array(10)].map(() => ({
-            title: 'Harry Porter',
+            title: 'Harry porter and the philosopher\'s stone',
             slug: 'harry-porter-1',
             description: 'Harry porter and the philosopher\'s stone',
             coverUrl: 'https://img.washingtonpost.com/wp-apps/imrs.php?src=https://img.washingtonpost.com/news/morning-mix/wp-content/uploads/sites/21/2014/07/9781408855713.jpg&w=1484',
@@ -50,7 +53,7 @@ class ProfilePage extends Component {
           contentState: CONTENT_STATE_FETCHING,
         },
         [TAB_FOLLOWING]: {
-          count: 1,
+          count: 0,
           icon: 'fa-user',
           menuLabel: 'Following',
           following: [...Array(10)].map(() => ({
@@ -62,7 +65,7 @@ class ProfilePage extends Component {
           contentState: CONTENT_STATE_FETCHING,
         },
         [TAB_FOLLOWERS]: {
-          count: 1,
+          count: 0,
           icon: 'fa-user',
           menuLabel: 'Followers',
           followers: [...Array(10)].map(() => ({
@@ -98,7 +101,7 @@ class ProfilePage extends Component {
     const { user, editMode } = this.state;
 
     if (user.contentState === CONTENT_STATE_FETCHING) {
-      return <div>User skeleton screen...</div>;
+      return <UserDetailsSkeletonScreen />;
     }
 
     if (user.contentState === CONTENT_STATE_FETCHED) {
@@ -209,7 +212,7 @@ class ProfilePage extends Component {
     let content = '';
 
     if (contentState === CONTENT_STATE_FETCHING) {
-      content = 'Articles skeleton screen';
+      content = <ArticleItemSkeletonScreen />;
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
       content = 'An error occurred. Please refresh';
     } else if (contentState === CONTENT_STATE_FETCHED) {
@@ -242,7 +245,7 @@ class ProfilePage extends Component {
     let content = '';
 
     if (contentState === CONTENT_STATE_FETCHING) {
-      content = 'Followers skeleton screen';
+      content = <UserItemSkeletonScreen />;
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
       content = 'An error occurred. Please refresh';
     } else if (contentState === CONTENT_STATE_FETCHED) {
@@ -274,7 +277,7 @@ class ProfilePage extends Component {
     let content = '';
 
     if (contentState === CONTENT_STATE_FETCHING) {
-      content = 'Following skeleton screen';
+      content = <UserItemSkeletonScreen />;
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
       content = 'An error occurred. Try again later.';
     } else if (contentState === CONTENT_STATE_FETCHED) {
@@ -334,6 +337,8 @@ class ProfilePage extends Component {
    * @returns {HTMLElement} Returns the profile page
    */
   render() {
+    const { user } = this.state;
+
     return (
       <div className="profile-section">
         <div className="profile-section__blue-bg">
@@ -342,8 +347,8 @@ class ProfilePage extends Component {
 
         <div className="profile-section__body">
           <div className="profile-section__container-center">
-            {this.getTabMenuView()}
-            {this.getProfileBody()}
+            {user.contentState === CONTENT_STATE_FETCHED && this.getTabMenuView()}
+            {user.contentState === CONTENT_STATE_FETCHED && this.getProfileBody()}
           </div>
         </div>
       </div>

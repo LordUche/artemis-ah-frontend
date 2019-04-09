@@ -1,0 +1,49 @@
+@import 'variables.scss';
+
+.article-item-skeleton-screen {
+    display: flex;
+    justify-content: left;
+
+    &__cover {
+        width: 180px;
+        height: 180px;
+        background: $bg-grey;
+        border-radius: $border-radius;
+    }
+
+    &__data {
+        margin-left: 10px;
+        margin-top: 40px;
+
+        &__title {
+            background: $bg-grey;
+            height: 16px;
+            border-radius: $border-radius;
+            width: 540px;
+        }
+
+        &__author {
+            width: 200px;
+            height: 11px;
+            margin-top: 4px;
+            background: $bg-grey;
+            border-radius: $border-radius;
+        }
+
+        &__description {
+            margin-top: 12px;
+
+            &__line1,
+            &__line2 {
+                background: $bg-grey;
+                border-radius: $border-radius;
+                width: 540px;
+                height: 11px;
+            }
+
+            &__line2 {
+                margin-top: 3px;
+            }
+        }
+    }
+}

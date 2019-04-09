@@ -36,8 +36,8 @@ $color-blue: #5863F8;
     &__blue-bg {
         background: $color-blue;
         color: #ffffff;
-        padding: 30px 0 60px 0;
-        height: 240px;
+        padding: 30px 0 65px 0;
+        height: 245px;
 
         &__user-wrapper {
             display: flex;
@@ -106,7 +106,8 @@ $color-blue: #5863F8;
 
             &__username {
                 font-size: 13px;
-                margin-top: 1px;
+                line-height: 100%;
+                color: #d0d3ff;
             }
 
             &__about {
@@ -140,6 +141,8 @@ $color-blue: #5863F8;
     }
 
     &__body {
+        padding-bottom: 30px;
+
         .user-list {
             width: 100%;
             display: flex;
@@ -153,8 +156,7 @@ $color-blue: #5863F8;
 
         &__tab-container {
             background: #ffffff;
-            height: 60px;
-            margin-top: -30px;
+            margin-top: -35px;
             box-shadow: 0 1px 7px rgba(0,0,0,0.3);
             border-radius: 5px;
             overflow: hidden;
@@ -162,7 +164,7 @@ $color-blue: #5863F8;
             justify-content: left;
 
             &__tab {
-                height: 60px;
+                height: 70px;
                 box-sizing: border-box;
                 width: 280px;
                 display: flex;
@@ -208,7 +210,7 @@ $color-blue: #5863F8;
                     bottom: 0;
                     height: 4px;
                     background: $color-blue;
-                    animation: spread 0.25s forwards;
+                    animation: spread 0.20s forwards;
                 }
             }
         }
