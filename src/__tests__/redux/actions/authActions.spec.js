@@ -37,7 +37,7 @@ describe('dispatching login actions', () => {
     });
     done();
   });
-  it('dispatch the login action when user details are valid', async (done) => {
+  it('when user details are valid it dispatches the login action', async (done) => {
     jest.setTimeout(30000);
     const details = {
       name: 'ayo',
@@ -61,13 +61,13 @@ describe('dispatching login actions', () => {
 });
 
 describe('dispatching loading state action ', () => {
-  it('dispatch the right action', () => {
+  it('dispatches the auth loading action', () => {
     expect(loadingAuthAction()).toEqual({ type: 'AUTH_LOADING' });
   });
 });
 
 describe('dispatching clear auth errors action ', () => {
-  it('dispatch the right action', () => {
+  it('the clear auth error action is dispatched', () => {
     expect(clearAuthErrorAction()).toEqual({ type: 'CLEAR_AUTH_ERROR' });
   });
 });

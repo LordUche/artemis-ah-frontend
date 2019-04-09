@@ -297,29 +297,4 @@ describe('Loading Modal Component', () => {
     expect(mockLoadingAuth.mock.calls.length).toEqual(0);
     expect(mockLoginUser.mock.calls.length).toEqual(0);
   });
-
-  // it('should clear errors when prompted ', () => {
-  //   const mockclearAuthError = jest.fn();
-  //   const mockFunction = jest.fn();
-  //   const loginModal = shallow(
-  //     <LoginModal
-  //       errorMessages={{
-  //         errors: {
-  //           name: 'Name is required'
-  //         }
-  //       }}
-  //       onClose={mockFunction}
-  //       loginUser={mockFunction}
-  //       loadingAuth={mockFunction}
-  //       clearAuthError={mockclearAuthError}
-  //       loading={false}
-  //       isLoggedIn={false}
-  //     />
-  //   );
-
-  //   loginModal.find('form#loginForm').simulate('submit');
-
-  //   expect(mockLoadingAuth.mock.calls.length).toEqual(1);
-  //   expect(mockLoginUser.mock.calls.length).toEqual(1);
-  // });
 });

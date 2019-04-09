@@ -9,7 +9,7 @@ describe('auth reducer initial state', () => {
     expect(state.errorMessages).toEqual({});
     expect(state.loading).toEqual(false);
   });
-  it('should return the right state when local storage is filled', () => {
+  it('returns the user details stored when local storage is filled', () => {
     const mockLocalStorage = {
       authorsHavenToken: 'abc',
     };
@@ -23,7 +23,7 @@ describe('auth reducer initial state', () => {
 
 
 describe('auth reducer', () => {
-  it('should return the right state when Login action is dispatched', () => {
+  it('updates the state\'s token and isLoggedIn fields when Login action is dispatched', () => {
     const mockLocalStorage = {};
     const state = authReducer(initialState(mockLocalStorage), {
       type: 'LOGIN_USER',
@@ -33,14 +33,14 @@ describe('auth reducer', () => {
     expect(state.isLoggedIn).toEqual(true);
     expect(state.loading).toEqual(false);
   });
-  it('should return the right state when Loading action is dispatched', () => {
+  it('updates the state\'s loading field when Loading action is dispatched', () => {
     const mockLocalStorage = {};
     const state = authReducer(initialState(mockLocalStorage), {
       type: 'AUTH_LOADING'
     });
     expect(state.loading).toEqual(true);
   });
-  it('should return the right state when general login error is dispatched', () => {
+  it('updates the state\'s loading and error messages fields when Login error action is dispatched', () => {
     const mockLocalStorage = {};
     const state = authReducer(initialState(mockLocalStorage), {
       type: 'LOGIN_ERROR',
@@ -55,7 +55,7 @@ describe('auth reducer', () => {
       }
     });
   });
-  it('should return the right state when name login error is dispatched', () => {
+  it('updates the state\'s error messages field with the exact name error that was dispatched', () => {
     const mockLocalStorage = {};
     const state = authReducer(initialState(mockLocalStorage), {
       type: 'LOGIN_ERROR',
@@ -72,24 +72,24 @@ describe('auth reducer', () => {
       }
     });
   });
-  it('should return the right state when password login error is dispatched', () => {
+  it('updates the state\'s error messages field with the exact password error that was dispatched', () => {
     const mockLocalStorage = {};
     const state = authReducer(initialState(mockLocalStorage), {
       type: 'LOGIN_ERROR',
       payload: {
         errors: {
-          name: ['password is required']
+          password: ['password is required']
         }
       }
     });
     expect(state.loading).toEqual(false);
     expect(state.errorMessages).toEqual({
       errors: {
-        name: ['password is required']
+        password: ['password is required']
       }
     });
   });
-  it('should return the right state when clear auth error action is dispatched', () => {
+  it('should clear the state\'s errormessages field when clear auth error action is dispatched', () => {
     const mockLocalStorage = {};
     const state = authReducer(initialState(mockLocalStorage), {
       type: 'CLEAR_AUTH_ERROR'

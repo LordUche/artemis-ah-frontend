@@ -9,7 +9,7 @@ describe('user reducer initial state', () => {
     expect(state.bio).toEqual('');
     expect(state.image).toEqual('');
   });
-  it('should return the right state when local storage is filled', () => {
+  it('should fetch the user details stored in local storage if present', () => {
     const mockLocalStorage = {
       authorsHavenUsername: 'abc',
       authorsHavenEmail: 'abc@yahoo.com',
@@ -26,7 +26,7 @@ describe('user reducer initial state', () => {
 
 
 describe('user reducer', () => {
-  it('should return the right state when Login action is dispatched', () => {
+  it('updates the state when login user action is dispatched', () => {
     const mockLocalStorage = {};
     const state = userReducer(initialState(mockLocalStorage), {
       type: 'LOGIN_USER',
