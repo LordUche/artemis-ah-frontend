@@ -1,5 +1,5 @@
 import {
-  LOGIN_USER, LOGIN_ERROR, AUTH_LOADING, CLEAR_AUTH_ERROR
+  LOGIN_USER, LOGIN_ERROR, AUTH_LOADING, CLEAR_AUTH_ERROR, SIGN_UP_ERROR
 } from '../actionTypes';
 
 /**
@@ -22,6 +22,10 @@ export const initialState = localStorage => ({
  */
 const authReducer = (state = initialState(localStorage), { type, payload }) => {
   switch (type) {
+    case SIGN_UP_ERROR:
+      return {
+        errorMessages: payload
+      };
     case LOGIN_USER:
       return {
         ...state,

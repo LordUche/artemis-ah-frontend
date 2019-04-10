@@ -90,13 +90,16 @@ Array [
               Login
             </span>
           </li>
-          <li>
-            <a
-              href="/register"
+          <li
+            className="register"
+          >
+            <button
+              className="click"
               onClick={[Function]}
+              type="button"
             >
               Register
-            </a>
+            </button>
           </li>
           <li
             className="dropdown__trigger"
@@ -191,6 +194,657 @@ Array [
       />
     </button>
   </section>,
+  <div
+    className="ah_modal_backdrop_wrapper hide"
+  >
+    <div
+      className="ah_modal_backdrop"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      tabIndex="0"
+    />
+    <div
+      className="ah_modal ah_signup"
+    >
+      <button
+        className="ah_modal_close"
+        onClick={[Function]}
+        type="button"
+      >
+         × 
+      </button>
+      <header
+        className="ah_modal_header"
+      >
+        <img
+          alt="authors haven logo"
+          className="ah_modal_header_img"
+          src="https://res.cloudinary.com/artemisah/image/upload/v1554320883/authorshaven/AH_logo_white.png"
+        />
+        <h2
+          className="ah_modal_header_text"
+        >
+          SIGN UP
+        </h2>
+      </header>
+      <div
+        className="ah_signup__body"
+      >
+        <p
+          className="login_body_required_text"
+        >
+          *(Required fields)
+        </p>
+        <form
+          className="ah_signup__form"
+        >
+          <div
+            className="ah_signup__form__input"
+          >
+            <span
+              className="ah-input-required-asterisk"
+            >
+              *
+            </span>
+            <input
+              className="ah-input ah_signup__form__input--signup firstname"
+              name="firstname"
+              onChange={[Function]}
+              placeholder="Enter Firstname"
+              required={true}
+              type="text"
+            />
+            <span
+              className="error"
+            >
+              
+            </span>
+          </div>
+          <div
+            className="ah_signup__form__input"
+          >
+            <span
+              className="ah-input-required-asterisk"
+            >
+              *
+            </span>
+            <input
+              className="ah-input ah_signup__form__input--signup"
+              name="lastname"
+              onChange={[Function]}
+              placeholder="Enter Lastname"
+              required={true}
+              type="text"
+            />
+            <span
+              className="error"
+            >
+              
+            </span>
+          </div>
+          <div
+            className="ah_signup__form__input"
+          >
+            <span
+              className="ah-input-required-asterisk"
+            >
+              *
+            </span>
+            <input
+              className="ah-input ah_signup__form__input--signup"
+              name="username"
+              onChange={[Function]}
+              placeholder="Enter Username"
+              required={true}
+              type="text"
+            />
+            <span
+              className="error"
+            >
+              
+            </span>
+          </div>
+          <div
+            className="ah_signup__form__input"
+          >
+            <span
+              className="ah-input-required-asterisk"
+            >
+              *
+            </span>
+            <input
+              className="ah-input ah_signup__form__input--signup"
+              name="email"
+              onChange={[Function]}
+              placeholder="Enter Email"
+              required={true}
+              type="text"
+            />
+            <span
+              className="error"
+            >
+              
+            </span>
+          </div>
+          <div
+            className="ah_signup__form__input"
+          >
+            <span
+              className="ah-input-required-asterisk"
+            >
+              *
+            </span>
+            <input
+              className="ah-input ah_signup__form__input--signup"
+              name="password"
+              onChange={[Function]}
+              placeholder="Enter Password"
+              required={true}
+              type="password"
+            />
+            <span
+              className="error"
+            >
+              
+            </span>
+          </div>
+          <div
+            className="ah_signup__form__input"
+          >
+            <span
+              className="ah-input-required-asterisk"
+            >
+              *
+            </span>
+            <input
+              className="ah-input ah_signup__form__input--signup"
+              name="confirmPassword"
+              onChange={[Function]}
+              placeholder="Confirm Password"
+              required={true}
+              type="password"
+            />
+            <span
+              className="error"
+            >
+              
+            </span>
+          </div>
+          <div
+            className="ah_signup__form__wrapper"
+          >
+            <button
+              className="ah-btn ah_signup__form__button"
+              disabled={true}
+              onClick={[Function]}
+              type="text"
+            >
+              
+              Sign Up
+            </button>
+          </div>
+        </form>
+        <div>
+          <p
+            className="ah_signup__has-account"
+          >
+            Already have an account?
+            <a
+              className="ah_signup__has-account--link"
+              href="/"
+            >
+               Login Here
+            </a>
+          </p>
+        </div>
+        <div>
+          <img
+            alt=""
+            className="ah_signup__or-tag"
+            src={
+              Object {
+                "process": [Function],
+              }
+            }
+          />
+        </div>
+        <div
+          className="ah_signup__social"
+        >
+          <button
+            className="ah-btn ah_signup__social__facebook"
+            disabled={false}
+            onClick={[Function]}
+            type="text"
+          >
+            <img
+              alt="Sign in with Facebook Image"
+              className=""
+              src={
+                Object {
+                  "process": [Function],
+                }
+              }
+            />
+            Sign in with Facebook
+          </button>
+          <button
+            className="ah-btn ah_signup__social__twitter"
+            disabled={false}
+            onClick={[Function]}
+            type="text"
+          >
+            <img
+              alt="Sign in with Twitter Image"
+              className=""
+              src={
+                Object {
+                  "process": [Function],
+                }
+              }
+            />
+            Sign in with Twitter
+          </button>
+          <button
+            className="ah-btn ah_signup__social__google"
+            disabled={false}
+            onClick={[Function]}
+            type="text"
+          >
+            <img
+              alt="Sign in with Google+ Image"
+              className=""
+              src={
+                Object {
+                  "process": [Function],
+                }
+              }
+            />
+            Sign in with Google+
+          </button>
+        </div>
+        <div
+          className="ah_signup__social--small"
+        >
+          <button
+            className="ah-btn ah_signup__social__facebook"
+            disabled={false}
+            onClick={[Function]}
+            type="text"
+          >
+            <img
+              alt=" Image"
+              className=""
+              src={
+                Object {
+                  "process": [Function],
+                }
+              }
+            />
+            
+          </button>
+          <button
+            className="ah-btn ah_signup__social__twitter"
+            disabled={false}
+            onClick={[Function]}
+            type="text"
+          >
+            <img
+              alt=" Image"
+              className="ah_signup__social__img"
+              src={
+                Object {
+                  "process": [Function],
+                }
+              }
+            />
+            
+          </button>
+          <button
+            className="ah-btn ah_signup__social__google"
+            disabled={false}
+            onClick={[Function]}
+            type="text"
+          >
+            <img
+              alt=" Image"
+              className=""
+              src={
+                Object {
+                  "process": [Function],
+                }
+              }
+            />
+            
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>,
+  <div
+    className="ah_modal_backdrop_wrapper hide"
+  >
+    <div
+      className="ah_modal_backdrop"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      tabIndex="0"
+    />
+    <div
+      className="ah_modal verify__modal"
+    >
+      <button
+        className="ah_modal_close"
+        onClick={[Function]}
+        type="button"
+      >
+         × 
+      </button>
+      <header
+        className="ah_modal_header"
+      >
+        <img
+          alt="authors haven logo"
+          className="ah_modal_header_img"
+          src="https://res.cloudinary.com/artemisah/image/upload/v1554320883/authorshaven/AH_logo_white.png"
+        />
+        <h2
+          className="ah_modal_header_text"
+        >
+          EMAIL VERIFICATION
+        </h2>
+      </header>
+      <div>
+        <strong>
+          <p
+            className="verification__text"
+          >
+            One more step for you, One giant leap for readers everywhere!
+          </p>
+        </strong>
+        <div>
+          <img
+            alt="verify"
+            className="verification__image"
+            src={
+              Object {
+                "process": [Function],
+              }
+            }
+          />
+        </div>
+        <p
+          className="verification__text"
+        >
+          <span>
+            Verification email has been sent to 
+          </span>
+          <strong>
+            
+          </strong>
+          .
+        </p>
+        <p
+          className="verification__text"
+        >
+          Please check your inbox and verify your email to begin writing awesome articles!
+        </p>
+      </div>
+    </div>
+  </div>,
+  <div
+    className="ah_modal_backdrop_wrapper hide"
+  >
+    <div
+      className="ah_modal_backdrop"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      tabIndex="0"
+    />
+    <div
+      className="ah_modal login_body_modal"
+    >
+      <button
+        className="ah_modal_close"
+        onClick={[Function]}
+        type="button"
+      >
+         × 
+      </button>
+      <header
+        className="ah_modal_header"
+      >
+        <img
+          alt="authors haven logo"
+          className="ah_modal_header_img"
+          src="https://res.cloudinary.com/artemisah/image/upload/v1554320883/authorshaven/AH_logo_white.png"
+        />
+        <h2
+          className="ah_modal_header_text"
+        >
+          Login
+        </h2>
+      </header>
+      <div
+        className="login_body"
+      >
+        <p
+          className="login_body_required_text"
+        >
+          *(Required fields)
+        </p>
+        <section
+          className="login_body_info"
+        >
+          <section
+            className="login_body_socials"
+          >
+            <button
+              className="ah-btn login_body_socials_btn login_body_socials_facebook"
+              disabled={false}
+              onClick={[Function]}
+              type="text"
+            >
+              <img
+                alt="facebook logo"
+                className="login_body_socials_btn_img"
+                src={
+                  Object {
+                    "process": [Function],
+                  }
+                }
+              />
+              Sign in with Facebook
+            </button>
+            <button
+              className="ah-btn login_body_socials_btn login_body_socials_twitter"
+              disabled={false}
+              onClick={[Function]}
+              type="text"
+            >
+              <img
+                alt="twitter logo"
+                className="login_body_socials_btn_img"
+                src={
+                  Object {
+                    "process": [Function],
+                  }
+                }
+              />
+              Sign in with Twitter
+            </button>
+            <button
+              className="ah-btn login_body_socials_btn login_body_socials_google"
+              disabled={false}
+              onClick={[Function]}
+              type="text"
+            >
+              <img
+                alt="google logo"
+                className="login_body_socials_btn_img"
+                src={
+                  Object {
+                    "process": [Function],
+                  }
+                }
+              />
+              Sign in with Google
+            </button>
+          </section>
+          <section
+            className="login_body_socials_responsive"
+          >
+            <p
+              className="login_body_socials_responsive_text"
+            >
+              Sign in with
+            </p>
+            <button
+              className="ah-btn login_body_socials_btn login_body_socials_facebook"
+              disabled={false}
+              onClick={[Function]}
+              type="text"
+            >
+              <img
+                alt="facebook logo"
+                className="login_body_socials_responsive_btn_img"
+                src={
+                  Object {
+                    "process": [Function],
+                  }
+                }
+              />
+              
+            </button>
+            <button
+              className="ah-btn login_body_socials_btn login_body_socials_twitter"
+              disabled={false}
+              onClick={[Function]}
+              type="text"
+            >
+              <img
+                alt="twitter logo"
+                className="login_body_socials_responsive_btn_img"
+                src={
+                  Object {
+                    "process": [Function],
+                  }
+                }
+              />
+              
+            </button>
+            <button
+              className="ah-btn login_body_socials_btn login_body_socials_google"
+              disabled={false}
+              onClick={[Function]}
+              type="text"
+            >
+              <img
+                alt="google logo"
+                className="login_body_socials_responsive_btn_img"
+                src={
+                  Object {
+                    "process": [Function],
+                  }
+                }
+              />
+              
+            </button>
+          </section>
+          <section
+            className="login_body_divider"
+          >
+            <hr
+              className="login_body_divider_line"
+            />
+            <span
+              className="login_body_divider_span"
+            >
+              OR
+            </span>
+          </section>
+          <form
+            className="login_body_form"
+            id="loginForm"
+            onSubmit={[Function]}
+          >
+            
+            <span
+              className="ah-input-required-asterisk"
+            >
+              *
+            </span>
+            <input
+              className="ah-input login_body_form_input"
+              name="name"
+              onChange={[Function]}
+              placeholder="Email or Username"
+              required={true}
+              type="text"
+            />
+            
+            <span
+              className="ah-input-required-asterisk"
+            >
+              *
+            </span>
+            <input
+              className="ah-input login_body_form_input"
+              name="password"
+              onChange={[Function]}
+              placeholder="Password"
+              required={true}
+              type="password"
+            />
+            
+            <div
+              className="login_body_form_rem_div"
+            >
+              <input
+                className="ah-input login_body_form_rem_div_input"
+                name="rememberMe"
+                onChange={[Function]}
+                placeholder=""
+                type="checkbox"
+              />
+              <p
+                className="login_body_form_rem_div_text"
+              >
+                Remember me
+              </p>
+            </div>
+            <button
+              className="ah-btn login_body_form_submit_btn"
+              disabled={false}
+              type="submit"
+            >
+              
+              Login
+            </button>
+            <div
+              className="login_body_form_links"
+            >
+              <a
+                className="login_body_form_link"
+                href="/"
+              >
+                Register now
+              </a>
+              <a
+                className="login_body_form_link"
+                href="/"
+              >
+                Forgot password?
+              </a>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>,
   <section
     className="segment about"
   >

@@ -4,13 +4,13 @@ import Hero from '../../components/Hero';
 import logo from '../../assets/img/logo.svg';
 
 describe('Hero Component', () => {
-  const mockHideLoginModal = jest.fn();
-  const mockRevealLoginModal = jest.fn();
+  const mockToggleModal = jest.fn();
+  const mockToggleLoginModal = jest.fn();
   const mockSmoothScrollListener = jest.fn();
   const hero = shallow(<Hero
     showLoginModal
-    hideLoginModal={mockHideLoginModal}
-    revealLoginModal={mockRevealLoginModal}
+    toggleModal={mockToggleModal}
+    toggleLoginModal={mockToggleLoginModal}
     smoothScrollListener={mockSmoothScrollListener}
   />);
 
@@ -37,8 +37,11 @@ describe('Hero Component', () => {
   });
 
   it('should show login modal on click', () => {
-    expect(mockRevealLoginModal.mock.calls.length).toBe(0);
-    hero.find('#login-link').simulate('click');
-    expect(mockRevealLoginModal.mock.calls.length).toBe(1);
+    const button = hero.find('#login-link');
+    button.simulate('click');
+    expect(mockToggleLoginModal).toHaveBeenCalled();
+    // expect(mockToggleModal.mock.calls.length).toBe(0);
+    // hero.find('#login-link').simulate('click');
+    // expect(mockToggleModal.mock.calls.length).toBe(1);
   });
 });

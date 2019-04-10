@@ -84,11 +84,16 @@ export class LoginModal extends Component {
       } = this;
       const { rememberMe } = state;
       const {
-        onClose, isLoggedIn, loading
+        toggleLoginModal, showLoginModal, isLoggedIn, loading
       } = this.props;
       const { nameError, passwordError, generalError } = handleErrorMessages();
       return isLoggedIn ? <Redirect to="/profile" /> : (
-        <Modal customClass="login_body_modal" modalHeader="Login" onClose={onClose}>
+        <Modal
+          customClass="login_body_modal"
+          modalHeader="Login"
+          showModal={showLoginModal}
+          onClose={toggleLoginModal}
+        >
           <div className="login_body">
             <p className="login_body_required_text">*(Required fields)</p>
             <section className="login_body_info">
@@ -219,7 +224,8 @@ export const mapStateToProps = ({ auth }) => {
 };
 
 LoginModal.propTypes = {
-  onClose: func.isRequired,
+  toggleLoginModal: func.isRequired,
+  showLoginModal: bool.isRequired,
   loginUser: func.isRequired,
   loadingAuth: func.isRequired,
   clearAuthError: func.isRequired,

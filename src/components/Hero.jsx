@@ -1,20 +1,20 @@
 import React from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
-import { func, bool } from 'prop-types';
+import { func } from 'prop-types';
 import logo from '../assets/img/logo.svg';
 import illustration from '../assets/img/illustration.svg';
 import NavDropdown from './NavDropdown';
-import AHLoginModal from '../views/LoginModal';
+// import AHLoginModal from '../views/LoginModal';
 /**
  * @param {object} smoothScrollListener - Callback when the down arrow is clicked
  * @description Hero - Hero component for Landing Page view
  * @returns {JSX} - JSX component
  */
 const Hero = ({
-  smoothScrollListener, showLoginModal, revealLoginModal, hideLoginModal
+  smoothScrollListener, toggleModal, toggleLoginModal
 }) => (
   <section className="hero">
-    {showLoginModal && <AHLoginModal onClose={hideLoginModal} />}
+    {/* {showLoginModal && <AHLoginModal onClose={hideLoginModal} />} */}
     <div className="hero__description">
       <div className="hero__header">
         <Router>
@@ -46,8 +46,16 @@ const Hero = ({
     <div className="hero__illustration">
       <nav className="hero__nav">
         <ul className="hero__nav--links">
-          <li><span id="login-link" className="link_lookalike" role="presentation" onClick={revealLoginModal}>Login</span></li>
-          <li><Router><Link to="./register">Register</Link></Router></li>
+          <li><span id="login-link" className="link_lookalike" role="presentation" onClick={toggleLoginModal}>Login</span></li>
+          <li className="register">
+            <button
+              className="click"
+              type="button"
+              onClick={toggleModal}
+            >
+              Register
+            </button>
+          </li>
           <NavDropdown parentLinkName="Explore">
             <li>
               <Router>
@@ -92,9 +100,11 @@ const Hero = ({
 
 Hero.propTypes = {
   smoothScrollListener: func.isRequired,
-  showLoginModal: bool.isRequired,
-  revealLoginModal: func.isRequired,
-  hideLoginModal: func.isRequired,
+  // showLoginModal: bool.isRequired,
+  // revealLoginModal: func.isRequired,
+  // hideLoginModal: func.isRequired,
+  toggleModal: func.isRequired,
+  toggleLoginModal: func.isRequired
 };
 
 export default Hero;

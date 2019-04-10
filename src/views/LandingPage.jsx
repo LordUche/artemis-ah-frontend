@@ -1,30 +1,50 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Hero from '../components/Hero';
 import AboutAH from '../components/AboutAH';
 import FeaturedCategories from '../components/FeaturedCategories';
 import Footer from '../components/Footer';
+import SignupModal from '../components/SignupModal';
+import VerifyEmailModal from '../components/SignupVerification';
+import LoginUserModal from './LoginModal';
 
 /**
  * @description landing page
  * @param {object} e
  * @returns {HTMLDivElement} landing page
  */
-class LandingPage extends Component {
+export default class LandingPage extends Component {
   state = {
-    showLoginModal: false
+    showLoginModal: false,
+    showSignup: false,
+    showVerify: false
   }
 
-  hideLoginModal = () => {
-    this.setState({
-      showLoginModal: false
-    });
+  // hideLoginModal = () => {
+  //   this.setState({
+  //     showLoginModal: false
+  //   });
+  // }
+
+  // revealLoginModal = () => {
+  //   this.setState({
+  //     showLoginModal: true
+  //   });
+  // }
+
+  toggleLoginModal = () => {
+    const { showLoginModal } = this.state;
+    // console.log(showLoginModal);
+    this.setState({ showLoginModal: !showLoginModal });
   }
 
-  revealLoginModal = () => {
-    this.setState({
-      showLoginModal: true
-    });
+  toggleModal = () => {
+    const { showSignup } = this.state;
+    this.setState({ showSignup: !showSignup });
+  }
+
+  toggleVerify = () => {
+    const { showVerify } = this.state;
+    this.setState({ showVerify: !showVerify });
   }
 
   /**
@@ -51,7 +71,8 @@ class LandingPage extends Component {
    */
   render() {
     const { revealLoginModal, hideLoginModal, state } = this;
-    const { showLoginModal } = state;
+    const { showLoginModal, showSignup, showVerify } = state;
+    // const {  } = this.state;
     return (
       <React.Fragment>
         <Hero
@@ -59,6 +80,21 @@ class LandingPage extends Component {
           showLoginModal={showLoginModal}
           revealLoginModal={revealLoginModal}
           hideLoginModal={hideLoginModal}
+          toggleModal={this.toggleModal}
+          toggleLoginModal={this.toggleLoginModal}
+        />
+        <SignupModal
+          toggleVerify={this.toggleVerify}
+          toggleModal={this.toggleModal}
+          showSignup={showSignup}
+        />
+        <VerifyEmailModal
+          toggleVerify={this.toggleVerify}
+          showVerify={showVerify}
+        />
+        <LoginUserModal
+          toggleLoginModal={this.toggleLoginModal}
+          showLoginModal={showLoginModal}
         />
         <AboutAH />
         <FeaturedCategories />
@@ -67,5 +103,3 @@ class LandingPage extends Component {
     );
   }
 }
-
-export default connect()(LandingPage);

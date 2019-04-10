@@ -69,6 +69,16 @@
     }
 }
 
+.register button{
+    text-decoration: none;
+    background: none;
+    height: 50px;
+    color: $primary-color;
+    font-weight: $semi-bold-font;
+    font-size: 15px;
+    cursor: pointer;
+}
+
 // Animation for dancing button
 @keyframes btnDance {
     0% {

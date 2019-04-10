@@ -2,12 +2,10 @@
 
 exports[`Loading Modal Component should have match the given snapshot 1`] = `
 <div
-  className="ah_modal_backdrop_wrapper"
+  className="ah_modal_backdrop_wrapper hide"
 >
   <div
     className="ah_modal_backdrop"
-    onClick={[MockFunction]}
-    onKeyPress={[MockFunction]}
     role="button"
     tabIndex="0"
   />
@@ -16,10 +14,9 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
   >
     <button
       className="ah_modal_close"
-      onClick={[MockFunction]}
       type="button"
     >
-      ×
+       × 
     </button>
     <header
       className="ah_modal_header"

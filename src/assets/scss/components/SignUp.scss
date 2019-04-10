@@ -1,0 +1,160 @@
+@import './base.scss';
+
+.ah_signup{
+  width: 80%;
+  margin: 3% auto;
+
+    &__form{
+      text-align: center;
+      margin-top: 20px; 
+    }
+
+    &__form__input{
+      width: 48%;
+      float: left;
+      padding: 1%;
+      height: 60px;
+
+      &--signup{
+        width: 95%;
+      }
+    }
+
+    &__form__button{
+      width: 100%;
+      background: #5863f8;
+      color: #ffffff;
+      margin: 5% auto;
+    }
+
+    &__form__wrapper{
+      width: 30%;
+      margin: auto
+    }
+
+    &__form__button:disabled{
+      background: #737CFE;
+      color: #F7F7FF;
+      cursor: default;
+    }
+
+    &__has-account{
+      text-align: center;
+      font-size: 1.6rem;
+      padding-bottom: 3%;
+    }
+
+    &__or-tag{
+      display: block;
+      width: 90%; 
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &__social{
+      padding-top: 2%;
+      color: #ffffff;
+      text-align: center;
+
+      &__google{
+        background: #C53F2E;
+        color: #ffffff;
+        margin: 2%;
+      }
+
+      &__facebook{
+        background: #385592;
+        color: #ffffff;
+        margin: 2%;
+      }
+
+      &__twitter{
+        background: #48A2D7;
+        color: #ffffff;
+        margin: 2%;
+      }
+    }
+
+    &__social--small{
+      padding-top: 2%;
+      right: 0;
+      color: #ffffff;
+      text-align: center;
+      display: none;
+    }
+}
+
+// @media only screen and (max-width: 768px) {
+//   /* For mobile phones: */
+//   [class="ah_signup"]{
+//     margin: 1% auto;
+//     padding: 10px;
+//   }
+//   [class="ah_signup__social"]{
+//     display: none;
+//   }
+//   [class*="ah_signup__form__input"]{
+//     width: 95%;
+//   }
+//   [class="ah_signup__or-tag"]{
+//     width: 100%;
+//   }
+//   [class*="ah-input-required-asterisk"]{
+//     margin-right: 1%;
+//   }
+//   [class*="ah_signup__form__wrapper"]{
+//     width: 60%;
+//   }
+//   [class="ah_signup__social--small"]{
+//     display: block;
+//   }
+//   [class="ah_signup__has-account"]{
+//     font-size: 1.2rem;
+//   }
+// }
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .ah_signup{
+    margin: 3% auto;
+    padding: 20px 0px;
+
+    &__form{
+      padding-left: 1%;
+    }
+
+    &__form__input{
+      width: 95%;
+    }
+
+    &__form__wrapper{
+      width: 60%;
+    }
+
+    &__social{
+      display: none;
+    }
+
+    &__or-tag{
+      width: 100%;
+      height: 30px;
+    }
+
+    &__social--small{
+      display: block;
+      padding-left: 2%;
+    }
+
+    &__has-account{
+      font-size: 1.2rem;
+
+      &--link{
+        font-size: 1.2rem
+      }
+    }
+  }
+
+  .ah-input-required-asterisk{
+     margin-right: 1%;
+  }
+}

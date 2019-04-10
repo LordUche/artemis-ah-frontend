@@ -1,7 +1,7 @@
 @import './base.scss';
 
 .ah_modal{
-    margin: 100px auto;
+    margin: 10px auto;
     width: fit-content;
     min-width: 40vw;
     max-width: 90vw;
@@ -29,6 +29,8 @@
             z-index: 1005;
             cursor: pointer;
         }
+
+        
     }
 
     &_close{
@@ -62,5 +64,16 @@
             margin: 10px auto 0;
             font-size: 20px;
         }
+    }
+}
+
+.hide {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    [class="ah_modal_close"]{
+      font-size: 20px;
     }
 }

@@ -1,8 +1,8 @@
-import 'babel-polyfill';
+import '@babel/polyfill';
 import { post } from 'axios';
-import { BASE_URL } from './index';
+import BASE_URL from './index';
 import {
-  LOGIN_ERROR, LOGIN_USER, AUTH_LOADING, CLEAR_AUTH_ERROR
+  LOGIN_ERROR, LOGIN_USER, AUTH_LOADING, CLEAR_AUTH_ERROR,
 } from '../actionTypes';
 
 /**

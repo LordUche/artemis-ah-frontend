@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
+// <InputField customClass="hfhf" />
+
 
 /**
  * @description reusable input component

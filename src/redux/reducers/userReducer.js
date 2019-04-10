@@ -1,4 +1,4 @@
-import { LOGIN_USER } from '../actionTypes';
+import { LOGIN_USER, SIGN_UP } from '../actionTypes';
 
 /**
  * @description function to return initial state
@@ -20,6 +20,11 @@ export const initialState = localStorage => ({
  */
 const userReducer = (state = initialState(localStorage), { type, payload }) => {
   switch (type) {
+    case SIGN_UP:
+      return {
+        ...state,
+        email: payload.data.user.email
+      };
     case LOGIN_USER:
       return {
         ...state,

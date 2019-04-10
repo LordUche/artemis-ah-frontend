@@ -29,6 +29,7 @@ describe('Loading Modal Component', () => {
         loginUser={mockFunction}
         loadingAuth={mockFunction}
         clearAuthError={mockFunction}
+        showModal
         loading={false}
         isLoggedIn={false}
       />
@@ -186,6 +187,7 @@ describe('Loading Modal Component', () => {
         isLoggedIn={false}
       />
     );
+
 
     expect(loginModal.find('p.login_body_form_error_general').exists()).toBe(true);
     expect(loginModal.find('p.login_body_form_error_general').text()).toBe('Invalid Credentials');
