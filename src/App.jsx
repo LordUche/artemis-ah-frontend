@@ -19,6 +19,7 @@ import BookmarkPage from './views/BookmarkPage';
 import ReadingStatsPage from './views/ReadingStatsPage';
 import HistoryPage from './views/HistoryPage';
 import SettingsPage from './views/SettingsPage';
+import PageNotFound from './views/PageNotFound';
 
 // Create Store
 const store = createStore(reducers, applyMiddleware(ReduxPromise));
@@ -32,11 +33,12 @@ const App = () => (
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={LandingPage} />
-        <Route exact path="/profile" component={ProfilePage} />
+        <Route exact path="/profile/:username?" component={ProfilePage} />
         <Route exact path="/bookmarks" component={BookmarkPage} />
         <Route exact path="/settings" component={SettingsPage} />
         <Route exact path="/history" component={HistoryPage} />
         <Route exact path="/reading-stats" component={ReadingStatsPage} />
+        <Route component={PageNotFound} />
       </Switch>
     </BrowserRouter>
   </Provider>

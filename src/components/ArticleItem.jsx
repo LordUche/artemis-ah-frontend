@@ -8,7 +8,7 @@ import '../assets/scss/ArticleItem.scss';
  * @return {HTMLElement} Returns the article list item.
  */
 const ArticleItem = ({
-  title, description, coverUrl, slug, tag
+  title, description, coverUrl, slug, tag, rating, readTime, author
 }) => (
   <div className="article-item">
     <div className="article-item__image-wrapper">
@@ -19,12 +19,12 @@ const ArticleItem = ({
       <div className="article-item__body-wrapper__body">
         <div className="article-item__body-wrapper__body__title"><Link to={`/${slug}`}>{title}</Link></div>
         <div className="article-item__body-wrapper__body__author">
-          <Link to="#/profile">@author</Link>
+          <Link to={`profile/${author}`}>{author}</Link>
         </div>
         <div className="article-item__body-wrapper__body__description">{description}</div>
       </div>
       <div className="article-item__body-wrapper__bottom-links">
-        <Link to="#/y" className="article-item__body-wrapper__bottom-links__read-more">READ FULL ARTICLE &rarr;</Link>
+        <Link to={`/${slug}`} className="article-item__body-wrapper__bottom-links__read-more">READ FULL ARTICLE &rarr;</Link>
         <div className="article-item__body-wrapper__bottom-links__user-actions">
           <Link to="/#/edit" className="article-item__body-wrapper__bottom-links__user-actions__edit"><i className="fa fa-pencil-alt" /></Link>
           <Link to="/#/delete" className="article-item__body-wrapper__bottom-links__user-actions__delete"><i className="fa fa-trash" /></Link>
@@ -36,12 +36,12 @@ const ArticleItem = ({
       <span>
         <i className="fa fa-star" />
         {' '}
-        5.0
+        {rating}
       </span>
       <span className="stats-wrapper__read-time">
         <i className="fa fa-clock" />
         {' '}
-        2 mins
+        {readTime}
       </span>
     </div>
   </div>
@@ -53,6 +53,9 @@ ArticleItem.propTypes = {
   coverUrl: stringProp.isRequired,
   slug: stringProp.isRequired,
   tag: stringProp.isRequired,
+  rating: stringProp.isRequired,
+  readTime: stringProp.isRequired,
+  author: stringProp.isRequired,
 };
 
 export default ArticleItem;

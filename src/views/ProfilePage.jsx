@@ -1,6 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
+import { object as objectProp, func as funcProp } from 'prop-types';
+// import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import {
+  fetchUserDetails,
+  fetchUserArticles,
+  fetchUserFollowers,
+  fetchUserFollowing
+} from '../redux/actions/profileActions';
 import ArticleItem from '../components/ArticleItem';
 import UserListItem from '../components/UserListItem';
 import Button from '../components/Button';
@@ -29,55 +37,19 @@ class ProfilePage extends Component {
     super(props);
 
     this.state = {
-      user: {
-        fullname: 'JK Rowling',
-        username: 'jkrowling',
-        about: 'I am the author of harry porter',
-        profilePic: 'https://librarykv4jal.files.wordpress.com/2018/04/pkhkqpju402jii5i53t7vru84r-_ux250_.jpg',
-        contentState: CONTENT_STATE_FETCHED,
-      },
       editMode: false,
       activeTab: TAB_ARTICLES,
-      tabContent: {
-        [TAB_ARTICLES]: {
-          count: 0,
-          icon: 'fa-sticky-note',
-          menuLabel: 'Articles',
-          articles: [...Array(10)].map(() => ({
-            title: 'Harry porter and the philosopher\'s stone',
-            slug: 'harry-porter-1',
-            description: 'Harry porter and the philosopher\'s stone',
-            coverUrl: 'https://img.washingtonpost.com/wp-apps/imrs.php?src=https://img.washingtonpost.com/news/morning-mix/wp-content/uploads/sites/21/2014/07/9781408855713.jpg&w=1484',
-            tag: 'HEALTH',
-          })),
-          contentState: CONTENT_STATE_FETCHING,
-        },
-        [TAB_FOLLOWING]: {
-          count: 0,
-          icon: 'fa-user',
-          menuLabel: 'Following',
-          following: [...Array(10)].map(() => ({
-            fullname: 'JK Rowling',
-            username: 'jkrowling',
-            profilePic: 'https://librarykv4jal.files.wordpress.com/2018/04/pkhkqpju402jii5i53t7vru84r-_ux250_.jpg',
-            about: 'I am the author of harry potter.',
-          })),
-          contentState: CONTENT_STATE_FETCHING,
-        },
-        [TAB_FOLLOWERS]: {
-          count: 0,
-          icon: 'fa-user',
-          menuLabel: 'Followers',
-          followers: [...Array(10)].map(() => ({
-            fullname: 'JK Rowling',
-            username: 'jkrowling',
-            profilePic: 'https://librarykv4jal.files.wordpress.com/2018/04/pkhkqpju402jii5i53t7vru84r-_ux250_.jpg',
-            about: 'I am the author of harry potter.',
-          })),
-          contentState: CONTENT_STATE_FETCHING,
-        }
-      },
     };
+  }
+
+  /**
+   * @returns {undefined}
+   */
+  componentWillMount() {
+    const { match, user, dispatch } = this.props;
+
+    const viewingUsername = (match.params.username || user.username);
+    fetchUserDetails(viewingUsername, user.authToken, dispatch);
   }
 
   /**
@@ -98,7 +70,11 @@ class ProfilePage extends Component {
    * @returns {Node} The view for the users details.
    */
   getUserDetailsView() {
-    const { user, editMode } = this.state;
+    const { profile } = this.props;
+
+    const { user } = profile;
+
+    const { editMode } = this.state;
 
     if (user.contentState === CONTENT_STATE_FETCHING) {
       return <UserDetailsSkeletonScreen />;
@@ -149,7 +125,10 @@ class ProfilePage extends Component {
    * @returns {Node} The tab view.
    */
   getTabMenuView() {
-    const { tabContent, activeTab } = this.state;
+    const { activeTab } = this.state;
+
+    const { profile } = this.props;
+    const { tabContent } = profile;
 
     return (
       <div className="profile-section__body__tab-container">
@@ -205,9 +184,12 @@ class ProfilePage extends Component {
    * @returns {Node} The view for articles the user has publishes.
    */
   getArticles() {
-    const { tabContent } = this.state;
+    const { profile, dispatch } = this.props;
+    const { tabContent } = profile;
 
     const { articles, contentState } = tabContent[TAB_ARTICLES];
+
+    fetchUserArticles(profile.user.username, dispatch);
 
     let content = '';
 
@@ -219,11 +201,14 @@ class ProfilePage extends Component {
       content = articles.map((article, index) => (
         <ArticleItem
           key={index.toString()}
-          tag={article.tag}
+          tag={(article.Tag || 'no tag')}
           title={article.title}
           description={article.description}
           slug={article.slug}
-          coverUrl={article.coverUrl}
+          coverUrl={(article.coverUrl || '')}
+          rating={article.rating}
+          readTime={article.readTime.text}
+          author={article.User.username}
         />
       ));
     }
@@ -238,9 +223,12 @@ class ProfilePage extends Component {
    * @returns {Node} The view for people following the user.
    */
   getFollowers() {
-    const { tabContent } = this.state;
+    const { profile, dispatch } = this.props;
+    const { tabContent } = profile;
 
     const { followers, contentState } = tabContent[TAB_FOLLOWERS];
+
+    fetchUserFollowers(profile.user.username, dispatch);
 
     let content = '';
 
@@ -270,9 +258,12 @@ class ProfilePage extends Component {
    * @returns {Node} The view for people the user is following
    */
   getFollowing() {
-    const { tabContent } = this.state;
+    const { profile, dispatch } = this.props;
+    const { tabContent } = profile;
 
     const { following, contentState } = tabContent[TAB_FOLLOWING];
+
+    fetchUserFollowing(profile.user.username, dispatch);
 
     let content = '';
 
@@ -337,9 +328,18 @@ class ProfilePage extends Component {
    * @returns {HTMLElement} Returns the profile page
    */
   render() {
-    const { user } = this.state;
+    const { profile } = this.props;
 
-    return (
+    const { user } = profile;
+
+    return user.contentState === CONTENT_STATE_FETCHING_FAILED ? (
+      <div>
+        <h2>An error occurred</h2>
+        <div>
+          <Button onClick={() => window.location.reload()} btnText="Retry" />
+        </div>
+      </div>
+    ) : (
       <div className="profile-section">
         <div className="profile-section__blue-bg">
           <div className="profile-section__container-center">{this.getUserDetailsView()}</div>
@@ -356,4 +356,27 @@ class ProfilePage extends Component {
   }
 }
 
-export default connect()(ProfilePage);
+ProfilePage.propTypes = {
+  match: objectProp.isRequired,
+  user: objectProp.isRequired,
+  profile: objectProp.isRequired,
+  dispatch: funcProp.isRequired,
+};
+
+/**
+ * @param {object} state The state of the application from redux store
+ * @return {object} Props for ProfilePage component.
+ */
+const state2props = (state) => {
+  const { auth, user, profile } = state;
+  return {
+    user: {
+      isLoggedIn: auth.isLoggedIn,
+      authToken: auth.token,
+      username: user.username,
+    },
+    profile,
+  };
+};
+
+export default connect(state2props)(ProfilePage);
