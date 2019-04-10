@@ -4,6 +4,7 @@
     margin: 100px auto;
     width: fit-content;
     min-width: 40vw;
+    max-width: 90vw;
     background: $white-color;
     border-radius: 20px;
     overflow: scroll;
@@ -36,7 +37,7 @@
         position: absolute;
         top:30px;
         right: 5%;
-        font-size: 30px;
+        font-size: 40px;
         color: #828282;
 
         &:hover{

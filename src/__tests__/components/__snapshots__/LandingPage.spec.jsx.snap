@@ -81,12 +81,14 @@ Array [
           className="hero__nav--links"
         >
           <li>
-            <a
-              href="/login"
+            <span
+              className="link_lookalike"
+              id="login-link"
               onClick={[Function]}
+              role="presentation"
             >
               Login
-            </a>
+            </span>
           </li>
           <li>
             <a

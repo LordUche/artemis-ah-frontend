@@ -4,7 +4,15 @@ import Hero from '../../components/Hero';
 import logo from '../../assets/img/logo.svg';
 
 describe('Hero Component', () => {
-  const hero = shallow(<Hero />);
+  const mockHideLoginModal = jest.fn();
+  const mockRevealLoginModal = jest.fn();
+  const mockSmoothScrollListener = jest.fn();
+  const hero = shallow(<Hero
+    showLoginModal
+    hideLoginModal={mockHideLoginModal}
+    revealLoginModal={mockRevealLoginModal}
+    smoothScrollListener={mockSmoothScrollListener}
+  />);
 
   it('should have a logo present', () => {
     expect(hero.find('.hero__logo > img').exists()).toBe(true);
@@ -26,5 +34,11 @@ describe('Hero Component', () => {
 
   it('should have a round navigation button', () => {
     expect(hero.find('.scroll').exists()).toBe(true);
+  });
+
+  it('should show login modal on click', () => {
+    expect(mockRevealLoginModal.mock.calls.length).toBe(0);
+    hero.find('#login-link').simulate('click');
+    expect(mockRevealLoginModal.mock.calls.length).toBe(1);
   });
 });
