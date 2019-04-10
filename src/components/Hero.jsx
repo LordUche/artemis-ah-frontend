@@ -1,35 +1,23 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { func, bool } from 'prop-types';
 import logo from '../assets/img/logo.svg';
 import illustration from '../assets/img/illustration.svg';
-import InputField from './InputField';
+// import InputField from './InputField';
+import NavDropdown from './NavDropdown';
+import AHLoginModal from '../views/LoginModal';
 
 /**
  * @description Hero - Hero component for Landing Page view
+ * @param {object} e event object
  * @returns {JSX} - JSX component
  */
 class Hero extends Component {
   state = {
-    displaySearchBar: false
+    displaySearchBar: false,
+    searchQuery: ''
   }
 
-  /**
-  * @description componentWillMount method
-  * @returns {object} - state
-  */
-  componentWillMount() {
-    const body = document.querySelector('body');
-    body.addEventListener('click', (e) => {
-      if (e.target.name !== 'input' && e.target.id !== 'search') {
-        this.setState({ displaySearchBar: false });
-      }
-    });
-  }
-
-  /**
-  * @description componentWillMount method
-  * @returns {object} - state
-  */
   searchButtonOnclick = () => {
     this.setState(state => ({
       ...state,
@@ -37,26 +25,30 @@ class Hero extends Component {
     }));
   }
 
-  /**
-  * @description searchKeyword method
-  * @returns {JSX} - JSX component
-  */
+  hideSearchField = (e) => {
+    if ((e.target.name !== 'searchQuery' && e.target.id !== 'search') && (e.target.id !== 'searchIconChild' && e.target.id !== 'searchIcon')) {
+      this.setState({ displaySearchBar: false });
+    }
+  }
+
   searchKeyword = () => {
     const input = document.querySelector('input');
-    const btn = document.querySelector('.fa-search');
+    const { searchQuery } = this.state;
 
-    input.addEventListener('keypress', (e) => {
-      if (e.code === 'Enter') {
-        input.value = 'Redirects to the search page';
-        return input.value;
-      }
-    });
+    if (searchQuery) {
+      input.value = 'Redirects to the search page';
+    }
+  }
 
-    btn.addEventListener('click', (e) => {
-      if (e.target.id === 'search') {
-        input.value = 'Redirects to the search page';
-        return input.value;
-      }
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.searchKeyword();
+    }
+  }
+
+  handleSearchBarChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
     });
   }
 
@@ -66,13 +58,20 @@ class Hero extends Component {
    */
   render() {
     const { displaySearchBar } = this.state;
+    const {
+      smoothScrollListener, showLoginModal, revealLoginModal, hideLoginModal
+    } = this.props;
+
     return (
-      <section className="hero">
+      <section className="hero" onClick={this.hideSearchField} role="presentation">
+        {showLoginModal && <AHLoginModal onClose={hideLoginModal} />}
         <div className="hero__description">
           <div className="hero__header">
-            <Link to="./" className="hero__logo">
-              <img src={logo} alt="Authors Haven Logo" />
-            </Link>
+            <Router>
+              <Link to="./" className="hero__logo">
+                <img src={logo} alt="Authors Haven Logo" />
+              </Link>
+            </Router>
             <button type="button" className="hero__nav--mobile">
               <span className="hamburger"><i className="fas fa-bars" /></span>
             </button>
@@ -82,47 +81,78 @@ class Hero extends Component {
             <p className="hero__text--normal">Building a community of like minded authors.</p>
           </div>
           <div className="hero__cta">
-            <Link to="./explore" className="btn">
-              Explore Stories
-            </Link>
-            <Link to="./create-story" className="btn">
-              Start Writing
-            </Link>
+            <Router>
+              <Link to="./explore" className="btn">
+                Explore Stories
+              </Link>
+            </Router>
+            <Router>
+              <Link to="./create-story" className="btn">
+                Start Writing
+              </Link>
+            </Router>
           </div>
         </div>
         <div className="hero__illustration">
           <nav className="hero__nav">
             { !displaySearchBar ? (
               <ul className="hero__nav--links">
-                <li><Link to="./login">Login</Link></li>
-                <li><Link to="./register">Register</Link></li>
+                <li><span id="login-link" className="link_lookalike" role="presentation" onClick={revealLoginModal}>Login</span></li>
+                <li><Router><Link to="./register">Register</Link></Router></li>
+                <NavDropdown parentLinkName="Explore">
+                  <li>
+                    <Router>
+                      <Link to="./filter?tag=Food">Food</Link>
+                    </Router>
+                  </li>
+                  <li>
+                    <Router>
+                      <Link to="./filter?tag=Technology">Technology</Link>
+                    </Router>
+                  </li>
+                  <li>
+                    <Router>
+                      <Link to="./filter?tag=Health">Health</Link>
+                    </Router>
+                  </li>
+                  <li>
+                    <Router>
+                      <Link to="./filter?tag=Finance">Finance</Link>
+                    </Router>
+                  </li>
+                  <li>
+                    <Router>
+                      <Link to="./filter?tag=Arts">Arts</Link>
+                    </Router>
+                  </li>
+                </NavDropdown>
                 <li>
-                  <Link to="./explore">
-                    Explore
-                    {' '}
-                    <i className="fas fa-angle-down" />
-                  </Link>
-                </li>
-                <li>
-                  <span role="presentation" onClick={this.searchButtonOnclick}>
-                    <i className="fas fa-search hero__nav--search" />
+                  <span role="presentation" onClick={this.searchButtonOnclick} id="searchIcon">
+                    <i className="fas fa-search hero__nav--search" id="searchIconChild" />
                   </span>
                 </li>
               </ul>
             ) : (
-              <div className="hero__nav--search_wrapper">
-                <InputField customClass="hero__nav--search_input" placeHolder="Type a keyword..." onChange={this.searchKeyword} inputName="input" />
-                <i className="fas fa-search hero__nav--search" id="search" />
-              </div>
+              <span className="hero__nav--search_wrapper" role="presentation">
+                <input className="hero__nav--search_input" placeholder="Type a keyword..." type="text" onChange={this.handleSearchBarChange} onKeyPress={this.handleKeyPress} name="searchQuery" />
+                <i className="fas fa-search hero__nav--search" id="search" onClick={this.searchKeyword} role="presentation" />
+              </span>
             )
             }
+            <img src={illustration} alt="Illustration of a reader" />
           </nav>
-          <img src={illustration} alt="Illustration of a reader" />
         </div>
-        <button type="button" className="scroll"><i className="fas fa-angle-down" /></button>
+        <button type="button" className="scroll" onClick={smoothScrollListener}><i className="fas fa-angle-down" /></button>
       </section>
     );
   }
 }
+
+Hero.propTypes = {
+  smoothScrollListener: func.isRequired,
+  showLoginModal: bool.isRequired,
+  revealLoginModal: func.isRequired,
+  hideLoginModal: func.isRequired,
+};
 
 export default Hero;

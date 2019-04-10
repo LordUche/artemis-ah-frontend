@@ -1,10 +1,11 @@
-@import './base.scss';
+@import '../base.scss';
 
 // Style definitions for the Hero segment of the Landing Page
 .hero {
     display: flex;
     background: $primary-color;
     height: 100vh;
+    width: 100%;
     position: relative;
 
     &__header {
@@ -12,11 +13,70 @@
     }
 
     &__nav {
-        transform: translate(65%, 45%);
+        &--links {
+            display: inline-block;
+            margin-inline-start: 380px;
+            height: 25px;
+        }
+
+        & > img {
+            margin-left: 280px;
+            margin-top: 100px;
+        }
+
+        & > ul li {
+            display: inline-block;
+            margin-right: 3rem;
+            font-weight: $semi-bold-font;
+        }
 
         &--mobile {
             display: none;
         }
+        
+        &--mobile {
+            display: none;
+        }
+
+        &--search_wrapper {
+            margin-left: 22rem;
+            float: right;
+            margin-right: 8.3rem;
+            display: flex;
+        }
+
+        &--search_input {
+            animation: slidein 0.5s ease-in;
+            padding-left: 0.5rem;
+            height: 2.5rem;
+            width: 22rem;
+            background: #eee;
+            font-size: 1.5rem;
+            border-radius: 0.5rem;
+            margin: 0 0.3rem;
+        }
+
+        &--search_input:focus {
+           outline: $primary-color auto 0.5rem;
+        }
+
+        &--search {
+            color: $primary-color;
+            cursor: pointer;
+            font-size: 1.6rem;
+            padding: 0.3rem;
+        }
+
+        @keyframes slidein {
+          from {
+            width: 0; 
+          }
+
+          to {
+            width: 22rem;
+          }
+        } 
+
     }
 
     &__description {
@@ -25,63 +85,28 @@
     }
 
     &__illustration {
+        display: flex;
+        justify-content: center;
+        padding: 60px;
         width: 60%;
         background: url('../img/hero.svg');
         background-repeat: no-repeat;
         position: relative;
-
-        & > img {
-            position: relative;
-            transform: translate(80%, 45%);
-        }
     }
 
-    &__nav {
-        position: absolute;
-        margin-top: 5rem;
-        margin-left: 20rem;
+    &__description {
+        width: 40%;
+        padding: 7rem 5rem 5rem 12rem;
+    }
 
-        & > ul li {
-            display: inline-block;
-            margin-right: 3rem;
-            font-weight: $bold-font;
-        }
-
-        &--search {
-            color: #5863f8;
-            cursor: pointer;
-            font-size: 1.6rem;
-            padding: 3px;
-        }
-
-        &--search_wrapper {
-            animation: slidein 0.5s linear;
-            background: #c4cdef;
-            margin-left: 40px;
-            border-radius: 5px;
-            display: flex;
-            width: 225px;
-        }
-
-        &--search_input {
-            
-            width: 220px;
-            font-size: 1.5rem !important;
-            border-radius: 5px 0 0 5px !important;
-            height: 25px;
-            padding-left: 5px!important;
-        }
-        @keyframes slidein {
-          from {
-            margin-left: 500px;
-            width: 300%; 
-          }
-
-          to {
-            margin-left: 150px;
-            width: 100%;
-          }
-        } 
+    &__illustration {
+        display: flex;
+        justify-content: center;
+        padding: 60px;
+        width: 60%;
+        background: url('../img/hero.svg');
+        background-repeat: no-repeat;
+        position: relative;
     }
 
     &__text {
@@ -105,8 +130,28 @@
     }
 }
 
+// Animation for dancing button
+@keyframes btnDance {
+    0% {
+        bottom: 7.7rem;
+    }
+
+    45% {
+        bottom: 7.3rem;
+    }
+
+    90% {
+        bottom: 6.5rem;
+    }
+
+    100% {
+        bottom: 7.7rem;
+    }
+}
+
 // Styles for the animated button on the hero section
 .scroll {
+    cursor: pointer;
     position: absolute;
     width: 8rem;
     height: 8rem;
@@ -115,33 +160,39 @@
     border-radius: 100%;
     border: 0.3rem solid #ffffff;
     font-size: 6rem;
-    bottom: 6.5rem;
     right: 50%;
+    outline: none;
+    transition:
+      color 0.3s,
+      border-color 0.3s;
+    animation: btnDance 0.9s forwards;
+    animation-iteration-count: infinite;
 }
 
 // Styles for the different sections (About Authors and Featured Sections)
 .segment {
     &.about {
         background: $light-grey;
-        height: 70vh;
+        padding: 6rem 4rem 18rem;
 
         & > .segment__title {
             font-weight: $semi-bold-font;
-            padding-top: 6rem;
+            padding-top: 1rem;
         }
     }
 
     &.featured {
         background: url('../img/section.svg');
+        background-size: cover;
         background-repeat: no-repeat;
-        height: 90vh;
         margin-top: -7rem;
         color: $white-color;
         display: flex;
         flex-direction: column;
+        padding: 4rem;
 
         & > .segment__title {
-            padding-top: 10rem;
+            padding-top: 7rem;
         }
     }
 
@@ -157,7 +208,7 @@
     }
     
     &__text {
-        font-size: 18px;
+        font-size: 1.8rem;
     }
 }
 
@@ -168,6 +219,7 @@
         justify-content: space-evenly;
         margin-top: 7.5rem;
         margin-bottom: 4rem;
+        flex-wrap: wrap;
     }
 
     &__card {
@@ -184,7 +236,7 @@
             font-size: 1.6rem;
             max-width: 12rem;
             position: absolute;
-            top: 15px;
+            top: 1.5rem;
             left: -2rem;
         }
 
@@ -235,7 +287,7 @@
     }
 
     &__title {
-        top: -15px;
+        top: -1.5rem;
         font-size: 2.2rem;
         font-weight: 600;
     }
@@ -255,7 +307,64 @@ footer {
     justify-content: center;
 }
 
-@media screen and (max-width: 768px) {
+// Responsive styles for viewports between 800px and 1000px
+@media screen and (min-width: 806px) and (max-width: 1300px) {
+    .hero {
+        &__nav {
+            display: flex;
+            flex-direction: column;
+
+            &  > ul li {
+                line-height: 2;
+            }
+
+            &--links {
+                margin-inline-start: unset;
+                align-self: flex-end;
+            }
+
+            & > img {
+                align-self: center;
+                width: 60%;
+                margin-top: 140px;
+            }
+        }
+
+        &__description {
+            width: 40%;
+            padding: 7rem 5rem 5rem 5rem;
+        }
+
+        &__illustration {
+            width: 80%;
+            background-size: cover;
+        }
+
+        &__cta {
+            margin-top: 4rem;
+            text-align: center;
+
+            & > a {
+                line-height: 1;
+                margin-bottom: 2rem;
+                min-width: 100%;
+                display: block;
+            }
+        }
+    }
+
+    .scroll {
+        bottom: 1.5rem;
+    }
+
+    .featured__card {
+        margin-right: 4rem;
+        margin-bottom: 3rem;
+    }
+}
+
+// Responsive styles for viewports 805 and below
+@media screen and (max-width: 805px) {
     .hamburger{
         color: $white-color;
         font-size: 3rem;
@@ -273,9 +382,14 @@ footer {
             display: none;
         }
 
+        &__nav--mobile {
+            display: inherit;
+            background: transparent;
+        }
+
         &__description {
             width: 100%;
-            padding: 30px;
+            padding: 3rem;
         }
 
         &__illustration {
@@ -288,17 +402,18 @@ footer {
         }
 
         &__text {
-            margin-top: 6.5rem;
+            margin-top: 5.5rem;
+            margin-bottom: 7rem;
             color: #ffffff;
             text-align: center;
             
             &--large, 
             &--normal {
-                padding: 0 5rem;
+                padding: 0 1rem;
             } 
 
             &--large {
-                font-size: 3.5rem;
+                font-size: 2.8rem;
                 margin-bottom: 4.5rem;
             }
     
@@ -315,9 +430,10 @@ footer {
                 display: block;
                 line-height: 1.6rem;
                 margin: 0 auto;
-                width: 40px;
+                width: 4rem;
 
                 &:not(:last-child) {
+                    margin: 0 auto;
                     margin-bottom: 2rem;
                 }
             }
@@ -329,6 +445,7 @@ footer {
 
         &__title {
             font-size: 2.5rem;
+            margin-top: 3rem;
         }
 
         &__text {
@@ -337,14 +454,15 @@ footer {
 
         &.about {
             background: $light-grey;
-            padding: 0 2.5rem 6.5rem;
+            padding: 2.5rem 2.5rem 6.5rem;
             height: auto;
         }
 
         &.featured {
             background-repeat: no-repeat;
             height: auto;
-            margin-top: -5rem;
+            margin-top: -15rem;
+            padding-bottom: 7rem;
             display: block;
         }
     }
@@ -370,7 +488,6 @@ footer {
             display: block;
             margin-bottom: 0;
             background: $primary-color;
-            height: 150rem;
         }
 
         &__card {
@@ -382,9 +499,28 @@ footer {
             position: absolute;
             margin-right: 0;
             right: 50%;
-            bottom: 4.5rem;
+            bottom: 2.5rem;
             transform: translateX(50%);
         }
     }
-    
+}
+
+// Responsive styles for viewports between 320px and below
+@media screen and (max-width: 400px) {
+    .hero__text {
+        margin-top: 2.5rem;
+
+        &--normal {
+            font-size: 1.6rem;
+        }
+
+        &--large {
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+    }
+
+    .hero__cta {
+        margin-top: 5rem;
+    }
 }

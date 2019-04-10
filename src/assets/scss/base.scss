@@ -14,6 +14,7 @@ $extra-bold-font: 800;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    border: unset;
 }
 
 html {
@@ -22,21 +23,32 @@ html {
 
 body {
     font-family: 'Nunito', 'Courier New', Courier, monospace;
+    min-width: 320px;
+}
+a.active > svg > path{
+    fill: #ffffff;
+}
+a:hover > svg > path {
+    fill: #ffffff;
 }
 
-a {
+a, .link_lookalike{
     text-decoration: none;
     color: $primary-color;
     font-size: 1.6rem;
+    cursor: pointer;
 }
 
 a.btn {
     background: $white-color;
-    margin-right: 3rem;
     padding: 1.5rem 2rem;
     min-width: 15rem;
     height: 4.5rem;
     border-radius: .5rem;
+}
+
+a.btn:not(:last-child) {
+    margin-right: 3rem;
 }
 
 li {

@@ -1,0 +1,380 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Landing Page Component should have match the given snapshot 1`] = `
+Array [
+  <section
+    className="hero"
+    onClick={[Function]}
+    role="presentation"
+  >
+    <div
+      className="hero__description"
+    >
+      <div
+        className="hero__header"
+      >
+        <a
+          className="hero__logo"
+          href="/"
+          onClick={[Function]}
+        >
+          <img
+            alt="Authors Haven Logo"
+            src={
+              Object {
+                "process": [Function],
+              }
+            }
+          />
+        </a>
+        <button
+          className="hero__nav--mobile"
+          type="button"
+        >
+          <span
+            className="hamburger"
+          >
+            <i
+              className="fas fa-bars"
+            />
+          </span>
+        </button>
+      </div>
+      <div
+        className="hero__text"
+      >
+        <h2
+          className="hero__text--large"
+        >
+          Authors Haven
+        </h2>
+        <p
+          className="hero__text--normal"
+        >
+          Building a community of like minded authors.
+        </p>
+      </div>
+      <div
+        className="hero__cta"
+      >
+        <a
+          className="btn"
+          href="/explore"
+          onClick={[Function]}
+        >
+          Explore Stories
+        </a>
+        <a
+          className="btn"
+          href="/create-story"
+          onClick={[Function]}
+        >
+          Start Writing
+        </a>
+      </div>
+    </div>
+    <div
+      className="hero__illustration"
+    >
+      <nav
+        className="hero__nav"
+      >
+        <ul
+          className="hero__nav--links"
+        >
+          <li>
+            <span
+              className="link_lookalike"
+              id="login-link"
+              onClick={[Function]}
+              role="presentation"
+            >
+              Login
+            </span>
+          </li>
+          <li>
+            <a
+              href="/register"
+              onClick={[Function]}
+            >
+              Register
+            </a>
+          </li>
+          <li
+            className="dropdown__trigger"
+          >
+            <a
+              href="/explore"
+              id="explore"
+              onClick={[Function]}
+              onMouseLeave={[Function]}
+            >
+              Explore
+               
+              <i
+                className="fas fa-angle-down"
+              />
+            </a>
+            <ul
+              className="dropdown__body "
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+            >
+              <li>
+                <a
+                  href="/filter?tag=Food"
+                  onClick={[Function]}
+                >
+                  Food
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/filter?tag=Technology"
+                  onClick={[Function]}
+                >
+                  Technology
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/filter?tag=Health"
+                  onClick={[Function]}
+                >
+                  Health
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/filter?tag=Finance"
+                  onClick={[Function]}
+                >
+                  Finance
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/filter?tag=Arts"
+                  onClick={[Function]}
+                >
+                  Arts
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <span
+              id="searchIcon"
+              onClick={[Function]}
+              role="presentation"
+            >
+              <i
+                className="fas fa-search hero__nav--search"
+                id="searchIconChild"
+              />
+            </span>
+          </li>
+        </ul>
+        <img
+          alt="Illustration of a reader"
+          src={
+            Object {
+              "process": [Function],
+            }
+          }
+        />
+      </nav>
+    </div>
+    <button
+      className="scroll"
+      onClick={[Function]}
+      type="button"
+    >
+      <i
+        className="fas fa-angle-down"
+      />
+    </button>
+  </section>,
+  <section
+    className="segment about"
+  >
+    <h3
+      className="segment__title"
+    >
+      How Authors Haven works
+    </h3>
+    <p
+      className="segment__text"
+    >
+      Create and share your story with an amazing community of authors and avid readers.
+    </p>
+    <div
+      className="steps"
+    >
+      <div
+        className="step"
+      >
+        <span
+          className="step__number"
+        >
+          1
+        </span>
+        <span
+          className="step__title"
+        >
+          Write
+        </span>
+        <span
+          className="step__text"
+        >
+          Share your unique story with readers.
+        </span>
+      </div>
+      <div
+        className="step"
+      >
+        <span
+          className="step__number"
+        >
+          2
+        </span>
+        <span
+          className="step__title"
+        >
+          Explore
+        </span>
+        <span
+          className="step__text"
+        >
+          Find stories from amazing authors.
+        </span>
+      </div>
+      <div
+        className="step"
+      >
+        <span
+          className="step__number"
+        >
+          3
+        </span>
+        <span
+          className="step__title"
+        >
+          Connect
+        </span>
+        <span
+          className="step__text"
+        >
+          Engage with a community of writers.
+        </span>
+      </div>
+    </div>
+  </section>,
+  <section
+    className="segment featured"
+  >
+    <h3
+      className="segment__title"
+    >
+      Featured Categories
+    </h3>
+    <p
+      className="segment__text"
+    >
+      Create and share your story with an amazing community of authors and avid readers.
+    </p>
+    <div
+      className="featured__articles"
+    >
+      <div
+        className="featured__card"
+      >
+        <span
+          className="category"
+        >
+          Food
+        </span>
+        <span
+          className="title"
+        >
+          Top recipes to making amazing sandwiches.
+        </span>
+      </div>
+      <div
+        className="featured__card"
+      >
+        <span
+          className="category"
+        >
+          Technology
+        </span>
+        <span
+          className="title"
+        >
+          Top recipes to making amazing sandwiches.
+        </span>
+      </div>
+      <div
+        className="featured__card"
+      >
+        <span
+          className="category"
+        >
+          Arts
+        </span>
+        <span
+          className="title"
+        >
+          Top recipes to making amazing sandwiches.
+        </span>
+      </div>
+      <div
+        className="featured__card"
+      >
+        <span
+          className="category"
+        >
+          Health
+        </span>
+        <span
+          className="title"
+        >
+          Top recipes to making amazing sandwiches.
+        </span>
+      </div>
+      <div
+        className="featured__card"
+      >
+        <span
+          className="category"
+        >
+          Finance
+        </span>
+        <span
+          className="title"
+        >
+          Top recipes to making amazing sandwiches.
+        </span>
+      </div>
+    </div>
+    <a
+      className="btn"
+      href="/explore"
+      onClick={[Function]}
+    >
+      Explore Stories
+       
+      <i
+        className="fas fa-angle-right"
+      />
+    </a>
+  </section>,
+  <footer>
+    ©
+     
+    2019
+     
+    Authors Haven
+  </footer>,
+]
+`;

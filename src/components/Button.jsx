@@ -1,14 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { func, string, bool } from 'prop-types';
 
 /**
  * @description reusable button component
  * @returns {HTMLButtonElement} button
  */
 const Button = ({
-  btnText, onClick, customClass, imgSrc, imgCustomClass, imgAltText
+  btnText, onClick, customClass, imgSrc, imgCustomClass, imgAltText, isDisabled, btnType
 }) => (
-  <button type="button" onClick={onClick} className={`ah-btn ${customClass}`}>
+  // eslint-disable-next-line react/button-has-type
+  <button type={btnType} onClick={onClick} className={`ah-btn ${customClass}`} disabled={isDisabled}>
     {imgSrc && (
     <img
       src={imgSrc}
@@ -24,27 +25,35 @@ Button.propTypes = {
   /**
    * The custom class containing extra styles for the button
    */
-  customClass: PropTypes.string,
+  customClass: string,
   /**
    * The source for the image on the button if any
    */
-  imgSrc: PropTypes.string,
+  imgSrc: string,
   /**
    * Custom class with extra styles for the image
    */
-  imgCustomClass: PropTypes.string,
+  imgCustomClass: string,
   /**
    * Alt text for the image
    */
-  imgAltText: PropTypes.string,
+  imgAltText: string,
   /**
    * Text to be dispayed on the button
    */
-  btnText: PropTypes.string.isRequired,
+  btnText: string.isRequired,
   /**
    * Function to be fired when clicked
    */
-  onClick: PropTypes.func.isRequired,
+  onClick: func.isRequired,
+  /**
+   * Disable and enable button
+   */
+  isDisabled: bool,
+  /**
+   * button type
+   */
+  btnType: string,
 };
 
 Button.defaultProps = {
@@ -52,6 +61,8 @@ Button.defaultProps = {
   imgSrc: '',
   imgCustomClass: '',
   imgAltText: '',
+  isDisabled: false,
+  btnType: 'text'
 };
 
 export default Button;
