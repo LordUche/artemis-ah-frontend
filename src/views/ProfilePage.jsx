@@ -7,7 +7,9 @@ import {
   fetchUserDetails,
   fetchUserArticles,
   fetchUserFollowers,
-  fetchUserFollowing
+  fetchUserFollowing,
+  updateUserDetails,
+  resetEditState,
 } from '../redux/actions/profileActions';
 import ArticleItem from '../components/ArticleItem';
 import UserListItem from '../components/UserListItem';
@@ -15,15 +17,17 @@ import Button from '../components/Button';
 import UserDetailsSkeletonScreen from '../skeletonscreens/ProfilePageUserDetails';
 import ArticleItemSkeletonScreen from '../skeletonscreens/ArticleItem';
 import UserItemSkeletonScreen from '../skeletonscreens/UserItem';
+import {
+  TAB_ARTICLES,
+  TAB_FOLLOWING,
+  TAB_FOLLOWERS,
+  CONTENT_STATE_FETCHED,
+  CONTENT_STATE_FETCHING,
+  CONTENT_STATE_FETCHING_FAILED,
+  CONTENT_STATE_UPDATING,
+  CONTENT_STATE_UPDATED,
+} from '../constants/profileConstants';
 import '../assets/scss/ProfilePage.scss';
-
-const TAB_ARTICLES = 'tab.articles';
-const TAB_FOLLOWING = 'tab.following';
-const TAB_FOLLOWERS = 'tab.followers';
-
-const CONTENT_STATE_FETCHED = 'content-state.fetched';
-const CONTENT_STATE_FETCHING = 'content-state.fetching';
-const CONTENT_STATE_FETCHING_FAILED = 'content-state.failed';
 
 /**
  * @class ProfilePage
@@ -39,6 +43,7 @@ class ProfilePage extends Component {
     this.state = {
       editMode: false,
       activeTab: TAB_ARTICLES,
+      selectedImage: null,
     };
   }
 
@@ -50,6 +55,22 @@ class ProfilePage extends Component {
 
     const viewingUsername = (match.params.username || user.username);
     fetchUserDetails(viewingUsername, user.authToken, dispatch);
+  }
+
+  /**
+   * @param {object} nextProps Props about to be passed by redux.
+   * @returns {undefined}
+   */
+  componentWillReceiveProps(nextProps) {
+    const { editMode } = this.state;
+
+    const { dispatch } = this.props;
+
+    if (editMode && nextProps.profile.editState === CONTENT_STATE_UPDATED) {
+      this.setState({ editMode: false });
+
+      dispatch(resetEditState());
+    }
   }
 
   /**
@@ -67,12 +88,26 @@ class ProfilePage extends Component {
   }
 
   /**
+   * @method onImageSelected
+   * @description Called when the selects a picture from their browser's image chooser.
+   * @returns {undefined}
+   */
+  onImageSelected = ({ target }) => {
+    const [image] = target.files;
+    this.showSelectedImage(image);
+
+    this.setState({
+      selectedImage: image,
+    });
+  }
+
+  /**
    * @returns {Node} The view for the users details.
    */
   getUserDetailsView() {
     const { profile } = this.props;
 
-    const { user } = profile;
+    const { user, editState } = profile;
 
     const { editMode } = this.state;
 
@@ -83,20 +118,43 @@ class ProfilePage extends Component {
     if (user.contentState === CONTENT_STATE_FETCHED) {
       const aboutProps = {
         className: 'profile-section__blue-bg__data__about',
+        'data-gramm_editor': 'false',
       };
+
+      const saveBtnProps = {
+        btnText: 'Save Changes',
+      };
+
       if (editMode) {
         aboutProps.className += ` ${aboutProps.className}--edit`;
-        aboutProps.contentEditable = true;
+
+        if (editState === CONTENT_STATE_UPDATING) {
+          saveBtnProps.btnText = 'Updating ...';
+        } else {
+          aboutProps.contentEditable = true;
+          saveBtnProps.onClick = this.saveUpdate.bind(this);
+        }
       }
 
       return (
         <div className="profile-section__blue-bg__user-wrapper">
           <div className="profile-section__blue-bg__picture-section">
-            <img src={user.profilePic} alt={user.fullname} />
+            <img
+              src={user.profilePic}
+              alt={user.fullname}
+              ref={(ref) => { this.profileImgElement = ref; }}
+            />
             {editMode && (
               <div className="profile-section__blue-bg__picture-section__edit-wrapper">
-                <div className="profile-section__blue-bg__picture-section__edit-wrapper__edit">
-                  <button type="button"><i className="fa fa-camera" /></button>
+                <div className="profile-section__blue-bg__picture-section__edit-wrapper__inner">
+                  <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser">
+                    <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner">
+                      <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner__btn">
+                        <i className="fa fa-camera" />
+                      </span>
+                      <input type="file" accept="image/*" onChange={event => this.onImageSelected(event)} />
+                    </span>
+                  </span>
                 </div>
               </div>
             )}
@@ -104,12 +162,17 @@ class ProfilePage extends Component {
           <div className="profile-section__blue-bg__data">
             <div className="profile-section__blue-bg__data__fullname">{user.fullname}</div>
             <div className="profile-section__blue-bg__data__username">{user.username}</div>
-            <div {...aboutProps}>{user.about}</div>
+            <div
+              {...aboutProps}
+              ref={(ref) => { this.aboutUserElement = ref; }}
+            >
+              {user.about}
+            </div>
             <div className="profile-section__blue-bg__data__btn-wrapper">
               {!editMode ? (
                 <Button onClick={() => this.startEditProfile()} btnText="Edit Profile" />
               ) : (
-                <Button onClick={() => this.saveUpdate()} btnText="Save Changes" />
+                <Button {...saveBtnProps} />
               )}
             </div>
           </div>
@@ -302,6 +365,18 @@ class ProfilePage extends Component {
   );
 
   /**
+   * @param {File} image The image the user selected from the file chooser.
+   * @returns {undefined}
+   */
+  showSelectedImage(image) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.profileImgElement.src = e.target.result;
+    };
+    reader.readAsDataURL(image);
+  }
+
+  /**
    * @method startEditProfile
    * @description Called when the "Edit Profile" button is clicked
    * @returns {undefined}
@@ -318,9 +393,16 @@ class ProfilePage extends Component {
    * @returns {undefined}
    */
   saveUpdate() {
-    this.setState({
-      editMode: false,
-    });
+    const { dispatch, user } = this.props;
+
+    const { selectedImage } = this.state;
+
+    updateUserDetails(
+      user.authToken,
+      this.aboutUserElement.innerText,
+      selectedImage,
+      dispatch,
+    );
   }
 
   /**
