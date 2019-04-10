@@ -4,6 +4,8 @@ exports[`Landing Page Component should have match the given snapshot 1`] = `
 Array [
   <section
     className="hero"
+    onClick={[Function]}
+    role="presentation"
   >
     <div
       className="hero__description"
@@ -161,14 +163,16 @@ Array [
             </ul>
           </li>
           <li>
-            <a
-              href="/search"
+            <span
+              id="searchIcon"
               onClick={[Function]}
+              role="presentation"
             >
               <i
-                className="fas fa-search"
+                className="fas fa-search hero__nav--search"
+                id="searchIconChild"
               />
-            </a>
+            </span>
           </li>
         </ul>
         <img

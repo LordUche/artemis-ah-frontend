@@ -29,7 +29,7 @@ class LandingPage extends Component {
 
   /**
    * @description Fired when the down button is pressed on the homepage to scroll smoothly to
-   *              the "How it Works" section.
+   *  the "How it Works" section.
    * @returns {undefined}
    */
   smoothScrollToAbout = () => {
