@@ -10,6 +10,10 @@
 
     &__header {
         display: block;
+
+        #hamburger{
+            color: $white-color;
+        };
     }
 
     &__nav {
@@ -318,7 +322,8 @@ footer {
                 line-height: 2;
             }
 
-            &--links {
+            &--links,
+            &--search_wrapper {
                 margin-inline-start: unset;
                 align-self: flex-end;
             }
@@ -438,6 +443,33 @@ footer {
                 }
             }
         } 
+        .hamburger{
+            &_div{
+              &_menu{
+                &_backdrop{
+                    display: block;
+                }
+                &_aside{
+                  display: block;
+                }
+              }
+            }
+          }
+          #hamburger, #hamburger-ex {
+            cursor: pointer;
+            display: block;
+           }
+
+          #hamburger{
+            margin: 5px 10px;
+           }
+          
+           #hamburger-ex{
+            position: absolute;
+            top: 17px;
+            right: 10px;
+            font-size: 40px;
+           }
     }
 
     .segment {

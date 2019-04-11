@@ -1,0 +1,129 @@
+@import './base.scss';
+
+.hamburger{
+  &_div{
+    &_menu{
+      top: 0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1020;
+
+      &_backdrop{
+        background: rgba(38, 37, 37, 0.88);
+        width: 500vw;
+        height: 800vh;
+        z-index: 1030;
+        position: fixed;
+        top: 0;
+        left: -800px;
+        display: none;
+      }
+
+      &_aside{
+        width: 50%;
+        min-width: fit-content;
+        max-width: 300px;
+        background: #ffffff;
+        position: fixed;
+        padding: 70px 0;
+        height: 100vh;
+        top:0;
+        right: -1000px;
+        display: none;
+        z-index: 1040;
+
+        &_show{
+          right: 0;
+          animation: slideIn .4s linear;
+        }
+
+        ul{
+          list-style-type: none;
+        }
+
+        li {
+          padding: 0;
+          border-bottom: 3px solid $primary-color;
+          width: 100%;
+          font-weight: bold;
+          font-size: 15px;
+          cursor: pointer;
+
+          &:hover{
+            background: $primary-color;
+          }
+
+          &:hover > a , &:hover > span{
+            color: $white-color;
+          }
+
+          span, a{
+            width: 100%;
+            display: block;
+            padding: 20px;
+          }
+        } 
+      }
+      
+    }
+  }
+}
+
+#hamburger-ex{
+  color: #828282;
+}
+
+#hamburger-ex:hover{
+  color: $red-color;
+}
+
+@keyframes slideIn {
+  0%{        
+    top: 0;
+    right: -500px;
+  }
+  50%{        
+    top: 0;
+    right: -200px;
+  }
+  100%{        
+    top: 0;
+    right: 0px;
+  }
+}
+
+
+@media screen and (max-width: 768px){
+  .hamburger{
+    &_div{
+      &_menu{
+        &_backdrop{
+          display: block;
+        }
+        &_aside{
+          display: block;
+        }
+      }
+    }
+  }
+  #hamburger, #hamburger-ex {
+    cursor: pointer;
+    display: block;
+   }
+  
+   #hamburger-ex{
+    position: absolute;
+    top: 17px;
+    right: 0px;
+    font-size: 40px;
+   }
+}
+
+@media screen and (max-width: 400px){
+  #hamburger-ex{
+    top: 7px;
+    right: 0px;
+   }
+}

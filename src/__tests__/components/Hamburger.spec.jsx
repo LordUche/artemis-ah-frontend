@@ -1,40 +1,81 @@
+/* eslint-disable require-jsdoc */
 import React from 'react';
 import { shallow } from 'enzyme';
 import Hamburger from '../../components/Hamburger';
-import { TopNav } from '../../components/TopNav';
 
-const { openMenu, closeMenu } = new TopNav();
-
-describe('test the Hamburger', () => {
+describe('test the hamburger when closed', () => {
+  const mockToggleMenu = jest.fn();
   const hamburger = shallow(
-    <Hamburger
-      closeMenu={() => closeMenu()}
-      openMenu={() => openMenu()}
-      hamburgerStateClose="inline-block"
-      hamburgerStateOpen="none"
-    />
+    <Hamburger open={false} toggleMenu={mockToggleMenu}>
+      <li id="link1">test nav link</li>
+      <li id="link2">test nav link</li>
+      <li id="link3">test nav link</li>
+    </Hamburger>
   );
-  it('should return a i and span tag', () => {
-    expect(hamburger.find('i').exists()).toBe(true);
-    expect(hamburger.find('span').exists()).toBe(true);
+  it('should render the hamburger component', () => {
+    expect(hamburger.find('div.hamburger_div').exists()).toBe(true);
+    expect(hamburger.find('i#hamburger').exists()).toBe(true);
   });
 
-  it('Test to simulate menu dropdown click', () => {
-    const topNav = shallow(<TopNav isLoggedIn={false} />);
-    const hamburgerClose = hamburger.find('i#hamburger');
-    const hamburgerOpen = hamburger.find('span#hamburger-ex');
+  it('should contain the links passed in as children', () => {
+    expect(hamburger.find('li#link1').exists()).toBe(true);
+    expect(hamburger.find('li#link1').text()).toBe('test nav link');
+    expect(hamburger.find('li#link2').exists()).toBe(true);
+    expect(hamburger.find('li#link2').text()).toBe('test nav link');
+    expect(hamburger.find('li#link3').exists()).toBe(true);
+    expect(hamburger.find('li#link3').text()).toBe('test nav link');
+  });
 
-    // Resize screen for mobile testing
-    global.innerWidth = 600;
-    global.dispatchEvent(new Event('resize'));
+  it('should hide the links', () => {
+    expect(hamburger.find('aside.hamburger_div_menu_aside').hasClass('hamburger_div_menu_aside_hide')).toBe(true);
+    expect(hamburger.find('aside.hamburger_div_menu_aside').hasClass('hamburger_div_menu_aside_show')).toBe(false);
+  });
 
-    // Testing state after click
-    hamburgerClose.simulate('click');
-    expect(topNav.state('hamburgerStateOpen')).toBe('none');
+  it('should fire the toggle method when the hamburger icon is clicked', () => {
+    expect(mockToggleMenu.mock.calls.length).toEqual(0);
 
-    // Testing state after click
-    hamburgerOpen.simulate('click');
-    expect(topNav.state('hamburgerStateClose')).toBe('inline-block');
-    expect(topNav.state('hamburgerStateOpen')).toBe('none');
+    hamburger.find('i#hamburger').simulate('click');
+
+    expect(mockToggleMenu.mock.calls.length).toEqual(1);
+  });
+});
+
+describe('test the hamburger when opened', () => {
+  const mockToggleMenu = jest.fn();
+  const hamburger = shallow(
+    <Hamburger open toggleMenu={mockToggleMenu}>
+      <li id="link1">test nav link</li>
+      <li id="link2">test nav link</li>
+      <li id="link3">test nav link</li>
+    </Hamburger>
+  );
+
+  it('should show the links', () => {
+    expect(hamburger.find('aside.hamburger_div_menu_aside').hasClass('hamburger_div_menu_aside_show')).toBe(true);
+    expect(hamburger.find('aside.hamburger_div_menu_aside').hasClass('hamburger_div_menu_aside_hide')).toBe(false);
+  });
+
+  it('should have a backdrop', () => {
+    expect(hamburger.find('div.hamburger_div_menu_backdrop').exists()).toBe(true);
+  });
+
+  it('should show the button for closing the menu', () => {
+    expect(hamburger.find('span#hamburger-ex').exists()).toBe(true);
+  });
+
+  it('should close the menu when the close button, backdrop or a list item is clicked', () => {
+    expect(mockToggleMenu.mock.calls.length).toEqual(0);
+
+    hamburger.find('span#hamburger-ex').simulate('click');
+
+    expect(mockToggleMenu.mock.calls.length).toEqual(1);
+
+    hamburger.find('div.hamburger_div_menu_backdrop').simulate('click');
+
+    expect(mockToggleMenu.mock.calls.length).toEqual(2);
+
+    hamburger.find('ul').simulate('click');
+
+    expect(mockToggleMenu.mock.calls.length).toEqual(3);
   });
 });

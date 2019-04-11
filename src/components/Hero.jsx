@@ -5,7 +5,7 @@ import logo from '../assets/img/logo.svg';
 import illustration from '../assets/img/illustration.svg';
 import NavDropdown from './NavDropdown';
 import AHLoginModal from '../views/LoginModal';
-
+import Hamburger from './Hamburger';
 /**
  * @description Hero - Hero component for Landing Page view
  * @param {object} e event object
@@ -14,15 +14,22 @@ import AHLoginModal from '../views/LoginModal';
 class Hero extends Component {
   state = {
     displaySearchBar: false,
-    searchQuery: ''
-  };
+    searchQuery: '',
+    showResponsiveNav: false
+  }
+
+  toggleResponsiveNav = () => {
+    const { showResponsiveNav } = this.state;
+    this.setState({
+      showResponsiveNav: !showResponsiveNav
+    });
+  }
 
   searchButtonOnclick = () => {
-    this.setState(state => ({
-      ...state,
+    this.setState({
       displaySearchBar: true
-    }));
-  };
+    });
+  }
 
   hideSearchField = (e) => {
     if (
@@ -60,7 +67,7 @@ class Hero extends Component {
    * @returns {JSX} - JSX component
    */
   render() {
-    const { displaySearchBar } = this.state;
+    const { displaySearchBar, showResponsiveNav } = this.state;
     const {
       smoothScrollListener,
       showLoginModal,
@@ -79,11 +86,11 @@ class Hero extends Component {
                 <img src={logo} alt="Authors Haven Logo" />
               </Link>
             </Router>
-            <button type="button" className="hero__nav--mobile">
-              <span className="hamburger">
-                <i className="fas fa-bars" />
-              </span>
-            </button>
+            <Hamburger open={showResponsiveNav} toggleMenu={this.toggleResponsiveNav}>
+              <li><span id="login-link" className="link_lookalike" role="presentation" onClick={revealLoginModal}>Login</span></li>
+              <li><Router><Link to="./register">Register</Link></Router></li>
+              <li><Router><Link to="./register">Explore</Link></Router></li>
+            </Hamburger>
           </div>
           <div className="hero__text">
             <h2 className="hero__text--large">Authors Haven</h2>
