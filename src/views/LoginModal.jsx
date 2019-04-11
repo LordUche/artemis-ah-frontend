@@ -90,13 +90,7 @@ export class LoginModal extends Component {
    * @returns {null} null
    */
   socialMediaLogin = (URL) => {
-    if (URL === GOOGLE_SOCIAL_LOGIN_URL) {
-      window.location.assign(GOOGLE_SOCIAL_LOGIN_URL);
-    } else if (URL === FACEBOOK_SOCIAL_LOGIN_URL) {
-      window.location.assign(FACEBOOK_SOCIAL_LOGIN_URL);
-    } else if (URL === TWITTER_SOCIAL_LOGIN_URL) {
-      window.location.assign(TWITTER_SOCIAL_LOGIN_URL);
-    }
+    window.location.assign(URL);
   };
 
   /**
