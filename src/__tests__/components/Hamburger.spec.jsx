@@ -1,15 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Hamburger from '../../components/Hamburger';
-import TopNav from '../../components/TopNav';
+import { TopNav } from '../../components/TopNav';
 
 const { openMenu, closeMenu } = new TopNav();
 
 describe('test the Hamburger', () => {
   const hamburger = shallow(
     <Hamburger
-      closeMenu={closeMenu}
-      openMenu={openMenu}
+      closeMenu={() => closeMenu()}
+      openMenu={() => openMenu()}
       hamburgerStateClose="inline-block"
       hamburgerStateOpen="none"
     />
@@ -20,7 +20,7 @@ describe('test the Hamburger', () => {
   });
 
   it('Test to simulate menu dropdown click', () => {
-    const topNav = shallow(<TopNav />);
+    const topNav = shallow(<TopNav isLoggedIn={false} />);
     const hamburgerClose = hamburger.find('i#hamburger');
     const hamburgerOpen = hamburger.find('span#hamburger-ex');
 
@@ -28,11 +28,8 @@ describe('test the Hamburger', () => {
     global.innerWidth = 600;
     global.dispatchEvent(new Event('resize'));
 
-    // Testing Initial State
-    expect(topNav.state('hamburgerStateClose')).toBe('inline-block');
-    hamburgerClose.simulate('click');
-
     // Testing state after click
+    hamburgerClose.simulate('click');
     expect(topNav.state('hamburgerStateOpen')).toBe('none');
 
     // Testing state after click

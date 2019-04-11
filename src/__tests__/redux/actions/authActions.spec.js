@@ -1,6 +1,12 @@
 import {
-  storeInLocal, loadingAuthAction, clearAuthErrorAction, loginUserAction
+  storeInLocal,
+  loadingAuthAction,
+  clearAuthErrorAction,
+  loginUserAction,
+  socialLoginUserAction
 } from '../../../redux/actions/authActions';
+
+import HelperUtils from '../../../utils/helperUtils';
 
 describe('storing data in local storage', () => {
   it('should store data in local storage', () => {
@@ -57,6 +63,18 @@ describe('dispatching login actions', () => {
     expect(secondAction.type).toEqual('LOGIN_USER');
     expect(secondAction.payload.username).toEqual('ayo');
     done();
+  });
+
+  it('when user details are valid it dispatches the login action', () => {
+    const payload = {
+      username: 'obiora',
+      lastname: 'ora',
+      firstname: 'obi',
+      token: HelperUtils.generateToken({ username: 'obiora', lastname: 'ora', firstname: 'obi' })
+    };
+    const action = socialLoginUserAction(payload);
+    expect(action.type).toEqual('LOGIN_USER');
+    expect(action.payload.username).toEqual('obiora');
   });
 });
 

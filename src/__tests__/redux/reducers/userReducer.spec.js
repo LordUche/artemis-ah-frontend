@@ -3,7 +3,8 @@ import userReducer, { initialState } from '../../../redux/reducers/userReducer';
 describe('user reducer initial state', () => {
   it('should return the right state when local storage is empty', () => {
     const mockLocalStorage = {};
-    const state = userReducer(initialState(mockLocalStorage), {});
+    const mockSessionStorage = {};
+    const state = userReducer(initialState(mockLocalStorage, mockSessionStorage), {});
     expect(state.username).toEqual('');
     expect(state.email).toEqual('');
     expect(state.bio).toEqual('');
@@ -14,9 +15,10 @@ describe('user reducer initial state', () => {
       authorsHavenUsername: 'abc',
       authorsHavenEmail: 'abc@yahoo.com',
       authorsHavenBio: 'blabla',
-      authorsHavenImage: 'abc.jpg',
+      authorsHavenImage: 'abc.jpg'
     };
-    const state = userReducer(initialState(mockLocalStorage), {});
+    const mockSessionStorage = {};
+    const state = userReducer(initialState(mockLocalStorage, mockSessionStorage), {});
     expect(state.username).toEqual('abc');
     expect(state.email).toEqual('abc@yahoo.com');
     expect(state.bio).toEqual('blabla');
@@ -24,11 +26,11 @@ describe('user reducer initial state', () => {
   });
 });
 
-
 describe('user reducer', () => {
   it('updates the state when login user action is dispatched', () => {
     const mockLocalStorage = {};
-    const state = userReducer(initialState(mockLocalStorage), {
+    const mockSessionStorage = {};
+    const state = userReducer(initialState(mockLocalStorage, mockSessionStorage), {
       type: 'LOGIN_USER',
       payload: {
         username: 'qwerty',
