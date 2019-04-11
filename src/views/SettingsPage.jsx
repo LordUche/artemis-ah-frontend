@@ -20,7 +20,7 @@ const Settings = () => {
         {test}
         <Link to="/">Home</Link>
       </section>
-      <SideNav isLoggedIn={false} />
+      <SideNav isLoggedIn />
     </div>
   );
 };
