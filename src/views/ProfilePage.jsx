@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TopNav, SideNav } from '../components';
+import { SideNav } from '../components';
+import TopNavBar from '../components/TopNav';
 
 /**
  * @description profile page view
@@ -15,12 +16,12 @@ const ProfilePage = () => {
     });
   return (
     <div>
-      <TopNav />
+      <TopNavBar />
       <section style={{ textAlign: 'center' }}>
         {test}
         <Link to="/">Home</Link>
       </section>
-      <SideNav />
+      <SideNav isLoggedIn />
     </div>
   );
 };

@@ -8,12 +8,15 @@ describe('Hero Component', () => {
   const mockRevealLoginModal = jest.fn();
   const mockSearchHandler = jest.fn();
   const mockSmoothScrollListener = jest.fn();
-  const hero = shallow(<Hero
-    showLoginModal
-    hideLoginModal={mockHideLoginModal}
-    revealLoginModal={mockRevealLoginModal}
-    smoothScrollListener={mockSmoothScrollListener}
-  />);
+  const hero = shallow(
+    <Hero
+      showLoginModal
+      hideLoginModal={mockHideLoginModal}
+      revealLoginModal={mockRevealLoginModal}
+      smoothScrollListener={mockSmoothScrollListener}
+      isLoggedIn={false}
+    />
+  );
 
   it('should have a logo present', () => {
     expect(hero.find('.hero__logo > img').exists()).toBe(true);
@@ -30,7 +33,9 @@ describe('Hero Component', () => {
 
   it('should have a large call to action text', () => {
     expect(hero.find('.hero__text--large').text()).toEqual('Authors Haven');
-    expect(hero.find('.hero__text--normal').text()).toEqual('Building a community of like minded authors.');
+    expect(hero.find('.hero__text--normal').text()).toEqual(
+      'Building a community of like minded authors.'
+    );
   });
 
   it('should have a round navigation button', () => {
@@ -48,10 +53,12 @@ describe('Hero Component', () => {
   });
 
   it('should simulate search icon click', () => {
-    const wrapper = shallow(<span role="presentation" onClick={mockSearchHandler}><i className="fas fa-search hero__nav--search" /></span>);
-    wrapper
-      .find('span')
-      .simulate('click');
+    const wrapper = shallow(
+      <span role="presentation" onClick={mockSearchHandler}>
+        <i className="fas fa-search hero__nav--search" />
+      </span>
+    );
+    wrapper.find('span').simulate('click');
     expect(mockSearchHandler).toHaveBeenCalled();
   });
 
@@ -61,17 +68,19 @@ describe('Hero Component', () => {
   });
 });
 
-
-describe('Hero Component Search Icon', () => {
+describe('Hero Component', () => {
   const mockHideLoginModal = jest.fn();
   const mockRevealLoginModal = jest.fn();
   const mockSmoothScrollListener = jest.fn();
-  const hero = mount(<Hero
-    showLoginModal={false}
-    hideLoginModal={mockHideLoginModal}
-    revealLoginModal={mockRevealLoginModal}
-    smoothScrollListener={mockSmoothScrollListener}
-  />);
+  const hero = shallow(
+    <Hero
+      showLoginModal
+      hideLoginModal={mockHideLoginModal}
+      revealLoginModal={mockRevealLoginModal}
+      smoothScrollListener={mockSmoothScrollListener}
+      isLoggedIn={false}
+    />
+  );
   const { hideSearchField } = new Hero();
 
   hero.setState({ displaySearchBar: true });
@@ -83,7 +92,7 @@ describe('Hero Component Search Icon', () => {
   it('button click should show search input', () => {
     hero
       .find('input.hero__nav--search_input')
-      .simulate('keypress', { key: 'Enter' });
+      .simulate('keypress', { key: 'Enter', target: { name: 'search' } });
     expect(hero).toMatchObject({});
   });
 
@@ -96,9 +105,7 @@ describe('Hero Component Search Icon', () => {
   });
 
   it('button click should show search input', () => {
-    hero
-      .find('section.hero')
-      .simulate('click');
+    hero.find('section.hero').simulate('click', { target: { name: 'search', value: 'abc' } });
     expect(hero).toMatchObject({});
   });
 });

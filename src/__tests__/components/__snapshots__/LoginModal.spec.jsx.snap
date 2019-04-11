@@ -50,7 +50,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           className="login_body_socials"
         >
           <button
-            className="ah-btn login_body_socials_btn login_body_socials_facebook"
+            className="ah-btn login_body_socials_btn login_body_socials_facebook facebookDesktop"
             disabled={false}
             onClick={[Function]}
             type="text"
@@ -67,7 +67,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
             Sign in with Facebook
           </button>
           <button
-            className="ah-btn login_body_socials_btn login_body_socials_twitter"
+            className="ah-btn login_body_socials_btn login_body_socials_twitter twitterDesktop"
             disabled={false}
             onClick={[Function]}
             type="text"
@@ -84,7 +84,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
             Sign in with Twitter
           </button>
           <button
-            className="ah-btn login_body_socials_btn login_body_socials_google"
+            className="ah-btn login_body_socials_btn login_body_socials_google googleDesktop"
             disabled={false}
             onClick={[Function]}
             type="text"
@@ -110,7 +110,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
             Sign in with
           </p>
           <button
-            className="ah-btn login_body_socials_btn login_body_socials_facebook"
+            className="ah-btn login_body_socials_btn login_body_socials_facebook facebookMobile"
             disabled={false}
             onClick={[Function]}
             type="text"
@@ -127,7 +127,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
             
           </button>
           <button
-            className="ah-btn login_body_socials_btn login_body_socials_twitter"
+            className="ah-btn login_body_socials_btn login_body_socials_twitter twitterMobile"
             disabled={false}
             onClick={[Function]}
             type="text"
@@ -144,7 +144,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
             
           </button>
           <button
-            className="ah-btn login_body_socials_btn login_body_socials_google"
+            className="ah-btn login_body_socials_btn login_body_socials_google googleMobile"
             disabled={false}
             onClick={[Function]}
             type="text"

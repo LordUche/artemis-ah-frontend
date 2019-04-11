@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
+import { bool, string } from 'prop-types';
+import { connect } from 'react-redux';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
 import Logo from './logo';
 import UserNavAvatar from './userNavAvartar';
@@ -12,7 +14,6 @@ import Hamburger from './Hamburger';
 class TopNav extends Component {
   state = {
     display: '',
-    auth: false,
     menuClassStyleName: 'link-wrapper',
     showResponsiveNav: false
   };
@@ -31,11 +32,11 @@ class TopNav extends Component {
   renderNavChildren = () => {
     const {
       display,
-      auth,
       menuClassStyleName,
       showResponsiveNav
     } = this.state;
-    if (auth) {
+    const { isLoggedIn, username, image } = this.props;
+    if (isLoggedIn) {
       return (
         <Fragment>
           <div className="nav-component-container-online1">
@@ -59,8 +60,8 @@ class TopNav extends Component {
             </li>
             <li>
               <UserNavAvatar
-                username="Shaolinmkz"
-                imgSrc="https://res.cloudinary.com/artemisah/image/upload/v1554335316/authorshaven/ARSENAL_ME.jpg"
+                username={username}
+                imgSrc={image}
                 customImageClassName="ah-profile-images"
                 customLinkClassName="ah-profile-link"
               />
@@ -128,4 +129,33 @@ class TopNav extends Component {
   }
 }
 
-export default TopNav;
+TopNav.propTypes = {
+  username: string,
+  isLoggedIn: bool,
+  image: string
+};
+
+TopNav.defaultProps = {
+  image: 'https://res.cloudinary.com/artemisah/image/upload/v1554333407/authorshaven/ah-avatar.png',
+  username: 'Default',
+  isLoggedIn: false
+};
+
+/**
+ *
+ * @param {object} store redux store
+ * @returns {object} TopNav props
+ */
+export const mapStateToProps = ({ auth, user }) => {
+  const { isLoggedIn } = auth;
+  const { image, username } = user;
+  return {
+    isLoggedIn,
+    image,
+    username
+  };
+};
+
+export default connect(mapStateToProps)(TopNav);
+
+export { TopNav };

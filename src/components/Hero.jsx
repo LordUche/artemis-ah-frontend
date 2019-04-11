@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { func, bool } from 'prop-types';
 import logo from '../assets/img/logo.svg';
 import illustration from '../assets/img/illustration.svg';
-// import InputField from './InputField';
 import NavDropdown from './NavDropdown';
 import AHLoginModal from '../views/LoginModal';
 import Hamburger from './Hamburger';
@@ -33,10 +32,14 @@ class Hero extends Component {
   }
 
   hideSearchField = (e) => {
-    if ((e.target.name !== 'searchQuery' && e.target.id !== 'search') && (e.target.id !== 'searchIconChild' && e.target.id !== 'searchIcon')) {
+    if (
+      e.target.name !== 'searchQuery'
+      && e.target.id !== 'search'
+      && (e.target.id !== 'searchIconChild' && e.target.id !== 'searchIcon')
+    ) {
       this.setState({ displaySearchBar: false });
     }
-  }
+  };
 
   searchKeyword = () => {
     const input = document.querySelector('input');
@@ -45,19 +48,19 @@ class Hero extends Component {
     if (searchQuery) {
       input.value = 'Redirects to the search page';
     }
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.searchKeyword();
     }
-  }
+  };
 
   handleSearchBarChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
     });
-  }
+  };
 
   /**
    * @description Hero - Hero component for Landing Page view
@@ -66,7 +69,11 @@ class Hero extends Component {
   render() {
     const { displaySearchBar, showResponsiveNav } = this.state;
     const {
-      smoothScrollListener, showLoginModal, revealLoginModal, hideLoginModal
+      smoothScrollListener,
+      showLoginModal,
+      revealLoginModal,
+      hideLoginModal,
+      isLoggedIn
     } = this.props;
 
     return (
@@ -104,10 +111,27 @@ class Hero extends Component {
         </div>
         <div className="hero__illustration">
           <nav className="hero__nav">
-            { !displaySearchBar ? (
+            {!displaySearchBar ? (
               <ul className="hero__nav--links">
-                <li><span id="login-link" className="link_lookalike" role="presentation" onClick={revealLoginModal}>Login</span></li>
-                <li><Router><Link to="./register">Register</Link></Router></li>
+                {!isLoggedIn && (
+                  <Fragment>
+                    <li>
+                      <span
+                        id="login-link"
+                        className="link_lookalike"
+                        role="presentation"
+                        onClick={revealLoginModal}
+                      >
+                        Login
+                      </span>
+                    </li>
+                    <li>
+                      <Router>
+                        <Link to="./register">Register</Link>
+                      </Router>
+                    </li>
+                  </Fragment>
+                )}
                 <NavDropdown parentLinkName="Explore">
                   <li>
                     <Router>
@@ -143,15 +167,28 @@ class Hero extends Component {
               </ul>
             ) : (
               <span className="hero__nav--search_wrapper" role="presentation">
-                <input className="hero__nav--search_input" placeholder="Type a keyword..." type="text" onChange={this.handleSearchBarChange} onKeyPress={this.handleKeyPress} name="searchQuery" />
-                <i className="fas fa-search hero__nav--search" id="search" onClick={this.searchKeyword} role="presentation" />
+                <input
+                  className="hero__nav--search_input"
+                  placeholder="Type a keyword..."
+                  type="text"
+                  onChange={this.handleSearchBarChange}
+                  onKeyPress={this.handleKeyPress}
+                  name="searchQuery"
+                />
+                <i
+                  className="fas fa-search hero__nav--search"
+                  id="search"
+                  onClick={this.searchKeyword}
+                  role="presentation"
+                />
               </span>
-            )
-            }
+            )}
             <img src={illustration} alt="Illustration of a reader" />
           </nav>
         </div>
-        <button type="button" className="scroll" onClick={smoothScrollListener}><i className="fas fa-angle-down" /></button>
+        <button type="button" className="scroll" onClick={smoothScrollListener}>
+          <i className="fas fa-angle-down" />
+        </button>
       </section>
     );
   }
@@ -162,6 +199,7 @@ Hero.propTypes = {
   showLoginModal: bool.isRequired,
   revealLoginModal: func.isRequired,
   hideLoginModal: func.isRequired,
+  isLoggedIn: bool.isRequired
 };
 
 export default Hero;

@@ -3,7 +3,8 @@ import authReducer, { initialState } from '../../../redux/reducers/authReducer';
 describe('auth reducer initial state', () => {
   it('should return the right state when local storage is empty', () => {
     const mockLocalStorage = {};
-    const state = authReducer(initialState(mockLocalStorage), {});
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {});
     expect(state.isLoggedIn).toEqual(false);
     expect(state.token).toEqual('');
     expect(state.errorMessages).toEqual({});
@@ -11,9 +12,10 @@ describe('auth reducer initial state', () => {
   });
   it('returns the user details stored when local storage is filled', () => {
     const mockLocalStorage = {
-      authorsHavenToken: 'abc',
+      authorsHavenToken: 'abc'
     };
-    const state = authReducer(initialState(mockLocalStorage), {});
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {});
     expect(state.isLoggedIn).toEqual(true);
     expect(state.token).toEqual('abc');
     expect(state.errorMessages).toEqual({});
@@ -21,11 +23,11 @@ describe('auth reducer initial state', () => {
   });
 });
 
-
 describe('auth reducer', () => {
-  it('updates the state\'s token and isLoggedIn fields when Login action is dispatched', () => {
+  it("updates the state's token and isLoggedIn fields when Login action is dispatched", () => {
     const mockLocalStorage = {};
-    const state = authReducer(initialState(mockLocalStorage), {
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {
       type: 'LOGIN_USER',
       payload: { token: 'abc' }
     });
@@ -33,16 +35,18 @@ describe('auth reducer', () => {
     expect(state.isLoggedIn).toEqual(true);
     expect(state.loading).toEqual(false);
   });
-  it('updates the state\'s loading field when Loading action is dispatched', () => {
+  it("updates the state's loading field when Loading action is dispatched", () => {
     const mockLocalStorage = {};
-    const state = authReducer(initialState(mockLocalStorage), {
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {
       type: 'AUTH_LOADING'
     });
     expect(state.loading).toEqual(true);
   });
-  it('updates the state\'s loading and error messages fields when Login error action is dispatched', () => {
+  it("updates the state's loading and error messages fields when Login error action is dispatched", () => {
     const mockLocalStorage = {};
-    const state = authReducer(initialState(mockLocalStorage), {
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {
       type: 'LOGIN_ERROR',
       payload: {
         message: 'invalid credentials'
@@ -55,9 +59,10 @@ describe('auth reducer', () => {
       }
     });
   });
-  it('updates the state\'s error messages field with the exact name error that was dispatched', () => {
+  it("updates the state's error messages field with the exact name error that was dispatched", () => {
     const mockLocalStorage = {};
-    const state = authReducer(initialState(mockLocalStorage), {
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {
       type: 'LOGIN_ERROR',
       payload: {
         errors: {
@@ -72,9 +77,10 @@ describe('auth reducer', () => {
       }
     });
   });
-  it('updates the state\'s error messages field with the exact password error that was dispatched', () => {
+  it("updates the state's error messages field with the exact password error that was dispatched", () => {
     const mockLocalStorage = {};
-    const state = authReducer(initialState(mockLocalStorage), {
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {
       type: 'LOGIN_ERROR',
       payload: {
         errors: {
@@ -89,9 +95,10 @@ describe('auth reducer', () => {
       }
     });
   });
-  it('should clear the state\'s errormessages field when clear auth error action is dispatched', () => {
+  it("should clear the state's errormessages field when clear auth error action is dispatched", () => {
     const mockLocalStorage = {};
-    const state = authReducer(initialState(mockLocalStorage), {
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {
       type: 'CLEAR_AUTH_ERROR'
     });
     expect(state.errorMessages).toEqual([]);
