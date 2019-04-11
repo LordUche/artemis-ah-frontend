@@ -33,11 +33,11 @@ export class LandingPage extends Component {
 
   /**
    * @description component will mount
-   * @param {object} data
    * @returns {undefined}
    */
-  componentWillMount = (data) => {
-    data = this.validateURLPayload();
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillMount = () => {
+    const data = this.validateURLPayload();
     const { location } = window;
     const { loginUserViaSocialMedia } = this.props;
     if (data) {
