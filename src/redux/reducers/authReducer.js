@@ -24,6 +24,7 @@ const authReducer = (state = initialState(localStorage), { type, payload }) => {
   switch (type) {
     case SIGN_UP_ERROR:
       return {
+        ...state,
         errorMessages: payload
       };
     case LOGIN_USER:

@@ -11,7 +11,7 @@ import NavDropdown from './NavDropdown';
  * @returns {JSX} - JSX component
  */
 const Hero = ({
-  smoothScrollListener, toggleModal, toggleLoginModal
+  smoothScrollListener, toggleSignupModal, toggleLoginModal
 }) => (
   <section className="hero">
     {/* {showLoginModal && <AHLoginModal onClose={hideLoginModal} />} */}
@@ -51,7 +51,7 @@ const Hero = ({
             <button
               className="click"
               type="button"
-              onClick={toggleModal}
+              onClick={toggleSignupModal}
             >
               Register
             </button>
@@ -103,7 +103,7 @@ Hero.propTypes = {
   // showLoginModal: bool.isRequired,
   // revealLoginModal: func.isRequired,
   // hideLoginModal: func.isRequired,
-  toggleModal: func.isRequired,
+  toggleSignupModal: func.isRequired,
   toggleLoginModal: func.isRequired
 };
 

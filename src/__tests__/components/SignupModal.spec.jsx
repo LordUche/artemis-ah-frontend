@@ -16,7 +16,7 @@ describe('SignUp Modal Component', () => {
       <Provider store={store}>
         <SignUp
           showSignup
-          toggleModal={mockFunction}
+          toggleSignupModal={mockFunction}
           toggleVerify={mockFunction}
           signUp={mockFunction}
           onClose={mockFunction}
@@ -33,7 +33,7 @@ describe('SignUp Modal Component', () => {
         <SignUp
           showModal={mockFunction}
           onClose={mockFunction}
-          toggleModal={mockFunction}
+          toggleSignupModal={mockFunction}
           toggleVerify={mockFunction}
           showSignup
           signUp={mockFunction}
@@ -57,7 +57,7 @@ describe('input fields', () => {
       <SignUp
         showModal={mockFunction}
         onClose={mockFunction}
-        toggleModal={mockFunction}
+        toggleSignupModal={mockFunction}
         toggleVerify={mockFunction}
         showSignup
         signUp={mockFunction}
@@ -122,7 +122,7 @@ describe('Should ahow errors when wrong values are entered', () => {
       <SignUp
         showModal={mockFunction}
         onClose={mockFunction}
-        toggleModal={mockFunction}
+        toggleSignupModal={mockFunction}
         toggleVerify={mockFunction}
         showSignup
         signUp={mockFunction}
@@ -178,24 +178,5 @@ describe('Should ahow errors when wrong values are entered', () => {
     confirmPasswordInput.simulate('change', event);
     expect(signUpModal.state().confirmPassword).toEqual(event.target.value);
     expect(signUpModal.state().formErrors.confirmPassword).toEqual('Password does not match');
-  });
-});
-
-describe('Submit form', () => {
-  it('Send data when Form is valid', () => {
-    const signUpModal = mount(
-      <SignUp
-        showModal={mockFunction}
-        onClose={mockFunction}
-        toggleModal={mockFunction}
-        toggleVerify={mockFunction}
-        showSignup
-        signUp={mockFunction}
-      />
-    );
-    signUpModal.setState({ formValid: true });
-    const signUpbutton = signUpModal.find('.ah_signup__form__button');
-    signUpbutton.simulate('click');
-    expect(mockFunction).toHaveBeenCalled();
   });
 });

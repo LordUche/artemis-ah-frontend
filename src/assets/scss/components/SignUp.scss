@@ -1,7 +1,7 @@
 @import './base.scss';
 
 .ah_signup{
-  width: 80%;
+  width: 60%;
   margin: 3% auto;
 
     &__form{
@@ -84,34 +84,23 @@
     }
 }
 
-// @media only screen and (max-width: 768px) {
-//   /* For mobile phones: */
-//   [class="ah_signup"]{
-//     margin: 1% auto;
-//     padding: 10px;
-//   }
-//   [class="ah_signup__social"]{
-//     display: none;
-//   }
-//   [class*="ah_signup__form__input"]{
-//     width: 95%;
-//   }
-//   [class="ah_signup__or-tag"]{
-//     width: 100%;
-//   }
-//   [class*="ah-input-required-asterisk"]{
-//     margin-right: 1%;
-//   }
-//   [class*="ah_signup__form__wrapper"]{
-//     width: 60%;
-//   }
-//   [class="ah_signup__social--small"]{
-//     display: block;
-//   }
-//   [class="ah_signup__has-account"]{
-//     font-size: 1.2rem;
-//   }
-// }
+.hasAccount{
+  color: #5863f8;
+  background: #ffffff;
+  padding-left: 5px;
+  font-size: 1.6rem;
+}
+
+.error{
+  color: $red-color
+}
+
+@media only screen and (max-width: 1000px) {
+  /* For mobile phones: */
+  .ah_signup{
+    width: 80%;
+  }
+}
 
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */

@@ -8,21 +8,22 @@ const BASEURL = 'http://localhost:3000';
 /**
  * @description user sign up
  * @param {object} values
- * @param {function} toggleModal
+ * @param {function} toggleSignupModal
  * @param {function} toggleVerify
  * @returns {object} action
  */
-export async function signUp(values, toggleModal, toggleVerify) {
+export async function signUp(values, toggleSignupModal, toggleVerify) {
   try {
     const request = await axios.post(`${BASEURL}/api/users`, values);
+    const { user } = request.data;
 
-    if (request) {
-      await toggleModal();
+    if (user) {
+      await toggleSignupModal();
       await toggleVerify();
     }
     return {
       type: SIGN_UP,
-      payload: request
+      payload: user
     };
   } catch (error) {
     return {

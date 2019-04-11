@@ -23,7 +23,7 @@ const userReducer = (state = initialState(localStorage), { type, payload }) => {
     case SIGN_UP:
       return {
         ...state,
-        email: payload.data.user.email
+        email: payload.email
       };
     case LOGIN_USER:
       return {

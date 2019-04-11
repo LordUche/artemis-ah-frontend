@@ -52,14 +52,6 @@ export class SignUp extends Component {
   };
 
   /**
-   * @returns {object} gg
-   */
-  // componentDidMount() {
-  //   const { history } = this.props;
-  //   console.log('history', history);
-  // }
-
-  /**
    * @description onChange method
    * @param {*} event
    * @returns {object} dunno
@@ -80,8 +72,8 @@ export class SignUp extends Component {
    */
   onSubmit(event) {
     event.preventDefault();
-    const { signUp, toggleModal, toggleVerify } = this.props;
-    signUp(this.state, toggleModal, toggleVerify);
+    const { signUp, toggleSignupModal, toggleVerify } = this.props;
+    signUp(this.state, toggleSignupModal, toggleVerify);
   }
 
   /**
@@ -158,6 +150,13 @@ export class SignUp extends Component {
   }
 
   /**
+   * @returns {HTMLElement} login
+   */
+  showLogin() {
+    this.toggleSignupModal();
+  }
+
+  /**
    * @returns {object} state
    */
   validateForm() {
@@ -190,17 +189,17 @@ export class SignUp extends Component {
    */
   render() {
     const { formErrors, formValid } = this.state;
-    const { showSignup, toggleModal } = this.props;
+    const { showSignup, toggleSignupModal, toggleLoginModal } = this.props;
     return (
       <Modal
         customClass="ah_signup"
         modalHeader="SIGN UP"
         showModal={showSignup}
-        onClose={toggleModal}
+        onClose={toggleSignupModal}
       >
         <div className="ah_signup__body">
           <p className="login_body_required_text">*(Required fields)</p>
-          <form className="ah_signup__form">
+          <form className="ah_signup__form" onSubmit={this.onSubmit}>
             <div className="ah_signup__form__input">
               <InputField
                 customClass="ah_signup__form__input--signup firstname"
@@ -277,7 +276,8 @@ export class SignUp extends Component {
               <Button
                 customClass="ah_signup__form__button"
                 btnText="Sign Up"
-                onClick={this.onSubmit}
+                // onClick={this.onSubmit}
+                btnType="submit"
                 isDisabled={!formValid}
               />
             </div>
@@ -285,7 +285,7 @@ export class SignUp extends Component {
           <div>
             <p className="ah_signup__has-account">
               Already have an account?
-              <a href="/" className="ah_signup__has-account--link"> Login Here</a>
+              <button type="button" onClick={toggleLoginModal} className="ah_signup__has-account--link hasAccount"> Login Here</button>
             </p>
           </div>
           <div>
@@ -340,7 +340,8 @@ export class SignUp extends Component {
 
 SignUp.propTypes = {
   showSignup: bool.isRequired,
-  toggleModal: func.isRequired,
+  toggleSignupModal: func.isRequired,
+  toggleLoginModal: func.isRequired,
   toggleVerify: func.isRequired,
   signUp: func.isRequired,
 };

@@ -45,6 +45,7 @@ exports[`SignUp Modal Component should have match the given snapshot 1`] = `
       </p>
       <form
         className="ah_signup__form"
+        onSubmit={[Function]}
       >
         <div
           className="ah_signup__form__input"
@@ -184,8 +185,7 @@ exports[`SignUp Modal Component should have match the given snapshot 1`] = `
           <button
             className="ah-btn ah_signup__form__button"
             disabled={true}
-            onClick={[Function]}
-            type="text"
+            type="submit"
           >
             
             Sign Up
@@ -197,12 +197,12 @@ exports[`SignUp Modal Component should have match the given snapshot 1`] = `
           className="ah_signup__has-account"
         >
           Already have an account?
-          <a
-            className="ah_signup__has-account--link"
-            href="/"
+          <button
+            className="ah_signup__has-account--link hasAccount"
+            type="button"
           >
              Login Here
-          </a>
+          </button>
         </p>
       </div>
       <div>

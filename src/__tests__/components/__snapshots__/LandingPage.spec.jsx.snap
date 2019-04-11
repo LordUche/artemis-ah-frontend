@@ -238,6 +238,7 @@ Array [
         </p>
         <form
           className="ah_signup__form"
+          onSubmit={[Function]}
         >
           <div
             className="ah_signup__form__input"
@@ -377,8 +378,7 @@ Array [
             <button
               className="ah-btn ah_signup__form__button"
               disabled={true}
-              onClick={[Function]}
-              type="text"
+              type="submit"
             >
               
               Sign Up
@@ -390,12 +390,13 @@ Array [
             className="ah_signup__has-account"
           >
             Already have an account?
-            <a
-              className="ah_signup__has-account--link"
-              href="/"
+            <button
+              className="ah_signup__has-account--link hasAccount"
+              onClick={[Function]}
+              type="button"
             >
                Login Here
-            </a>
+            </button>
           </p>
         </div>
         <div>
@@ -827,12 +828,13 @@ Array [
             <div
               className="login_body_form_links"
             >
-              <a
-                className="login_body_form_link"
-                href="/"
+              <button
+                className="login_body_form_link hasAccount"
+                onClick={[Function]}
+                type="button"
               >
                 Register now
-              </a>
+              </button>
               <a
                 className="login_body_form_link"
                 href="/"

@@ -19,27 +19,15 @@ export default class LandingPage extends Component {
     showVerify: false
   }
 
-  // hideLoginModal = () => {
-  //   this.setState({
-  //     showLoginModal: false
-  //   });
-  // }
-
-  // revealLoginModal = () => {
-  //   this.setState({
-  //     showLoginModal: true
-  //   });
-  // }
-
   toggleLoginModal = () => {
     const { showLoginModal } = this.state;
     // console.log(showLoginModal);
-    this.setState({ showLoginModal: !showLoginModal });
+    this.setState({ showLoginModal: !showLoginModal, showSignup: false });
   }
 
-  toggleModal = () => {
+  toggleSignupModal = () => {
     const { showSignup } = this.state;
-    this.setState({ showSignup: !showSignup });
+    this.setState({ showSignup: !showSignup, showLoginModal: false });
   }
 
   toggleVerify = () => {
@@ -70,22 +58,20 @@ export default class LandingPage extends Component {
    * @returns {HTMLElement} div
    */
   render() {
-    const { revealLoginModal, hideLoginModal, state } = this;
+    const { state } = this;
     const { showLoginModal, showSignup, showVerify } = state;
     // const {  } = this.state;
     return (
       <React.Fragment>
         <Hero
           smoothScrollListener={() => this.smoothScrollToAbout()}
-          showLoginModal={showLoginModal}
-          revealLoginModal={revealLoginModal}
-          hideLoginModal={hideLoginModal}
-          toggleModal={this.toggleModal}
+          toggleSignupModal={this.toggleSignupModal}
           toggleLoginModal={this.toggleLoginModal}
         />
         <SignupModal
           toggleVerify={this.toggleVerify}
-          toggleModal={this.toggleModal}
+          toggleLoginModal={this.toggleLoginModal}
+          toggleSignupModal={this.toggleSignupModal}
           showSignup={showSignup}
         />
         <VerifyEmailModal
@@ -94,6 +80,7 @@ export default class LandingPage extends Component {
         />
         <LoginUserModal
           toggleLoginModal={this.toggleLoginModal}
+          toggleSignupModal={this.toggleSignupModal}
           showLoginModal={showLoginModal}
         />
         <AboutAH />

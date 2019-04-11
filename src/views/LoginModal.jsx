@@ -84,7 +84,7 @@ export class LoginModal extends Component {
       } = this;
       const { rememberMe } = state;
       const {
-        toggleLoginModal, showLoginModal, isLoggedIn, loading
+        toggleLoginModal, toggleSignupModal, showLoginModal, isLoggedIn, loading
       } = this.props;
       const { nameError, passwordError, generalError } = handleErrorMessages();
       return isLoggedIn ? <Redirect to="/profile" /> : (
@@ -187,7 +187,7 @@ export class LoginModal extends Component {
                 </div>
                 <Button customClass="login_body_form_submit_btn" btnText="Login" isDisabled={loading} btnType="submit" />
                 <div className="login_body_form_links">
-                  <a href="/" className="login_body_form_link">Register now</a>
+                  <button type="button" onClick={toggleSignupModal} className="login_body_form_link hasAccount">Register now</button>
                   <a href="/" className="login_body_form_link">Forgot password?</a>
                 </div>
               </form>
@@ -225,6 +225,7 @@ export const mapStateToProps = ({ auth }) => {
 
 LoginModal.propTypes = {
   toggleLoginModal: func.isRequired,
+  toggleSignupModal: func.isRequired,
   showLoginModal: bool.isRequired,
   loginUser: func.isRequired,
   loadingAuth: func.isRequired,

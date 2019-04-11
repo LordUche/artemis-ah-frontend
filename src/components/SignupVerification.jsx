@@ -1,8 +1,9 @@
 /* eslint-disable react/forbid-prop-types */
-/* eslint-disable arrow-body-style */
 import React from 'react';
 import { connect } from 'react-redux';
-import { func, bool, string } from 'prop-types';
+import {
+  func, bool, object
+} from 'prop-types';
 import Modal from './Modal';
 import message from '../assets/img/message.png';
 
@@ -13,29 +14,27 @@ import message from '../assets/img/message.png';
  */
 export const VerifyModal = ({
   toggleVerify, showVerify, user
-}) => {
-  return (
-    <Modal
-      customClass="verify__modal"
-      modalHeader="EMAIL VERIFICATION"
-      onClose={toggleVerify}
-      showModal={showVerify}
-    >
+}) => (
+  <Modal
+    customClass="verify__modal"
+    modalHeader="EMAIL VERIFICATION"
+    onClose={toggleVerify}
+    showModal={showVerify}
+  >
+    <div>
+      <strong><p className="verification__text">One more step for you, One giant leap for readers everywhere!</p></strong>
       <div>
-        <strong><p className="verification__text">One more step for you, One giant leap for readers everywhere!</p></strong>
-        <div>
-          <img src={message} className="verification__image" alt="verify" />
-        </div>
-        <p className="verification__text">
-          <span>Verification email has been sent to </span>
-          <strong>{user.email}</strong>
-          .
-        </p>
-        <p className="verification__text">Please check your inbox and verify your email to begin writing awesome articles!</p>
+        <img src={message} className="verification__image" alt="verify" />
       </div>
-    </Modal>
-  );
-};
+      <p className="verification__text">
+        <span>Verification email has been sent to </span>
+        <strong>{user.email}</strong>
+        .
+      </p>
+      <p className="verification__text">Please check your inbox and verify your email to begin writing awesome articles!</p>
+    </div>
+  </Modal>
+);
 
 
 /**
@@ -52,7 +51,7 @@ function mapStateToProps(state) {
 VerifyModal.propTypes = {
   toggleVerify: func.isRequired,
   showVerify: bool.isRequired,
-  user: string.isRequired,
+  user: object.isRequired,
 };
 
 export default connect(mapStateToProps)(VerifyModal);

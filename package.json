@@ -63,6 +63,7 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",
     "jest": "^24.6.0",
+    "moxios": "^0.4.0",
     "nightwatch": "^1.0.19",
     "node-sass": "^4.11.0",
     "react-test-renderer": "^16.8.6",
