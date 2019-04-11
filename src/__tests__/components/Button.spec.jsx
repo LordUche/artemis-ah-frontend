@@ -55,4 +55,9 @@ describe('render button with image', () => {
     const noAltWrapper = shallow(<Button btnText="testBtn" customClass="biggestbutton" imgSrc="abc.jpg" imgCustomClass="biggestimage" onClick={() => null} />);
     expect(noAltWrapper.find('img').prop('alt')).toEqual('testBtn Image');
   });
+
+  it('should have default click handler if none is provided', () => {
+    const noClickWrapper = shallow(<Button btnText="testBtn" customClass="biggestbutton" imgSrc="abc.jpg" imgCustomClass="biggestimage" imgAltText="abc" />);
+    expect(noClickWrapper.find('button').prop('onClick')()).toEqual('No click handler');
+  });
 });

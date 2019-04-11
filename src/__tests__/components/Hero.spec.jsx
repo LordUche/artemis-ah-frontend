@@ -39,7 +39,7 @@ describe('Hero Component', () => {
 
   it('should show login modal on click', () => {
     expect(mockRevealLoginModal.mock.calls.length).toBe(0);
-    hero.find('#login-link').simulate('click');
+    hero.find('#login-link').first().simulate('click');
     expect(mockRevealLoginModal.mock.calls.length).toBe(1);
   });
 
@@ -62,8 +62,16 @@ describe('Hero Component', () => {
 });
 
 
-describe('Hero Component', () => {
-  const hero = mount(<Hero />);
+describe('Hero Component Search Icon', () => {
+  const mockHideLoginModal = jest.fn();
+  const mockRevealLoginModal = jest.fn();
+  const mockSmoothScrollListener = jest.fn();
+  const hero = mount(<Hero
+    showLoginModal={false}
+    hideLoginModal={mockHideLoginModal}
+    revealLoginModal={mockRevealLoginModal}
+    smoothScrollListener={mockSmoothScrollListener}
+  />);
   const { hideSearchField } = new Hero();
 
   hero.setState({ displaySearchBar: true });
@@ -92,5 +100,30 @@ describe('Hero Component', () => {
       .find('section.hero')
       .simulate('click');
     expect(hero).toMatchObject({});
+  });
+});
+
+describe('Hero hamburger menu', () => {
+  const mockHideLoginModal = jest.fn();
+  const mockRevealLoginModal = jest.fn();
+  const mockSmoothScrollListener = jest.fn();
+  const hero = mount(<Hero
+    showLoginModal={false}
+    hideLoginModal={mockHideLoginModal}
+    revealLoginModal={mockRevealLoginModal}
+    smoothScrollListener={mockSmoothScrollListener}
+  />);
+
+  it('should contain the hamburger icon', () => {
+    expect(hero.find('i#hamburger').exists()).toBe(true);
+  });
+
+  it('should hide the menu by default', () => {
+    expect(hero.state('showResponsiveNav')).toEqual(false);
+  });
+
+  it('should show the menu when the hamburger icon is clicked', () => {
+    hero.find('i#hamburger').simulate('click');
+    expect(hero.state('showResponsiveNav')).toEqual(true);
   });
 });

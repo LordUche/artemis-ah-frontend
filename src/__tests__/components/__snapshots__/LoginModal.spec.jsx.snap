@@ -226,6 +226,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           <button
             className="ah-btn login_body_form_submit_btn"
             disabled={false}
+            onClick={[Function]}
             type="submit"
           >
             

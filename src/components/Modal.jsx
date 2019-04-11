@@ -1,5 +1,5 @@
 import React from 'react';
-import { string, func, object } from 'prop-types';
+import { string, func, node } from 'prop-types';
 
 /**
  * @description reusable modal component
@@ -31,8 +31,7 @@ Modal.propTypes = {
   /**
    * The inner html to be rendered in the modal
    */
-  // eslint-disable-next-line react/forbid-prop-types
-  children: object.isRequired,
+  children: node.isRequired,
   /**
    * The function to be fired on close
    */
