@@ -28,7 +28,7 @@ body {
 a.active > svg > path{
     fill: #ffffff;
 }
-a:hover > svg > path {
+.side-nav__first-child a:hover > svg > path {
     fill: #ffffff;
 }
 

@@ -23,13 +23,14 @@ const UserNavAvatar = (props) => {
 };
 
 UserNavAvatar.propTypes = {
-  username: string.isRequired,
+  username: string,
   imgSrc: string,
   customLinkClassName: string,
   customImageClassName: string
 };
 
 UserNavAvatar.defaultProps = {
+  username: 'AH',
   customImageClassName: 'default-avatar-class',
   imgSrc:
     'https://res.cloudinary.com/artemisah/image/upload/v1554333407/authorshaven/ah-avatar.png',

@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
+const Dotenv = require('dotenv-webpack');
 const path = require('path');
 
 module.exports = env => ({
@@ -7,7 +8,7 @@ module.exports = env => ({
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/',
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.css']
@@ -21,12 +22,15 @@ module.exports = env => ({
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader', {
-          loader: 'eslint-loader',
-          options: {
-            useEslintrc: true,
+        use: [
+          'babel-loader',
+          {
+            loader: 'eslint-loader',
+            options: {
+              useEslintrc: true
+            }
           }
-        }]
+        ]
       },
       {
         test: /\.html$/,
@@ -37,12 +41,7 @@ module.exports = env => ({
       },
       {
         test: /\.(css|scss)$/,
-        use: [
-          'style-loader',
-          MiniCSSExtractPlugin.loader,
-          'css-loader',
-          'sass-loader'
-        ]
+        use: ['style-loader', MiniCSSExtractPlugin.loader, 'css-loader', 'sass-loader']
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
@@ -56,7 +55,7 @@ module.exports = env => ({
             }
           }
         ]
-      },
+      }
     ]
   },
   devtool: env.production ? 'source-maps' : 'eval',
@@ -67,7 +66,8 @@ module.exports = env => ({
     }),
     new MiniCSSExtractPlugin({
       filename: './style.css'
-    })
+    }),
+    new Dotenv()
   ],
   devServer: {
     historyApiFallback: true

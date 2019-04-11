@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { func, bool } from 'prop-types';
 import logo from '../assets/img/logo.svg';
@@ -11,7 +11,11 @@ import AHLoginModal from '../views/LoginModal';
  * @returns {JSX} - JSX component
  */
 const Hero = ({
-  smoothScrollListener, showLoginModal, revealLoginModal, hideLoginModal
+  smoothScrollListener,
+  showLoginModal,
+  revealLoginModal,
+  hideLoginModal,
+  isLoggedIn
 }) => (
   <section className="hero">
     {showLoginModal && <AHLoginModal onClose={hideLoginModal} />}
@@ -23,7 +27,9 @@ const Hero = ({
           </Link>
         </Router>
         <button type="button" className="hero__nav--mobile">
-          <span className="hamburger"><i className="fas fa-bars" /></span>
+          <span className="hamburger">
+            <i className="fas fa-bars" />
+          </span>
         </button>
       </div>
       <div className="hero__text">
@@ -46,8 +52,25 @@ const Hero = ({
     <div className="hero__illustration">
       <nav className="hero__nav">
         <ul className="hero__nav--links">
-          <li><span id="login-link" className="link_lookalike" role="presentation" onClick={revealLoginModal}>Login</span></li>
-          <li><Router><Link to="./register">Register</Link></Router></li>
+          {!isLoggedIn && (
+            <Fragment>
+              <li>
+                <span
+                  id="login-link"
+                  className="link_lookalike"
+                  role="presentation"
+                  onClick={revealLoginModal}
+                >
+                  Login
+                </span>
+              </li>
+              <li>
+                <Router>
+                  <Link to="./register">Register</Link>
+                </Router>
+              </li>
+            </Fragment>
+          )}
           <NavDropdown parentLinkName="Explore">
             <li>
               <Router>
@@ -86,7 +109,9 @@ const Hero = ({
         <img src={illustration} alt="Illustration of a reader" />
       </nav>
     </div>
-    <button type="button" className="scroll" onClick={smoothScrollListener}><i className="fas fa-angle-down" /></button>
+    <button type="button" className="scroll" onClick={smoothScrollListener}>
+      <i className="fas fa-angle-down" />
+    </button>
   </section>
 );
 
@@ -95,6 +120,7 @@ Hero.propTypes = {
   showLoginModal: bool.isRequired,
   revealLoginModal: func.isRequired,
   hideLoginModal: func.isRequired,
+  isLoggedIn: bool.isRequired
 };
 
 export default Hero;

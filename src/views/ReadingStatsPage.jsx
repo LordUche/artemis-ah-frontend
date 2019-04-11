@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TopNav, SideNav } from '../components';
+import { SideNav } from '../components';
+import TopNavBar from '../components/TopNav';
 
 /**
  * @description Reading stats view
@@ -15,7 +16,7 @@ const ReadingStats = () => {
     });
   return (
     <div>
-      <TopNav />
+      <TopNavBar />
       <section
         style={{
           textAlign: 'center'
@@ -24,7 +25,7 @@ const ReadingStats = () => {
         {test}
         <Link to="/">Home</Link>
       </section>
-      <SideNav />
+      <SideNav isLoggedIn />
     </div>
   );
 };

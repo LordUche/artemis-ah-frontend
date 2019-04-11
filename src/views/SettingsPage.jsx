@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TopNav, SideNav } from '../components';
+import { SideNav } from '../components';
+import TopNavBar from '../components/TopNav';
 /**
  * @description setttings page view method
  * @returns {HTMLDivElement} profile
@@ -14,12 +15,12 @@ const Settings = () => {
     });
   return (
     <div>
-      <TopNav />
+      <TopNavBar />
       <section style={{ textAlign: 'center' }}>
         {test}
         <Link to="/">Home</Link>
       </section>
-      <SideNav />
+      <SideNav isLoggedIn={false} />
     </div>
   );
 };

@@ -12,6 +12,7 @@ describe('Hero Component', () => {
     hideLoginModal={mockHideLoginModal}
     revealLoginModal={mockRevealLoginModal}
     smoothScrollListener={mockSmoothScrollListener}
+    isLoggedIn={false}
   />);
 
   it('should have a logo present', () => {

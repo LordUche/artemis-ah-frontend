@@ -1,15 +1,13 @@
-import actionType from '../actionTypes/index';
-
-
 // Base url
-export const BASE_URL = 'https://authorshaven.herokuapp.com/api';
+const BASE_URL = 'https://authorshaven.herokuapp.com/api';
 
-/**
- * @returns {object} action
- */
-const name = () => ({
-  type: actionType,
-  payload: 'bisi'
-});
+// Google Auth URL
+const GOOGLE_SOCIAL_LOGIN_URL = `${BASE_URL}/users/auth/google`;
+// Facebook Auth URL
+const FACEBOOK_SOCIAL_LOGIN_URL = `${BASE_URL}/users/auth/facebook`;
+// Twitter Auth URL
+const TWITTER_SOCIAL_LOGIN_URL = 'http://authorshaven.herokuapp.com/api/users/auth/twitter';
 
-export default name;
+export { GOOGLE_SOCIAL_LOGIN_URL, FACEBOOK_SOCIAL_LOGIN_URL, TWITTER_SOCIAL_LOGIN_URL };
+
+export default BASE_URL;

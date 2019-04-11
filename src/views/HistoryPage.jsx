@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TopNav, SideNav } from '../components';
+import { SideNav } from '../components';
+import TopNavBar from '../components/TopNav';
 /**
  * @description history page view method
  * @returns {HTMLDivElement} profile
@@ -14,13 +15,13 @@ const History = () => {
     });
   return (
     <div>
-      <TopNav />
+      <TopNavBar />
       <section style={{ textAlign: 'center' }}>
         <h1>This is your History page!!</h1>
         {test}
         <Link to="/">Home</Link>
       </section>
-      <SideNav />
+      <SideNav isLoggedIn />
     </div>
   );
 };

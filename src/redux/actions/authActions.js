@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import { post } from 'axios';
-import { BASE_URL } from './index';
+import BASE_URL from './index';
 import {
   LOGIN_ERROR, LOGIN_USER, AUTH_LOADING, CLEAR_AUTH_ERROR
 } from '../actionTypes';
@@ -22,6 +22,22 @@ export const storeInLocal = ({
 };
 
 /**
+ * @description function for storing platform data in sessionStorage
+ * @param {object} user the user details to be stored in session storage
+ * @param {object} sessionStorage the session storage to be used ( to be mocked for testing )
+ * @returns {undefined}
+ */
+export const storeInSession = ({
+  bio, email, token, username, image
+}, sessionStorage) => {
+  sessionStorage.authorsHavenUsername = username;
+  sessionStorage.authorsHavenEmail = email;
+  sessionStorage.authorsHavenBio = bio;
+  sessionStorage.authorsHavenImage = image;
+  sessionStorage.authorsHavenToken = token;
+};
+
+/**
  * @description function for dispatching action for logging in user
  * @returns {object} action
  */
@@ -31,6 +47,8 @@ export const loginUserAction = async ({ name, password, rememberMe }) => {
     const { user } = response.data;
     if (rememberMe) {
       storeInLocal(user, localStorage);
+    } else {
+      storeInSession(user, sessionStorage);
     }
     return {
       type: LOGIN_USER,
@@ -42,6 +60,16 @@ export const loginUserAction = async ({ name, password, rememberMe }) => {
       payload: err.response.data
     };
   }
+};
+
+/**
+ * @description function for dispatching action for social media login
+ * @param {object} user
+ * @returns {object} action
+ */
+export const socialLoginUserAction = (user) => {
+  storeInSession(user, sessionStorage);
+  return { type: LOGIN_USER, payload: user };
 };
 
 /**
