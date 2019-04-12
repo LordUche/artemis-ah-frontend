@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { object as objectProp, func as funcProp } from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   fetchUserDetails,
@@ -292,6 +292,32 @@ class ProfilePage extends Component {
   }
 
   /**
+   * @returns {Node} Returns the view that shows when the user does not have any article.
+   */
+  getNoArticleFoundMessage() {
+    const { user, profile } = this.props;
+
+    if (user.isLoggedIn && user.username === profile.user.username) {
+      return (
+        <div className="no-result">
+          <div>You don&apos;t have any article.</div>
+          <div className="no-result__link">
+            <Link to="/create-article" className="ah-btn">Create an Article</Link>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="no-result">
+        {profile.user.fullname.split(' ')[0]}
+        {' '}
+        does not have any article.
+      </div>
+    );
+  }
+
+  /**
    * @returns {Node} The view for articles the user has publishes.
    */
   getArticles() {
@@ -316,7 +342,7 @@ class ProfilePage extends Component {
       );
     } else if (contentState === CONTENT_STATE_FETCHED) {
       if (articles.length < 1) {
-        content = 'No article found.';
+        content = this.getNoArticleFoundMessage();
       } else {
         content = articles.map((article, index) => (
           <ArticleItem
@@ -337,6 +363,25 @@ class ProfilePage extends Component {
     return this.bodyTemplate(
       'Your Articles',
       <div className="article-list">{content}</div>
+    );
+  }
+
+  /**
+   * @returns {Node} Returns the view that shows when the user does not have any follower.
+   */
+  getNoFollowerMessage() {
+    const { user, profile } = this.props;
+
+    if (user.isLoggedIn && profile.user.username === user.username) {
+      return <div className="no-result">You don&apos;t have any follower</div>;
+    }
+
+    return (
+      <div className="no-result">
+        {profile.user.fullname.split(' ')[0]}
+        {' '}
+        does not have any follower
+      </div>
     );
   }
 
@@ -365,7 +410,7 @@ class ProfilePage extends Component {
       );
     } else if (contentState === CONTENT_STATE_FETCHED) {
       if (followers.length < 1) {
-        content = 'No followers';
+        content = this.getNoFollowerMessage();
       } else {
         content = followers.map((user, index) => (
           <UserListItem
@@ -382,6 +427,27 @@ class ProfilePage extends Component {
     return this.bodyTemplate(
       'Your followers',
       <div className="user-list">{content}</div>,
+    );
+  }
+
+  /**
+   * @returns {Node} Returns the view that shows when the user is not following anyone.
+   */
+  getNoFollowingMessage() {
+    const { user, profile } = this.props;
+
+    if (user.isLoggedIn && profile.user.username === user.username) {
+      return (
+        <div className="no-result">You are not following anyone.</div>
+      );
+    }
+
+    return (
+      <div className="no-result">
+        {profile.user.fullname.split(' ')[0]}
+        {' '}
+        is not following anyone.
+      </div>
     );
   }
 
@@ -410,7 +476,7 @@ class ProfilePage extends Component {
       );
     } else if (contentState === CONTENT_STATE_FETCHED) {
       if (following.length < 1) {
-        content = 'Not following anyone.';
+        content = this.getNoFollowingMessage();
       } else {
         content = following.map((user, index) => (
           <UserListItem

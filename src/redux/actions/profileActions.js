@@ -1,5 +1,5 @@
 import { get, post, put } from 'axios';
-import { BASE_URL } from './index';
+import BASE_URL from './index';
 import {
   PROFILE_USER_DETAILS_FETCHED,
   PROFILE_USER_DETAILS_FETCH_ERROR,
