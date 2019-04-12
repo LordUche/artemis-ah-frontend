@@ -35,13 +35,11 @@ export class LandingPage extends Component {
    * @description ru when component mounts
    * @returns {undefined}
    */
-  run = () => {
+  componentWillMount = () => {
     const data = this.validateURLPayload();
     const { location } = window;
     const { loginUserViaSocialMedia } = this.props;
-    alert(`data ${data} yet to pass`);
     if (data) {
-      alert(`data ${data} passed!!!!`);
       loginUserViaSocialMedia(data);
       location.assign(`${location.origin}/profile`);
     }
@@ -51,10 +49,8 @@ export class LandingPage extends Component {
     const { location } = window;
     const params = new URLSearchParams(location.search);
     const paramsToken = params.get('userData');
-    alert(`token ${paramsToken} recieved`);
     if (paramsToken) {
       const payload = HelperUtils.verifyToken(paramsToken);
-      alert(`payload ${payload} gotten`);
       return payload;
     }
     return false;
@@ -80,9 +76,8 @@ export class LandingPage extends Component {
    */
   render() {
     const {
-      revealLoginModal, hideLoginModal, state, props, run
+      revealLoginModal, hideLoginModal, state, props
     } = this;
-    run();
     const { showLoginModal } = state;
     const { isLoggedIn } = props;
     return (

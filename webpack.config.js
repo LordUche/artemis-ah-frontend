@@ -69,9 +69,7 @@ module.exports = env => ({
     new MiniCSSExtractPlugin({
       filename: './style.css'
     }),
-    new Dotenv({
-      path: path.join(__dirname, './.env')
-    }),
+    new Dotenv(),
     new webpack.DefinePlugin({
       'process.env.SECRET_KEY': JSON.stringify(process.env.SECRET_KEY),
     }),
