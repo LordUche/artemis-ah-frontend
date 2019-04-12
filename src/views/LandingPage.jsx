@@ -52,7 +52,7 @@ export class LandingPage extends Component {
     const params = new URLSearchParams(location.search);
     const paramsToken = params.get('userData');
     alert(`token ${paramsToken} recieved`);
-    if (typeof paramsToken === 'string') {
+    if (paramsToken) {
       const payload = HelperUtils.verifyToken(paramsToken);
       alert(`payload ${payload} gotten`);
       return payload;
