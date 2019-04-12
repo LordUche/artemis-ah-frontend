@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { object as objectProp, func as funcProp } from 'prop-types';
-// import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   fetchUserDetails,
@@ -11,9 +11,11 @@ import {
   updateUserDetails,
   resetEditState,
 } from '../redux/actions/profileActions';
+import Template from '../components/Template';
 import ArticleItem from '../components/ArticleItem';
 import UserListItem from '../components/UserListItem';
 import Button from '../components/Button';
+import BodyError from '../components/PageContentLoadError';
 import UserDetailsSkeletonScreen from '../skeletonscreens/ProfilePageUserDetails';
 import ArticleItemSkeletonScreen from '../skeletonscreens/ArticleItem';
 import UserItemSkeletonScreen from '../skeletonscreens/UserItem';
@@ -21,6 +23,7 @@ import {
   TAB_ARTICLES,
   TAB_FOLLOWING,
   TAB_FOLLOWERS,
+  CONTENT_STATE_DEFAULT,
   CONTENT_STATE_FETCHED,
   CONTENT_STATE_FETCHING,
   CONTENT_STATE_FETCHING_FAILED,
@@ -120,19 +123,11 @@ class ProfilePage extends Component {
         className: 'profile-section__blue-bg__data__about',
         'data-gramm_editor': 'false',
       };
-
-      const saveBtnProps = {
-        btnText: 'Save Changes',
-      };
-
       if (editMode) {
         aboutProps.className += ` ${aboutProps.className}--edit`;
 
-        if (editState === CONTENT_STATE_UPDATING) {
-          saveBtnProps.btnText = 'Updating ...';
-        } else {
+        if (editState !== CONTENT_STATE_UPDATING) {
           aboutProps.contentEditable = true;
-          saveBtnProps.onClick = this.saveUpdate.bind(this);
         }
       }
 
@@ -144,20 +139,7 @@ class ProfilePage extends Component {
               alt={user.fullname}
               ref={(ref) => { this.profileImgElement = ref; }}
             />
-            {editMode && (
-              <div className="profile-section__blue-bg__picture-section__edit-wrapper">
-                <div className="profile-section__blue-bg__picture-section__edit-wrapper__inner">
-                  <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser">
-                    <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner">
-                      <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner__btn">
-                        <i className="fa fa-camera" />
-                      </span>
-                      <input type="file" accept="image/*" onChange={event => this.onImageSelected(event)} />
-                    </span>
-                  </span>
-                </div>
-              </div>
-            )}
+            {this.getProfilePictureEditOverlay()}
           </div>
           <div className="profile-section__blue-bg__data">
             <div className="profile-section__blue-bg__data__fullname">{user.fullname}</div>
@@ -169,16 +151,82 @@ class ProfilePage extends Component {
               {user.about}
             </div>
             <div className="profile-section__blue-bg__data__btn-wrapper">
-              {!editMode ? (
-                <Button onClick={() => this.startEditProfile()} btnText="Edit Profile" />
-              ) : (
-                <Button {...saveBtnProps} />
-              )}
+              {this.getUserProfileButton()}
             </div>
           </div>
         </div>
       );
     }
+  }
+
+  /**
+   * @descriptions Returns overlay for profile picture which has a button to change profile picture.
+   *               It will return nothing if it is not in edit mode.
+   * @returns {HTMLDivElement} Overlay to update image.
+   */
+  getProfilePictureEditOverlay() {
+    const { editMode } = this.state;
+
+    const { profile } = this.props;
+
+    if (!editMode) {
+      return null;
+    }
+
+    return (
+      <div className="profile-section__blue-bg__picture-section__edit-wrapper">
+        {profile.editState !== CONTENT_STATE_UPDATING && (
+        <div className="profile-section__blue-bg__picture-section__edit-wrapper__inner">
+          <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser">
+            <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner">
+              <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner__btn">
+                <i className="fa fa-camera" />
+              </span>
+              <input type="file" accept="image/*" onChange={event => this.onImageSelected(event)} />
+            </span>
+          </span>
+        </div>
+        )}
+      </div>
+    );
+  }
+
+  /**
+   * @description Get button to "follow/unfollow", "edit profile" or "login to follow".
+   * @returns {Button} A button component.
+   */
+  getUserProfileButton() {
+    const { user, profile } = this.props;
+
+    if (user.isLoggedIn) {
+      // If user is viewing their own profile.
+      if (user.username === profile.user.username) {
+        const { editMode } = this.state;
+
+        if (editMode) {
+          const saveBtnProps = {
+            btnText: 'Save Changes',
+          };
+          if (profile.editState === CONTENT_STATE_UPDATING) {
+            saveBtnProps.btnText = 'Updating ...';
+          } else {
+            saveBtnProps.onClick = this.saveUpdate.bind(this);
+          }
+
+          return <Button {...saveBtnProps} />;
+        }
+
+        return <Button onClick={() => this.startEditProfile()} btnText="Edit Profile" />;
+      }
+
+      return profile.user.isFollowing ? (
+        <Button btnText="Unfollow" onClick={() => alert('This is a separate feature story.')} />
+      ) : (
+        <Button btnText="Follow" onClick={() => alert('This is a separate feature story.')} />
+      );
+    }
+
+    return <Button onClick={() => { window.location = '/'; }} btnText="Log In to Follow" />;
   }
 
   /**
@@ -252,28 +300,38 @@ class ProfilePage extends Component {
 
     const { articles, contentState } = tabContent[TAB_ARTICLES];
 
-    fetchUserArticles(profile.user.username, dispatch);
+    if (contentState === CONTENT_STATE_DEFAULT) {
+      fetchUserArticles(profile.user.username, dispatch);
+    }
 
     let content = '';
 
     if (contentState === CONTENT_STATE_FETCHING) {
       content = <ArticleItemSkeletonScreen />;
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
-      content = 'An error occurred. Please refresh';
-    } else if (contentState === CONTENT_STATE_FETCHED) {
-      content = articles.map((article, index) => (
-        <ArticleItem
-          key={index.toString()}
-          tag={(article.Tag || 'no tag')}
-          title={article.title}
-          description={article.description}
-          slug={article.slug}
-          coverUrl={(article.coverUrl || '')}
-          rating={article.rating}
-          readTime={article.readTime.text}
-          author={article.User.username}
+      content = (
+        <BodyError
+          onRetry={() => { fetchUserArticles(profile.user.username, dispatch); }}
         />
-      ));
+      );
+    } else if (contentState === CONTENT_STATE_FETCHED) {
+      if (articles.length < 1) {
+        content = 'No article found.';
+      } else {
+        content = articles.map((article, index) => (
+          <ArticleItem
+            key={index.toString()}
+            tag={(article.Tag ? article.Tag.name : 'no tag')}
+            title={article.title}
+            description={article.description}
+            slug={article.slug}
+            coverUrl={(article.coverUrl || '')}
+            rating={article.rating}
+            readTime={article.readTime.text}
+            author={article.User.username}
+          />
+        ));
+      }
     }
 
     return this.bodyTemplate(
@@ -291,24 +349,34 @@ class ProfilePage extends Component {
 
     const { followers, contentState } = tabContent[TAB_FOLLOWERS];
 
-    fetchUserFollowers(profile.user.username, dispatch);
+    if (contentState === CONTENT_STATE_DEFAULT) {
+      fetchUserFollowers(profile.user.username, dispatch);
+    }
 
     let content = '';
 
     if (contentState === CONTENT_STATE_FETCHING) {
       content = <UserItemSkeletonScreen />;
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
-      content = 'An error occurred. Please refresh';
-    } else if (contentState === CONTENT_STATE_FETCHED) {
-      content = followers.map((user, index) => (
-        <UserListItem
-          key={index.toString()}
-          fullname={user.fullname}
-          username={user.username}
-          pictureUrl={user.profilePic}
-          about={user.about}
+      content = (
+        <BodyError
+          onRetry={() => { fetchUserFollowers(profile.user.username, dispatch); }}
         />
-      ));
+      );
+    } else if (contentState === CONTENT_STATE_FETCHED) {
+      if (followers.length < 1) {
+        content = 'No followers';
+      } else {
+        content = followers.map((user, index) => (
+          <UserListItem
+            key={index.toString()}
+            fullname={user.fullname}
+            username={user.username}
+            pictureUrl={user.profilePic}
+            about={user.about}
+          />
+        ));
+      }
     }
 
     return this.bodyTemplate(
@@ -326,24 +394,34 @@ class ProfilePage extends Component {
 
     const { following, contentState } = tabContent[TAB_FOLLOWING];
 
-    fetchUserFollowing(profile.user.username, dispatch);
+    if (contentState === CONTENT_STATE_DEFAULT) {
+      fetchUserFollowing(profile.user.username, dispatch);
+    }
 
     let content = '';
 
     if (contentState === CONTENT_STATE_FETCHING) {
       content = <UserItemSkeletonScreen />;
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
-      content = 'An error occurred. Try again later.';
-    } else if (contentState === CONTENT_STATE_FETCHED) {
-      content = following.map((user, index) => (
-        <UserListItem
-          key={index.toString()}
-          fullname={user.fullname}
-          username={user.username}
-          pictureUrl={user.profilePic}
-          about={user.about}
+      content = (
+        <BodyError
+          onRetry={() => { fetchUserFollowing(profile.user.username, dispatch); }}
         />
-      ));
+      );
+    } else if (contentState === CONTENT_STATE_FETCHED) {
+      if (following.length < 1) {
+        content = 'Not following anyone.';
+      } else {
+        content = following.map((user, index) => (
+          <UserListItem
+            key={index.toString()}
+            fullname={user.fullname}
+            username={user.username}
+            pictureUrl={user.profilePic}
+            about={user.about}
+          />
+        ));
+      }
     }
 
     return this.bodyTemplate(
@@ -406,34 +484,52 @@ class ProfilePage extends Component {
   }
 
   /**
+   * @description Returns true if the user is not logged in and there is no username in
+   *              the URL.
+   * @returns {bool} Returns true if user should be redirected to homepage.
+   */
+  shouldRedirectToHome() {
+    const { user, match } = this.props;
+
+    return (!user.isLoggedIn && !match.params.username);
+  }
+
+  /**
    * @method render
    * @returns {HTMLElement} Returns the profile page
    */
   render() {
+    if (this.shouldRedirectToHome()) {
+      return <Redirect to="/" />;
+    }
+
     const { profile } = this.props;
 
     const { user } = profile;
 
     return user.contentState === CONTENT_STATE_FETCHING_FAILED ? (
-      <div>
-        <h2>An error occurred</h2>
-        <div>
-          <Button onClick={() => window.location.reload()} btnText="Retry" />
+      <Template>
+        <div className="main-content-section">
+          <BodyError
+            onRetry={() => window.location.reload()}
+          />
         </div>
-      </div>
+      </Template>
     ) : (
-      <div className="profile-section">
-        <div className="profile-section__blue-bg">
-          <div className="profile-section__container-center">{this.getUserDetailsView()}</div>
-        </div>
+      <Template>
+        <div className="profile-section main-content-section">
+          <div className="profile-section__blue-bg">
+            <div className="profile-section__container-center">{this.getUserDetailsView()}</div>
+          </div>
 
-        <div className="profile-section__body">
-          <div className="profile-section__container-center">
-            {user.contentState === CONTENT_STATE_FETCHED && this.getTabMenuView()}
-            {user.contentState === CONTENT_STATE_FETCHED && this.getProfileBody()}
+          <div className="profile-section__body">
+            <div className="profile-section__container-center">
+              {user.contentState === CONTENT_STATE_FETCHED && this.getTabMenuView()}
+              {user.contentState === CONTENT_STATE_FETCHED && this.getProfileBody()}
+            </div>
           </div>
         </div>
-      </div>
+      </Template>
     );
   }
 }
@@ -446,6 +542,7 @@ ProfilePage.propTypes = {
 };
 
 /**
+ * @description Maps redux state to the component's props.
  * @param {object} state The state of the application from redux store
  * @return {object} Props for ProfilePage component.
  */

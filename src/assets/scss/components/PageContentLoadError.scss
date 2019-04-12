@@ -1,0 +1,24 @@
+@import '../base.scss';
+
+.page-content-load-error {
+    text-align: center;
+    padding-top: 20px;
+
+    &__icon {
+        font-size: 89px;
+        color: #dadada;
+    }
+
+    &__title {
+        font-size: 18px;
+    }
+
+    &__btn-area {
+        margin-top: 6px;
+
+        button {
+            background: $primary-color;
+            color: $white-color;
+        }
+    }
+}

@@ -189,6 +189,7 @@ $color-blue: #5863F8;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                color: #8A92FA;
                 
                 &__inner {
                     display: inline-block;
@@ -221,6 +222,7 @@ $color-blue: #5863F8;
 
             &__tab--active {
                 position: relative;
+                color: $color-blue;
 
                 &::after {
                     display: block;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { string as stringProp } from 'prop-types';
+import { string as stringProp, bool as boolProp } from 'prop-types';
 import { Link } from 'react-router-dom';
 import '../assets/scss/ArticleItem.scss';
 
@@ -8,7 +8,7 @@ import '../assets/scss/ArticleItem.scss';
  * @return {HTMLElement} Returns the article list item.
  */
 const ArticleItem = ({
-  title, description, coverUrl, slug, tag, rating, readTime, author
+  title, description, coverUrl, slug, tag, rating, readTime, author, showAuthor
 }) => (
   <div className="article-item">
     <div className="article-item__image-wrapper">
@@ -18,9 +18,11 @@ const ArticleItem = ({
     <div className="article-item__body-wrapper">
       <div className="article-item__body-wrapper__body">
         <div className="article-item__body-wrapper__body__title"><Link to={`/${slug}`}>{title}</Link></div>
+        {showAuthor && (
         <div className="article-item__body-wrapper__body__author">
           <Link to={`profile/${author}`}>{`@${author}`}</Link>
         </div>
+        )}
         <div className="article-item__body-wrapper__body__description">{description}</div>
       </div>
       <div className="article-item__body-wrapper__bottom-links">
@@ -47,7 +49,12 @@ const ArticleItem = ({
   </div>
 );
 
+ArticleItem.defaultProps = {
+  showAuthor: true,
+};
+
 ArticleItem.propTypes = {
+  showAuthor: boolProp,
   title: stringProp.isRequired,
   description: stringProp.isRequired,
   coverUrl: stringProp.isRequired,
