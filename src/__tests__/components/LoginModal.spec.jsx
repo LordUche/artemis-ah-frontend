@@ -1,22 +1,25 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { shallow, mount } from 'enzyme';
+import sinon from 'sinon';
 import { LoginModal, mapStateToProps } from '../../views/LoginModal';
 
 describe('Loading Modal Component', () => {
   it('should have match the given snapshot', () => {
     const mockFunction = jest.fn();
-    const tree = renderer.create(
-      <LoginModal
-        errorMessages={{}}
-        onClose={mockFunction}
-        loginUser={mockFunction}
-        loadingAuth={mockFunction}
-        clearAuthError={mockFunction}
-        loading={false}
-        isLoggedIn={false}
-      />
-    ).toJSON();
+    const tree = renderer
+      .create(
+        <LoginModal
+          errorMessages={{}}
+          onClose={mockFunction}
+          loginUser={mockFunction}
+          loadingAuth={mockFunction}
+          clearAuthError={mockFunction}
+          loading={false}
+          isLoggedIn={false}
+        />
+      )
+      .toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -190,11 +193,31 @@ describe('Loading Modal Component', () => {
     expect(loginModal.find('p.login_body_form_error_general').exists()).toBe(true);
     expect(loginModal.find('p.login_body_form_error_general').text()).toBe('Invalid Credentials');
 
-    expect(loginModal.find('p.login_body_form_error').first().exists()).toBe(true);
-    expect(loginModal.find('p.login_body_form_error').first().text()).toEqual('Name is required');
+    expect(
+      loginModal
+        .find('p.login_body_form_error')
+        .first()
+        .exists()
+    ).toBe(true);
+    expect(
+      loginModal
+        .find('p.login_body_form_error')
+        .first()
+        .text()
+    ).toEqual('Name is required');
 
-    expect(loginModal.find('p.login_body_form_error').last().exists()).toBe(true);
-    expect(loginModal.find('p.login_body_form_error').last().text()).toEqual('Password is required');
+    expect(
+      loginModal
+        .find('p.login_body_form_error')
+        .last()
+        .exists()
+    ).toBe(true);
+    expect(
+      loginModal
+        .find('p.login_body_form_error')
+        .last()
+        .text()
+    ).toEqual('Password is required');
   });
 
   it('should show only name errors when there are only name errors', () => {
@@ -203,7 +226,7 @@ describe('Loading Modal Component', () => {
       <LoginModal
         errorMessages={{
           errors: {
-            name: ['Name is required'],
+            name: ['Name is required']
           }
         }}
         onClose={mockFunction}
@@ -227,7 +250,7 @@ describe('Loading Modal Component', () => {
       <LoginModal
         errorMessages={{
           errors: {
-            password: ['Password is required'],
+            password: ['Password is required']
           }
         }}
         onClose={mockFunction}
@@ -251,7 +274,7 @@ describe('Loading Modal Component', () => {
       <LoginModal
         errorMessages={{
           errors: {
-            general: 'Invalid Credentials',
+            general: 'Invalid Credentials'
           }
         }}
         onClose={mockFunction}
@@ -264,7 +287,9 @@ describe('Loading Modal Component', () => {
     );
 
     expect(loginModal.find('p.login_body_form_error_general').exists()).toBe(true);
-    expect(loginModal.find('p.login_body_form_error_general').text()).toEqual('Invalid Credentials');
+    expect(loginModal.find('p.login_body_form_error_general').text()).toEqual(
+      'Invalid Credentials'
+    );
 
     expect(loginModal.find('p.login_body_form_error').exists()).toBe(false);
   });
@@ -296,5 +321,29 @@ describe('Loading Modal Component', () => {
 
     expect(mockLoadingAuth.mock.calls.length).toEqual(0);
     expect(mockLoginUser.mock.calls.length).toEqual(0);
+  });
+
+  it('Should describe the social media login button click', () => {
+    const mockFunction = jest.fn();
+    const mockLoadingAuth = jest.fn();
+    const mockLoginUser = jest.fn();
+    const loginModal = mount(
+      <LoginModal
+        errorMessages={{}}
+        onClose={mockFunction}
+        loginUser={mockLoginUser}
+        loadingAuth={mockLoadingAuth}
+        clearAuthError={mockFunction}
+        loading
+        isLoggedIn={false}
+      />
+    );
+    sinon.stub(window.location, 'assign');
+    loginModal.find('button.facebookDesktop').simulate('click');
+    loginModal.find('button.twitterDesktop').simulate('click');
+    loginModal.find('button.googleDesktop').simulate('click');
+    loginModal.find('button.twitterMobile').simulate('click');
+    loginModal.find('button.facebookMobile').simulate('click');
+    loginModal.find('button.googleMobile').simulate('click');
   });
 });

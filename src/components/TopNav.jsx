@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
+import { bool, string } from 'prop-types';
+import { connect } from 'react-redux';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
 import Logo from './logo';
 import UserNavAvatar from './userNavAvartar';
@@ -10,95 +12,18 @@ import Hamburger from './Hamburger';
  * @returns {JSX} top nav
  */
 class TopNav extends Component {
-  /**
-   * @description top nav contructor
-   * @param {object} props
-   * @returns {undefined}
-   */
-  constructor(props) {
-    super(props);
-    this.state = {
-      mobile: 768,
-      display: '',
-      auth: false,
-      hamburgerStateClose: 'inline-block',
-      hamburgerStateOpen: 'none',
-      reset: false,
-      menuClassStyleName: 'link-wrapper'
-    };
+  state = {
+    display: '',
+    menuClassStyleName: 'link-wrapper',
+    showResponsiveNav: false
+  };
+
+  toggleResponsiveNav = () => {
+    const { showResponsiveNav } = this.state;
+    this.setState({
+      showResponsiveNav: !showResponsiveNav
+    });
   }
-
-  /**
-   * @description top nav life cycle method
-   * @returns {undefined}
-   */
-  componentWillMount() {
-    document.body.onresize = () => {
-      const { mobile } = this.state;
-      if (window.innerWidth <= mobile) {
-        this.setState({
-          display: 'mobile'
-        });
-      } else {
-        this.setState({ display: 'desktop' });
-      }
-    };
-  }
-
-  /**
-   * @description Hamburger life cycle method
-   * @returns {undefined}
-   */
-  componentDidMount() {
-    const { mobile, reset } = this.state;
-    document.body.onresize = () => {
-      if (window.innerWidth > mobile && reset === false) {
-        return this.setState({
-          hamburgerStateClose: 'none',
-          hamburgerStateOpen: 'none',
-          menuClassStyleName: 'link-wrapper',
-          reset: true
-        });
-      }
-      this.setState({
-        hamburgerStateClose: 'inline-block',
-        hamburgerStateOpen: 'none',
-        menuClassStyleName: 'link-wrapper'
-      });
-    };
-
-    document.body.onload = () => {
-      if (window.innerWidth <= mobile) {
-        this.setState({ hamburgerStateClose: 'inline-block' });
-      }
-      if (window.innerWidth > mobile) {
-        this.setState({ hamburgerStateClose: 'none' });
-      }
-    };
-    if (window.innerWidth > mobile) {
-      this.setState({ hamburgerStateClose: 'none' });
-    }
-  }
-
-  /**
-   * @description open hamburger menu method
-   * @returns {undefined}
-   */
-  openMenu = () => this.setState({
-    hamburgerStateOpen: 'inline-block',
-    hamburgerStateClose: 'none',
-    menuClassStyleName: 'showHamburgerMenu'
-  });
-
-  /**
-   * @description close hamburger menu method
-   * @returns {undefined}
-   */
-  closeMenu = () => this.setState({
-    hamburgerStateOpen: 'none',
-    hamburgerStateClose: 'inline-block',
-    menuClassStyleName: 'link-wrapper'
-  });
 
   /**
    * @description returns nav children
@@ -107,12 +32,11 @@ class TopNav extends Component {
   renderNavChildren = () => {
     const {
       display,
-      auth,
       menuClassStyleName,
-      hamburgerStateOpen,
-      hamburgerStateClose
+      showResponsiveNav
     } = this.state;
-    if (auth) {
+    const { isLoggedIn, username, image } = this.props;
+    if (isLoggedIn) {
       return (
         <Fragment>
           <div className="nav-component-container-online1">
@@ -136,8 +60,8 @@ class TopNav extends Component {
             </li>
             <li>
               <UserNavAvatar
-                username="Shaolinmkz"
-                imgSrc="https://res.cloudinary.com/artemisah/image/upload/v1554335316/authorshaven/ARSENAL_ME.jpg"
+                username={username}
+                imgSrc={image}
                 customImageClassName="ah-profile-images"
                 customLinkClassName="ah-profile-link"
               />
@@ -153,19 +77,19 @@ class TopNav extends Component {
         </div>
         <ul className="nav-component-container-offline2">
           <span className={menuClassStyleName}>
-            <li>
+            <li className="nav-component-container-offline2_link">
               <NavLink to="/login">Login</NavLink>
             </li>
-            <li>
+            <li className="nav-component-container-offline2_link">
               <NavLink to="/register">Register</NavLink>
             </li>
-            <li>
+            <li className="nav-component-container-offline2_link">
               <NavLink to="/explore">
                 Explore &nbsp;
                 <i className="fas fa-angle-down" id="hide-angle-down" />
               </NavLink>
             </li>
-            <li>
+            <li className="nav-component-container-offline2_link">
               <NavLink to="/search" id="#search">
                 <span className="ah-search">Search</span>
                 {' '}
@@ -173,12 +97,20 @@ class TopNav extends Component {
               </NavLink>
             </li>
           </span>
-          <Hamburger
-            closeMenu={this.closeMenu}
-            openMenu={this.openMenu}
-            hamburgerStateClose={hamburgerStateClose}
-            hamburgerStateOpen={hamburgerStateOpen}
-          />
+          <Hamburger open={showResponsiveNav} toggleMenu={this.toggleResponsiveNav}>
+            <li className="nav-component-container-offline2_link">
+              <NavLink to="/login">Login</NavLink>
+            </li>
+            <li className="nav-component-container-offline2_link">
+              <NavLink to="/register">Register</NavLink>
+            </li>
+            <li className="nav-component-container-offline2_link">
+              <NavLink to="/explore">
+                Explore
+                <i className="fas fa-angle-down" id="hide-angle-down" />
+              </NavLink>
+            </li>
+          </Hamburger>
         </ul>
       </Fragment>
     );
@@ -197,4 +129,33 @@ class TopNav extends Component {
   }
 }
 
-export default TopNav;
+TopNav.propTypes = {
+  username: string,
+  isLoggedIn: bool,
+  image: string
+};
+
+TopNav.defaultProps = {
+  image: 'https://res.cloudinary.com/artemisah/image/upload/v1554333407/authorshaven/ah-avatar.png',
+  username: 'Default',
+  isLoggedIn: false
+};
+
+/**
+ *
+ * @param {object} store redux store
+ * @returns {object} TopNav props
+ */
+export const mapStateToProps = ({ auth, user }) => {
+  const { isLoggedIn } = auth;
+  const { image, username } = user;
+  return {
+    isLoggedIn,
+    image,
+    username
+  };
+};
+
+export default connect(mapStateToProps)(TopNav);
+
+export { TopNav };

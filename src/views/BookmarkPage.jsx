@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TopNav, SideNav } from '../components';
+import { SideNav } from '../components';
+import TopNavBar from '../components/TopNav';
 /**
  * @description bookmark view page method
  * @returns {HTMLDivElement} profile
@@ -14,12 +15,12 @@ const Bookmark = () => {
     });
   return (
     <div>
-      <TopNav />
+      <TopNavBar />
       <section style={{ textAlign: 'center' }}>
         {test}
         <Link to="/">Home</Link>
       </section>
-      <SideNav />
+      <SideNav isLoggedIn />
     </div>
   );
 };

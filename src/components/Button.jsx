@@ -45,7 +45,7 @@ Button.propTypes = {
   /**
    * Function to be fired when clicked
    */
-  onClick: func.isRequired,
+  onClick: func,
   /**
    * Disable and enable button
    */
@@ -62,7 +62,8 @@ Button.defaultProps = {
   imgCustomClass: '',
   imgAltText: '',
   isDisabled: false,
-  btnType: 'text'
+  btnType: 'text',
+  onClick: () => 'No click handler',
 };
 
 export default Button;

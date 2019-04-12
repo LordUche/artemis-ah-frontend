@@ -13,7 +13,7 @@ import './assets/scss/style.scss';
 import reducers from './redux/reducers';
 
 // Import views
-import LandingPage from './views/LandingPage';
+import Landing from './views/LandingPage';
 import ProfilePage from './views/ProfilePage';
 import BookmarkPage from './views/BookmarkPage';
 import ReadingStatsPage from './views/ReadingStatsPage';
@@ -32,7 +32,7 @@ const App = () => (
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={LandingPage} />
+        <Route exact path="/" component={Landing} />
         <Route exact path="/profile/:username?" component={ProfilePage} />
         <Route exact path="/bookmarks" component={BookmarkPage} />
         <Route exact path="/settings" component={SettingsPage} />

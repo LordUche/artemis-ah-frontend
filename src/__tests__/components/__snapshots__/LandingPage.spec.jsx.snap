@@ -4,6 +4,8 @@ exports[`Landing Page Component should have match the given snapshot 1`] = `
 Array [
   <section
     className="hero"
+    onClick={[Function]}
+    role="presentation"
   >
     <div
       className="hero__description"
@@ -25,18 +27,62 @@ Array [
             }
           />
         </a>
-        <button
-          className="hero__nav--mobile"
-          type="button"
+        <div
+          className="hamburger_div"
         >
-          <span
-            className="hamburger"
+          <i
+            className="fas fa-bars"
+            id="hamburger"
+            onClick={[Function]}
+            role="presentation"
+          />
+          <section
+            className="hamburger_div_menu"
           >
-            <i
-              className="fas fa-bars"
-            />
-          </span>
-        </button>
+            <aside
+              className="hamburger_div_menu_aside hamburger_div_menu_aside_hide"
+            >
+              <span
+                id="hamburger-ex"
+                onClick={[Function]}
+                role="presentation"
+              >
+                ×
+              </span>
+              <ul
+                onClick={[Function]}
+                role="presentation"
+              >
+                <li>
+                  <span
+                    className="link_lookalike"
+                    id="login-link"
+                    onClick={[Function]}
+                    role="presentation"
+                  >
+                    Login
+                  </span>
+                </li>
+                <li>
+                  <a
+                    href="/register"
+                    onClick={[Function]}
+                  >
+                    Register
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/register"
+                    onClick={[Function]}
+                  >
+                    Explore
+                  </a>
+                </li>
+              </ul>
+            </aside>
+          </section>
+        </div>
       </div>
       <div
         className="hero__text"
@@ -161,14 +207,16 @@ Array [
             </ul>
           </li>
           <li>
-            <a
-              href="/search"
+            <span
+              id="searchIcon"
               onClick={[Function]}
+              role="presentation"
             >
               <i
-                className="fas fa-search"
+                className="fas fa-search hero__nav--search"
+                id="searchIconChild"
               />
-            </a>
+            </span>
           </li>
         </ul>
         <img

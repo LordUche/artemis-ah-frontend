@@ -62,8 +62,13 @@ ul.dropdown__body li {
 
 @media screen and (min-width: 806px) and (max-width: 1300px) {
     .dropdown__body {
+        top: 6rem;
         &.open {
             height: 31rem;
+
+            & > li {
+                padding: 0;
+            }
         }
     }
 }

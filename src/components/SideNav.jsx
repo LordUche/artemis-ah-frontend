@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { bool } from 'prop-types';
 import {
   settingsIcon,
   historyIcon,
@@ -7,12 +8,13 @@ import {
   bookmarkIcon
 } from '../assets/img__func/icons_svg';
 
+
 /**
  * @description side nav class component
  * @returns {undefined}
  */
-const SideNav = () => (
-  <aside className="side-nav-parent">
+export const SideNav = ({ isLoggedIn }) => (
+  <aside className="side-nav-parent" style={isLoggedIn !== false ? { top: '91.59px' } : { top: '900000000000000000em' }}>
     <nav className="side-nav">
       <ul className="side-nav__first-child">
         <li id="bookmarkLink" className="side-nav__first-child__children">
@@ -57,5 +59,9 @@ const SideNav = () => (
     </nav>
   </aside>
 );
+
+SideNav.propTypes = {
+  isLoggedIn: bool.isRequired
+};
 
 export default SideNav;

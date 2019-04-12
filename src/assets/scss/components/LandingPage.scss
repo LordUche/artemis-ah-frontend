@@ -10,12 +10,17 @@
 
     &__header {
         display: block;
+
+        #hamburger{
+            color: $white-color;
+        };
     }
 
     &__nav {
         &--links {
             display: inline-block;
             margin-inline-start: 380px;
+            height: 25px;
         }
 
         & > img {
@@ -28,9 +33,69 @@
             margin-right: 3rem;
             font-weight: $semi-bold-font;
         }
+
         &--mobile {
             display: none;
         }
+        
+        &--mobile {
+            display: none;
+        }
+
+        &--search_wrapper {
+            margin-left: 22rem;
+            float: right;
+            margin-right: 8.3rem;
+            display: flex;
+        }
+
+        &--search_input {
+            animation: slidein 0.5s ease-in;
+            padding-left: 0.5rem;
+            height: 2.5rem;
+            width: 22rem;
+            background: #eee;
+            font-size: 1.5rem;
+            border-radius: 0.5rem;
+            margin: 0 0.3rem;
+        }
+
+        &--search_input:focus {
+           outline: $primary-color auto 0.5rem;
+        }
+
+        &--search {
+            color: $primary-color;
+            cursor: pointer;
+            font-size: 1.6rem;
+            padding: 0.3rem;
+        }
+
+        @keyframes slidein {
+          from {
+            width: 0; 
+          }
+
+          to {
+            width: 22rem;
+          }
+        } 
+
+    }
+
+    &__description {
+        width: 40%;
+        padding: 7rem 5rem 5rem 12rem;
+    }
+
+    &__illustration {
+        display: flex;
+        justify-content: center;
+        padding: 60px;
+        width: 60%;
+        background: url('../img/hero.svg');
+        background-repeat: no-repeat;
+        position: relative;
     }
 
     &__description {
@@ -257,7 +322,8 @@ footer {
                 line-height: 2;
             }
 
-            &--links {
+            &--links,
+            &--search_wrapper {
                 margin-inline-start: unset;
                 align-self: flex-end;
             }
@@ -302,7 +368,7 @@ footer {
     }
 }
 
-// Responsive styles for viewports 768px and below
+// Responsive styles for viewports 805 and below
 @media screen and (max-width: 805px) {
     .hamburger{
         color: $white-color;
@@ -377,6 +443,33 @@ footer {
                 }
             }
         } 
+        .hamburger{
+            &_div{
+              &_menu{
+                &_backdrop{
+                    display: block;
+                }
+                &_aside{
+                  display: block;
+                }
+              }
+            }
+          }
+          #hamburger, #hamburger-ex {
+            cursor: pointer;
+            display: block;
+           }
+
+          #hamburger{
+            margin: 5px 10px;
+           }
+          
+           #hamburger-ex{
+            position: absolute;
+            top: 17px;
+            right: 10px;
+            font-size: 40px;
+           }
     }
 
     .segment {
@@ -384,6 +477,7 @@ footer {
 
         &__title {
             font-size: 2.5rem;
+            margin-top: 3rem;
         }
 
         &__text {
@@ -392,14 +486,14 @@ footer {
 
         &.about {
             background: $light-grey;
-            padding: 0 2.5rem 6.5rem;
+            padding: 2.5rem 2.5rem 6.5rem;
             height: auto;
         }
 
         &.featured {
             background-repeat: no-repeat;
             height: auto;
-            margin-top: -10rem;
+            margin-top: -15rem;
             padding-bottom: 7rem;
             display: block;
         }
