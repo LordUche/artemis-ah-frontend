@@ -14,6 +14,7 @@ import {
   PROFILE_DETAILS_UPDATED,
   PROFILE_DETAILS_UPDATE_ERROR,
   PROFILE_RESET_EDIT_STATE,
+  PROFILE_RESET,
 } from '../actionTypes';
 import {
   TAB_ARTICLES,
@@ -28,7 +29,10 @@ import {
   CONTENT_STATE_UPDATE_FAILED,
 } from '../../constants/profileConstants';
 
-const initialState = {
+/**
+ * @returns {object} Returns the initial state of the profile page.
+ */
+const getInitialState = () => ({
   user: {
     fullname: null,
     username: null,
@@ -61,9 +65,9 @@ const initialState = {
     }
   },
   editState: CONTENT_STATE_DEFAULT,
-};
+});
 
-export default (state = initialState, { type, data }) => {
+export default (state = getInitialState(), { type, data }) => {
   const newState = Object.assign({}, state);
 
   switch (type) {
@@ -155,6 +159,10 @@ export default (state = initialState, { type, data }) => {
     case PROFILE_RESET_EDIT_STATE:
       newState.editState = CONTENT_STATE_DEFAULT;
       return newState;
+
+    // Reset user profile.
+    case PROFILE_RESET:
+      return getInitialState();
 
     default:
       return state;
