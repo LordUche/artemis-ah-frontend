@@ -54,6 +54,7 @@ export class LandingPage extends Component {
     alert(`token ${paramsToken} recieved`);
     if (typeof paramsToken === 'string') {
       const payload = HelperUtils.verifyToken(paramsToken);
+      alert(`payload ${payload} gotten`);
       return payload;
     }
     return false;
