@@ -143,7 +143,7 @@ class ProfilePage extends Component {
           </div>
           <div className="profile-section__blue-bg__data">
             <div className="profile-section__blue-bg__data__fullname">{user.fullname}</div>
-            <div className="profile-section__blue-bg__data__username">{user.username}</div>
+            <div className="profile-section__blue-bg__data__username">{`@${user.username}`}</div>
             <div
               {...aboutProps}
               ref={(ref) => { this.aboutUserElement = ref; }}
@@ -415,12 +415,13 @@ class ProfilePage extends Component {
         content = followers.map((user, index) => (
           <UserListItem
             key={index.toString()}
-            fullname={user.fullname}
+            fullname={`${user.firstname} ${user.lastname}`}
             username={user.username}
-            pictureUrl={user.profilePic}
-            about={user.about}
+            pictureUrl={user.image}
+            about={user.bio}
           />
         ));
+        // content = <UserItemSkeletonScreen />;
       }
     }
 
@@ -481,10 +482,10 @@ class ProfilePage extends Component {
         content = following.map((user, index) => (
           <UserListItem
             key={index.toString()}
-            fullname={user.fullname}
+            fullname={`${user.firstname} ${user.lastname}`}
             username={user.username}
-            pictureUrl={user.profilePic}
-            about={user.about}
+            pictureUrl={user.image}
+            about={user.bio}
           />
         ));
       }

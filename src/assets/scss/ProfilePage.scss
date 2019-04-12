@@ -245,6 +245,15 @@ $color-white: #ffffff;
                 text-align: center;
                 font-size: 22px;
             }
+
+            .article-item-skeleton-screen {
+                margin-top: 20px;
+            }
+
+            .user-list-item,
+            .user-item-skeleton-screen {
+                margin-top: 30px;
+            }
         }
 
         .no-result {
@@ -267,5 +276,65 @@ $color-white: #ffffff;
     &__container-center {
         width: 840px;
         margin: 0 auto;
+    }
+
+
+    @media screen and (max-width: 768px) {
+        &__container-center {
+            width: 91%;
+        }
+
+        &__blue-bg {
+            height: auto;
+            text-align: center;
+
+            &__user-wrapper {
+                display: block;
+            }
+
+            &__picture-section {
+                display: inline-block;
+            }
+
+            &__data {
+                margin-left: 0;
+
+                &__fullname {
+                    margin-top: 15px;
+                }
+                
+                &__btn-wrapper {
+                    position: static;
+                    width: 100%;
+                    margin-top: 15px;
+                }
+
+                &__about--edit {
+                    width: 100%;
+                }
+            }
+        }
+
+        &__body {
+            &__tab-container {
+                &__tab {
+                    &__inner {
+                        &__icon {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            .user-list {
+                display: block;
+
+                &-item {
+                    width: 100%;
+                }
+            }
+
+            padding-bottom: 110px;
+        }
     }
 }

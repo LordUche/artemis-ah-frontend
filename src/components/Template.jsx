@@ -21,7 +21,7 @@ const Template = ({ children, isLoggedIn }) => {
       <TopNav />
       {children}
       {isLoggedIn && (
-        <SideNav />
+        <SideNav isLoggedIn={isLoggedIn} />
       )}
     </div>
   );

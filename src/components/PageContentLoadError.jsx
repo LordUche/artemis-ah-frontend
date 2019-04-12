@@ -10,7 +10,7 @@ import '../assets/scss/components/PageContentLoadError.scss';
 const ErrorComponent = ({ onRetry }) => (
   <div className="page-content-load-error">
     <div className="page-content-load-error__icon"><i className="fa fa-cloud" /></div>
-    <div className="page-content-load-error__title">Oops! Something went wrong. Please check your internet connection and try again.</div>
+    <div className="page-content-load-error__title">Oops! Something went wrong. Please try again.</div>
     <div className="page-content-load-error__btn-area">
       <Button btnText="Retry" onClick={onRetry} />
     </div>

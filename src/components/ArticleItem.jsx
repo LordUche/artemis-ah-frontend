@@ -14,13 +14,25 @@ const ArticleItem = ({
     <div className="article-item__image-wrapper">
       <img src={coverUrl} alt="" />
       <span className="tag">{tag.toUpperCase()}</span>
+      <div className="stats-wrapper">
+        <span>
+          <i className="fa fa-star" />
+          {' '}
+          {rating}
+        </span>
+        <span className="stats-wrapper__read-time">
+          <i className="fa fa-clock" />
+          {' '}
+          {readTime}
+        </span>
+      </div>
     </div>
     <div className="article-item__body-wrapper">
       <div className="article-item__body-wrapper__body">
         <div className="article-item__body-wrapper__body__title"><Link to={`/${slug}`}>{title}</Link></div>
         {showAuthor && (
         <div className="article-item__body-wrapper__body__author">
-          <Link to={`profile/${author}`}>{`@${author}`}</Link>
+          <Link to={`/profile/${author}`}>{`By @${author}`}</Link>
         </div>
         )}
         <div className="article-item__body-wrapper__body__description">{description}</div>

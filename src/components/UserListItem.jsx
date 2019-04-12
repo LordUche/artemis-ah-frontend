@@ -17,11 +17,13 @@ const UserListItem = ({
   about,
 }) => (
   <div className="user-list-item">
-    <img src={pictureUrl} alt={fullname} />
-    <div className="user-list-item__details_wrapper">
-      <div className="user-list-item__details_wrapper__fullname"><Link to="/profile">{fullname}</Link></div>
-      <div className="user-list-item__details_wrapper__username"><Link to="/profile">{`@${username}`}</Link></div>
-      <div className="user-list-item__details_wrapper__about">{about}</div>
+    <div className="user-list-item__inner">
+      <img src={pictureUrl} alt={fullname} />
+      <div className="user-list-item__inner__details_wrapper">
+        <div className="user-list-item__inner__details_wrapper__fullname"><Link to="/profile">{fullname}</Link></div>
+        <div className="user-list-item__inner__details_wrapper__username"><Link to="/profile">{`@${username}`}</Link></div>
+        <div className="user-list-item__inner__details_wrapper__about">{about}</div>
+      </div>
     </div>
   </div>
 );
