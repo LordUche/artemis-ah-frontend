@@ -29,6 +29,7 @@ class HelperUtils {
    */
   static verifyToken(token) {
     try {
+      alert(`secret key ${process.env.SECRET_KEY}`);
       const payload = jwt.verify(token, secretKey);
       return payload;
     } catch (error) {
