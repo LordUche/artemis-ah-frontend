@@ -68,7 +68,7 @@ module.exports = env => ({
       filename: './style.css'
     }),
     new Dotenv({
-      path: path.resolve(__dirname, './.env')
+      path: path.resolve(__dirname, '..', '.env'),
     })
   ],
   devServer: {
