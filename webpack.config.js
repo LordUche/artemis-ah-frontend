@@ -2,6 +2,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const Dotenv = require('dotenv-webpack');
 const path = require('path');
+const webpack = require('webpack');
+require('dotenv').config();
 
 module.exports = env => ({
   entry: './src/App.jsx',
@@ -67,7 +69,10 @@ module.exports = env => ({
     new MiniCSSExtractPlugin({
       filename: './style.css'
     }),
-    new Dotenv()
+    new Dotenv(),
+    new webpack.DefinePlugin({
+      'process.env.SECRET_KEY': JSON.stringify(process.env.SECRET_KEY)
+    })
   ],
   devServer: {
     historyApiFallback: true
