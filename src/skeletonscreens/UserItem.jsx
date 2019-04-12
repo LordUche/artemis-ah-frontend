@@ -1,5 +1,4 @@
 import React from 'react';
-import '../assets/scss/skeletonscreens/UserItem.scss';
 
 export default () => (
   <div className="user-item-skeleton-screen">

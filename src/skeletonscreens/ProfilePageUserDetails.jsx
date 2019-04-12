@@ -1,5 +1,4 @@
 import React from 'react';
-import '../assets/scss/skeletonscreens/ProfilePageUserDetails.scss';
 
 export default () => (
   <div className="user-details-skeleton-screen">

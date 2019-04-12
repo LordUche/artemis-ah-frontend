@@ -10,6 +10,7 @@ import {
   fetchUserFollowing,
   updateUserDetails,
   resetEditState,
+  resetProfile,
 } from '../redux/actions/profileActions';
 import Template from '../components/Template';
 import ArticleItem from '../components/ArticleItem';
@@ -30,7 +31,6 @@ import {
   CONTENT_STATE_UPDATING,
   CONTENT_STATE_UPDATED,
 } from '../constants/profileConstants';
-import '../assets/scss/ProfilePage.scss';
 
 /**
  * @class ProfilePage
@@ -73,6 +73,21 @@ class ProfilePage extends Component {
       this.setState({ editMode: false });
 
       dispatch(resetEditState());
+    }
+  }
+
+  /**
+   * @param {object} prevProps The previous props before the component was updated.
+   * @returns {undefined}
+   */
+  componentDidUpdate(prevProps) {
+    const { match, user, dispatch } = this.props;
+
+    if (match.params.username !== prevProps.match.params.username) {
+      dispatch(resetProfile());
+
+      const viewingUsername = (match.params.username || user.username);
+      fetchUserDetails(viewingUsername, user.authToken, dispatch);
     }
   }
 
@@ -421,7 +436,6 @@ class ProfilePage extends Component {
             about={user.bio}
           />
         ));
-        // content = <UserItemSkeletonScreen />;
       }
     }
 

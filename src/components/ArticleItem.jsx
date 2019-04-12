@@ -1,7 +1,6 @@
 import React from 'react';
 import { string as stringProp, bool as boolProp } from 'prop-types';
 import { Link } from 'react-router-dom';
-import '../assets/scss/ArticleItem.scss';
 
 /**
  * @description Component for an article list item in a list of articles.

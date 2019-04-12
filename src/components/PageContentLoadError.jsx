@@ -1,7 +1,6 @@
 import React from 'react';
 import { func as funcProp } from 'prop-types';
 import Button from './Button';
-import '../assets/scss/components/PageContentLoadError.scss';
 
 /**
  * @param {function} onRetry Callback function fired when onRetry is clicked.

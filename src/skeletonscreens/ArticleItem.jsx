@@ -1,5 +1,4 @@
 import React from 'react';
-import '../assets/scss/skeletonscreens/ArticleItem.scss';
 
 export default () => (
   <div className="article-item-skeleton-screen">

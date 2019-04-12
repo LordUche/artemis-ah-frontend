@@ -16,6 +16,7 @@ import {
   PROFILE_DETAILS_UPDATE_ERROR,
   PROFILE_DETAILS_UPDATING,
   PROFILE_RESET_EDIT_STATE,
+  PROFILE_RESET,
 } from '../actionTypes';
 
 /**
@@ -187,9 +188,17 @@ export const updateUserDetails = (token, updatedBio, selectedImage, dispatch) =>
 };
 
 /**
- * Resets `editState`
+ * @description Resets `editState`
  * @returns {object} Action object for redux.
  */
 export const resetEditState = () => ({
   type: PROFILE_RESET_EDIT_STATE,
+});
+
+/**
+ * @description Reset user profile.
+ * @returns {object} Action object for redux
+ */
+export const resetProfile = () => ({
+  type: PROFILE_RESET,
 });
