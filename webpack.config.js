@@ -67,7 +67,9 @@ module.exports = env => ({
     new MiniCSSExtractPlugin({
       filename: './style.css'
     }),
-    new Dotenv()
+    new Dotenv({
+      path: path.resolve(__dirname, './.env')
+    })
   ],
   devServer: {
     historyApiFallback: true
