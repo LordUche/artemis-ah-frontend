@@ -35,8 +35,7 @@ export class LandingPage extends Component {
    * @description component will mount
    * @returns {undefined}
    */
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillMount = () => {
+  componentWillMount = () => {
     const data = this.validateURLPayload();
     const { location } = window;
     const { loginUserViaSocialMedia } = this.props;
@@ -77,10 +76,11 @@ export class LandingPage extends Component {
    */
   render() {
     const {
-      revealLoginModal, hideLoginModal, state, props
+      revealLoginModal, hideLoginModal, state, props, componentWillMount
     } = this;
     const { showLoginModal } = state;
     const { isLoggedIn } = props;
+    componentWillMount();
     return (
       <React.Fragment>
         <Hero
