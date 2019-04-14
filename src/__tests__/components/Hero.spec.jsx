@@ -44,7 +44,10 @@ describe('Hero Component', () => {
 
   it('should show login modal on click', () => {
     expect(mockRevealLoginModal.mock.calls.length).toBe(0);
-    hero.find('#login-link').first().simulate('click');
+    hero
+      .find('#login-link')
+      .first()
+      .simulate('click');
     expect(mockRevealLoginModal.mock.calls.length).toBe(1);
   });
 
@@ -72,6 +75,8 @@ describe('Hero Component', () => {
   const mockHideLoginModal = jest.fn();
   const mockRevealLoginModal = jest.fn();
   const mockSmoothScrollListener = jest.fn();
+  const mockHistoryPush = jest.fn();
+  const history = { push: mockHistoryPush };
   const hero = shallow(
     <Hero
       showLoginModal
@@ -79,6 +84,7 @@ describe('Hero Component', () => {
       revealLoginModal={mockRevealLoginModal}
       smoothScrollListener={mockSmoothScrollListener}
       isLoggedIn={false}
+      history={history}
     />
   );
   const { hideSearchField } = new Hero();
@@ -89,11 +95,22 @@ describe('Hero Component', () => {
     expect(hero.find('.hero__nav--search_wrapper').exists()).toBe(true);
   });
 
+  it('should trigger history.push() method when the cta button is clicked', () => {
+    const ctaButtonExplore = hero.find('.btn').at(0);
+    ctaButtonExplore.simulate('click');
+    const ctaButtonWrite = hero.find('.btn').at(1);
+    ctaButtonWrite.simulate('click');
+  });
+
   it('button click should show search input', () => {
     hero
       .find('input.hero__nav--search_input')
       .simulate('keypress', { key: 'Enter', target: { name: 'search' } });
     expect(hero).toMatchObject({});
+  });
+
+  it('should test if enter button is not pressed', () => {
+    hero.find('input.hero__nav--search_input').simulate('keypress', { key: 'N' });
   });
 
   it('button click should show search input', () => {
@@ -108,18 +125,30 @@ describe('Hero Component', () => {
     hero.find('section.hero').simulate('click', { target: { name: 'search', value: 'abc' } });
     expect(hero).toMatchObject({});
   });
+
+  it('check if body is clicked to toggle search bar', () => {
+    hero.find('section.hero').simulate('click', { target: { name: 'searchQuery', id: 'search' } });
+  });
+
+  it('should test when user is done typing', () => {
+    hero.setState({ displaySearchBar: true });
+    hero.update();
+    hero.find('.hero__nav--search').simulate('click');
+  });
 });
 
 describe('Hero hamburger menu', () => {
   const mockHideLoginModal = jest.fn();
   const mockRevealLoginModal = jest.fn();
   const mockSmoothScrollListener = jest.fn();
-  const hero = mount(<Hero
-    showLoginModal={false}
-    hideLoginModal={mockHideLoginModal}
-    revealLoginModal={mockRevealLoginModal}
-    smoothScrollListener={mockSmoothScrollListener}
-  />);
+  const hero = mount(
+    <Hero
+      showLoginModal={false}
+      hideLoginModal={mockHideLoginModal}
+      revealLoginModal={mockRevealLoginModal}
+      smoothScrollListener={mockSmoothScrollListener}
+    />
+  );
 
   it('should contain the hamburger icon', () => {
     expect(hero.find('i#hamburger').exists()).toBe(true);

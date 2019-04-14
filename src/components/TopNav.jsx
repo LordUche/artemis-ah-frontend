@@ -23,18 +23,14 @@ class TopNav extends Component {
     this.setState({
       showResponsiveNav: !showResponsiveNav
     });
-  }
+  };
 
   /**
    * @description returns nav children
    * @returns {JSX} JSX
    */
   renderNavChildren = () => {
-    const {
-      display,
-      menuClassStyleName,
-      showResponsiveNav
-    } = this.state;
+    const { display, menuClassStyleName, showResponsiveNav } = this.state;
     const { isLoggedIn, username, image } = this.props;
     if (isLoggedIn) {
       return (
@@ -48,10 +44,7 @@ class TopNav extends Component {
 
           <ul className="nav-component-container-online2">
             <li>
-              <NavLink to="/explore">
-                Explore &nbsp;
-                <i className="fas fa-angle-down" />
-              </NavLink>
+              <NavLink to="/explore">Explore &nbsp;</NavLink>
             </li>
             <li>
               <NavLink to="/notifications">

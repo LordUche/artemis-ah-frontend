@@ -80,7 +80,7 @@ export class LandingPage extends Component {
       revealLoginModal, hideLoginModal, state, props
     } = this;
     const { showLoginModal } = state;
-    const { isLoggedIn } = props;
+    const { isLoggedIn, history } = props;
     return (
       <React.Fragment>
         <Hero
@@ -89,6 +89,7 @@ export class LandingPage extends Component {
           revealLoginModal={revealLoginModal}
           hideLoginModal={hideLoginModal}
           isLoggedIn={isLoggedIn}
+          history={history}
         />
         <AboutAH />
         <FeaturedCategories />

@@ -101,20 +101,20 @@ Array [
       <div
         className="hero__cta"
       >
-        <a
-          className="btn"
-          href="/explore"
+        <button
+          className="btn btn-explore"
           onClick={[Function]}
+          type="button"
         >
           Explore Stories
-        </a>
-        <a
-          className="btn"
-          href="/create-story"
+        </button>
+        <button
+          className="btn btn-write"
           onClick={[Function]}
+          type="button"
         >
           Start Writing
-        </a>
+        </button>
       </div>
     </div>
     <div

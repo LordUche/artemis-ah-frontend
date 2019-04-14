@@ -4,13 +4,6 @@ html {
  font-size: 10px;
 }
 
-body {
- padding: 0;
- color: $primary-color;
- font-family: "Nunito", sans-serif;
- margin: 0;
-}
-
 @mixin strip-link-style {
  li {
   list-style: none;
@@ -43,9 +36,13 @@ body {
 }
 
 .ah-header {
- // z-index: 1000;
+ z-index: 1000;
  height: 85px;
  margin-bottom: 2rem;
+
+ & > .top-nav {
+    z-index: 10;
+ }
 }
 
 .ah-nav-article {

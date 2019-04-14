@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { Provider } from 'react-redux';
 import { shallow } from 'enzyme';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxPromise from 'redux-promise';
 import sinon from 'sinon';
@@ -17,7 +18,9 @@ describe('Landing Page Component', () => {
     const tree = renderer
       .create(
         <Provider store={store}>
-          <LandingPageStore />
+          <Router>
+            <LandingPageStore />
+          </Router>
         </Provider>
       )
       .toJSON();
@@ -25,7 +28,6 @@ describe('Landing Page Component', () => {
   });
 
   it('should test for class methods', () => {
-    // const onClickMock = jest.fn();
     const mockRevealModal = jest.fn();
     const mockHideModal = jest.fn();
     const mockAction = jest.fn();
