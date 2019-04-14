@@ -8,6 +8,7 @@ import FeaturedCategories from '../components/FeaturedCategories';
 import Footer from '../components/Footer';
 import HelperUtils from '../utils/helperUtils';
 import { socialLoginUserAction } from '../redux/actions/authActions';
+import SignUpViewModal from './SignUpView';
 
 /**
  * @description landing page
@@ -16,7 +17,8 @@ import { socialLoginUserAction } from '../redux/actions/authActions';
  */
 export class LandingPage extends Component {
   state = {
-    showLoginModal: false
+    showLoginModal: false,
+    showSignUpModal: false
   };
 
   hideLoginModal = () => {
@@ -27,9 +29,15 @@ export class LandingPage extends Component {
 
   revealLoginModal = () => {
     this.setState({
-      showLoginModal: true
+      showLoginModal: true,
+      showSignUpModal: false
     });
   };
+
+  toggleSignUpModal = () => {
+    const { showSignUpModal } = this.state;
+    this.setState({ showSignUpModal: !showSignUpModal, showLoginModal: false });
+  }
 
   /**
    * @description component will mount
@@ -77,10 +85,10 @@ export class LandingPage extends Component {
    */
   render() {
     const {
-      revealLoginModal, hideLoginModal, state, props
+      revealLoginModal, hideLoginModal, state, props, toggleSignUpModal
     } = this;
-    const { showLoginModal } = state;
-    const { isLoggedIn } = props;
+    const { showLoginModal, showSignUpModal } = state;
+    const { isLoggedIn, signedUp, email } = props;
     return (
       <React.Fragment>
         <Hero
@@ -89,7 +97,18 @@ export class LandingPage extends Component {
           revealLoginModal={revealLoginModal}
           hideLoginModal={hideLoginModal}
           isLoggedIn={isLoggedIn}
+          showSignUpModal={showLoginModal}
+          toggleSignUpModal={toggleSignUpModal}
         />
+        {showSignUpModal && (
+        <SignUpViewModal
+          revealLoginModal={revealLoginModal}
+          showSignUpModal={showSignUpModal}
+          toggleSignUpModal={toggleSignUpModal}
+          signedUp={signedUp}
+          email={email}
+        />
+        )}
         <AboutAH />
         <FeaturedCategories />
         <Footer />
@@ -115,15 +134,19 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
  * @param {object} store The redux store
  * @returns {object} props
  */
-export const mapStateToProps = ({ auth }) => {
-  const { isLoggedIn } = auth;
+export const mapStateToProps = ({ auth, user }) => {
+  const { isLoggedIn, signedUp } = auth;
+  const { email } = user;
   return {
-    isLoggedIn
+    email,
+    isLoggedIn,
+    signedUp,
+    user
   };
 };
 
 LandingPage.propTypes = {
-  loginUserViaSocialMedia: func.isRequired
+  loginUserViaSocialMedia: func.isRequired,
 };
 
 export default connect(

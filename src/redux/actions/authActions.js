@@ -2,8 +2,40 @@ import 'babel-polyfill';
 import { post } from 'axios';
 import BASE_URL from './index';
 import {
-  LOGIN_ERROR, LOGIN_USER, AUTH_LOADING, CLEAR_AUTH_ERROR
+  LOGIN_ERROR,
+  LOGIN_USER,
+  AUTH_LOADING,
+  CLEAR_AUTH_ERROR,
+  SIGN_UP,
+  SIGN_UP_ERROR
 } from '../actionTypes';
+
+const BASEURL = 'http://localhost:3000';
+
+/**
+ * @description user sign up
+ * @param {object} values
+ * @param {function} toggleSignupModal
+ * @param {function} toggleVerify
+ * @returns {object} action
+ */
+export async function signUp(values) {
+  try {
+    const request = await post(`${BASEURL}/api/users`, values);
+    const { user } = request.data;
+
+    return {
+      type: SIGN_UP,
+      payload: user
+    };
+  } catch (error) {
+    return {
+      type: SIGN_UP_ERROR,
+      payload: error.response.data
+    };
+  }
+}
+
 
 /**
  * @description function for storing platform data in localStorage
