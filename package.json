@@ -9,7 +9,7 @@
     "serve": " npm run build && npm run start",
     "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
-    "test": "jest ./src/__tests__ --coverage --no-cache -u --watch",
+    "test": "jest ./src/__tests__ --coverage --no-cache -u",
     "nightwatch": "nightwatch -c tests/nightwatch.conf.js -e"
   },
   "repository": {
