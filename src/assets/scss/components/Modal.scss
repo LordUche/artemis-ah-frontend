@@ -39,7 +39,6 @@
         right: 5%;
         font-size: 40px;
         color: #828282;
-        background: none !important;
 
         &:hover{
             color: $red-color;
@@ -64,4 +63,8 @@
             font-size: 20px;
         }
     }
+}
+
+#ah-modal-close{
+    background: none;
 }
