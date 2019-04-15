@@ -11,7 +11,7 @@ import Hamburger from './Hamburger';
  * @description top nav
  * @returns {JSX} top nav
  */
-class TopNav extends Component {
+export class TopNav extends Component {
   state = {
     display: '',
     menuClassStyleName: 'link-wrapper',
@@ -23,18 +23,14 @@ class TopNav extends Component {
     this.setState({
       showResponsiveNav: !showResponsiveNav
     });
-  }
+  };
 
   /**
    * @description returns nav children
    * @returns {JSX} JSX
    */
   renderNavChildren = () => {
-    const {
-      display,
-      menuClassStyleName,
-      showResponsiveNav
-    } = this.state;
+    const { display, menuClassStyleName, showResponsiveNav } = this.state;
     const { isLoggedIn, username, image } = this.props;
     if (isLoggedIn) {
       return (
@@ -157,5 +153,3 @@ export const mapStateToProps = ({ auth, user }) => {
 };
 
 export default connect(mapStateToProps)(TopNav);
-
-export { TopNav };

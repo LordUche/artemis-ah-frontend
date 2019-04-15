@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { node as nodeProp, bool as boolProp } from 'prop-types';
-import { TopNav, SideNav } from '.';
+import { SideNav } from '.';
+import TopNavBar from './TopNav';
 
 /**
  * @description Returns a template containing the top and side navs. Just wrap
@@ -18,18 +19,16 @@ const Template = ({ children, isLoggedIn }) => {
 
   return (
     <div {...rootProps}>
-      <TopNav />
+      <TopNavBar />
       {children}
-      {isLoggedIn && (
-        <SideNav isLoggedIn={isLoggedIn} />
-      )}
+      {isLoggedIn && <SideNav isLoggedIn={isLoggedIn} />}
     </div>
   );
 };
 
 Template.propTypes = {
   children: nodeProp.isRequired,
-  isLoggedIn: boolProp.isRequired,
+  isLoggedIn: boolProp.isRequired
 };
 
 /**
@@ -37,8 +36,11 @@ Template.propTypes = {
  * @param {object} state The state of the application from redux store
  * @return {object} Props for ProfilePage component.
  */
-const mapState2Props = state => ({
-  isLoggedIn: state.auth.isLoggedIn,
-});
+const mapState2Props = ({ auth }) => {
+  const { isLoggedIn } = auth;
+  return {
+    isLoggedIn
+  };
+};
 
 export default connect(mapState2Props)(Template);
