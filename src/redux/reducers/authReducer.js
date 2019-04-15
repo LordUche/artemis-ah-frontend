@@ -1,5 +1,10 @@
 import {
-  LOGIN_USER, LOGIN_ERROR, AUTH_LOADING, CLEAR_AUTH_ERROR
+  LOGIN_USER,
+  LOGIN_ERROR,
+  AUTH_LOADING,
+  CLEAR_AUTH_ERROR,
+  SIGN_UP,
+  SIGN_UP_ERROR
 } from '../actionTypes';
 
 /**
@@ -12,7 +17,8 @@ export const initialState = (localStorage, sessionStorage) => ({
   isLoggedIn: !!(localStorage.authorsHavenToken || sessionStorage.authorsHavenToken),
   token: localStorage.authorsHavenToken || sessionStorage.authorsHavenToken || '',
   errorMessages: {},
-  loading: false
+  loading: false,
+  signedUp: false
 });
 
 /**
@@ -23,6 +29,19 @@ export const initialState = (localStorage, sessionStorage) => ({
  */
 const authReducer = (state = initialState(localStorage, sessionStorage), { type, payload }) => {
   switch (type) {
+    case SIGN_UP_ERROR:
+      return {
+        ...state,
+        errorMessages: payload,
+        signedUp: false,
+        loading: false
+      };
+    case SIGN_UP:
+      return {
+        ...state,
+        loading: false,
+        signedUp: true
+      };
     case LOGIN_USER:
       return {
         ...state,
@@ -44,7 +63,8 @@ const authReducer = (state = initialState(localStorage, sessionStorage), { type,
     case CLEAR_AUTH_ERROR:
       return {
         ...state,
-        errorMessages: []
+        errorMessages: [],
+        signedUp: false,
       };
     default:
       return state;

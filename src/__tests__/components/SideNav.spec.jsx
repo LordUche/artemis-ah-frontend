@@ -7,4 +7,5 @@ describe('test the side nav', () => {
   it('should return a div', () => {
     expect(sideNav.find('div').exists()).toBe(true);
   });
+  sideNav.setProps({ isLoggedIn: false });
 });

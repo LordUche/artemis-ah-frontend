@@ -64,12 +64,14 @@ Array [
                   </span>
                 </li>
                 <li>
-                  <a
-                    href="/register"
+                  <span
+                    className="link_lookalike"
+                    id="signup-link"
                     onClick={[Function]}
+                    role="presentation"
                   >
                     Register
-                  </a>
+                  </span>
                 </li>
                 <li>
                   <a
@@ -101,20 +103,20 @@ Array [
       <div
         className="hero__cta"
       >
-        <a
-          className="btn"
-          href="/explore"
+        <button
+          className="btn btn-explore"
           onClick={[Function]}
+          type="button"
         >
           Explore Stories
-        </a>
-        <a
-          className="btn"
-          href="/create-story"
+        </button>
+        <button
+          className="btn btn-write"
           onClick={[Function]}
+          type="button"
         >
           Start Writing
-        </a>
+        </button>
       </div>
     </div>
     <div
@@ -137,12 +139,14 @@ Array [
             </span>
           </li>
           <li>
-            <a
-              href="/register"
+            <span
+              className="link_lookalike"
+              id="signup-link"
               onClick={[Function]}
+              role="presentation"
             >
               Register
-            </a>
+            </span>
           </li>
           <li
             className="dropdown__trigger"

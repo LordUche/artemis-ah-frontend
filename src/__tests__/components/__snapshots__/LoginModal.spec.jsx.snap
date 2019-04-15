@@ -16,6 +16,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
   >
     <button
       className="ah_modal_close"
+      id="ah-modal-close"
       onClick={[MockFunction]}
       type="button"
     >
@@ -186,6 +187,8 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           </span>
           <input
             className="ah-input login_body_form_input"
+            maxLength=""
+            minLength=""
             name="name"
             onChange={[Function]}
             placeholder="Email or Username"
@@ -200,6 +203,8 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           </span>
           <input
             className="ah-input login_body_form_input"
+            maxLength=""
+            minLength=""
             name="password"
             onChange={[Function]}
             placeholder="Password"
@@ -235,12 +240,12 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           <div
             className="login_body_form_links"
           >
-            <a
-              className="login_body_form_link"
-              href="/"
+            <button
+              className="ah_signup_registered-link hasAccount"
+              type="button"
             >
-              Register now
-            </a>
+               Login Here
+            </button>
             <a
               className="login_body_form_link"
               href="/"
