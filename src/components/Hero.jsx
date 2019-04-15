@@ -90,31 +90,9 @@ class Hero extends Component {
               </Link>
             </Router>
             <Hamburger open={showResponsiveNav} toggleMenu={this.toggleResponsiveNav}>
-              <li>
-                <span
-                  id="login-link"
-                  className="link_lookalike"
-                  role="presentation"
-                  onClick={revealLoginModal}
-                >
-                  Login
-                </span>
-              </li>
-              <li>
-                <span
-                  id="signup-link"
-                  className="link_lookalike"
-                  role="presentation"
-                  onClick={toggleSignUpModal}
-                >
-                  Register
-                </span>
-              </li>
-              <li>
-                <Router>
-                  <Link to="./register">Explore</Link>
-                </Router>
-              </li>
+              <li><span id="login-link" className="link_lookalike" role="presentation" onClick={revealLoginModal}>Login</span></li>
+              <li><span id="signup-link" className="link_lookalike" role="presentation" onClick={toggleSignUpModal}>Register</span></li>
+              <li><Router><Link to="./register">Explore</Link></Router></li>
             </Hamburger>
           </div>
           <div className="hero__text">
