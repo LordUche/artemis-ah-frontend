@@ -64,12 +64,14 @@ Array [
                   </span>
                 </li>
                 <li>
-                  <a
-                    href="/register"
+                  <span
+                    className="link_lookalike"
+                    id="signup-link"
                     onClick={[Function]}
+                    role="presentation"
                   >
                     Register
-                  </a>
+                  </span>
                 </li>
                 <li>
                   <a
@@ -137,12 +139,14 @@ Array [
             </span>
           </li>
           <li>
-            <a
-              href="/register"
+            <span
+              className="link_lookalike"
+              id="signup-link"
               onClick={[Function]}
+              role="presentation"
             >
               Register
-            </a>
+            </span>
           </li>
           <li
             className="dropdown__trigger"

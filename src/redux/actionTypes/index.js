@@ -1,4 +1,3 @@
-
 export const CHANGE_NAME = 'CHANGE_NAME';
 
 // Auth Action types
@@ -14,3 +13,7 @@ export const CREATE_ARTICLE = 'CREATE_ARTICLE';
 export const CREATE_ARTICLE_ERROR = 'CREATE_ARTICLE_ERROR';
 export const CLEAR_ARTICLE_ERROR = 'CLEAR_ARTICLE_ERROR';
 export const PUBLISHING_ARTICLE = 'PUBLISHING_ARTICLE';
+
+// Sign Up Action types
+export const SIGN_UP = 'SIGN_UP';
+export const SIGN_UP_ERROR = 'SIGN_UP_ERROR';

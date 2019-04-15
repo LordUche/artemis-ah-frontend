@@ -45,6 +45,7 @@ describe('Landing Page Component', () => {
     sinon.stub(window, 'scrollBy');
     landing.instance().hideLoginModal();
     landing.instance().revealLoginModal();
+    landing.instance().toggleSignUpModal();
     landing.instance().componentWillMount();
     landing.instance().validateURLPayload();
     expect(landing.find('Hero').exists()).toBe(true);

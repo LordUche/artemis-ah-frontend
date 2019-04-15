@@ -73,12 +73,15 @@ class Hero extends Component {
       revealLoginModal,
       hideLoginModal,
       isLoggedIn,
-      history
+      history,
+      toggleSignUpModal
     } = this.props;
 
     return (
       <section className="hero" onClick={this.hideSearchField} role="presentation">
-        {showLoginModal && <AHLoginModal onClose={hideLoginModal} />}
+        {showLoginModal && (
+          <AHLoginModal onClose={hideLoginModal} toggleSignUpModal={toggleSignUpModal} />
+        )}
         <div className="hero__description">
           <div className="hero__header">
             <Router>
@@ -98,9 +101,14 @@ class Hero extends Component {
                 </span>
               </li>
               <li>
-                <Router>
-                  <Link to="./register">Register</Link>
-                </Router>
+                <span
+                  id="signup-link"
+                  className="link_lookalike"
+                  role="presentation"
+                  onClick={toggleSignUpModal}
+                >
+                  Register
+                </span>
               </li>
               <li>
                 <Router>
@@ -147,9 +155,14 @@ class Hero extends Component {
                       </span>
                     </li>
                     <li>
-                      <Router>
-                        <Link to="./register">Register</Link>
-                      </Router>
+                      <span
+                        id="signup-link"
+                        className="link_lookalike"
+                        role="presentation"
+                        onClick={toggleSignUpModal}
+                      >
+                        Register
+                      </span>
                     </li>
                   </Fragment>
                 )}
@@ -222,7 +235,8 @@ Hero.propTypes = {
   revealLoginModal: func.isRequired,
   hideLoginModal: func.isRequired,
   isLoggedIn: bool.isRequired,
-  history: func.isRequired
+  history: func.isRequired,
+  toggleSignUpModal: func.isRequired
 };
 
 export default Hero;
