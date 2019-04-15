@@ -1,12 +1,79 @@
+import moxios from 'moxios';
 import {
   storeInLocal,
   loadingAuthAction,
   clearAuthErrorAction,
   loginUserAction,
-  socialLoginUserAction
+  socialLoginUserAction,
+  signUp
 } from '../../../redux/actions/authActions';
 
 import HelperUtils from '../../../utils/helperUtils';
+
+describe('user sign-up', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should sign up a user', async () => {
+    const mockRequest = {
+      firstname: 'Adaeze',
+      lastname: 'Odurukwe',
+      username: 'deedee44007',
+      email: 'daizyodurukwe3943jnd@gmail.com',
+      password: '12345678'
+    };
+
+    const expectedResponse = {
+      message: 'user created successfully',
+      user: {
+        email: 'daizyodurukwe3943jnd@gmail.com',
+        token: 'GL4DMA82yGCjptZk-_JUi7XodxUFbWYxMdiUiHipQZU',
+        username: 'deedee3344007',
+        bio: 'n/a',
+        image: 'https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/iReporter/avatar.png'
+      }
+    };
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 201, response: expectedResponse });
+    });
+
+    const result = await signUp(mockRequest);
+    expect(result.type).toEqual('SIGN_UP');
+  });
+
+  it('should return error when email is invalid', async () => {
+    const mockRequest = {
+      firstname: 'Adaeze',
+      lastname: 'Odurukwe',
+      username: 'deedee44007',
+      email: 'daizyodurukwe3943jndmail.com',
+      password: '12345678'
+    };
+
+    const expectedResponse = {
+      errors: {
+        email: [
+          'Email is invalid.'
+        ]
+      }
+    };
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: expectedResponse });
+    });
+
+    const result = await signUp(mockRequest);
+    expect(result.type).toEqual('SIGN_UP_ERROR');
+  });
+});
 
 describe('storing data in local storage', () => {
   it('should store data in local storage', () => {

@@ -73,12 +73,14 @@ class Hero extends Component {
       showLoginModal,
       revealLoginModal,
       hideLoginModal,
-      isLoggedIn
+      isLoggedIn,
+      toggleSignUpModal
     } = this.props;
 
     return (
       <section className="hero" onClick={this.hideSearchField} role="presentation">
-        {showLoginModal && <AHLoginModal onClose={hideLoginModal} />}
+        {showLoginModal && (
+        <AHLoginModal onClose={hideLoginModal} toggleSignUpModal={toggleSignUpModal} />)}
         <div className="hero__description">
           <div className="hero__header">
             <Router>
@@ -88,7 +90,7 @@ class Hero extends Component {
             </Router>
             <Hamburger open={showResponsiveNav} toggleMenu={this.toggleResponsiveNav}>
               <li><span id="login-link" className="link_lookalike" role="presentation" onClick={revealLoginModal}>Login</span></li>
-              <li><Router><Link to="./register">Register</Link></Router></li>
+              <li><span id="signup-link" className="link_lookalike" role="presentation" onClick={toggleSignUpModal}>Register</span></li>
               <li><Router><Link to="./register">Explore</Link></Router></li>
             </Hamburger>
           </div>
@@ -126,9 +128,14 @@ class Hero extends Component {
                       </span>
                     </li>
                     <li>
-                      <Router>
-                        <Link to="./register">Register</Link>
-                      </Router>
+                      <span
+                        id="signup-link"
+                        className="link_lookalike"
+                        role="presentation"
+                        onClick={toggleSignUpModal}
+                      >
+                        Register
+                      </span>
                     </li>
                   </Fragment>
                 )}
@@ -199,7 +206,8 @@ Hero.propTypes = {
   showLoginModal: bool.isRequired,
   revealLoginModal: func.isRequired,
   hideLoginModal: func.isRequired,
-  isLoggedIn: bool.isRequired
+  isLoggedIn: bool.isRequired,
+  toggleSignUpModal: func.isRequired
 };
 
 export default Hero;

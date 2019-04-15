@@ -1,0 +1,192 @@
+@import './base.scss';
+
+.ah_signup{
+  width: 70%;
+  margin: 3% auto;
+}
+
+.ah_signup_form{
+  padding-top: 1%;
+
+  &__input{
+    display: block;
+    width: 50%;
+    padding: 1%;
+    height: 60px;
+    float: left;
+    text-align: center;
+
+    &--signup{
+      width: 95%;
+    }
+  }
+}
+
+.ah_signup_form_wrapper{
+  width: 30%;
+  margin: auto;
+  display: block;
+
+  &__button{
+    width: 100%;
+    background: #5863f8;
+    color: #ffffff;
+    margin: 10% auto;
+  }
+}
+
+.ah_signup_registered{
+  text-align: center;
+  font-size: 1.6rem;
+  padding-bottom: 3%;
+}
+
+.hasAccount{
+  color: #5863f8;
+  background: #ffffff;
+  padding-left: 5px;
+  font-size: 1.6rem;
+}
+
+.ah_signup_or{
+  display: block;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2% 0;
+}
+
+.ah_signup_social{
+  padding-top: 2%;
+  text-align: center;
+
+  &--facebook{
+    background: #385592;
+    color: #ffffff;
+    margin: 2%;
+  }
+
+  &--twitter{
+    background: #48A2D7;
+    color: #ffffff;
+    margin: 2%;
+  }
+
+  &--google{
+    background: #C53F2E;
+    color: #ffffff;
+    margin: 2%;
+  }
+
+}
+
+.error{
+  color: $red-color
+}
+
+.ah_signup_social_small{
+  display: none;
+}
+
+.verification{
+  padding: 2%;
+}
+
+.verification__text{
+  text-align: center;
+  font-size: 1.6rem;
+}
+
+.verification__image{
+  display: block;
+  width: 50%;
+  margin: auto;
+}
+
+.ah_signup_social_small{
+  text-align: center;
+  color: #656464;
+  font-size: 1.2rem;
+
+  &--facebook{
+    background: #385592;
+    color: #ffffff;
+    margin: 2%;
+  }
+
+  &--google{
+    background: #C53F2E;
+    color: #ffffff;
+    margin: 2%;
+  }
+
+  &--twitter{
+    background: #48A2D7;
+    color: #ffffff;
+    margin: 2%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  /* For mobile phones: */
+  .ah_signup{
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .ah_signup{
+    margin: 2% auto;
+    padding: 20px 0px;
+  }
+  .ah_signup_form{  
+    &__input{
+      width: 80%;
+      margin: auto;
+      float: none !important;
+
+      &--signup{
+        width: 95%;
+      }
+    }
+  }
+
+  .ah_signup_form_wrapper{
+    width: 50%;
+    margin: auto;
+    display: block;
+  
+    &__button{
+      width: 100%;
+      background: #5863f8;
+      color: #ffffff;
+      margin: 5% auto;
+    }
+  }
+
+  .ah_signup_social{
+    display: none;
+  }
+
+  .ah_signup_social_small{
+    display: block;
+  }
+  .ah_signup_or{
+    padding: 1% 0;
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 375px) {
+  /* For mobile phones: */
+  .ah_signup{
+    width: 100%;
+  }
+  .ah_signup_form{  
+    &__input{
+      &--signup{
+        width: 90%;
+      }
+    }
+  }
+}

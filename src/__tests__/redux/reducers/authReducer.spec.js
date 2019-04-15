@@ -1,5 +1,26 @@
 import authReducer, { initialState } from '../../../redux/reducers/authReducer';
 
+describe('SignUp test cases', () => {
+  it('sets signedUp to true after', () => {
+    const mockLocalStorage = {};
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {
+      type: 'SIGN_UP',
+    });
+    expect(state.signedUp).toEqual(true);
+    expect(state.loading).toEqual(false);
+  });
+  it('sets signedUp to false when there is an error', () => {
+    const mockLocalStorage = {};
+    const mockSessionStorage = {};
+    const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {
+      type: 'SIGN_UP_ERROR',
+    });
+    expect(state.signedUp).toEqual(false);
+    expect(state.loading).toEqual(false);
+  });
+});
+
 describe('auth reducer initial state', () => {
   it('should return the right state when local storage is empty', () => {
     const mockLocalStorage = {};

@@ -44,4 +44,15 @@ describe('user reducer', () => {
     expect(state.bio).toEqual('blaaaaa');
     expect(state.image).toEqual('qwerty.jpg');
   });
+  it('Updates email on after signing up', () => {
+    const mockLocalStorage = {};
+    const mockSessionStorage = {};
+    const state = userReducer(initialState(mockLocalStorage, mockSessionStorage), {
+      type: 'SIGN_UP',
+      payload: {
+        email: 'qwerty@yahoo.com',
+      }
+    });
+    expect(state.email).toEqual('qwerty@yahoo.com');
+  });
 });
