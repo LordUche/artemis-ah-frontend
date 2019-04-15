@@ -10,8 +10,6 @@ import {
   SIGN_UP_ERROR
 } from '../actionTypes';
 
-const BASEURL = 'http://localhost:3000';
-
 /**
  * @description user sign up
  * @param {object} values
@@ -21,7 +19,7 @@ const BASEURL = 'http://localhost:3000';
  */
 export async function signUp(values) {
   try {
-    const request = await post(`${BASEURL}/api/users`, values);
+    const request = await post(`${BASE_URL}/users`, values);
     const { user } = request.data;
 
     return {

@@ -63,7 +63,8 @@ const authReducer = (state = initialState(localStorage, sessionStorage), { type,
     case CLEAR_AUTH_ERROR:
       return {
         ...state,
-        errorMessages: []
+        errorMessages: [],
+        signedUp: false,
       };
     default:
       return state;

@@ -5,9 +5,6 @@
   margin: 3% auto;
 }
 
-// .ah_signup_body{
-//   margin: 2% auto;
-// }
 .ah_signup_form{
   padding-top: 1%;
 
@@ -97,7 +94,7 @@
 
 .verification__text{
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
 }
 
 .verification__image{
@@ -108,6 +105,8 @@
 
 .ah_signup_social_small{
   text-align: center;
+  color: #656464;
+  font-size: 1.2rem;
 
   &--facebook{
     background: #385592;
@@ -150,6 +149,19 @@
       &--signup{
         width: 95%;
       }
+    }
+  }
+
+  .ah_signup_form_wrapper{
+    width: 50%;
+    margin: auto;
+    display: block;
+  
+    &__button{
+      width: 100%;
+      background: #5863f8;
+      color: #ffffff;
+      margin: 5% auto;
     }
   }
 

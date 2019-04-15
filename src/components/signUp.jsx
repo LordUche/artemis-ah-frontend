@@ -1,9 +1,17 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
   func, bool, objectOf, object, string
 } from 'prop-types';
+
+// Social Media Auth URL's
+import {
+  GOOGLE_SOCIAL_LOGIN_URL,
+  FACEBOOK_SOCIAL_LOGIN_URL,
+  TWITTER_SOCIAL_LOGIN_URL
+} from '../redux/actions';
 
 // Actions
 import { loadingAuthAction, clearAuthErrorAction, signUp } from '../redux/actions/authActions';
@@ -32,7 +40,6 @@ export class SignUp extends Component {
     password: '',
     confirmPassword: '',
     confirmPasswordError: '',
-    valid: false
   }
 
   clearErrors = () => {
@@ -76,26 +83,28 @@ export class SignUp extends Component {
     const { target } = e;
     const { value } = target;
     const { name } = target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value }, () => { this.handleConfirmPassword(); });
   }
 
   /**
-   * @description onChange method
-   * @param {*} e
-   * @returns {object} name-value pair
+   * @description handle confirmPassword method
+   * @returns {object} checks password against confirmPassword
    */
-  handleConfirmPassword = (e) => {
-    const confirmPassword = e.target.value;
-    const { password } = this.state;
+  handleConfirmPassword = () => {
+    const { password, confirmPassword } = this.state;
     if (confirmPassword !== password) this.setState({ confirmPasswordError: 'password does not match' });
     else this.setState({ confirmPasswordError: '' });
-    this.setValid();
   }
 
-  setValid = () => {
-    const { valid, confirmPasswordError } = this.state;
-    if (confirmPasswordError === '') this.setState({ valid: !valid });
-  }
+  /**
+   * @description social Login
+   * @param {string} URL
+   * @returns {null} null
+   */
+  socialMediaLogin = (URL) => {
+    window.location.assign(URL);
+  };
+
 
   /**
    * @description onChange method
@@ -115,7 +124,6 @@ export class SignUp extends Component {
    * @returns {HTMLElement} modal child
    */
   render() {
-    // console.log(this.props);
     const { confirmPasswordError } = this.state;
     const valid = confirmPasswordError === '';
     const {
@@ -130,7 +138,8 @@ export class SignUp extends Component {
       signedUp,
       email,
       loading,
-      revealLoginModal
+      revealLoginModal,
+      clear
     } = this.props;
     return signedUp ? (
       <div className="verification">
@@ -143,7 +152,11 @@ export class SignUp extends Component {
           <strong>{email}</strong>
           .
         </p>
-        <p className="verification__text">Please check your inbox and verify your email to begin writing awesome articles!</p>
+        <p className="verification__text">
+        Please check your inbox and verify your email and login to begin writing awesome articles!
+          <br />
+          <button type="button" className="ah_signup_registered-link hasAccount" onClick={clear}> Not You?</button>
+        </p>
       </div>
     ) : (
       <div className="ah_signup_body">
@@ -214,7 +227,7 @@ export class SignUp extends Component {
             <InputField
               customClass="ah_signup_form__input--signup"
               placeHolder="Confirm Password"
-              onChange={this.handleConfirmPassword}
+              onChange={this.onInputChange}
               inputType="password"
               inputName="confirmPassword"
               required
@@ -226,7 +239,6 @@ export class SignUp extends Component {
             <Button
               customClass="ah_signup_form_wrapper__button"
               btnText="Sign Up"
-              onClick={this.onSubmit}
               isDisabled={!valid || loading}
               btnType="submit"
             />
@@ -247,42 +259,45 @@ export class SignUp extends Component {
             imgSrc={faceBookLogo}
             imgCustomClass="ah_signup_social_img"
             btnText="Sign in with Facebook"
-            onClick={this.onClick}
+            onClick={() => this.socialMediaLogin(FACEBOOK_SOCIAL_LOGIN_URL)}
           />
           <Button
             customClass="ah_signup_social--twitter"
             imgSrc={twitterLogo}
+            imgCustomClass="ah_signup_social_img"
             btnText="Sign in with Twitter"
-            onClick={this.onClick}
+            onClick={() => this.socialMediaLogin(TWITTER_SOCIAL_LOGIN_URL)}
           />
           <Button
             customClass="ah_signup_social--google"
             imgSrc={googleLogo}
+            imgCustomClass="ah_signup_social_img"
             btnText="Sign in with Google+"
-            onClick={this.onClick}
+            onClick={() => this.socialMediaLogin(GOOGLE_SOCIAL_LOGIN_URL)}
           />
         </div>
         <div className="ah_signup_social_small">
+          <p className="ah_signup_social_small_text">Sign in with</p>
           <Button
             customClass="ah_signup_social_small--facebook"
             imgCustomClass="login_body_socials_responsive_btn_img"
             imgSrc={faceBookLogo}
             btnText=""
-            onClick={this.onClick}
+            onClick={() => this.socialMediaLogin(FACEBOOK_SOCIAL_LOGIN_URL)}
           />
           <Button
             customClass="ah_signup_social_small--twitter"
             imgSrc={twitterLogo}
             imgCustomClass="login_body_socials_responsive_btn_img"
             btnText=""
-            onClick={this.onClick}
+            onClick={() => this.socialMediaLogin(TWITTER_SOCIAL_LOGIN_URL)}
           />
           <Button
             customClass="ah_signup_social_small--google"
             imgSrc={googleLogo}
             imgCustomClass="login_body_socials_responsive_btn_img"
             btnText=""
-            onClick={this.onClick}
+            onClick={() => this.socialMediaLogin(GOOGLE_SOCIAL_LOGIN_URL)}
           />
         </div>
       </div>
