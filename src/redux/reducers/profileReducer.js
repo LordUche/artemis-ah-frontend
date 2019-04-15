@@ -32,7 +32,7 @@ import {
 /**
  * @returns {object} Returns the initial state of the profile page.
  */
-const getInitialState = () => ({
+export const getInitialState = () => ({
   user: {
     fullname: null,
     username: null,

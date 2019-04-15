@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { node as nodeProp, bool as boolProp } from 'prop-types';
-import { TopNav, SideNav } from '.';
+import TopNavBar from './TopNav';
+import { SideNav } from '.';
 
 /**
  * @description Returns a template containing the top and side navs. Just wrap
@@ -18,7 +19,7 @@ const Template = ({ children, isLoggedIn }) => {
 
   return (
     <div {...rootProps}>
-      <TopNav />
+      <TopNavBar />
       {children}
       {isLoggedIn && (
         <SideNav isLoggedIn={isLoggedIn} />
