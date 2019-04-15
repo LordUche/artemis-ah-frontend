@@ -16,20 +16,20 @@ class Hero extends Component {
     displaySearchBar: false,
     searchQuery: '',
     showResponsiveNav: false
-  }
+  };
 
   toggleResponsiveNav = () => {
     const { showResponsiveNav } = this.state;
     this.setState({
       showResponsiveNav: !showResponsiveNav
     });
-  }
+  };
 
   searchButtonOnclick = () => {
     this.setState({
       displaySearchBar: true
     });
-  }
+  };
 
   hideSearchField = (e) => {
     if (
@@ -42,11 +42,10 @@ class Hero extends Component {
   };
 
   searchKeyword = () => {
-    const input = document.querySelector('input');
     const { searchQuery } = this.state;
 
     if (searchQuery) {
-      input.value = 'Redirects to the search page';
+      this.setState({ searchQuery: 'Redirects to the search page' });
     }
   };
 
@@ -67,20 +66,22 @@ class Hero extends Component {
    * @returns {JSX} - JSX component
    */
   render() {
-    const { displaySearchBar, showResponsiveNav } = this.state;
+    const { displaySearchBar, showResponsiveNav, searchQuery } = this.state;
     const {
       smoothScrollListener,
       showLoginModal,
       revealLoginModal,
       hideLoginModal,
       isLoggedIn,
+      history,
       toggleSignUpModal
     } = this.props;
 
     return (
       <section className="hero" onClick={this.hideSearchField} role="presentation">
         {showLoginModal && (
-        <AHLoginModal onClose={hideLoginModal} toggleSignUpModal={toggleSignUpModal} />)}
+          <AHLoginModal onClose={hideLoginModal} toggleSignUpModal={toggleSignUpModal} />
+        )}
         <div className="hero__description">
           <div className="hero__header">
             <Router>
@@ -99,16 +100,20 @@ class Hero extends Component {
             <p className="hero__text--normal">Building a community of like minded authors.</p>
           </div>
           <div className="hero__cta">
-            <Router>
-              <Link to="./explore" className="btn">
-                Explore Stories
-              </Link>
-            </Router>
-            <Router>
-              <Link to="./create-story" className="btn">
-                Start Writing
-              </Link>
-            </Router>
+            <button
+              className="btn btn-explore"
+              type="button"
+              onClick={() => history.push('./explore')}
+            >
+              Explore Stories
+            </button>
+            <button
+              className="btn btn-write"
+              type="button"
+              onClick={() => history.push('./create-article')}
+            >
+              Start Writing
+            </button>
           </div>
         </div>
         <div className="hero__illustration">
@@ -181,6 +186,7 @@ class Hero extends Component {
                   onChange={this.handleSearchBarChange}
                   onKeyPress={this.handleKeyPress}
                   name="searchQuery"
+                  value={searchQuery}
                 />
                 <i
                   className="fas fa-search hero__nav--search"
@@ -207,6 +213,7 @@ Hero.propTypes = {
   revealLoginModal: func.isRequired,
   hideLoginModal: func.isRequired,
   isLoggedIn: bool.isRequired,
+  history: func.isRequired,
   toggleSignUpModal: func.isRequired
 };
 

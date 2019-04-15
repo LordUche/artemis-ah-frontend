@@ -37,7 +37,7 @@ export class LandingPage extends Component {
   toggleSignUpModal = () => {
     const { showSignUpModal } = this.state;
     this.setState({ showSignUpModal: !showSignUpModal, showLoginModal: false });
-  }
+  };
 
   /**
    * @description component will mount
@@ -88,7 +88,9 @@ export class LandingPage extends Component {
       revealLoginModal, hideLoginModal, state, props, toggleSignUpModal
     } = this;
     const { showLoginModal, showSignUpModal } = state;
-    const { isLoggedIn, signedUp, email } = props;
+    const {
+      isLoggedIn, signedUp, email, history
+    } = props;
     return (
       <React.Fragment>
         <Hero
@@ -97,6 +99,7 @@ export class LandingPage extends Component {
           revealLoginModal={revealLoginModal}
           hideLoginModal={hideLoginModal}
           isLoggedIn={isLoggedIn}
+          history={history}
           showSignUpModal={showLoginModal}
           toggleSignUpModal={toggleSignUpModal}
         />
