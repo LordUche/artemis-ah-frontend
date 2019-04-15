@@ -61,15 +61,22 @@ $border-radius: 5px;
 
             &__fullname {
                 width: 390px;
+                display: block;
             }
 
             &__username {
                 width: 190px;
+                display: block;
             }
 
             &__about {
                 margin-top: 12px;
                 width: 560px;
+
+                &__line1,
+                &__line2 {
+                    display: block;
+                }
             }
         }
     }

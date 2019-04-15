@@ -71,9 +71,10 @@ $border-radius: 5px;
 
             &__author {
                 margin-top: 5px;
+                font-size: 14px;
 
                 a {
-                    font-size: 14px;
+                    font-size: inherit;
                     line-height: 100%;
                     color: #787878;
                 }
@@ -112,7 +113,7 @@ $border-radius: 5px;
 
     @media screen and (min-width: 769px) {
         margin-top: 50px;
-        height: 150px;
+        height: 159px;
 
         & > .stats-wrapper {
             top: 0;
@@ -123,7 +124,7 @@ $border-radius: 5px;
         &__image-wrapper {
             width: 180px;
             background: #f9f9f9;
-            height: 180px;
+            height: 189px;
             margin-top: -30px;
             float: left;
     
@@ -143,13 +144,30 @@ $border-radius: 5px;
         }
 
         &__body-wrapper {
-            height: 150px;
+            height: 159px;
             margin-left: 180px;
             padding-bottom: 0;
             position: relative;
     
             &__body {
                 padding: 10px 0 0 10px;
+
+                &__title,
+                &__description {
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    text-overflow: ellipsis;
+                }
+
+                &__title {
+                    max-height: 38px;
+                }
+
+                &__description {
+                    max-height: 35px;
+                }
             }
     
             &__bottom-links {

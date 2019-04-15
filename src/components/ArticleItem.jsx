@@ -31,7 +31,8 @@ const ArticleItem = ({
         <div className="article-item__body-wrapper__body__title"><Link to={`/${slug}`}>{title}</Link></div>
         {showAuthor && (
         <div className="article-item__body-wrapper__body__author">
-          <Link to={`/profile/${author}`}>{`By @${author}`}</Link>
+          {'By '}
+          <Link to={`/profile/${author}`}>{`@${author}`}</Link>
         </div>
         )}
         <div className="article-item__body-wrapper__body__description">{description}</div>
