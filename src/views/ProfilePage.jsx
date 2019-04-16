@@ -315,7 +315,7 @@ class ProfilePage extends Component {
     if (user.isLoggedIn && user.username === profile.user.username) {
       return (
         <div className="no-result">
-          <div>You don&apos;t have any article.</div>
+          <div className="no-result__msg">You don&apos;t have any article.</div>
           <div className="no-result__link">
             <Link to="/create-article" className="ah-btn">Create an Article</Link>
           </div>
