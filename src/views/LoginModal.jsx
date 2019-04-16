@@ -101,7 +101,12 @@ export class LoginModal extends Component {
       state, doNothing, handleSubmit, handleInputChange, handleErrorMessages
     } = this;
     const { rememberMe } = state;
-    const { onClose, isLoggedIn, loading } = this.props;
+    const {
+      onClose,
+      isLoggedIn,
+      loading,
+      toggleSignUpModal
+    } = this.props;
     const { nameError, passwordError, generalError } = handleErrorMessages();
     return isLoggedIn ? (
       <Redirect to="/profile" />
@@ -212,9 +217,7 @@ export class LoginModal extends Component {
                 onClick={doNothing}
               />
               <div className="login_body_form_links">
-                <a href="/" className="login_body_form_link">
-                  Register now
-                </a>
+                <button type="button" className="ah_signup_registered-link hasAccount" onClick={toggleSignUpModal}> Login Here</button>
                 <a href="/" className="login_body_form_link">
                   Forgot password?
                 </a>
@@ -262,7 +265,8 @@ LoginModal.propTypes = {
   clearAuthError: func.isRequired,
   loading: bool.isRequired,
   isLoggedIn: bool.isRequired,
-  errorMessages: objectOf(object).isRequired
+  errorMessages: objectOf(object).isRequired,
+  toggleSignUpModal: func.isRequired
 };
 
 export default connect(

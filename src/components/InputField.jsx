@@ -1,46 +1,59 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-
+import { func, string, bool } from 'prop-types';
 
 /**
  * @description reusable input component
  * @returns {HTMLInputElement} input
  */
 const InputField = ({
-  customClass, placeHolder, required, inputType, inputName, onChange, showRequiredAsterisk
+  customClass,
+  minLength,
+  maxLength,
+  placeHolder,
+  required,
+  inputType,
+  inputName,
+  onChange,
+  showRequiredAsterisk
 }) => (
   <Fragment>
-    {showRequiredAsterisk && <span className="ah-input-required-asterisk">*</span>}
-    { required && (
-    <input
-      type={inputType}
-      className={`ah-input ${customClass}`}
-      placeholder={placeHolder}
-      onChange={onChange}
-      name={inputName}
-      required
-    />
+    {showRequiredAsterisk && (
+      <span className="ah-input-required-asterisk">*</span>
     )}
-    { !required && (
-    <input
-      type={inputType}
-      className={`ah-input ${customClass}`}
-      placeholder={placeHolder}
-      onChange={onChange}
-      name={inputName}
-    />
+    {required && (
+      <input
+        type={inputType}
+        className={`ah-input ${customClass}`}
+        placeholder={placeHolder}
+        onChange={onChange}
+        name={inputName}
+        required
+        minLength={minLength}
+        maxLength={maxLength}
+      />
+    )}
+    {!required && (
+      <input
+        type={inputType}
+        className={`ah-input ${customClass}`}
+        placeholder={placeHolder}
+        onChange={onChange}
+        name={inputName}
+      />
     )}
   </Fragment>
 );
 
 InputField.propTypes = {
-  customClass: PropTypes.string,
-  placeHolder: PropTypes.string,
-  required: PropTypes.bool,
-  showRequiredAsterisk: PropTypes.bool,
-  inputType: PropTypes.string,
-  inputName: PropTypes.string,
-  onChange: PropTypes.func.isRequired
+  customClass: string,
+  placeHolder: string,
+  required: bool,
+  showRequiredAsterisk: bool,
+  inputType: string,
+  inputName: string,
+  onChange: func.isRequired,
+  minLength: string,
+  maxLength: string
 };
 
 InputField.defaultProps = {
@@ -50,6 +63,8 @@ InputField.defaultProps = {
   inputType: 'text',
   inputName: '',
   showRequiredAsterisk: false,
+  minLength: '',
+  maxLength: ''
 };
 
 export default InputField;

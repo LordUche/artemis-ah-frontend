@@ -4,53 +4,85 @@ $white-color: #ffffff;
 $black-color: #000000;
 $transparent-grey: #21212180;
 $light-grey: #f7f5fa;
-$red-color: #FD705E;
+$red-color: #fd705e;
 $bold-font: 700;
 $semi-bold-font: 600;
 $extra-bold-font: 800;
 
 // Project wide base styles
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: unset;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: unset;
 }
 
 html {
-    font-size: 10px;
+  font-size: 10px;
 }
 
 body {
-    font-family: 'Nunito', 'Courier New', Courier, monospace;
-    min-width: 320px;
+  font-family: "Nunito", "Courier New", Courier, monospace;
+  min-width: 320px;
 }
-a.active > svg > path{
-    fill: #ffffff;
+a.active > svg > path {
+  fill: #ffffff;
 }
 .side-nav__first-child a:hover > svg > path {
-    fill: #ffffff;
+  fill: #ffffff;
 }
 
-a, .link_lookalike{
-    text-decoration: none;
-    color: $primary-color;
-    font-size: 1.6rem;
-    cursor: pointer;
+a,
+.link_lookalike {
+  text-decoration: none;
+  color: $primary-color;
+  font-size: 1.6rem;
+  cursor: pointer;
 }
 
-a.btn {
-    background: $white-color;
-    padding: 1.5rem 2rem;
-    min-width: 15rem;
-    height: 4.5rem;
-    border-radius: .5rem;
-}
-
-a.btn:not(:last-child) {
-    margin-right: 3rem;
+.btn {
+  background: $white-color;
+  padding: 1.5rem 2rem;
+  min-width: 15rem;
+  min-height: 5.2rem;
+  border-radius: 0.5rem;
+  color: $primary-color;
+  font-size: 1.6rem;
+  font-family: inherit;
+  cursor: pointer;
+  margin-bottom: 2rem;
 }
 
 li {
-    text-decoration: none;
+  text-decoration: none;
+}
+
+input[type="text"],
+input[type="password"],
+textarea,
+select {
+  font-size: 1.6rem;
+  font-family: inherit;
+  border: 1px solid #cccccc;
+  background: #f7f7f7;
+
+  &:active,
+  &:focus {
+    background-color: $white-color;
+    outline-color: #2684ff;
+    outline-style: solid;
+    outline-width: 0.25rem;
+  }
+}
+select {
+  border-radius: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -webkit-border-radius: 0px;
+  background-color: #f5f5f5;
+  background-image: url("https://image.flaticon.com/icons/svg/60/60781.svg");
+  background-position: 90% 50%;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  font-family: inherit;
 }

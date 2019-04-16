@@ -1,4 +1,3 @@
-
 export const CHANGE_NAME = 'CHANGE_NAME';
 
 // Auth Action types
@@ -30,3 +29,17 @@ export const PROFILE_DETAILS_UPDATE_ERROR = 'PROFILE_DETAILS_UPDATE_ERROR';
 export const PROFILE_RESET_EDIT_STATE = 'PROFILE_RESET_EDIT_STATE';
 
 export const PROFILE_RESET = 'PROFILE_RESET';
+// Articles Action types
+export const FETCH_TAGS = 'FETCH_TAGS';
+export const FETCH_TAGS_ERROR = 'FETCH_TAGS_ERROR';
+export const CREATE_ARTICLE = 'CREATE_ARTICLE';
+export const CREATE_ARTICLE_ERROR = 'CREATE_ARTICLE_ERROR';
+export const CLEAR_ARTICLE_ERROR = 'CLEAR_ARTICLE_ERROR';
+export const PUBLISHING_ARTICLE = 'PUBLISHING_ARTICLE';
+
+// Sign Up Action types
+export const SIGN_UP = 'SIGN_UP';
+export const SIGN_UP_ERROR = 'SIGN_UP_ERROR';
+
+export const EDIT_ARTICLE = 'EDIT_ARTICLE';
+export const SAVE_EDITED_ARTICLE = 'SAVE_EDITED_ARTICLE';

@@ -13,7 +13,7 @@ import {
   resetProfile,
 } from '../redux/actions/profileActions';
 import Template from '../components/Template';
-import ArticleItem from '../components/ArticleItem';
+import ArticleItemComp from '../components/ArticleItem';
 import UserListItem from '../components/UserListItem';
 import Button from '../components/Button';
 import BodyError from '../components/PageContentLoadError';
@@ -235,9 +235,9 @@ class ProfilePage extends Component {
       }
 
       return profile.user.isFollowing ? (
-        <Button btnText="Unfollow" onClick={() => alert('This is a separate feature story.')} />
+        <Button btnText="Unfollow" onClick={() => ('This is a separate feature story.')} />
       ) : (
-        <Button btnText="Follow" onClick={() => alert('This is a separate feature story.')} />
+        <Button btnText="Follow" onClick={() => ('This is a separate feature story.')} />
       );
     }
 
@@ -336,11 +336,10 @@ class ProfilePage extends Component {
    * @returns {Node} The view for articles the user has publishes.
    */
   getArticles() {
-    const { profile, dispatch } = this.props;
+    const { profile, dispatch, history } = this.props;
     const { tabContent } = profile;
-
+    const { push } = history;
     const { articles, contentState } = tabContent[TAB_ARTICLES];
-
     if (contentState === CONTENT_STATE_DEFAULT) {
       fetchUserArticles(profile.user.username, dispatch);
     }
@@ -360,16 +359,18 @@ class ProfilePage extends Component {
         content = this.getNoArticleFoundMessage();
       } else {
         content = articles.map((article, index) => (
-          <ArticleItem
+          <ArticleItemComp
             key={index.toString()}
             tag={(article.Tag ? article.Tag.name : 'no tag')}
             title={article.title}
+            body={article.body}
             description={article.description}
             slug={article.slug}
             coverUrl={(article.coverUrl || '')}
             rating={article.rating}
             readTime={article.readTime.text}
             author={article.User.username}
+            push={push}
           />
         ));
       }
@@ -620,6 +621,7 @@ ProfilePage.propTypes = {
   user: objectProp.isRequired,
   profile: objectProp.isRequired,
   dispatch: funcProp.isRequired,
+  history: objectProp.isRequired
 };
 
 /**

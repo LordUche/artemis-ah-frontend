@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
+import readingTime from 'reading-time';
 import dotenv from 'dotenv';
+import { post } from 'axios';
+import 'regenerator-runtime';
 
 dotenv.config();
 
@@ -33,6 +36,40 @@ class HelperUtils {
       return payload;
     } catch (error) {
       return false;
+    }
+  }
+
+  /**
+   * @description Method that estimates the reading time for an article
+   * @param {string} articleBody
+   * @return {object} estimatedTime
+   */
+  static estimateReadingTime(articleBody) {
+    const estimatedTime = readingTime(articleBody);
+    if (estimatedTime.minutes < 1) {
+      estimatedTime.text = '< 1 min read';
+    }
+    return estimatedTime;
+  }
+
+  /**
+   * @description Method for uploading images to cloudinary
+   * @param {string} fileData
+   * @return {object} estimatedTime
+   */
+  static async uploadImage(fileData) {
+    const cloudinaryEndpoint = process.env.UPLOAD_URL;
+    try {
+      const getImage = await post(`${cloudinaryEndpoint}`, fileData, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+      const { data } = getImage;
+      const secureUrl = data.secure_url;
+      return secureUrl;
+    } catch (error) {
+      return 'Image could not be uploaded';
     }
   }
 }

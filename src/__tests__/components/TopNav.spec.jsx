@@ -27,6 +27,9 @@ describe('test the side nav', () => {
   it('should return a div', () => {
     expect(topNav.find('div').exists()).toBe(true);
   });
+
+  topNavII.setState({ display: 'desktop' });
+  topNavII.update();
 });
 
 describe('test the hamburger menu', () => {
