@@ -4,6 +4,7 @@ import {
   shape, string, number, func, object
 } from 'prop-types';
 import { get } from 'axios';
+import BASE_URL from '../redux/actions';
 import 'regenerator-runtime';
 
 /**
@@ -76,7 +77,7 @@ class FeaturedCategories extends Component {
    * @returns {undefined}
    */
   async retrieveFeaturedArticles() {
-    const response = await get('http://localhost:3000/api/articles');
+    const response = await get(`${BASE_URL}/articles`);
     const { articles } = response.data;
     const featuredArtArticle = this.sortArticles(articles, 'Art');
     const featuredHealthArticle = this.sortArticles(articles, 'Health');
