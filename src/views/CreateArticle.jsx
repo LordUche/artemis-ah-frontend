@@ -38,7 +38,8 @@ export class CreateArticlePage extends Component {
     tags: {
       value: '1',
       label: 'Food'
-    }
+    },
+    tagId: 1
   };
 
   /**

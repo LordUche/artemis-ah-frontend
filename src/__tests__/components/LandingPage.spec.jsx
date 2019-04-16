@@ -1,32 +1,12 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
-import { Provider } from 'react-redux';
 import { shallow } from 'enzyme';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
-import ReduxPromise from 'redux-promise';
 import sinon from 'sinon';
-import LandingPageStore, { LandingPage } from '../../views/LandingPage';
-import reducers from '../../redux/reducers';
+import { LandingPage } from '../../views/LandingPage';
 import Hero from '../../components/Hero';
 
 const { smoothScrollToAbout } = new LandingPage();
 
 describe('Landing Page Component', () => {
-  const store = createStore(reducers, applyMiddleware(ReduxPromise));
-  it('should have match the given snapshot', () => {
-    const tree = renderer
-      .create(
-        <Provider store={store}>
-          <Router>
-            <LandingPageStore />
-          </Router>
-        </Provider>
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
   it('should test for class methods', () => {
     const mockRevealModal = jest.fn();
     const mockHideModal = jest.fn();
