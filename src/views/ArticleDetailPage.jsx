@@ -37,6 +37,18 @@ export class ArticleDetailPage extends Component {
  * @returns {HTMLElement} div
  */
   render() {
+    const stars = Array(5)
+      .fill(undefined)
+      .map((val, index) => {
+        const i = index;
+        return <i key={i} className="far fa-star article_detail_rating_star" />;
+      });
+    const skeletonText = Array(10)
+      .fill(undefined)
+      .map((val, index) => {
+        const i = index;
+        return <p key={i} />;
+      });
     const {
       isGetting, articleGotten, errors, isLoggedIn
     } = this.props;
@@ -88,14 +100,7 @@ export class ArticleDetailPage extends Component {
             <p>Add to Bookmark</p>
           </div>
           <article className="article_detail_body">
-            <p />
-            <p />
-            <p />
-            <p />
-            <p />
-            <p />
-            <p />
-            <p />
+            {skeletonText}
           </article>
         </div>
         )}
@@ -149,11 +154,7 @@ export class ArticleDetailPage extends Component {
             <Fragment>
               <p>How did you enjoy this article?</p>
               <section className="article_detail_rating_stars">
-                <i className="far fa-star article_detail_rating_star" />
-                <i className="far fa-star article_detail_rating_star" />
-                <i className="far fa-star article_detail_rating_star" />
-                <i className="far fa-star article_detail_rating_star" />
-                <i className="far fa-star article_detail_rating_star" />
+                {stars}
               </section>
             </Fragment>
             )

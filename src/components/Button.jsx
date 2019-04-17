@@ -6,10 +6,10 @@ import { func, string, bool } from 'prop-types';
  * @returns {HTMLButtonElement} button
  */
 const Button = ({
-  btnText, onClick, customClass, imgSrc, imgCustomClass, imgAltText, isDisabled, btnType
+  btnText, onClick, customClass, imgSrc, imgCustomClass, imgAltText, isDisabled, btnType, btnId
 }) => (
   // eslint-disable-next-line react/button-has-type
-  <button type={btnType} onClick={onClick} className={`ah-btn ${customClass}`} disabled={isDisabled}>
+  <button type={btnType} onClick={onClick} className={`ah-btn ${customClass}`} disabled={isDisabled} id={btnId}>
     {imgSrc && (
     <img
       src={imgSrc}
@@ -54,9 +54,14 @@ Button.propTypes = {
    * button type
    */
   btnType: string,
+  /**
+   * button type
+   */
+  btnId: string,
 };
 
 Button.defaultProps = {
+  btnId: '',
   customClass: '',
   imgSrc: '',
   imgCustomClass: '',

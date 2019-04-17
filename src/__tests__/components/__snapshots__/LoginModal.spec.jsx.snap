@@ -53,6 +53,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           <button
             className="ah-btn login_body_socials_btn login_body_socials_facebook facebookDesktop"
             disabled={false}
+            id=""
             onClick={[Function]}
             type="text"
           >
@@ -70,6 +71,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           <button
             className="ah-btn login_body_socials_btn login_body_socials_twitter twitterDesktop"
             disabled={false}
+            id=""
             onClick={[Function]}
             type="text"
           >
@@ -87,6 +89,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           <button
             className="ah-btn login_body_socials_btn login_body_socials_google googleDesktop"
             disabled={false}
+            id=""
             onClick={[Function]}
             type="text"
           >
@@ -113,6 +116,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           <button
             className="ah-btn login_body_socials_btn login_body_socials_facebook facebookMobile"
             disabled={false}
+            id=""
             onClick={[Function]}
             type="text"
           >
@@ -130,6 +134,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           <button
             className="ah-btn login_body_socials_btn login_body_socials_twitter twitterMobile"
             disabled={false}
+            id=""
             onClick={[Function]}
             type="text"
           >
@@ -147,6 +152,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           <button
             className="ah-btn login_body_socials_btn login_body_socials_google googleMobile"
             disabled={false}
+            id=""
             onClick={[Function]}
             type="text"
           >
@@ -231,6 +237,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
           <button
             className="ah-btn login_body_form_submit_btn"
             disabled={false}
+            id=""
             onClick={[Function]}
             type="submit"
           >
@@ -241,10 +248,14 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
             className="login_body_form_links"
           >
             <button
-              className="ah_signup_registered-link hasAccount"
+              className="ah-btn ah_signup_registered-link hasAccount link_lookalike"
+              disabled={false}
+              id="login-register-btn"
+              onClick={[Function]}
               type="button"
             >
-               Login Here
+              
+              Register Now
             </button>
             <a
               className="login_body_form_link"
