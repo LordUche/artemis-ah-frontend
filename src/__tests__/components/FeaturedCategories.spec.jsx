@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import moxios from 'moxios';
 import FeaturedCategories from '../../components/FeaturedCategories';
 
 const mockHistoryPush = jest.fn();
@@ -41,6 +40,32 @@ describe('Featured Categories Component', () => {
     exploreBtn.simulate('click');
     featuredCategories.setState({ slidesToShow: 1, width: '100%' });
     featuredCategories.update();
+  });
+
+  it('It should test for when the viewport is resized', () => {
+    // Test for <= 805px
+    global.innerWidth = 360;
+    global.dispatchEvent(new Event('resize'));
+    featuredCategories.instance().componentDidMount();
+
+    global.dispatchEvent(new Event('load'));
+    featuredCategories.instance().componentDidMount();
+
+    // Test for >805px && <= 1000px
+    global.innerWidth = 900;
+    global.dispatchEvent(new Event('resize'));
+    featuredCategories.instance().componentDidMount();
+
+    global.dispatchEvent(new Event('load'));
+    featuredCategories.instance().componentDidMount();
+
+    // Test for >1000px && <=1200px
+    global.innerWidth = 1000;
+    global.dispatchEvent(new Event('resize'));
+    featuredCategories.instance().componentDidMount();
+
+    global.dispatchEvent(new Event('load'));
+    featuredCategories.instance().componentDidMount();
   });
 });
 

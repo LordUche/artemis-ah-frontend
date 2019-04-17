@@ -6,6 +6,7 @@ import {
 import { get } from 'axios';
 import BASE_URL from '../redux/actions';
 import 'regenerator-runtime';
+import SkeletonCard from './SkeletonCard';
 
 /**
  * @class FeaturedCategories
@@ -103,6 +104,7 @@ class FeaturedCategories extends Component {
   render() {
     const { history } = this.props;
     const { width, slidesToShow, featuredArticles } = this.state;
+    const loadingData = new Array(5).fill().map(() => <SkeletonCard />);
     const featuredArticlesCards = featuredArticles.map(article => (
       <div
         role="presentation"
@@ -148,7 +150,7 @@ class FeaturedCategories extends Component {
             renderBottomCenterControls={({ currentSlide }) => (slidesToShow === 1 ? `${currentSlide + 1} of ${totalSlides}` : null)
             }
           >
-            {featuredArticlesCards}
+            {featuredArticlesCards.length ? featuredArticlesCards : loadingData}
           </Carousel>
         </div>
         <button className="btn btn-explore" type="button" onClick={() => history.push('./explore')}>

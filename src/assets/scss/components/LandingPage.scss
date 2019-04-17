@@ -262,7 +262,6 @@
   }
 
   &__card {
-    background: url("../img/article-cover.jpg");
     width: 25rem;
     height: 32rem;
     border-radius: 1rem;
@@ -277,6 +276,7 @@
       position: absolute;
       top: 1.5rem;
       left: -2rem;
+      min-height: 4.2rem;
     }
 
     & > .title {
@@ -293,6 +293,7 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      min-height: 5.2rem;
     }
   }
 
