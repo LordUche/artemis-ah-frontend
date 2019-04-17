@@ -89,8 +89,8 @@ export class CreateArticlePage extends Component {
     const articleDetails = {
       title,
       tagId,
-      body: body.replace(/\r?\n|\r/g, '<br />'),
-      description: description.replace(/\r?\n|\r/g, '<br />'),
+      body,
+      description,
       cover
     };
     const { createArticle } = this.props;

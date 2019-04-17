@@ -9,6 +9,7 @@ import { Link, Redirect } from 'react-router-dom';
 
 // Components
 import TopNavBar from '../components/TopNav';
+import Button from '../components/Button';
 
 // Images
 import defaultClap from '../assets/img/defaultClap.svg';
@@ -139,7 +140,7 @@ export class ArticleDetailPage extends Component {
           </div>
           )}
           <article className={`article_detail_body ${!isLoggedIn && 'article_detail_body_no_auth'}`}>
-            {body.split('<br />').map(section => (
+            {body.split('\n').map(section => (
               <Fragment>
                 <article className="article_detail_body_segment">
                   {section}
@@ -183,13 +184,21 @@ export class ArticleDetailPage extends Component {
             )}
             <div className={`article_detail_aside_share ${!isLoggedIn && 'article_detail_aside_share_no_auth'}`}>
               <p className="article_detail_aside_share_text">Share with</p>
-              <button type="button" title="share via facebook" className="article_detail_aside_share_button">
+              <Button
+                btnType="button"
+                btnTitle="share via facebook"
+                customClass="article_detail_aside_share_button"
+              >
                 <i className="fab fa-facebook-square article_detail_aside_share_button_icon article_detail_aside_share_button_facebook" />
-              </button>
+              </Button>
               <br />
-              <button type="button" title="share via twitter" className="article_detail_aside_share_button">
+              <Button
+                btnType="button"
+                btnTitle="share via twitter"
+                customClass="article_detail_aside_share_button"
+              >
                 <i className="fab fa-twitter article_detail_aside_share_button_icon article_detail_aside_share_button_twitter" />
-              </button>
+              </Button>
             </div>
             { isLoggedIn && (
             <div className="article_detail_aside_report">
@@ -211,9 +220,11 @@ export class ArticleDetailPage extends Component {
               </p>
             </section>
             { isLoggedIn && (
-            <button type="button" className="article_detail_author_follow_btn">
-              Follow
-            </button>
+            <Button
+              btnType="button"
+              customClass="article_detail_author_follow_btn"
+              btnText="Follow"
+            />
             )}
           </div>
         </div>
