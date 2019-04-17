@@ -170,4 +170,21 @@ describe('Create article component', () => {
     expect(bodyElement.exists()).toBe(true);
     bodyElement.simulate('keyup', { value: 'c' });
   });
+
+  it('should redirect to article page after article is published', () => {
+    const createArticle = shallow(
+      <CreateArticlePage
+        tagList={[{ value: '1', label: 'Food' }]}
+        isLoggedIn
+        fetchTags={fetchTagsFn}
+        publishingArticle={publishinArticleFn}
+        clearErrors={clearErrorsFn}
+        isPublishing={false}
+        createArticle={createArticleFn}
+        newArticleSlug="abcd-1"
+      />
+    );
+    expect(createArticle.find('Redirect').exists()).toBe(true);
+    expect(createArticle.find('Redirect').prop('to')).toBe('/article/abcd-1');
+  });
 });
