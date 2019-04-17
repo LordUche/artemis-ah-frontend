@@ -244,14 +244,15 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
               className="ah_signup_registered-link hasAccount"
               type="button"
             >
-               Login Here
+              Register Now
             </button>
-            <a
-              className="login_body_form_link"
-              href="/"
+            <button
+              className="ah_signup_registered-link hasAccount"
+              onClick={[Function]}
+              type="button"
             >
-              Forgot password?
-            </a>
+              Forgot Password?
+            </button>
           </div>
         </form>
       </section>

@@ -157,6 +157,39 @@
         color: $primary-color;
       }
     }
+
+    &_instruction {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: $primary-color;
+    }
+
+    &_reset_section {
+      text-align: center;
+    }
+
+    &_reset_input {
+      font-size: 1.6rem;
+      font-family: inherit;
+      border: 1px solid #cccccc;
+      background: #f7f7f7;
+      width: 60%;
+      margin-top: 4rem;
+    }
+
+    &_reset_btn {
+      width: 35%;
+      margin: 40px 0 20px 0;
+      outline: none;
+    }
+
+    &_response_text {
+      margin: 20px 0;
+      color: #000;
+      text-transform: capitalize;      
+    }
 }
 
 @media screen and (max-width: 860px){
@@ -268,5 +301,13 @@
               left: -5px;
             }
           }
+
+        &_reset_input {
+          width: 85%;
+        }
+
+        &_reset_btn {
+          width: 90%;
+        }
     }
 }
