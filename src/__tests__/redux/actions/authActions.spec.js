@@ -95,12 +95,23 @@ describe('storing data in local storage', () => {
 });
 
 describe('dispatching login actions', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
   it('dispatch the error action when user details are invalid', async (done) => {
     jest.setTimeout(30000);
     const details = {
       name: 'abc',
       password: '123'
     };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: { message: 'invalid credentials' } });
+    });
     const action = await loginUserAction(details);
     expect(action).toEqual({
       type: 'LOGIN_ERROR',
@@ -114,21 +125,33 @@ describe('dispatching login actions', () => {
     jest.setTimeout(30000);
     const details = {
       name: 'ayo',
-      password: 'admin123456',
+      username: 'ayo',
+      password: 'abcdef',
       rememberMe: true
     };
+
+    const secondDetails = {
+      name: 'john',
+      username: 'john',
+      password: 'abcd',
+      rememberMe: false
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: { user: details } }).then(() => {
+        moxios.wait(() => {
+          const req = moxios.requests.mostRecent();
+          req.respondWith({ status: 200, response: { user: secondDetails } });
+        });
+      });
+    });
     const action = await loginUserAction(details);
     expect(action.type).toEqual('LOGIN_USER');
     expect(action.payload.username).toEqual('ayo');
 
-    const secondDetails = {
-      name: 'ayo',
-      password: 'admin123456',
-      rememberMe: false
-    };
     const secondAction = await loginUserAction(secondDetails);
     expect(secondAction.type).toEqual('LOGIN_USER');
-    expect(secondAction.payload.username).toEqual('ayo');
+    expect(secondAction.payload.username).toEqual('john');
     done();
   });
 
