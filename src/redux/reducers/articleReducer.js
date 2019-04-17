@@ -4,16 +4,18 @@ import {
   CLEAR_ARTICLE_ERROR,
   PUBLISHING_ARTICLE,
   SAVE_EDITED_ARTICLE,
-  EDIT_ARTICLE
+  EDIT_ARTICLE,
+  OPEN_DELETE_CONFIRMATION_MODAL,
+  CLOSE_DELETE_CONFIRMATION_MODAL
 } from '../actionTypes';
-
 
 export const initialState = {
   articleData: {},
   errors: {},
   isPublishing: false,
-  isEditing: false,
-  articleCardData: JSON.parse(localStorage.getItem('cardData')) || {}
+  articleCardData: JSON.parse(localStorage.getItem('cardData')) || {},
+  confirmationModal: false,
+  updatedArticle: {}
 };
 
 /**
@@ -39,7 +41,6 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isPublishing: false,
-        isEditing: false,
         errors: {}
       };
     case PUBLISHING_ARTICLE:
@@ -55,7 +56,18 @@ const articleReducer = (state = initialState, { type, payload }) => {
     case SAVE_EDITED_ARTICLE:
       return {
         ...state,
-        isEditing: true
+        isPublishing: false,
+        updatedArticle: payload
+      };
+    case OPEN_DELETE_CONFIRMATION_MODAL:
+      return {
+        ...state,
+        confirmationModal: true
+      };
+    case CLOSE_DELETE_CONFIRMATION_MODAL:
+      return {
+        ...state,
+        confirmationModal: false
       };
     default:
       return state;

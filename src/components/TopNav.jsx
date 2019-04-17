@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { bool, string } from 'prop-types';
 import { connect } from 'react-redux';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
@@ -38,18 +38,18 @@ export class TopNav extends Component {
           <div className="nav-component-container-online1">
             <Logo containerCustomClass="logoContainerClass" logoCustomClass="logoCustomClass" />
             <li>
-              <NavLink to="/create-article">{createArticleIcon(30, 30)}</NavLink>
+              <Link to="/create-article">{createArticleIcon(30, 30)}</Link>
             </li>
           </div>
 
           <ul className="nav-component-container-online2">
             <li>
-              <NavLink to="/explore">Explore &nbsp;</NavLink>
+              <Link to="/explore">Explore &nbsp;</Link>
             </li>
             <li>
-              <NavLink to="/notifications">
+              <Link to="/notifications">
                 {display === 'desktop' ? notificationIcon(20, 20) : notificationIcon(30, 30)}
-              </NavLink>
+              </Link>
             </li>
             <li>
               <UserNavAvatar
@@ -71,37 +71,37 @@ export class TopNav extends Component {
         <ul className="nav-component-container-offline2">
           <span className={menuClassStyleName}>
             <li className="nav-component-container-offline2_link">
-              <NavLink to="/login">Login</NavLink>
+              <Link to="/login">Login</Link>
             </li>
             <li className="nav-component-container-offline2_link">
-              <NavLink to="/register">Register</NavLink>
+              <Link to="/register">Register</Link>
             </li>
             <li className="nav-component-container-offline2_link">
-              <NavLink to="/explore">
+              <Link to="/explore">
                 Explore &nbsp;
                 <i className="fas fa-angle-down" id="hide-angle-down" />
-              </NavLink>
+              </Link>
             </li>
             <li className="nav-component-container-offline2_link">
-              <NavLink to="/search" id="#search">
+              <Link to="/search" id="#search">
                 <span className="ah-search">Search</span>
                 {' '}
                 <i className="fas fa-search" />
-              </NavLink>
+              </Link>
             </li>
           </span>
           <Hamburger open={showResponsiveNav} toggleMenu={this.toggleResponsiveNav}>
             <li className="nav-component-container-offline2_link">
-              <NavLink to="/login">Login</NavLink>
+              <Link to="/login">Login</Link>
             </li>
             <li className="nav-component-container-offline2_link">
-              <NavLink to="/register">Register</NavLink>
+              <Link to="/register">Register</Link>
             </li>
             <li className="nav-component-container-offline2_link">
-              <NavLink to="/explore">
+              <Link to="/explore">
                 Explore
                 <i className="fas fa-angle-down" id="hide-angle-down" />
-              </NavLink>
+              </Link>
             </li>
           </Hamburger>
         </ul>

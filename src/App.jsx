@@ -5,6 +5,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxPromise from 'redux-promise';
+import { ToastContainer, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 // Import scss
 import './assets/scss/style.scss';
@@ -45,6 +47,14 @@ const App = () => (
         <Route component={PageNotFound} />
       </Switch>
     </BrowserRouter>
+    <ToastContainer
+      pauseOnFocusLoss={false}
+      transition={Bounce}
+      className="toast-container"
+      toastClassName="default-toast"
+      autoClose={4000}
+      position="top-right"
+    />
   </Provider>
 );
 

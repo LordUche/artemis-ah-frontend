@@ -1,5 +1,8 @@
 import 'babel-polyfill';
-import { get, post } from 'axios';
+import { toast } from 'react-toastify';
+import {
+  get, post, patch, delete as axiosDelete
+} from 'axios';
 import BASE_URL from './index';
 import {
   FETCH_TAGS,
@@ -9,8 +12,13 @@ import {
   CLEAR_ARTICLE_ERROR,
   PUBLISHING_ARTICLE,
   EDIT_ARTICLE,
-  SAVE_EDITED_ARTICLE
+  SAVE_EDITED_ARTICLE,
+  OPEN_DELETE_CONFIRMATION_MODAL,
+  CLOSE_DELETE_CONFIRMATION_MODAL,
+  DELETE_ARTICLE,
+  FETCH_DELETE_ERROR
 } from '../actionTypes';
+import notifyUser from '../../utils/Toast';
 
 /**
  * @method fetchTags
@@ -40,10 +48,11 @@ const fetchTagsAction = async () => {
  * @returns {object} - The create article action object
  */
 const createArticleAction = async (articleDetails) => {
+  const token = localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken');
   try {
     const request = await post(`${BASE_URL}/articles`, articleDetails, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('authorsHavenToken')}`
+        Authorization: `Bearer ${token}`
       }
     });
 
@@ -76,6 +85,18 @@ const clearErrorsAction = () => ({ type: CLEAR_ARTICLE_ERROR });
 const publishingArticleAction = () => ({ type: PUBLISHING_ARTICLE });
 
 /**
+ * @description function for confirming article delete (this opens a modal)
+ * @returns {object} action
+ */
+const confirmArticleDeleteAction = () => ({ type: OPEN_DELETE_CONFIRMATION_MODAL });
+
+/**
+ * @description function for closing the confirm article deletion modal
+ * @returns {object} action
+ */
+const closeArticleDeleteModalAction = () => ({ type: CLOSE_DELETE_CONFIRMATION_MODAL });
+
+/**
  * @description Edit an article
  * @param {object} articleCardData
  * @returns {object} Action object for redux
@@ -90,10 +111,69 @@ const editArticle = articleCardData => ({
  * @param {object} payload
  * @returns {object} Action object for redux
  */
-const saveEditedArticle = payload => ({
-  payload,
-  type: SAVE_EDITED_ARTICLE
-});
+const saveEditedArticleAction = async ({
+  title, body, description, cover, slug
+}) => {
+  const token = localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken');
+  try {
+    const response = await patch(
+      `${BASE_URL}/articles/${slug}`,
+      {
+        title,
+        body,
+        description,
+        cover
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    localStorage.removeItem('cardData');
+    const { article, message } = response.data;
+    sessionStorage.setItem('articleEditMessage', message);
+    const payload = article;
+    return {
+      type: SAVE_EDITED_ARTICLE,
+      payload,
+      data: { article }
+    };
+  } catch (error) {
+    return {
+      type: FETCH_DELETE_ERROR,
+      payload: error.response.data
+    };
+  }
+};
+
+/**
+ * @description delete article
+ * @param {string} slug
+ * @returns {object} Action object for redux
+ */
+const deleteArticleAction = async (slug) => {
+  const token = localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken');
+  try {
+    const response = await axiosDelete(`${BASE_URL}/articles/${slug}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const { message } = response.data;
+    notifyUser(toast(message));
+    localStorage.removeItem('deleteSlug');
+    return {
+      type: DELETE_ARTICLE,
+      data: { slug }
+    };
+  } catch (error) {
+    return {
+      type: FETCH_DELETE_ERROR,
+      payload: error.response.data
+    };
+  }
+};
 
 export {
   fetchTagsAction,
@@ -101,5 +181,8 @@ export {
   clearErrorsAction,
   publishingArticleAction,
   editArticle,
-  saveEditedArticle
+  saveEditedArticleAction,
+  confirmArticleDeleteAction,
+  closeArticleDeleteModalAction,
+  deleteArticleAction
 };

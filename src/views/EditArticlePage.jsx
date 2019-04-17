@@ -7,15 +7,13 @@ import {
 } from 'prop-types';
 import Dropzone from 'react-dropzone';
 import dotenv from 'dotenv';
-import InputField from '../components/InputField';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import TopNavBar from '../components/TopNav';
 import {
-  createArticleAction,
   clearErrorsAction,
   publishingArticleAction,
-  saveEditedArticle
+  saveEditedArticleAction
 } from '../redux/actions/articleActions';
 import HelperUtils from '../utils/helperUtils';
 
@@ -32,13 +30,15 @@ export class EditArticlePage extends Component {
     charactersCount: 1000,
     bodyWordCount: 0,
     readingTime: 0,
+    showDescriptionCount: false,
+    showBodyCount: false,
     cover:
       'https://res.cloudinary.com/artemisah/image/upload/v1553005105/authorshaven/articlePicImage.png',
     tag: '',
     title: '',
     description: '',
-    coverUrl: '',
-    body: ''
+    body: '',
+    slug: ''
   };
 
   /**
@@ -48,18 +48,22 @@ export class EditArticlePage extends Component {
    */
   componentDidMount() {
     this.clearErrorMessages();
+
     const { articleCardData } = this.props;
+
     const {
-      title, description, coverUrl, tag, body
+      title, description, coverUrl, tag, body, slug
     } = articleCardData;
+
     this.setState({
       title,
       description,
-      coverUrl,
+      cover: coverUrl,
+      imagePreview: coverUrl,
       tag,
-      body
+      body,
+      slug
     });
-    setTimeout(() => console.log(this.state), 2000);
   }
 
   /**
@@ -83,26 +87,28 @@ export class EditArticlePage extends Component {
   handleSubmitForm = async (event) => {
     event.preventDefault();
     const { publishingArticle } = this.props;
-    publishingArticle();
-
     const {
-      formData, tagId, title, body, description
+      formData, title, body, description, slug
     } = this.state;
+
+    publishingArticle();
 
     if (formData) {
       const secureUrl = await HelperUtils.uploadImage(formData);
       this.setState({ cover: secureUrl });
     }
     const { cover } = this.state;
-    const articleDetails = {
+
+    const editedDetails = {
       title,
-      tagId,
       body,
       description,
-      cover
+      cover,
+      slug
     };
-    const { createArticle } = this.props;
-    createArticle(articleDetails);
+
+    const { saveEdited } = this.props;
+    saveEdited(editedDetails);
   };
 
   /**
@@ -152,8 +158,9 @@ export class EditArticlePage extends Component {
    */
   handleImageUpload = (file) => {
     const formData = new FormData();
+    const CLOUDINARY_UPLOAD_PRESET = 'vslx4tc8';
     formData.append('file', file[0]);
-    formData.append('upload_preset', 'vslx4tc8');
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
     this.setState({
       imagePreview: URL.createObjectURL(file[0])
     });
@@ -172,9 +179,19 @@ export class EditArticlePage extends Component {
       charactersCount,
       bodyWordCount,
       readingTime,
-      tag
+      title,
+      description,
+      tag,
+      body,
+      showDescriptionCount,
+      showBodyCount
     } = this.state;
-    // const tags = tagList.map(tag => ({ value: tag.id, label: tag.name }));
+
+    const cardData = localStorage.getItem('cardData');
+    if (!cardData) {
+      return <Redirect to="/profile" />;
+    }
+
     return !isLoggedIn ? (
       <Redirect to="./" />
     ) : (
@@ -192,23 +209,24 @@ export class EditArticlePage extends Component {
           <form onSubmit={this.handleSubmitForm} className="formbox__fields">
             <div className="formbox__control">
               <label htmlFor="tag">TAG</label>
-              <span>{tag}</span>
+              <span className="formbox__control__tag">{tag.toUpperCase()}</span>
             </div>
             <div className="formbox__segment">
               <div className="article-details">
                 <div className="formbox__control">
                   <label htmlFor="title">TITLE</label>
                   {errors.title && <p className="error-message">{errors.title[0]}</p>}
-                  <InputField
+                  <input
                     id="title"
-                    inputType="text"
-                    inputName="title"
+                    type="text"
+                    name="title"
                     minLength="5"
                     maxLength="200"
                     required
-                    placeHolder="Enter Title"
-                    customClass="formbox__fields--input"
+                    placeholder="Enter Title"
+                    className="formbox__fields--input"
                     onChange={this.handleInputChange}
+                    value={title}
                   />
                 </div>
                 <div className="formbox__control">
@@ -217,6 +235,7 @@ export class EditArticlePage extends Component {
                   <textarea
                     onChange={this.handleInputChange}
                     onKeyUp={this.handleCharacterCount}
+                    onKeyPress={() => this.setState({ showDescriptionCount: true })}
                     id="description"
                     name="description"
                     type="text"
@@ -224,13 +243,16 @@ export class EditArticlePage extends Component {
                     required
                     minLength="5"
                     maxLength="1000"
+                    value={description}
                   />
                   <div className="word-count">
-                    <strong>{charactersCount}</strong>
+                    {showDescriptionCount && <strong>{charactersCount}</strong>}
                     {' '}
-                    {charactersCount === 1 ? 'character' : 'characters'}
+                    {showDescriptionCount && (
+                      <span>{charactersCount === 1 ? 'character' : 'characters'}</span>
+                    )}
                     {' '}
-left
+                    {showDescriptionCount && <span>left</span>}
                   </div>
                 </div>
               </div>
@@ -249,7 +271,7 @@ left
                         <div className="upload-control">
                           {!imagePreview && (
                             <img
-                              className="icon"
+                              className="coverURL"
                               src="../src/assets/img/add-image.svg"
                               alt="Upload Button"
                             />
@@ -272,29 +294,33 @@ left
               <textarea
                 onKeyUp={this.handleReadingTime}
                 onChange={this.handleInputChange}
+                onKeyPress={() => this.setState({ showBodyCount: true })}
                 id="body"
                 name="body"
                 type="text"
                 className="formbox__fields--textarea"
                 required
                 minLength="10"
+                value={body}
               />
               <div className="reading-time">
                 <span>
-                  <strong>{bodyWordCount}</strong>
+                  {showBodyCount && <strong>{bodyWordCount}</strong>}
                   {' '}
-                  {bodyWordCount === 1 ? 'word' : 'words'}
+                  {showBodyCount && <span>{bodyWordCount === 1 ? 'word' : 'words'}</span>}
                   {' '}
                 </span>
                 <span>
-                  <strong>{readingTime === 0 ? `${readingTime} mins` : readingTime}</strong>
+                  {showBodyCount && (
+                    <strong>{readingTime === 0 ? `${readingTime} mins` : readingTime}</strong>
+                  )}
                 </span>
               </div>
             </div>
             {imageUploadFailed && <p>Image upload failed, try again</p>}
             <div className="formbox__control">
               <Button
-                btnText={isPublishing ? 'Publishing Article...' : 'Publish'}
+                btnText={isPublishing ? 'Saving Article...' : 'Save'}
                 isDisabled={isPublishing}
                 type="submit"
               />
@@ -315,10 +341,9 @@ left
  */
 const matchDispatchToProps = dispatch => bindActionCreators(
   {
-    createArticle: createArticleAction,
     clearErrors: clearErrorsAction,
     publishingArticle: publishingArticleAction,
-    saveEdited: saveEditedArticle
+    saveEdited: saveEditedArticleAction
   },
   dispatch
 );
@@ -332,15 +357,12 @@ const matchDispatchToProps = dispatch => bindActionCreators(
 export const mapStateToProps = ({ tags, auth, article }) => {
   const { isLoggedIn } = auth;
   const { tagList } = tags;
-  const {
-    errors, articleCardData, isPublishing, isEditing
-  } = article;
+  const { errors, articleCardData, isPublishing } = article;
   return {
     tagList,
     isLoggedIn,
     errors,
     isPublishing,
-    isEditing,
     articleCardData
   };
 };
@@ -350,7 +372,7 @@ EditArticlePage.propTypes = {
   clearErrors: func.isRequired,
   publishingArticle: func.isRequired,
   tagList: arrayOf(object).isRequired,
-  createArticle: func.isRequired,
+  saveEdited: func.isRequired,
   errors: objectOf(arrayOf(string)),
   isPublishing: bool.isRequired,
   articleCardData: objectProp.isRequired

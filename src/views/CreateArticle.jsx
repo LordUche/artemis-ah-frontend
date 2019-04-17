@@ -37,7 +37,8 @@ export class CreateArticlePage extends Component {
       'https://res.cloudinary.com/artemisah/image/upload/v1553005105/authorshaven/articlePicImage.png',
     tags: {
       value: '1',
-      label: 'Food'
+      label: 'Food',
+      tagId: 1
     }
   };
 

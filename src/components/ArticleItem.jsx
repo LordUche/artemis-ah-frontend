@@ -1,11 +1,9 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import {
-  string as stringProp, bool as boolProp, func
-} from 'prop-types';
+import { string as stringProp, bool as boolProp, func } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { editArticle } from '../redux/actions/articleActions';
+import { editArticle, confirmArticleDeleteAction } from '../redux/actions/articleActions';
 
 /**
  * @description Component for an article list item in a list of articles.
@@ -23,13 +21,15 @@ export const ArticleItem = ({
   author,
   showAuthor,
   modifyArticle,
-  push
+  push,
+  deleteConfirmation
 }) => {
   const card = {
     title,
     description,
     coverUrl,
     tag,
+    slug,
     body
   };
   return (
@@ -81,6 +81,10 @@ export const ArticleItem = ({
             </button>
             <button
               className="article-item__body-wrapper__bottom-links__user-actions__delete"
+              onMouseDown={() => {
+                localStorage.setItem('deleteSlug', slug);
+                deleteConfirmation();
+              }}
               type="button"
             >
               <i className="fa fa-trash" />
@@ -121,8 +125,10 @@ ArticleItem.propTypes = {
   author: stringProp.isRequired,
   body: stringProp.isRequired,
   modifyArticle: func.isRequired,
-  push: func.isRequired
+  push: func.isRequired,
+  deleteConfirmation: func.isRequired
 };
+
 /**
  * @description function to map dispatch to component as props
  * @param {object} dispatch
@@ -130,7 +136,8 @@ ArticleItem.propTypes = {
  */
 export const mapDispatchToProps = dispatch => bindActionCreators(
   {
-    modifyArticle: editArticle
+    modifyArticle: editArticle,
+    deleteConfirmation: confirmArticleDeleteAction
   },
   dispatch
 );

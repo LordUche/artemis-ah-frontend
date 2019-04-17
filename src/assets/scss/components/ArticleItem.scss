@@ -211,3 +211,11 @@ $border-radius: 5px;
         }
     }
 }
+
+.default-toast {
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    color: $primary-color;
+    background: white;
+}
+
