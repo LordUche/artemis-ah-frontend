@@ -143,6 +143,20 @@ class ProfilePage extends Component {
 
         if (editState !== CONTENT_STATE_UPDATING) {
           aboutProps.contentEditable = true;
+
+          // Prevent the browser from rendering html on paste.
+          aboutProps.onPaste = (event) => {
+            event.preventDefault();
+
+            const text = event.clipboardData.getData('text/plain').substr(0, 190);
+            document.execCommand('insertHTML', false, text);
+          };
+
+          aboutProps.onKeyDown = (event) => {
+            if (event.target.innerText.length > 190 && event.keyCode !== 8) {
+              event.preventDefault();
+            }
+          };
         }
       }
 

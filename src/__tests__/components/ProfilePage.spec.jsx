@@ -219,12 +219,11 @@ describe('Test the profile page.', () => {
   });
 
   describe('Test feature to edit user profile.', () => {
-    it('It should update user bio (no image uploaded)', (done) => {
+    it('It should show update form.', (done) => {
       const editBtn = profilePage.find('.profile-section__blue-bg__data__btn-wrapper button');
       editBtn.simulate('click');
       expect(editBtn.text()).toBe('Save Changes');
-
-      profilePage.find('.profile-section__blue-bg__data__about').simulate('change', { target: { value: 'My new bio' } });
+      expect(profilePage.find('.profile-section__blue-bg__data__about--edit').exists()).toBe(true);
 
       done();
     });
