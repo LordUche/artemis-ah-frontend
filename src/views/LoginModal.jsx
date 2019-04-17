@@ -217,7 +217,7 @@ export class LoginModal extends Component {
                 onClick={doNothing}
               />
               <div className="login_body_form_links">
-                <button type="button" className="ah_signup_registered-link hasAccount" onClick={toggleSignUpModal}> Login Here</button>
+                <button type="button" className="ah_signup_registered-link hasAccount" onClick={toggleSignUpModal}>Register Now</button>
                 <a href="/" className="login_body_form_link">
                   Forgot password?
                 </a>
