@@ -12,6 +12,7 @@ import InputField from '../components/InputField';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import TopNavBar from '../components/TopNav';
+import icon from '../assets/img/add-image.svg';
 import {
   fetchTagsAction,
   createArticleAction,
@@ -259,13 +260,7 @@ left
                       <div {...getRootProps()}>
                         <input {...getInputProps()} />
                         <div className="upload-control">
-                          {!imagePreview && (
-                            <img
-                              className="icon"
-                              src="../src/assets/img/add-image.svg"
-                              alt="Upload Button"
-                            />
-                          )}
+                          {!imagePreview && <img className="icon" src={icon} alt="Upload Button" />}
                           {!imagePreview && <p>Click here to add files.</p>}
                           {imagePreview && (
                             <img className="preview" src={imagePreview} alt="File preview" />
