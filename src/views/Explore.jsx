@@ -1,21 +1,32 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { func, arrayOf, object } from 'prop-types';
+import {
+  func,
+  arrayOf,
+  object,
+  bool
+} from 'prop-types';
+
+// Import Component
 import TopNavBar from '../components/TopNav';
 import ArticleItem from '../components/ArticleItem';
 import Footer from '../components/Footer';
+import BodyError from '../components/PageContentLoadError';
 
 // Import Actions
 import { getAllArticles } from '../redux/actions/articleActions';
+import ArticleItemSkeletonScreen from '../skeletonscreens/ArticleItem';
 
+// Import Images
 import background from '../assets/img/Ellipse.png';
 
 /**
  * @returns {HTMLElement} explore page
  */
-class Explore extends Component {
+export class Explore extends Component {
   /**
    * @method componentDidMount
    * @returns {Function} Action call
@@ -29,7 +40,8 @@ class Explore extends Component {
    * @returns {object} Articles
    */
   getArticleData() {
-    const { articles } = this.props;
+    const { articles, } = this.props;
+    if (!articles[0]) return 'No article available';
     return (
       articles.map((article, index) => (
         <ArticleItem
@@ -46,6 +58,24 @@ class Explore extends Component {
         />
       ))
     );
+  }
+
+  /**
+   * @returns {HTMLElement} skeleton
+   */
+  cardSkeleton() {
+    const { loading } = this.props;
+    if (loading) return <ArticleItemSkeletonScreen />;
+  }
+
+  /**
+   * @returns {HTMLElement} body error
+   */
+  ShowBodyError() {
+    const { errors } = this.props;
+    if (Object.keys(errors).length > 0) {
+      return <BodyError onRetry={() => { this.getArticleData(); }} />;
+    }
   }
 
   /**
@@ -70,7 +100,6 @@ class Explore extends Component {
       control: base => ({
         ...base,
         backgroundColor: '#333333',
-        color: 'white',
         borderRight: 'none',
         borderLeft: 'none',
         borderTop: 'none',
@@ -80,7 +109,7 @@ class Explore extends Component {
     return (
       <div className="explore">
         <div className="explore_header">
-          <TopNavBar />
+          <TopNavBar navID="explore_nav" />
           <img src={background} alt="" className="explore_header__img" />
           <div className="explore_header__text">Explore</div>
           <input type="text" className="explore_header__input" placeholder="Search by title, author or tag" id="explore_input" />
@@ -108,6 +137,8 @@ class Explore extends Component {
           </div>
         </div>
         <div className="explore_body">
+          {this.cardSkeleton()}
+          {this.ShowBodyError()}
           {this.getArticleData()}
         </div>
         <Footer />
@@ -122,8 +153,8 @@ class Explore extends Component {
  * @returns {object} state
  */
 function mapStateToProps({ article }) {
-  const { articles, errors } = article;
-  return { articles, errors };
+  const { articles, loading, errors } = article;
+  return { articles, loading, errors };
 }
 
 /**
@@ -139,7 +170,9 @@ function mapDispatchToProps(dispatch) {
 
 Explore.propTypes = {
   getArticles: func.isRequired,
-  articles: arrayOf(object).isRequired
+  articles: arrayOf(object).isRequired,
+  loading: bool.isRequired,
+  errors: object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Explore);

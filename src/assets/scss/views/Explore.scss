@@ -2,7 +2,7 @@
 .explore{
   &_header{
     width: 100%;
-    height: 400px;
+    height: 360px;
     background-color: #333333;
     position: relative;
 
@@ -63,12 +63,16 @@
 
   &_body{
     width: 60%;
-    margin: 10% auto;
+    margin: 5% auto;
   }
 
   &_hide{
     display: none;
   }
+}
+
+#explore_nav{
+  box-shadow: none;
 }
 
 #explore_input{
@@ -100,6 +104,8 @@
 @media only screen and (max-width: 1024px) {
   /* For mobile phones: */
   .explore_header{
+    height: 400px;
+
     &__img{
       height: 250px;
     }
@@ -155,7 +161,7 @@
 
     &__input{
       width: 90%;
-      margin-top: 15%;
+      margin-top: 14%;
     }
 
     &_filter{

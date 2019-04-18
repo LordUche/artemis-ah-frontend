@@ -9,7 +9,7 @@ import {
   CLEAR_ARTICLE_ERROR,
   PUBLISHING_ARTICLE,
   GET_ARTICLES,
-  GET_ARTICLES_ERROR
+  GET_ARTICLES_ERROR,
 } from '../actionTypes';
 
 /**
@@ -33,6 +33,10 @@ const getAllArticles = async () => {
     };
   }
 };
+
+/**
+ * @returns {string} loading
+ */
 
 /**
  * @method fetchTags
@@ -98,5 +102,9 @@ const clearErrorsAction = () => ({ type: CLEAR_ARTICLE_ERROR });
 const publishingArticleAction = () => ({ type: PUBLISHING_ARTICLE });
 
 export {
-  fetchTagsAction, createArticleAction, clearErrorsAction, publishingArticleAction, getAllArticles
+  fetchTagsAction,
+  createArticleAction,
+  clearErrorsAction,
+  publishingArticleAction,
+  getAllArticles,
 };

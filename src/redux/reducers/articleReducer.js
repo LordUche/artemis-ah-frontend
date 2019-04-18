@@ -1,10 +1,16 @@
 import {
-  CREATE_ARTICLE, CREATE_ARTICLE_ERROR, CLEAR_ARTICLE_ERROR, PUBLISHING_ARTICLE, GET_ARTICLES
+  CREATE_ARTICLE,
+  CREATE_ARTICLE_ERROR,
+  CLEAR_ARTICLE_ERROR,
+  PUBLISHING_ARTICLE,
+  GET_ARTICLES,
+  GET_ARTICLES_ERROR
 } from '../actionTypes';
 
 export const initialState = {
   articleData: {},
   articles: [],
+  loading: true,
   errors: {},
   isPublishing: false
 };
@@ -19,7 +25,14 @@ const articleReducer = (state = initialState, { type, payload }) => {
     case GET_ARTICLES:
       return {
         ...state,
-        articles: payload
+        articles: payload,
+        loading: false
+      };
+    case GET_ARTICLES_ERROR:
+      return {
+        ...state,
+        errors: payload,
+        loading: false
       };
     case CREATE_ARTICLE:
       return {
