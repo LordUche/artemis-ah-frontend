@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  func, arrayOf, object, objectOf, bool, string, object as objectProp
+  func, arrayOf, object, bool, object as objectProp
 } from 'prop-types';
 import Dropzone from 'react-dropzone';
 import dotenv from 'dotenv';
@@ -11,7 +11,6 @@ import Footer from '../components/Footer';
 import Button from '../components/Button';
 import TopNavBar from '../components/TopNav';
 import {
-  clearErrorsAction,
   publishingArticleAction,
   saveEditedArticleAction
 } from '../redux/actions/articleActions';
@@ -47,8 +46,6 @@ export class EditArticlePage extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
-    this.clearErrorMessages();
-
     const { articleCardData } = this.props;
 
     const {
@@ -65,18 +62,6 @@ export class EditArticlePage extends Component {
       slug
     });
   }
-
-  /**
-   * @method clearErrorMessages
-   * @description Clears error messages
-   * @returns {undefined}
-   */
-  clearErrorMessages = () => {
-    const { errors, clearErrors } = this.props;
-    if (Object.keys(errors).length < 1) {
-      clearErrors();
-    }
-  };
 
   /**
    * @method handleSubmitForm
@@ -119,7 +104,6 @@ export class EditArticlePage extends Component {
    */
   handleInputChange = (event) => {
     event.preventDefault();
-    this.clearErrorMessages();
     this.setState({
       [event.target.name]: event.target.value
     });
@@ -172,7 +156,7 @@ export class EditArticlePage extends Component {
    * @returns {JSX} HTML Markup
    */
   render() {
-    const { isLoggedIn, errors, isPublishing } = this.props;
+    const { isLoggedIn, isPublishing } = this.props;
     const {
       imageUploadFailed,
       imagePreview,
@@ -201,11 +185,6 @@ export class EditArticlePage extends Component {
           <div className="formbox__header">
             <h3 className="title">Edit Article</h3>
           </div>
-          {errors.status === '5XX' && (
-            <p className="server-error">
-              Oops, could not connect to the server at this time, try again.
-            </p>
-          )}
           <form onSubmit={this.handleSubmitForm} className="formbox__fields">
             <div className="formbox__control">
               <label htmlFor="tag">TAG</label>
@@ -215,7 +194,6 @@ export class EditArticlePage extends Component {
               <div className="article-details">
                 <div className="formbox__control">
                   <label htmlFor="title">TITLE</label>
-                  {errors.title && <p className="error-message">{errors.title[0]}</p>}
                   <input
                     id="title"
                     type="text"
@@ -231,7 +209,6 @@ export class EditArticlePage extends Component {
                 </div>
                 <div className="formbox__control">
                   <label htmlFor="description">DESCRIPTION</label>
-                  {errors.description && <p className="error-message">{errors.description[0]}</p>}
                   <textarea
                     onChange={this.handleInputChange}
                     onKeyUp={this.handleCharacterCount}
@@ -290,7 +267,6 @@ export class EditArticlePage extends Component {
             </div>
             <div className="formbox__control">
               <label htmlFor="body">BODY</label>
-              {errors.body && <p className="error-message">{errors.body[0]}</p>}
               <textarea
                 onKeyUp={this.handleReadingTime}
                 onChange={this.handleInputChange}
@@ -341,7 +317,6 @@ export class EditArticlePage extends Component {
  */
 const matchDispatchToProps = dispatch => bindActionCreators(
   {
-    clearErrors: clearErrorsAction,
     publishingArticle: publishingArticleAction,
     saveEdited: saveEditedArticleAction
   },
@@ -354,14 +329,11 @@ const matchDispatchToProps = dispatch => bindActionCreators(
  * @param {object} * - destructured state object
  * @returns {object} - state
  */
-export const mapStateToProps = ({ tags, auth, article }) => {
+export const mapStateToProps = ({ auth, article }) => {
   const { isLoggedIn } = auth;
-  const { tagList } = tags;
-  const { errors, articleCardData, isPublishing } = article;
+  const { articleCardData, isPublishing } = article;
   return {
-    tagList,
     isLoggedIn,
-    errors,
     isPublishing,
     articleCardData
   };
@@ -369,18 +341,13 @@ export const mapStateToProps = ({ tags, auth, article }) => {
 
 EditArticlePage.propTypes = {
   isLoggedIn: bool.isRequired,
-  clearErrors: func.isRequired,
   publishingArticle: func.isRequired,
   tagList: arrayOf(object).isRequired,
   saveEdited: func.isRequired,
-  errors: objectOf(arrayOf(string)),
   isPublishing: bool.isRequired,
   articleCardData: objectProp.isRequired
 };
 
-EditArticlePage.defaultProps = {
-  errors: {}
-};
 
 export default connect(
   mapStateToProps,
