@@ -91,7 +91,7 @@ describe('Article details component', () => {
     expect(gottenArticleDetailPage.find('span.article_detail_header_info_tag_span').exists()).toBe(true);
     expect(gottenArticleDetailPage.find('span.article_detail_header_info_tag_span').text()).toEqual(name);
     expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').exists()).toBe(true);
-    expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').prop('href')).toEqual(`/profiles/${username}`);
+    expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').prop('href')).toEqual(`/profile/${username}`);
     expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').text()).toEqual(`${firstname} ${lastname}`);
   });
 
