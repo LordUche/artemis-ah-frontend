@@ -45,7 +45,7 @@ import notifyUser from '../utils/Toast';
  * @class ProfilePage
  * @description Component for profile page
  */
-class ProfilePage extends Component {
+export class ProfilePage extends Component {
   /**
    * @param {object} props Props
    */
@@ -60,10 +60,13 @@ class ProfilePage extends Component {
   }
 
   /**
+   * @description Called when the component has mounted.
    * @returns {undefined}
    */
-  componentWillMount() {
+  componentDidMount() {
     const { match, user, dispatch } = this.props;
+
+    dispatch(resetProfile());
 
     const viewingUsername = match.params.username || user.username;
     fetchUserDetails(viewingUsername, user.authToken, dispatch);
@@ -86,13 +89,17 @@ class ProfilePage extends Component {
   }
 
   /**
-   * @param {object} prevProps The previous props before the component was updated.
+   * @param {object} prevProps The previous props.
    * @returns {undefined}
    */
   componentDidUpdate(prevProps) {
     const { match, user, dispatch } = this.props;
 
-    if (match.params.username !== prevProps.match.params.username) {
+    const currentUsernameToView = match.params.username || user.username;
+    if (
+      prevProps.profile.user.username
+      && currentUsernameToView !== prevProps.profile.user.username
+    ) {
       dispatch(resetProfile());
 
       const viewingUsername = match.params.username || user.username;
@@ -368,7 +375,9 @@ does not have any article.
    * @returns {Node} The view for articles the user has publishes.
    */
   getArticles() {
-    const { profile, dispatch, history } = this.props;
+    const {
+      profile, dispatch, history, user
+    } = this.props;
     const { tabContent } = profile;
     const { push } = history;
     const { articles, contentState } = tabContent[TAB_ARTICLES];
@@ -410,7 +419,14 @@ does not have any article.
       }
     }
 
-    return this.bodyTemplate('Your Articles', <div className="article-list">{content}</div>);
+    let title = 'Your Articles';
+    if (!user.isLoggedIn || (user.isLoggedIn && profile.user.username !== user.username)) {
+      let firstname = profile.user.fullname.split(' ')[0];
+      firstname += firstname.substr(-1) === 's' ? "'" : "'s";
+      title = `${firstname} Articles`;
+    }
+
+    return this.bodyTemplate(title, <div className="article-list">{content}</div>);
   }
 
   /**
@@ -473,7 +489,16 @@ does not have any follower
       }
     }
 
-    return this.bodyTemplate('Your followers', <div className="user-list">{content}</div>);
+    const { user } = this.props;
+
+    let title = 'Your';
+    if (!user.isLoggedIn || (user.isLoggedIn && profile.user.username !== user.username)) {
+      [title] = profile.user.fullname.split(' ');
+      title += title.substr(-1) === 's' ? "'" : "'s";
+    }
+    title += ' Followers';
+
+    return this.bodyTemplate(title, <div className="user-list">{content}</div>);
   }
 
   /**
@@ -536,7 +561,13 @@ is not following anyone.
       }
     }
 
-    return this.bodyTemplate('People you follow', <div className="user-list">{content}</div>);
+    const { user } = this.props;
+    let title = 'People you Follow';
+    if (!user.isLoggedIn || (user.isLoggedIn && profile.user.username !== user.username)) {
+      title = `People ${profile.user.fullname.split(' ')[0]} Follows`;
+    }
+
+    return this.bodyTemplate(title, <div className="user-list">{content}</div>);
   }
 
   /**

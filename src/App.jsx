@@ -23,6 +23,8 @@ import HistoryPage from './views/HistoryPage';
 import SettingsPage from './views/SettingsPage';
 import PageNotFound from './views/PageNotFound';
 import CreateArticle from './views/CreateArticle';
+import ResetPassword from './views/ResetPasswordPage';
+import ArticleDetailsPage from './views/ArticleDetailPage';
 import EditArticle from './views/EditArticlePage';
 
 // Create Store
@@ -44,6 +46,8 @@ const App = () => (
         <Route exact path="/settings" component={SettingsPage} />
         <Route exact path="/history" component={HistoryPage} />
         <Route exact path="/reading-stats" component={ReadingStatsPage} />
+        <Route exact path="/reset-password" component={ResetPassword} />
+        <Route exact path="/article/:articleSlug" component={ArticleDetailsPage} />
         <Route component={PageNotFound} />
       </Switch>
     </BrowserRouter>

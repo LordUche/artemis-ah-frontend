@@ -16,7 +16,10 @@ import {
   OPEN_DELETE_CONFIRMATION_MODAL,
   CLOSE_DELETE_CONFIRMATION_MODAL,
   DELETE_ARTICLE,
-  FETCH_DELETE_ERROR
+  FETCH_DELETE_ERROR,
+  GOT_ARTICLE,
+  ERROR_GETTING_ARTICLE,
+  GETTING_ARTICLE
 } from '../actionTypes';
 import notifyUser from '../../utils/Toast';
 
@@ -145,6 +148,37 @@ const saveEditedArticleAction = async ({
       payload: error.response.data
     };
   }
+}
+
+/**
+ * @method getArticleAction
+ * @param {string} articleSlug - The slug of the article to get
+ * @param {string} token - The user's token
+ * @description - Method to dispatch get article actions
+ * @returns {object} - The got article action object
+ */
+const getArticleAction = async (articleSlug, token) => {
+  const requestOptions = {};
+  if (token) {
+    requestOptions.headers = {
+      Authorization: `Bearer ${token}`
+    };
+  }
+  try {
+    const request = await get(`${BASE_URL}/articles/${articleSlug}`, requestOptions);
+    const gottenArticle = request.data;
+
+    return {
+      type: GOT_ARTICLE,
+      payload: gottenArticle
+    };
+  } catch (error) {
+    const networkErrorResponse = { message: 'Can\'t get Article right now, please try again later' };
+    return {
+      type: ERROR_GETTING_ARTICLE,
+      payload: error.response ? error.response.data : networkErrorResponse
+    };
+  }
 };
 
 /**
@@ -173,7 +207,13 @@ const deleteArticleAction = async (slug) => {
       payload: error.response.data
     };
   }
-};
+}
+
+/**
+ * @description function for displaying loading state
+ * @returns {object} action
+ */
+const gettingArticleAction = () => ({ type: GETTING_ARTICLE });
 
 export {
   fetchTagsAction,
@@ -184,5 +224,7 @@ export {
   saveEditedArticleAction,
   confirmArticleDeleteAction,
   closeArticleDeleteModalAction,
-  deleteArticleAction
+  deleteArticleAction,
+  getArticleAction,
+  gettingArticleAction
 };

@@ -4,8 +4,12 @@ import { bool, string } from 'prop-types';
 import { connect } from 'react-redux';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
 import Logo from './logo';
+
+// Components
 import UserNavAvatar from './userNavAvartar';
 import Hamburger from './Hamburger';
+import AHLoginModal from '../views/LoginModal';
+import AHSignUpModal from '../views/SignUpView';
 
 /**
  * @description top nav
@@ -15,7 +19,9 @@ export class TopNav extends Component {
   state = {
     display: '',
     menuClassStyleName: 'link-wrapper',
-    showResponsiveNav: false
+    showResponsiveNav: false,
+    showLoginModal: false,
+    showSignUpModal: false
   };
 
   toggleResponsiveNav = () => {
@@ -25,12 +31,30 @@ export class TopNav extends Component {
     });
   };
 
+  toggleLoginModal = () => {
+    const { showLoginModal } = this.state;
+    this.setState({
+      showLoginModal: !showLoginModal,
+      showSignUpModal: false
+    });
+  };
+
+  toggleSignUpModal = () => {
+    const { showSignUpModal } = this.state;
+    this.setState({
+      showSignUpModal: !showSignUpModal,
+      showLoginModal: false
+    });
+  };
+
   /**
    * @description returns nav children
    * @returns {JSX} JSX
    */
   renderNavChildren = () => {
-    const { display, menuClassStyleName, showResponsiveNav } = this.state;
+    const {
+      display, menuClassStyleName, showResponsiveNav, showLoginModal, showSignUpModal
+    } = this.state;
     const { isLoggedIn, username, image } = this.props;
     if (isLoggedIn) {
       return (
@@ -65,16 +89,32 @@ export class TopNav extends Component {
     }
     return (
       <Fragment>
+        {showLoginModal && (
+          <AHLoginModal
+            onClose={this.toggleLoginModal}
+            toggleSignUpModal={this.toggleSignUpModal}
+          />
+        )}
+        {showSignUpModal && (
+          <AHSignUpModal
+            toggleSignUpModal={this.toggleSignUpModal}
+            revealLoginModal={this.toggleLoginModal}
+          />
+        )}
         <div className="nav-component-container-offline1">
           <Logo containerCustomClass="logoContainerClass" logoCustomClass="logoCustomClass" />
         </div>
         <ul className="nav-component-container-offline2">
           <span className={menuClassStyleName}>
             <li className="nav-component-container-offline2_link">
-              <Link to="/login">Login</Link>
+              <span id="top-nav-login" className="link_lookalike" onClick={this.toggleLoginModal} role="presentation">
+                Login
+              </span>
             </li>
             <li className="nav-component-container-offline2_link">
-              <Link to="/register">Register</Link>
+              <span id="top-nav-signup" className="link_lookalike" onClick={this.toggleSignUpModal} role="presentation">
+               Register
+              </span>
             </li>
             <li className="nav-component-container-offline2_link">
               <Link to="/explore">
@@ -92,10 +132,14 @@ export class TopNav extends Component {
           </span>
           <Hamburger open={showResponsiveNav} toggleMenu={this.toggleResponsiveNav}>
             <li className="nav-component-container-offline2_link">
-              <Link to="/login">Login</Link>
+              <span className="link_lookalike" onClick={this.toggleLoginModal} role="presentation">
+                Login
+              </span>
             </li>
             <li className="nav-component-container-offline2_link">
-              <Link to="/register">Register</Link>
+              <span className="link_lookalike" onClick={this.toggleSignUpModal} role="presentation">
+               Register
+              </span>
             </li>
             <li className="nav-component-container-offline2_link">
               <Link to="/explore">

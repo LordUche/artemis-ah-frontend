@@ -6,7 +6,10 @@ import {
   SAVE_EDITED_ARTICLE,
   EDIT_ARTICLE,
   OPEN_DELETE_CONFIRMATION_MODAL,
-  CLOSE_DELETE_CONFIRMATION_MODAL
+  CLOSE_DELETE_CONFIRMATION_MODAL,
+  GETTING_ARTICLE,
+  GOT_ARTICLE,
+  ERROR_GETTING_ARTICLE
 } from '../actionTypes';
 
 export const initialState = {
@@ -15,7 +18,10 @@ export const initialState = {
   isPublishing: false,
   articleCardData: JSON.parse(localStorage.getItem('cardData')) || {},
   confirmationModal: false,
-  updatedArticle: {}
+  updatedArticle: {},
+  isGetting: false,
+  articleGotten: {},
+  newArticleSlug: ''
 };
 
 /**
@@ -29,7 +35,8 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isPublishing: false,
-        articleData: payload
+        newArticleSlug: payload.article.slug,
+        articleData: payload.article
       };
     case CREATE_ARTICLE_ERROR:
       return {
@@ -41,6 +48,8 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isPublishing: false,
+        isGetting: false,
+        newArticleSlug: '',
         errors: {}
       };
     case PUBLISHING_ARTICLE:
@@ -68,6 +77,28 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         confirmationModal: false
+      };
+    case GETTING_ARTICLE:
+      return {
+        ...state,
+        isGetting: true,
+        errors: {}
+      };
+    // eslint-disable-next-line no-case-declarations
+    case GOT_ARTICLE:
+      const { article, clap } = payload;
+      return {
+        ...state,
+        isGetting: false,
+        articleGotten: { ...article, clap },
+        errors: {}
+      };
+    case ERROR_GETTING_ARTICLE:
+      return {
+        ...state,
+        isGetting: false,
+        articleDetailsGotten: {},
+        errors: payload
       };
     default:
       return state;

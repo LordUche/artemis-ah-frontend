@@ -170,7 +170,7 @@ export class CreateArticlePage extends Component {
    */
   render() {
     const {
-      tagList, isLoggedIn, errors, isPublishing
+      tagList, isLoggedIn, errors, isPublishing, newArticleSlug
     } = this.props;
     const {
       imageUploadFailed,
@@ -185,15 +185,17 @@ export class CreateArticlePage extends Component {
       <Redirect to="./" />
     ) : (
       <Fragment>
+        {newArticleSlug && !isPublishing && (<Redirect to={`/article/${newArticleSlug}`} />)}
         <TopNavBar />
+        {!newArticleSlug && (
         <section className="formbox">
           <div className="formbox__header">
             <h3 className="title">Create Article</h3>
           </div>
           {errors.status === '5XX' && (
-            <p className="server-error">
+          <p className="server-error">
               Oops, could not connect to the server at this time, try again.
-            </p>
+          </p>
           )}
           <form onSubmit={this.handleSubmitForm} className="formbox__fields">
             <div className="formbox__control">
@@ -268,7 +270,7 @@ left
                           )}
                           {!imagePreview && <p>Click here to add files.</p>}
                           {imagePreview && (
-                            <img className="preview" src={imagePreview} alt="File preview" />
+                          <img className="preview" src={imagePreview} alt="File preview" />
                           )}
                           {imagePreview && <p className="replace-image">Replace image</p>}
                         </div>
@@ -313,6 +315,7 @@ left
             </div>
           </form>
         </section>
+        )}
         <Footer />
       </Fragment>
     );
@@ -344,12 +347,13 @@ const matchDispatchToProps = dispatch => bindActionCreators(
 export const mapStateToProps = ({ tags, auth, article }) => {
   const { isLoggedIn } = auth;
   const { tagList } = tags;
-  const { errors, isPublishing } = article;
+  const { errors, isPublishing, newArticleSlug } = article;
   return {
     tagList,
     isLoggedIn,
     errors,
-    isPublishing
+    isPublishing,
+    newArticleSlug
   };
 };
 
@@ -361,7 +365,8 @@ CreateArticlePage.propTypes = {
   tagList: arrayOf(object).isRequired,
   createArticle: func.isRequired,
   errors: objectOf(arrayOf(string)),
-  isPublishing: bool.isRequired
+  isPublishing: bool.isRequired,
+  newArticleSlug: string.isRequired
 };
 
 CreateArticlePage.defaultProps = {
