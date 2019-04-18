@@ -4,8 +4,17 @@ import {
   createArticleAction,
   clearErrorsAction,
   publishingArticleAction,
+  getArticleAction,
+  gettingArticleAction,
   getAllArticles
 } from '../../../redux/actions/articleActions';
+
+import {
+  GETTING_ARTICLE,
+  GOT_ARTICLE,
+  ERROR_GETTING_ARTICLE
+} from '../../../redux/actionTypes';
+
 
 describe('Test get all articles action', () => {
   beforeEach(() => {
@@ -187,5 +196,57 @@ describe('Testing article action', () => {
 
     const result = await createArticleAction(mockRequest);
     expect(result.type).toEqual('CREATE_ARTICLE_ERROR');
+  });
+});
+
+describe('Testing get article action', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should return the GOT_ARTICLE action when article was gotten successfully', async () => {
+    const mockSlug = 'abc-1';
+    const mockResponse = {
+      article: {
+        id: 1,
+        title: 'abcd',
+        slug: mockSlug
+      }
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const result = await getArticleAction(mockSlug);
+    expect(result.type).toEqual(GOT_ARTICLE);
+    expect(result.payload).toEqual(mockResponse);
+  });
+
+  it('should return the ERROR_GETTING_ARTICLE action when there is a descriptive error', async () => {
+    const mockSlug = 'abc-1';
+    const mockToken = '12345';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500, response: { data: 'Server Error' } });
+    });
+    const result = await getArticleAction(mockSlug, mockToken);
+    expect(result.type).toEqual(ERROR_GETTING_ARTICLE);
+  });
+  it('should return the ERROR_GETTING_ARTICLE action when there is no descriptive error', async () => {
+    const mockSlug = 'abc-1';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500 });
+    });
+    const result = await getArticleAction(mockSlug);
+    expect(result.type).toEqual(ERROR_GETTING_ARTICLE);
+  });
+  it('should return the GETTING_ARTICLE action', () => {
+    const result = gettingArticleAction();
+    expect(result.type).toEqual(GETTING_ARTICLE);
   });
 });

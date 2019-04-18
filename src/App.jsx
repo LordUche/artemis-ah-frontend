@@ -22,6 +22,8 @@ import SettingsPage from './views/SettingsPage';
 import PageNotFound from './views/PageNotFound';
 import CreateArticle from './views/CreateArticle';
 import ExplorePage from './views/Explore';
+import ResetPassword from './views/ResetPasswordPage';
+import ArticleDetailsPage from './views/ArticleDetailPage';
 
 // Create Store
 const store = createStore(reducers, applyMiddleware(ReduxPromise));
@@ -42,6 +44,8 @@ const App = () => (
         <Route exact path="/history" component={HistoryPage} />
         <Route exact path="/reading-stats" component={ReadingStatsPage} />
         <Route exact path="/explore" component={ExplorePage} />
+        <Route exact path="/reset-password" component={ResetPassword} />
+        <Route exact path="/article/:articleSlug" component={ArticleDetailsPage} />
         <Route component={PageNotFound} />
       </Switch>
     </BrowserRouter>

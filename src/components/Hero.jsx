@@ -1,6 +1,8 @@
 import React, { Fragment, Component } from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
-import { func, bool } from 'prop-types';
+import {
+  object, shape, func, bool, string, number
+} from 'prop-types';
 import logo from '../assets/img/logo.svg';
 import illustration from '../assets/img/illustration.svg';
 import NavDropdown from './NavDropdown';
@@ -90,9 +92,31 @@ class Hero extends Component {
               </Link>
             </Router>
             <Hamburger open={showResponsiveNav} toggleMenu={this.toggleResponsiveNav}>
-              <li><span id="login-link" className="link_lookalike" role="presentation" onClick={revealLoginModal}>Login</span></li>
-              <li><span id="signup-link" className="link_lookalike" role="presentation" onClick={toggleSignUpModal}>Register</span></li>
-              <li><Router><Link to="./register">Explore</Link></Router></li>
+              <li>
+                <span
+                  id="login-link"
+                  className="link_lookalike"
+                  role="presentation"
+                  onClick={revealLoginModal}
+                >
+                  Login
+                </span>
+              </li>
+              <li>
+                <span
+                  id="signup-link"
+                  className="link_lookalike"
+                  role="presentation"
+                  onClick={toggleSignUpModal}
+                >
+                  Register
+                </span>
+              </li>
+              <li>
+                <Router>
+                  <Link to="./register">Explore</Link>
+                </Router>
+              </li>
             </Hamburger>
           </div>
           <div className="hero__text">
@@ -213,8 +237,20 @@ Hero.propTypes = {
   revealLoginModal: func.isRequired,
   hideLoginModal: func.isRequired,
   isLoggedIn: bool.isRequired,
-  history: func.isRequired,
-  toggleSignUpModal: func.isRequired
+  toggleSignUpModal: func.isRequired,
+  history: shape({
+    action: string,
+    block: func,
+    createHref: func,
+    go: func,
+    goBack: func,
+    goForward: func,
+    length: number,
+    listen: func,
+    location: object,
+    push: func,
+    replace: func
+  }).isRequired
 };
 
 export default Hero;

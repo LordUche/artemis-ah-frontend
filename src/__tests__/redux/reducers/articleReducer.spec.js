@@ -5,16 +5,22 @@ import {
   CLEAR_ARTICLE_ERROR,
   PUBLISHING_ARTICLE,
   GET_ARTICLES,
-  GET_ARTICLES_ERROR
+  GET_ARTICLES_ERROR,
+  GETTING_ARTICLE,
+  GOT_ARTICLE,
+  ERROR_GETTING_ARTICLE
 } from '../../../redux/actionTypes';
 
 describe('Test for Article Reducer', () => {
   it('should validate create articles reducer', () => {
     const mockPayload = {
-      tagId: 2,
-      title: 'This is a long string',
-      description: 'This is a description text '.repeat(10),
-      body: 'This is a body text '.repeat(50)
+      article: {
+        tagId: 2,
+        title: 'This is a long string',
+        description: 'This is a description text '.repeat(10),
+        body: 'This is a body text '.repeat(50),
+        slug: 'abcd-1'
+      }
     };
     const mockArticleReducer = articleReducer(initialState, {
       type: CREATE_ARTICLE,
@@ -27,6 +33,7 @@ describe('Test for Article Reducer', () => {
       'This is a description text '.repeat(10)
     );
     expect(mockArticleReducer.articleData.body).toEqual('This is a body text '.repeat(50));
+    expect(mockArticleReducer.newArticleSlug).toEqual('abcd-1');
   });
 
   it('should validate create article title error', () => {
@@ -136,5 +143,42 @@ describe('Test for Article Reducer', () => {
       payload: mockErrorPayload
     });
     expect(mockArticleReducer.errors.status).toEqual(500);
+  });
+  it('should update isGetting when GETTING_ARTICLE action is dispatched', () => {
+    const mockState = articleReducer(initialState, { type: GETTING_ARTICLE });
+    expect(mockState.isGetting).toBe(true);
+    expect(mockState.errors).toEqual({});
+  });
+
+  it('should update state when GOT_ARTICLE action is dispatched', () => {
+    const mockPayload = {
+      article: {
+        slug: 'hfhgh-1',
+        id: 1,
+        title: 'hfhfhf',
+        body: 'jdjfgfgfhf',
+        description: 'iugfgfhhfjjfjfj'
+      },
+      clap: true
+    };
+    const mockState = articleReducer(initialState, { type: GOT_ARTICLE, payload: mockPayload });
+    expect(mockState.articleGotten.title).toEqual(mockPayload.article.title);
+    expect(mockState.articleGotten.body).toEqual(mockPayload.article.body);
+    expect(mockState.articleGotten.description).toEqual(mockPayload.article.description);
+    expect(mockState.articleGotten.clap).toEqual(true);
+    expect(mockState.isGetting).toBe(false);
+    expect(mockState.errors).toEqual({});
+  });
+
+  it('should update state when ERROR_GETTING_ARTICLE action is dispatched', () => {
+    const mockPayload = {
+      message: 'Network error'
+    };
+    const mockState = articleReducer(initialState, {
+      type: ERROR_GETTING_ARTICLE, payload: mockPayload
+    });
+    expect(mockState.errors).toEqual(mockPayload);
+    expect(mockState.articleGotten).toEqual({});
+    expect(mockState.isGetting).toBe(false);
   });
 });

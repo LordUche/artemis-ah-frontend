@@ -4,7 +4,10 @@ import {
   CLEAR_ARTICLE_ERROR,
   PUBLISHING_ARTICLE,
   GET_ARTICLES,
-  GET_ARTICLES_ERROR
+  GET_ARTICLES_ERROR,
+  GETTING_ARTICLE,
+  GOT_ARTICLE,
+  ERROR_GETTING_ARTICLE
 } from '../actionTypes';
 
 export const initialState = {
@@ -12,7 +15,10 @@ export const initialState = {
   articles: [],
   loading: true,
   errors: {},
-  isPublishing: false
+  isPublishing: false,
+  isGetting: false,
+  articleGotten: {},
+  newArticleSlug: ''
 };
 
 /**
@@ -38,7 +44,8 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isPublishing: false,
-        articleData: payload
+        newArticleSlug: payload.article.slug,
+        articleData: payload.article
       };
     case CREATE_ARTICLE_ERROR:
       return {
@@ -50,12 +57,36 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isPublishing: false,
+        isGetting: false,
+        newArticleSlug: '',
         errors: {}
       };
     case PUBLISHING_ARTICLE:
       return {
         ...state,
         isPublishing: true
+      };
+    case GETTING_ARTICLE:
+      return {
+        ...state,
+        isGetting: true,
+        errors: {}
+      };
+    // eslint-disable-next-line no-case-declarations
+    case GOT_ARTICLE:
+      const { article, clap } = payload;
+      return {
+        ...state,
+        isGetting: false,
+        articleGotten: { ...article, clap },
+        errors: {}
+      };
+    case ERROR_GETTING_ARTICLE:
+      return {
+        ...state,
+        isGetting: false,
+        articleDetailsGotten: {},
+        errors: payload
       };
     default:
       return state;

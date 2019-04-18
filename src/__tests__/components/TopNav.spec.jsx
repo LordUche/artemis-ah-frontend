@@ -50,3 +50,17 @@ describe('test the hamburger menu', () => {
     expect(topNav.state('showResponsiveNav')).toEqual(false);
   });
 });
+
+describe('Navbar Links', () => {
+  const topNav = shallow(<TopNav />);
+  it('shows the login modal when login button is clicked', () => {
+    topNav.find('span#top-nav-login').simulate('click');
+    expect(topNav.state('showLoginModal')).toEqual(true);
+    expect(topNav.state('showSignUpModal')).toEqual(false);
+  });
+  it('shows the sign up modal when signup button is clicked', () => {
+    topNav.find('span#top-nav-signup').simulate('click');
+    expect(topNav.state('showSignUpModal')).toEqual(true);
+    expect(topNav.state('showLoginModal')).toEqual(false);
+  });
+});

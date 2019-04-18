@@ -45,3 +45,8 @@ export const PUBLISHING_ARTICLE = 'PUBLISHING_ARTICLE';
 // Sign Up Action types
 export const SIGN_UP = 'SIGN_UP';
 export const SIGN_UP_ERROR = 'SIGN_UP_ERROR';
+
+// Record Action types
+export const GETTING_ARTICLE = 'GETTINg_ARTICLE';
+export const GOT_ARTICLE = 'GOT_ARTICLE';
+export const ERROR_GETTING_ARTICLE = 'ERROR_GETTING_ARTICLE';

@@ -78,7 +78,7 @@ describe('Explore Page', () => {
     expect(ExploreView.find('.explore').exists()).toEqual(true);
   });
   it('Should mount successfully with articles', () => {
-    const ExploreView = mount(
+    const ExploreView = shallow(
       <Explore
         getArticles={mockFunction}
         articles={returnedarticles}
