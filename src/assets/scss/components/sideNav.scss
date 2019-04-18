@@ -94,3 +94,11 @@
   top: auto;
  }
 }
+
+@media screen and (min-width: 769px) {
+ .has-side-nav {
+  .main-content-section {
+   margin-left: 192px;
+  }
+ }
+}

@@ -1,0 +1,206 @@
+$border-radius: 5px;
+
+.article-item {
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    margin-top: 20px;
+    position: relative;
+    border-radius: $border-radius;
+
+    .stats-wrapper {
+        position: absolute;
+        background: #333333;
+        color: #ffffff;
+        padding: 5px 7px;
+        font-size: 13px;
+        border-top-right-radius: $border-radius;
+
+        &__read-time {
+            margin-left: 10px;
+        }
+    }
+
+    & > .stats-wrapper {
+        display: none;
+    }
+
+    &__image-wrapper {
+        position: relative;
+
+        .tag {
+            position: absolute;
+            top: 10px;
+            left: -10px;
+            background: #ffffff;
+            padding: 3px 9px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+            font-size: 12px;
+        }
+
+        img {
+            width: 100%;
+            border-radius: $border-radius;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .stats-wrapper {
+            bottom: 4px;
+            left: 0;
+        }
+    }
+
+    &__body-wrapper {
+        padding-bottom: 40px;
+
+        &__body {
+            padding: 10px;
+        
+            &__title {
+                font-weight: bold;
+                font-size: 17px;
+                line-height: 100%;
+    
+                a {
+                    color: #333333;
+    
+                    &:hover {
+                        color: #000000;
+                    }
+                }
+            }
+
+            &__author {
+                margin-top: 5px;
+                font-size: 14px;
+
+                a {
+                    font-size: inherit;
+                    line-height: 100%;
+                    color: #787878;
+                }
+            }
+    
+            &__description {
+                color: #444444;
+                margin-top: 8px;
+                font-size: 14px;
+            }
+        }
+    
+        &__bottom-links {
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+    
+            &__user-actions {
+                float: right;
+    
+                a {
+                    margin-left: 19px;
+                }
+
+                &__edit {
+                    color: #000000;
+                }
+
+                &__delete {
+                    color: #F94A4A;
+                }
+            }
+        }
+    }
+
+    @media screen and (min-width: 769px) {
+        margin-top: 50px;
+        height: 159px;
+
+        & > .stats-wrapper {
+            top: 0;
+            right: 0;
+            display: block;
+        }
+
+        &__image-wrapper {
+            width: 180px;
+            background: #f9f9f9;
+            height: 189px;
+            margin-top: -30px;
+            float: left;
+    
+            img {
+                width: 100%;
+                height: 100%;
+                vertical-align: top;
+                border-radius: $border-radius;
+                border-bottom-right-radius: 0;
+            }
+
+            .stats-wrapper {
+                bottom: 0;
+                left: 0;
+                display: none;
+            }
+        }
+
+        &__body-wrapper {
+            height: 159px;
+            margin-left: 180px;
+            padding-bottom: 0;
+            position: relative;
+    
+            &__body {
+                padding: 10px 0 0 10px;
+
+                &__title,
+                &__description {
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    text-overflow: ellipsis;
+                }
+
+                &__title {
+                    max-height: 38px;
+                }
+
+                &__description {
+                    max-height: 35px;
+                }
+            }
+    
+            &__bottom-links {
+                position: absolute;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+    
+                &__read-more {
+                    font-size: 13px;
+                }
+            }
+        }
+
+        &:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+    
+        .stats-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #333333;
+            color: #ffffff;
+            padding: 5px 7px;
+            font-size: 13px;
+            border-top-right-radius: $border-radius;
+    
+            &__read-time {
+                margin-left: 10px;
+            }
+        }
+    }
+}

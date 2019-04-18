@@ -1,0 +1,49 @@
+@import 'variables.scss';
+
+.user-item-skeleton-screen {
+    display: flex;
+    justify-content: left;
+
+    &__img {
+        height: 120px;
+        width: 120px;
+        border-radius: $border-radius;
+        background: $bg-grey;
+    }
+
+    &__data {
+        margin-top: 30px;
+        margin-left: 10px;
+
+        &__fullname {
+            width: 200px;
+            height: 11px;
+            background: $bg-grey;
+            border-radius: $border-radius;
+        }
+
+        &__username {
+            width: 100px;
+            height: 10px;
+            margin-top: 4px;
+            background: $bg-grey;
+            border-radius: $border-radius;
+        }
+
+        &__about {
+            margin-top: 9px;
+            width: 250px;
+            
+            &__line1,
+            &__line2 {
+                height: 10px;
+                background: $bg-grey;
+                border-radius: $border-radius;
+            }
+
+            &__line2 {
+                margin-top: 3px;
+            }
+        }
+    }
+}

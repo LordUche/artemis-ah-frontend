@@ -77,6 +77,7 @@
     "nightwatch": "^1.0.19",
     "node-sass": "^4.11.0",
     "react-test-renderer": "^16.8.6",
+    "regenerator-runtime": "^0.13.2",
     "sass-loader": "^7.1.0",
     "selenium-server": "^3.141.59",
     "style-loader": "^0.23.1"

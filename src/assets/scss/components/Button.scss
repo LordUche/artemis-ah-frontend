@@ -1,4 +1,6 @@
-.ah-btn {
+button,
+a {
+ &.ah-btn {
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
@@ -19,3 +21,8 @@
  .ah-btn:hover {
   opacity: 0.9;;
  }
+}
+
+a.ah-btn {
+  display: inline-block;
+}
