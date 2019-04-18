@@ -1,9 +1,10 @@
 import {
-  CREATE_ARTICLE, CREATE_ARTICLE_ERROR, CLEAR_ARTICLE_ERROR, PUBLISHING_ARTICLE
+  CREATE_ARTICLE, CREATE_ARTICLE_ERROR, CLEAR_ARTICLE_ERROR, PUBLISHING_ARTICLE, GET_ARTICLES
 } from '../actionTypes';
 
 export const initialState = {
   articleData: {},
+  articles: [],
   errors: {},
   isPublishing: false
 };
@@ -15,6 +16,11 @@ export const initialState = {
  */
 const articleReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case GET_ARTICLES:
+      return {
+        ...state,
+        articles: payload
+      };
     case CREATE_ARTICLE:
       return {
         ...state,

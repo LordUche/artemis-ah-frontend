@@ -7,8 +7,32 @@ import {
   CREATE_ARTICLE,
   CREATE_ARTICLE_ERROR,
   CLEAR_ARTICLE_ERROR,
-  PUBLISHING_ARTICLE
+  PUBLISHING_ARTICLE,
+  GET_ARTICLES,
+  GET_ARTICLES_ERROR
 } from '../actionTypes';
+
+/**
+ * @method GetArticles
+ * @description Method to get all articles
+ * @returns {object} Fetched articles
+ */
+const getAllArticles = async () => {
+  try {
+    const response = await get(`${BASE_URL}/articles`);
+    const { articles } = response.data;
+
+    return {
+      type: GET_ARTICLES,
+      payload: articles
+    };
+  } catch (error) {
+    return {
+      type: GET_ARTICLES_ERROR,
+      payload: error.response.data
+    };
+  }
+};
 
 /**
  * @method fetchTags
@@ -74,5 +98,5 @@ const clearErrorsAction = () => ({ type: CLEAR_ARTICLE_ERROR });
 const publishingArticleAction = () => ({ type: PUBLISHING_ARTICLE });
 
 export {
-  fetchTagsAction, createArticleAction, clearErrorsAction, publishingArticleAction
+  fetchTagsAction, createArticleAction, clearErrorsAction, publishingArticleAction, getAllArticles
 };

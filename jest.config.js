@@ -12,7 +12,8 @@ module.exports = {
     '!**/coverage/**',
     '!**/tests/**',
     '!**/__tests__/**',
-    '!**/index.js'
+    '!**/index.js',
+    '!**/dist/**'
   ],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/src/__tests__/assetsTransformer.js'
