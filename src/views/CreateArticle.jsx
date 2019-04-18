@@ -12,6 +12,7 @@ import InputField from '../components/InputField';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import TopNavBar from '../components/TopNav';
+import icon from '../assets/img/add-image.svg';
 import {
   fetchTagsAction,
   createArticleAction,
@@ -38,7 +39,8 @@ export class CreateArticlePage extends Component {
     tags: {
       value: '1',
       label: 'Food'
-    }
+    },
+    tagId: 1
   };
 
   /**
@@ -169,7 +171,7 @@ export class CreateArticlePage extends Component {
    */
   render() {
     const {
-      tagList, isLoggedIn, errors, isPublishing
+      tagList, isLoggedIn, errors, isPublishing, newArticleSlug
     } = this.props;
     const {
       imageUploadFailed,
@@ -184,15 +186,17 @@ export class CreateArticlePage extends Component {
       <Redirect to="./" />
     ) : (
       <Fragment>
+        {newArticleSlug && !isPublishing && (<Redirect to={`/article/${newArticleSlug}`} />)}
         <TopNavBar />
+        {!newArticleSlug && (
         <section className="formbox">
           <div className="formbox__header">
             <h3 className="title">Create Article</h3>
           </div>
           {errors.status === '5XX' && (
-            <p className="server-error">
+          <p className="server-error">
               Oops, could not connect to the server at this time, try again.
-            </p>
+          </p>
           )}
           <form onSubmit={this.handleSubmitForm} className="formbox__fields">
             <div className="formbox__control">
@@ -258,16 +262,10 @@ left
                       <div {...getRootProps()}>
                         <input {...getInputProps()} />
                         <div className="upload-control">
-                          {!imagePreview && (
-                            <img
-                              className="icon"
-                              src="../src/assets/img/add-image.svg"
-                              alt="Upload Button"
-                            />
-                          )}
+                          {!imagePreview && <img className="icon" src={icon} alt="Upload Button" />}
                           {!imagePreview && <p>Click here to add files.</p>}
                           {imagePreview && (
-                            <img className="preview" src={imagePreview} alt="File preview" />
+                          <img className="preview" src={imagePreview} alt="File preview" />
                           )}
                           {imagePreview && <p className="replace-image">Replace image</p>}
                         </div>
@@ -312,6 +310,7 @@ left
             </div>
           </form>
         </section>
+        )}
         <Footer />
       </Fragment>
     );
@@ -343,12 +342,13 @@ const matchDispatchToProps = dispatch => bindActionCreators(
 export const mapStateToProps = ({ tags, auth, article }) => {
   const { isLoggedIn } = auth;
   const { tagList } = tags;
-  const { errors, isPublishing } = article;
+  const { errors, isPublishing, newArticleSlug } = article;
   return {
     tagList,
     isLoggedIn,
     errors,
-    isPublishing
+    isPublishing,
+    newArticleSlug
   };
 };
 
@@ -360,7 +360,8 @@ CreateArticlePage.propTypes = {
   tagList: arrayOf(object).isRequired,
   createArticle: func.isRequired,
   errors: objectOf(arrayOf(string)),
-  isPublishing: bool.isRequired
+  isPublishing: bool.isRequired,
+  newArticleSlug: string.isRequired
 };
 
 CreateArticlePage.defaultProps = {

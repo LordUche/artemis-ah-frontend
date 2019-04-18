@@ -285,8 +285,20 @@ export class LoginModal extends Component {
                   onClick={doNothing}
                 />
                 <div className="login_body_form_links">
-                  <button type="button" className="ah_signup_registered-link hasAccount" onClick={toggleSignUpModal}>Register Now</button>
-                  <button type="button" className="ah_signup_registered-link hasAccount" onClick={() => this.setState({ resetPasswordModal: !resetPasswordModal })}>Forgot Password?</button>
+                  <Button
+                    btnType="button"
+                    btnText="Register Now"
+                    customClass="ah_signup_registered-link hasAccount link_lookalike"
+                    onClick={toggleSignUpModal}
+                    btnId="login-register-btn"
+                  />
+                  <Button
+                    btnType="button"
+                    btnText="Forgot Password?"
+                    customClass="ah_signup_registered-link hasAccount"
+                    onClick={() => this.setState({ resetPasswordModal: !resetPasswordModal })}
+                    btnId="login-reset-btn"
+                  />
                 </div>
               </form>
             </section>

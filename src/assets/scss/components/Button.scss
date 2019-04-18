@@ -1,5 +1,4 @@
-button {
- &.ah-btn {
+.ah-btn {
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
@@ -17,7 +16,6 @@ button {
    cursor: not-allowed;
   }
  }
- &.ah-btn:hover {
+ .ah-btn:hover {
   opacity: 0.9;;
  }
-}

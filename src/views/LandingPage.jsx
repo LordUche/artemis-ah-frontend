@@ -104,16 +104,16 @@ export class LandingPage extends Component {
           toggleSignUpModal={toggleSignUpModal}
         />
         {showSignUpModal && (
-        <SignUpViewModal
-          revealLoginModal={revealLoginModal}
-          showSignUpModal={showSignUpModal}
-          toggleSignUpModal={toggleSignUpModal}
-          signedUp={signedUp}
-          email={email}
-        />
+          <SignUpViewModal
+            revealLoginModal={revealLoginModal}
+            showSignUpModal={showSignUpModal}
+            toggleSignUpModal={toggleSignUpModal}
+            signedUp={signedUp}
+            email={email}
+          />
         )}
         <AboutAH />
-        <FeaturedCategories />
+        <FeaturedCategories history={history} />
         <Footer />
       </React.Fragment>
     );
@@ -149,7 +149,7 @@ export const mapStateToProps = ({ auth, user }) => {
 };
 
 LandingPage.propTypes = {
-  loginUserViaSocialMedia: func.isRequired,
+  loginUserViaSocialMedia: func.isRequired
 };
 
 export default connect(
