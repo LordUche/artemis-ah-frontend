@@ -43,7 +43,7 @@ let store;
 describe('Test the profile page.', () => {
   beforeAll((done) => {
     axiosPost('https://authorshaven.herokuapp.com/api/users/login', {
-      name: 'ayo-oluwa.adebayo@andela.com',
+      name: 'ayo',
       password: 'admin123456',
     })
       .then((response) => {
@@ -53,7 +53,7 @@ describe('Test the profile page.', () => {
       });
   });
 
-  beforeAll(() => {
+  beforeAll((done) => {
     store = createStore(combineReducers({
       profile: profileReducer,
       user: mockUserReducer,
@@ -71,6 +71,8 @@ describe('Test the profile page.', () => {
         </BrowserRouter>
       </Provider>
     );
+
+    done();
   });
 
   describe('Before user data is fetched', () => {
@@ -146,7 +148,7 @@ describe('Test the profile page.', () => {
         .at(1)
         .simulate('click', { preventDefault: () => 1 });
 
-      expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
+      expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you Follow');
       expect(profilePage.find('.user-item-skeleton-screen').exists()).toBe(true);
 
       done();
@@ -163,7 +165,7 @@ describe('Test the profile page.', () => {
             .at(1)
             .simulate('click', { preventDefault: () => 1 });
 
-          expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
+          expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you Follow');
 
           expect(profilePage.find('.user-list .user-item-skeleton-screen').exists()).toBe(false);
 
@@ -185,7 +187,7 @@ describe('Test the profile page.', () => {
         .at(2)
         .simulate('click', { preventDefault: () => 1 });
 
-      expect(profilePage.find('.profile-section__body__content__title').text()).toBe('Your followers');
+      expect(profilePage.find('.profile-section__body__content__title').text()).toBe('Your Followers');
       expect(profilePage.find('.user-list .user-item-skeleton-screen').exists()).toBe(true);
 
       done();
@@ -202,7 +204,7 @@ describe('Test the profile page.', () => {
             .at(2)
             .simulate('click', { preventDefault: () => 1 });
 
-          expect(profilePage.find('.profile-section__body__content__title').text()).toBe('Your followers');
+          expect(profilePage.find('.profile-section__body__content__title').text()).toBe('Your Followers');
 
           expect(profilePage.find('.user-list .user-item-skeleton-screen').exists()).toBe(false);
 
