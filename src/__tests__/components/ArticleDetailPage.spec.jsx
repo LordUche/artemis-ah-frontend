@@ -91,7 +91,7 @@ describe('Article details component', () => {
     expect(gottenArticleDetailPage.find('span.article_detail_header_info_tag_span').exists()).toBe(true);
     expect(gottenArticleDetailPage.find('span.article_detail_header_info_tag_span').text()).toEqual(name);
     expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').exists()).toBe(true);
-    expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').prop('href')).toEqual(`/profiles/${username}`);
+    expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').prop('href')).toEqual(`/profile/${username}`);
     expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').text()).toEqual(`${firstname} ${lastname}`);
   });
 
@@ -124,7 +124,7 @@ describe('Article details component', () => {
     } = mockArticle;
     const { username } = User;
     expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').exists()).toBe(true);
-    expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').prop('href')).toEqual(`/profiles/${username}`);
+    expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').prop('href')).toEqual(`/profile/${username}`);
     expect(gottenArticleDetailPage.find('a.article_detail_header_info_details_author').text()).toEqual(`${username}`);
     expect(gottenArticleDetailPage.find('h3.article_detail_author_info_name').exists()).toBe(true);
     expect(gottenArticleDetailPage.find('h3.article_detail_author_info_name').text()).toEqual(`${username}`);
