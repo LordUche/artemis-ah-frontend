@@ -215,8 +215,7 @@ export class ArticleDetailPage extends Component {
                 { (!User.firstname && !User.lastname) && `${User.username}`}
               </h3>
               <p className="article_detail_author_info_bio">
-                I write about science fiction, art,
-                food and several other categories. Follow me for more like this
+                {User.bio}
               </p>
             </section>
             { isLoggedIn && (
