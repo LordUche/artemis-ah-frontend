@@ -114,7 +114,7 @@ export class ArticleDetailPage extends Component {
                 {title}
               </h2>
               <section className="article_detail_header_info_details">
-                <Link to={`/profiles/${User.username}`} className="article_detail_header_info_details_author">
+                <Link to={`/profile/${User.username}`} className="article_detail_header_info_details_author">
                   { (User.firstname || User.lastname) && `${User.firstname || ''} ${User.lastname || ''}`}
                   { (!User.firstname && !User.lastname) && `${User.username}`}
                 </Link>
@@ -215,8 +215,7 @@ export class ArticleDetailPage extends Component {
                 { (!User.firstname && !User.lastname) && `${User.username}`}
               </h3>
               <p className="article_detail_author_info_bio">
-                I write about science fiction, art,
-                food and several other categories. Follow me for more like this
+                {User.bio}
               </p>
             </section>
             { isLoggedIn && (
