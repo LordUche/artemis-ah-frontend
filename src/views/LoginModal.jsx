@@ -5,12 +5,14 @@ import {
   bool, func, objectOf, object
 } from 'prop-types';
 import { Redirect } from 'react-router-dom';
+// import { post } from 'axios';
+import { post } from 'axios';
 
 // Social Media Auth URL's
-import {
+import BASE_URL, {
   GOOGLE_SOCIAL_LOGIN_URL,
   FACEBOOK_SOCIAL_LOGIN_URL,
-  TWITTER_SOCIAL_LOGIN_URL
+  TWITTER_SOCIAL_LOGIN_URL,
 } from '../redux/actions';
 
 // Components
@@ -39,7 +41,11 @@ export class LoginModal extends Component {
   state = {
     name: '',
     password: '',
-    rememberMe: false
+    rememberMe: false,
+    resetPasswordModal: false,
+    email: '',
+    message: '',
+    fetching: false
   };
 
   clearErrors = () => {
@@ -84,6 +90,35 @@ export class LoginModal extends Component {
       };
   };
 
+  modalName = () => {
+    const { resetPasswordModal } = this.state;
+    if (resetPasswordModal) {
+      return 'Forgot Password';
+    }
+    return 'Login';
+  }
+
+  submitReset = async (e) => {
+    this.setState({ fetching: true });
+    e.preventDefault();
+    const { email } = this.state;
+    try {
+      const response = await post(`${BASE_URL}/users/reset-password`, {
+        email
+      });
+      const { message } = response.data;
+      this.setState({ message, fetching: false });
+    } catch (error) {
+      const { message } = error.response.data;
+      if (message === 'user not found in our records') {
+        this.setState({
+          message: 'Please, verify password reset link in your email box',
+          fetching: false
+        });
+      }
+    }
+  }
+
   /**
    * @description social Login
    * @param {string} URL
@@ -98,9 +133,14 @@ export class LoginModal extends Component {
    */
   render() {
     const {
-      state, doNothing, handleSubmit, handleInputChange, handleErrorMessages
+      state, doNothing, handleSubmit, handleInputChange, handleErrorMessages, modalName, submitReset
     } = this;
-    const { rememberMe } = state;
+    const {
+      rememberMe,
+      resetPasswordModal,
+      message,
+      fetching
+    } = state;
     const {
       onClose,
       isLoggedIn,
@@ -111,126 +151,159 @@ export class LoginModal extends Component {
     return isLoggedIn ? (
       <Redirect to="/profile" />
     ) : (
-      <Modal customClass="login_body_modal" modalHeader="Login" onClose={onClose}>
-        <div className="login_body">
-          <p className="login_body_required_text">*(Required fields)</p>
-          <section className="login_body_info">
-            <section className="login_body_socials">
-              <Button
-                btnText="Sign in with Facebook"
-                customClass="login_body_socials_btn login_body_socials_facebook facebookDesktop"
-                imgSrc={faceBookLogo}
-                imgAltText="facebook logo"
-                imgCustomClass="login_body_socials_btn_img"
-                onClick={() => this.socialMediaLogin(FACEBOOK_SOCIAL_LOGIN_URL)}
-              />
-              <Button
-                btnText="Sign in with Twitter"
-                customClass="login_body_socials_btn login_body_socials_twitter twitterDesktop"
-                imgSrc={twitterLogo}
-                imgAltText="twitter logo"
-                imgCustomClass="login_body_socials_btn_img"
-                onClick={() => this.socialMediaLogin(TWITTER_SOCIAL_LOGIN_URL)}
-              />
-              <Button
-                btnText="Sign in with Google"
-                customClass="login_body_socials_btn login_body_socials_google googleDesktop"
-                imgSrc={googleLogo}
-                imgAltText="google logo"
-                imgCustomClass="login_body_socials_btn_img"
-                onClick={() => this.socialMediaLogin(GOOGLE_SOCIAL_LOGIN_URL)}
-              />
-            </section>
-            <section className="login_body_socials_responsive">
-              <p className="login_body_socials_responsive_text">Sign in with</p>
-              <Button
-                btnText=""
-                customClass="login_body_socials_btn login_body_socials_facebook facebookMobile"
-                imgSrc={faceBookLogo}
-                imgAltText="facebook logo"
-                imgCustomClass="login_body_socials_responsive_btn_img"
-                onClick={() => this.socialMediaLogin(FACEBOOK_SOCIAL_LOGIN_URL)}
-              />
-              <Button
-                btnText=""
-                customClass="login_body_socials_btn login_body_socials_twitter twitterMobile"
-                imgSrc={twitterLogo}
-                imgAltText="twitter logo"
-                imgCustomClass="login_body_socials_responsive_btn_img"
-                onClick={() => this.socialMediaLogin(TWITTER_SOCIAL_LOGIN_URL)}
-              />
-              <Button
-                btnText=""
-                customClass="login_body_socials_btn login_body_socials_google googleMobile"
-                imgSrc={googleLogo}
-                imgAltText="google logo"
-                imgCustomClass="login_body_socials_responsive_btn_img"
-                onClick={() => this.socialMediaLogin(GOOGLE_SOCIAL_LOGIN_URL)}
-              />
-            </section>
-            <section className="login_body_divider">
-              <hr className="login_body_divider_line" />
-              <span className="login_body_divider_span">OR</span>
-            </section>
-            <form
-              className="login_body_form"
-              id="loginForm"
-              onSubmit={loading ? doNothing : handleSubmit}
-            >
-              {generalError && <p className="login_body_form_error_general">{generalError}</p>}
-              <InputField
-                placeHolder="Email or Username"
-                showRequiredAsterisk
-                required
-                inputType="text"
-                customClass="login_body_form_input"
-                inputName="name"
-                onChange={handleInputChange}
-              />
-              {nameError && (
-                <p className="login_body_form_error login_body_form_error_name">{nameError}</p>
-              )}
-              <InputField
-                placeHolder="Password"
-                showRequiredAsterisk
-                required
-                inputType="password"
-                customClass="login_body_form_input"
-                inputName="password"
-                onChange={handleInputChange}
-              />
-              {passwordError && <p className="login_body_form_error">{passwordError}</p>}
-              <div className="login_body_form_rem_div">
+      <Modal customClass="login_body_modal" modalHeader={modalName()} onClose={onClose}>
+        { resetPasswordModal && (
+          <div className="login_body">
+            <p className="login_body_required_text">*(Required fields)</p>
+            <p className="login_body_instruction">PLEASE ENTER YOUR REGISTERED EMAIL ADDRESS</p>
+            <section className="login_body_reset_section">
+              <form onSubmit={submitReset}>
                 <InputField
-                  inputType="checkbox"
-                  customClass="login_body_form_rem_div_input"
-                  inputName="rememberMe"
-                  onChange={() => this.setState({ rememberMe: !rememberMe })}
+                  placeHolder="Enter Email"
+                  showRequiredAsterisk
+                  required
+                  inputType="email"
+                  customClass="login_body_reset_input"
+                  inputName="email"
+                  onChange={handleInputChange}
                 />
-                <p className="login_body_form_rem_div_text">Remember me</p>
-              </div>
-              <Button
-                customClass="login_body_form_submit_btn"
-                btnText="Login"
-                isDisabled={loading}
-                btnType="submit"
-                onClick={doNothing}
-              />
-              <div className="login_body_form_links">
+                <br />
+                <p className="login_body_required_text login_body_response_text">{ message }</p>
                 <Button
-                  btnType="button"
-                  btnText="Register Now"
-                  customClass="ah_signup_registered-link hasAccount link_lookalike"
-                  onClick={toggleSignUpModal}
-                  btnId="login-register-btn"
+                  customClass="login_body_form_submit_btn login_body_reset_btn"
+                  btnText="Recover"
+                  btnType="submit"
+                  isDisabled={fetching}
                 />
-                <a href="/" className="login_body_form_link">
-                  Forgot password?
-                </a>
-              </div>
-            </form>
-          </section>
-        </div>
+              </form>
+            </section>
+          </div>
+        )}
+        { !resetPasswordModal && (
+          <div className="login_body">
+            <p className="login_body_required_text">*(Required fields)</p>
+            <section className="login_body_info">
+              <section className="login_body_socials">
+                <Button
+                  btnText="Sign in with Facebook"
+                  customClass="login_body_socials_btn login_body_socials_facebook facebookDesktop"
+                  imgSrc={faceBookLogo}
+                  imgAltText="facebook logo"
+                  imgCustomClass="login_body_socials_btn_img"
+                  onClick={() => this.socialMediaLogin(FACEBOOK_SOCIAL_LOGIN_URL)}
+                />
+                <Button
+                  btnText="Sign in with Twitter"
+                  customClass="login_body_socials_btn login_body_socials_twitter twitterDesktop"
+                  imgSrc={twitterLogo}
+                  imgAltText="twitter logo"
+                  imgCustomClass="login_body_socials_btn_img"
+                  onClick={() => this.socialMediaLogin(TWITTER_SOCIAL_LOGIN_URL)}
+                />
+                <Button
+                  btnText="Sign in with Google"
+                  customClass="login_body_socials_btn login_body_socials_google googleDesktop"
+                  imgSrc={googleLogo}
+                  imgAltText="google logo"
+                  imgCustomClass="login_body_socials_btn_img"
+                  onClick={() => this.socialMediaLogin(GOOGLE_SOCIAL_LOGIN_URL)}
+                />
+              </section>
+              <section className="login_body_socials_responsive">
+                <p className="login_body_socials_responsive_text">Sign in with</p>
+                <Button
+                  btnText=""
+                  customClass="login_body_socials_btn login_body_socials_facebook facebookMobile"
+                  imgSrc={faceBookLogo}
+                  imgAltText="facebook logo"
+                  imgCustomClass="login_body_socials_responsive_btn_img"
+                  onClick={() => this.socialMediaLogin(FACEBOOK_SOCIAL_LOGIN_URL)}
+                />
+                <Button
+                  btnText=""
+                  customClass="login_body_socials_btn login_body_socials_twitter twitterMobile"
+                  imgSrc={twitterLogo}
+                  imgAltText="twitter logo"
+                  imgCustomClass="login_body_socials_responsive_btn_img"
+                  onClick={() => this.socialMediaLogin(TWITTER_SOCIAL_LOGIN_URL)}
+                />
+                <Button
+                  btnText=""
+                  customClass="login_body_socials_btn login_body_socials_google googleMobile"
+                  imgSrc={googleLogo}
+                  imgAltText="google logo"
+                  imgCustomClass="login_body_socials_responsive_btn_img"
+                  onClick={() => this.socialMediaLogin(GOOGLE_SOCIAL_LOGIN_URL)}
+                />
+              </section>
+              <section className="login_body_divider">
+                <hr className="login_body_divider_line" />
+                <span className="login_body_divider_span">OR</span>
+              </section>
+              <form
+                className="login_body_form"
+                id="loginForm"
+                onSubmit={loading ? doNothing : handleSubmit}
+              >
+                {generalError && <p className="login_body_form_error_general">{generalError}</p>}
+                <InputField
+                  placeHolder="Email or Username"
+                  showRequiredAsterisk
+                  required
+                  inputType="text"
+                  customClass="login_body_form_input"
+                  inputName="name"
+                  onChange={handleInputChange}
+                />
+                {nameError && (
+                  <p className="login_body_form_error login_body_form_error_name">{nameError}</p>
+                )}
+                <InputField
+                  placeHolder="Password"
+                  showRequiredAsterisk
+                  required
+                  inputType="password"
+                  customClass="login_body_form_input"
+                  inputName="password"
+                  onChange={handleInputChange}
+                />
+                {passwordError && <p className="login_body_form_error">{passwordError}</p>}
+                <div className="login_body_form_rem_div">
+                  <InputField
+                    inputType="checkbox"
+                    customClass="login_body_form_rem_div_input"
+                    inputName="rememberMe"
+                    onChange={() => this.setState({ rememberMe: !rememberMe })}
+                  />
+                  <p className="login_body_form_rem_div_text">Remember me</p>
+                </div>
+                <Button
+                  customClass="login_body_form_submit_btn"
+                  btnText="Login"
+                  isDisabled={loading}
+                  btnType="submit"
+                  onClick={doNothing}
+                />
+                <div className="login_body_form_links">
+                  <Button
+                    btnType="button"
+                    btnText="Register Now"
+                    customClass="ah_signup_registered-link hasAccount link_lookalike"
+                    onClick={toggleSignUpModal}
+                    btnId="login-register-btn"
+                  />
+                  <Button
+                    btnType="button"
+                    btnText="Forgot Password?"
+                    customClass="ah_signup_registered-link hasAccount"
+                    onClick={() => this.setState({ resetPasswordModal: !resetPasswordModal })}
+                    btnId="login-reset-btn"
+                  />
+                </div>
+              </form>
+            </section>
+          </div>
+        )}
       </Modal>
     );
   }

@@ -273,12 +273,18 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
               Register Now
               
             </button>
-            <a
-              className="login_body_form_link"
-              href="/"
+            <button
+              className="ah-btn ah_signup_registered-link hasAccount"
+              disabled={false}
+              id="login-register-btn"
+              onClick={[Function]}
+              title=""
+              type="button"
             >
-              Forgot password?
-            </a>
+              
+              Forgot Password?
+              
+            </button>
           </div>
         </form>
       </section>
