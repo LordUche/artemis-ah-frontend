@@ -1,15 +1,27 @@
 import React from 'react';
-import { func, string, bool } from 'prop-types';
+import {
+  func, string, bool, node
+} from 'prop-types';
 
 /**
  * @description reusable button component
  * @returns {HTMLButtonElement} button
  */
 const Button = ({
-  btnText, onClick, customClass, imgSrc, imgCustomClass, imgAltText, isDisabled, btnType
+  btnText,
+  onClick,
+  customClass,
+  imgSrc,
+  imgCustomClass,
+  imgAltText,
+  isDisabled,
+  btnType,
+  btnId,
+  children,
+  btnTitle
 }) => (
   // eslint-disable-next-line react/button-has-type
-  <button type={btnType} onClick={onClick} className={`ah-btn ${customClass}`} disabled={isDisabled}>
+  <button type={btnType} onClick={onClick} className={`ah-btn ${customClass}`} disabled={isDisabled} id={btnId} title={btnTitle}>
     {imgSrc && (
     <img
       src={imgSrc}
@@ -18,6 +30,7 @@ const Button = ({
     />
     )}
     {btnText}
+    {children}
   </button>
 );
 
@@ -41,7 +54,7 @@ Button.propTypes = {
   /**
    * Text to be dispayed on the button
    */
-  btnText: string.isRequired,
+  btnText: string,
   /**
    * Function to be fired when clicked
    */
@@ -54,9 +67,25 @@ Button.propTypes = {
    * button type
    */
   btnType: string,
+  /**
+   * button id
+   */
+  btnId: string,
+  /**
+   * children html elements
+   */
+  children: node,
+  /**
+   * button title
+   */
+  btnTitle: string
 };
 
 Button.defaultProps = {
+  children: '',
+  btnTitle: '',
+  btnText: '',
+  btnId: '',
   customClass: '',
   imgSrc: '',
   imgCustomClass: '',

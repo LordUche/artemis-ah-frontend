@@ -7,7 +7,10 @@ import {
   CREATE_ARTICLE,
   CREATE_ARTICLE_ERROR,
   CLEAR_ARTICLE_ERROR,
-  PUBLISHING_ARTICLE
+  PUBLISHING_ARTICLE,
+  GOT_ARTICLE,
+  ERROR_GETTING_ARTICLE,
+  GETTING_ARTICLE
 } from '../actionTypes';
 
 /**
@@ -41,7 +44,7 @@ const createArticleAction = async (articleDetails) => {
   try {
     const request = await post(`${BASE_URL}/articles`, articleDetails, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('authorsHavenToken')}`
+        Authorization: `Bearer ${localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken')}`
       }
     });
 
@@ -73,6 +76,48 @@ const clearErrorsAction = () => ({ type: CLEAR_ARTICLE_ERROR });
  */
 const publishingArticleAction = () => ({ type: PUBLISHING_ARTICLE });
 
+/**
+ * @method getArticleAction
+ * @param {string} articleSlug - The slug of the article to get
+ * @param {string} token - The user's token
+ * @description - Method to dispatch get article actions
+ * @returns {object} - The got article action object
+ */
+const getArticleAction = async (articleSlug, token) => {
+  const requestOptions = {};
+  if (token) {
+    requestOptions.headers = {
+      Authorization: `Bearer ${token}`
+    };
+  }
+  try {
+    const request = await get(`${BASE_URL}/articles/${articleSlug}`, requestOptions);
+    const gottenArticle = request.data;
+
+    return {
+      type: GOT_ARTICLE,
+      payload: gottenArticle
+    };
+  } catch (error) {
+    const networkErrorResponse = { message: 'Can\'t get Article right now, please try again later' };
+    return {
+      type: ERROR_GETTING_ARTICLE,
+      payload: error.response ? error.response.data : networkErrorResponse
+    };
+  }
+};
+
+/**
+ * @description function for displaying loading state
+ * @returns {object} action
+ */
+const gettingArticleAction = () => ({ type: GETTING_ARTICLE });
+
 export {
-  fetchTagsAction, createArticleAction, clearErrorsAction, publishingArticleAction
+  fetchTagsAction,
+  createArticleAction,
+  clearErrorsAction,
+  publishingArticleAction,
+  getArticleAction,
+  gettingArticleAction
 };

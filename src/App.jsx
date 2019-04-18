@@ -21,6 +21,7 @@ import HistoryPage from './views/HistoryPage';
 import SettingsPage from './views/SettingsPage';
 import PageNotFound from './views/PageNotFound';
 import CreateArticle from './views/CreateArticle';
+import ArticleDetailsPage from './views/ArticleDetailPage';
 
 // Create Store
 const store = createStore(reducers, applyMiddleware(ReduxPromise));
@@ -40,6 +41,7 @@ const App = () => (
         <Route exact path="/settings" component={SettingsPage} />
         <Route exact path="/history" component={HistoryPage} />
         <Route exact path="/reading-stats" component={ReadingStatsPage} />
+        <Route exact path="/article/:articleSlug" component={ArticleDetailsPage} />
         <Route component={PageNotFound} />
       </Switch>
     </BrowserRouter>

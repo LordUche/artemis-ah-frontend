@@ -1,5 +1,39 @@
 @import "../base.scss";
 
+// Style for Slider, used the !important rule to override the default css
+// Genrerated by the Slider component
+
+.slider {
+  &-frame {
+    padding: 0 2.5rem !important;
+  }
+
+  &-list {
+    height: 32rem !important;
+  }
+
+  &-control-centerleft {
+    left: -6.5rem !important;
+  }
+
+  &-control-centerright {
+    right: -6.5rem !important;
+  }
+
+  &-control-bottomcenter {
+    font-size: 1.6rem;
+  }
+
+  &__btn {
+    background: transparent;
+    outline: 0;
+    cursor: pointer;
+    color: $white-color;
+    font-size: 10rem;
+    position: relative;
+  }
+}
+
 // Style definitions for the Hero segment of the Landing Page
 .hero {
   display: flex;
@@ -228,7 +262,6 @@
   }
 
   &__card {
-    background: url("../img/article-cover.jpg");
     width: 25rem;
     height: 32rem;
     border-radius: 1rem;
@@ -243,6 +276,7 @@
       position: absolute;
       top: 1.5rem;
       left: -2rem;
+      min-height: 4.2rem;
     }
 
     & > .title {
@@ -256,10 +290,14 @@
       border-bottom-right-radius: 1rem;
       font-size: 1.6rem;
       padding: 1.5rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      min-height: 5.2rem;
     }
   }
 
-  & > a {
+  & > .btn {
     align-self: center;
   }
 }
@@ -435,7 +473,9 @@ footer {
       align-items: center;
 
       & > .btn {
-        width: 25rem;
+        margin-right: 0;
+        min-width: 25rem;
+        max-width: 25rem;
       }
     }
     .hamburger {
@@ -468,6 +508,10 @@ footer {
     }
   }
 
+  .slider-frame {
+    padding: 0 0.5rem !important;
+  }
+
   .segment {
     display: block;
 
@@ -489,9 +533,12 @@ footer {
     &.featured {
       background-repeat: no-repeat;
       height: auto;
-      margin-top: -15rem;
-      padding-bottom: 7rem;
-      display: block;
+      margin-top: -7rem;
+      padding-bottom: 2rem;
+
+      & > .segment__title {
+        padding-top: 0;
+      }
     }
   }
 
@@ -550,5 +597,9 @@ footer {
 
   .hero__cta {
     margin-top: 5rem;
+  }
+
+  .slider-frame {
+    padding: 0 0.5rem !important;
   }
 }

@@ -71,7 +71,8 @@ module.exports = env => ({
     }),
     new Dotenv(),
     new webpack.DefinePlugin({
-      'process.env.SECRET_KEY': JSON.stringify(process.env.SECRET_KEY)
+      'process.env.SECRET_KEY': JSON.stringify(process.env.SECRET_KEY),
+      'process.env.UPLOAD_URL': JSON.stringify(process.env.UPLOAD_URL)
     })
   ],
   devServer: {
