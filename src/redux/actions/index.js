@@ -1,6 +1,5 @@
 // Base url
 const BASE_URL = 'https://authorshaven.herokuapp.com/api';
-// const BASE_URL = 'http://localhost:3000/api';
 
 // Google Auth URL
 const GOOGLE_SOCIAL_LOGIN_URL = `${BASE_URL}/users/auth/google`;
