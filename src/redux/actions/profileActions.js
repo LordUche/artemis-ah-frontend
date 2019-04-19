@@ -137,7 +137,7 @@ const uploadImage = (file) => {
  * @param {*} dispatch Function to dispatch actions to redux store.
  * @returns {undefined}
  */
-const saveUserDetails = (token, updatedBio, uploadedImageUrl, dispatch) => {
+export const saveUserDetails = (token, updatedBio, uploadedImageUrl, dispatch) => {
   const postData = {
     bio: updatedBio,
   };

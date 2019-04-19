@@ -33,6 +33,7 @@ export class CreateArticlePage extends Component {
     charactersCount: 1000,
     bodyWordCount: 0,
     readingTime: 0,
+    tagId: 1,
     cover:
       'https://res.cloudinary.com/artemisah/image/upload/v1553005105/authorshaven/articlePicImage.png',
     tags: {

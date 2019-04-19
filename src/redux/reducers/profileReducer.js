@@ -110,7 +110,7 @@ export default (state = getInitialState(), { type, data }) => {
       ].articles.filter(article => article.slug !== data.slug);
       return newState;
     case SAVE_EDITED_ARTICLE:
-      sessionStorage.setItem('reload', true);
+      localStorage.setItem('reload', true);
       return newState;
     case PROFILE_ARTICLES_FETCH_ERROR:
       newState.tabContent[TAB_ARTICLES] = Object.assign(newState.tabContent[TAB_ARTICLES], {

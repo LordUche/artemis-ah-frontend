@@ -16,7 +16,7 @@ import reducers from './redux/reducers';
 
 // Import views
 import Landing from './views/LandingPage';
-import ProfilePage from './views/ProfilePage';
+import ProfileView from './views/ProfilePage';
 import BookmarkPage from './views/BookmarkPage';
 import ReadingStatsPage from './views/ReadingStatsPage';
 import HistoryPage from './views/HistoryPage';
@@ -38,7 +38,7 @@ const App = () => (
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        <Route exact path="/profile/:username?" component={ProfilePage} />
+        <Route exact path="/profile/:username?" component={ProfileView} />
         <Route exact path="/" component={({ history }) => <Landing history={history} />} />
         <Route exact path="/create-article" component={CreateArticle} />
         <Route exact path="/edit-article" component={EditArticle} />

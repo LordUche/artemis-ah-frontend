@@ -135,7 +135,7 @@ const saveEditedArticleAction = async ({
     );
     localStorage.removeItem('cardData');
     const { article, message } = response.data;
-    sessionStorage.setItem('articleEditMessage', message);
+    localStorage.setItem('articleEditMessage', message);
     const payload = article;
     return {
       type: SAVE_EDITED_ARTICLE,
@@ -148,7 +148,7 @@ const saveEditedArticleAction = async ({
       payload: error.response.data
     };
   }
-}
+};
 
 /**
  * @method getArticleAction
@@ -173,7 +173,7 @@ const getArticleAction = async (articleSlug, token) => {
       payload: gottenArticle
     };
   } catch (error) {
-    const networkErrorResponse = { message: 'Can\'t get Article right now, please try again later' };
+    const networkErrorResponse = { message: "Can't get Article right now, please try again later" };
     return {
       type: ERROR_GETTING_ARTICLE,
       payload: error.response ? error.response.data : networkErrorResponse
@@ -207,7 +207,7 @@ const deleteArticleAction = async (slug) => {
       payload: error.response.data
     };
   }
-}
+};
 
 /**
  * @description function for displaying loading state

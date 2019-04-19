@@ -174,6 +174,7 @@ export class LoginModal extends Component {
                   btnText="Recover"
                   btnType="submit"
                   isDisabled={fetching}
+                  btnId="login_body_reset_btn"
                 />
               </form>
             </section>

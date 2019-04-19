@@ -638,12 +638,10 @@ is not following anyone.
       return <Redirect to="/" />;
     }
 
-    if (sessionStorage.getItem('reload')) {
-      sessionStorage.removeItem('reload');
-      window.location.reload();
-    } else if (sessionStorage.getItem('articleEditMessage')) {
-      notifyUser(toast(sessionStorage.getItem('articleEditMessage')));
-      sessionStorage.removeItem('articleEditMessage');
+    if (localStorage.getItem('reload')) {
+      localStorage.removeItem('reload');
+      notifyUser(toast(localStorage.getItem('articleEditMessage')));
+      localStorage.removeItem('articleEditMessage');
     }
 
     const {

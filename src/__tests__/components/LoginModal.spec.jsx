@@ -107,6 +107,8 @@ describe('Loading Modal Component', () => {
     );
 
     loginModal.find('form#loginForm').simulate('submit', fakeEvent);
+    loginModal.find('#login-reset-btn').simulate('click', fakeEvent);
+    loginModal.find('#login_body_reset_btn').simulate('submit', fakeEvent);
 
     expect(mockLoadingAuth.mock.calls.length).toEqual(1);
     expect(mockLoginUser.mock.calls.length).toEqual(1);

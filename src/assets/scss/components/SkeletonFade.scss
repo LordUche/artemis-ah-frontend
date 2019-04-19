@@ -1,0 +1,32 @@
+.skeleton-fade {
+ background: #cccccc;
+ & .category {
+  min-width: 10rem;
+ }
+
+ & .title {
+  color: #cccccc;
+ }
+
+ &::after {
+  display: block;
+  content: "";
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(
+   90deg,
+   transparent,
+   rgba(255, 255, 255, 0.2),
+   transparent
+  );
+  animation: skeleton-card 1s infinite;
+ }
+}
+
+@keyframes skeleton-card {
+ 100% {
+  width: 100%;
+ }
+}

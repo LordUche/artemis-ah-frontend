@@ -110,7 +110,8 @@ export const ArticleItem = ({
 };
 
 ArticleItem.defaultProps = {
-  showAuthor: true
+  showAuthor: true,
+  push: () => 'do nothing'
 };
 
 ArticleItem.propTypes = {
@@ -125,7 +126,7 @@ ArticleItem.propTypes = {
   author: stringProp.isRequired,
   body: stringProp.isRequired,
   modifyArticle: func.isRequired,
-  push: func.isRequired,
+  push: func,
   deleteConfirmation: func.isRequired
 };
 

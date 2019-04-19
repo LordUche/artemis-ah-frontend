@@ -5,13 +5,19 @@ import {
   clearErrorsAction,
   publishingArticleAction,
   getArticleAction,
-  gettingArticleAction
+  gettingArticleAction,
+  deleteArticleAction,
+  saveEditedArticleAction,
+  confirmArticleDeleteAction,
+  closeArticleDeleteModalAction
 } from '../../../redux/actions/articleActions';
 
 import {
   GETTING_ARTICLE,
   GOT_ARTICLE,
-  ERROR_GETTING_ARTICLE
+  ERROR_GETTING_ARTICLE,
+  OPEN_DELETE_CONFIRMATION_MODAL,
+  CLOSE_DELETE_CONFIRMATION_MODAL
 } from '../../../redux/actionTypes';
 
 describe('Testing article tag actions', () => {
@@ -139,6 +145,145 @@ describe('Testing article action', () => {
   });
 });
 
+describe('Testing edit article action', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should clear article errors', () => {
+    clearErrorsAction();
+  });
+
+  it('should show publishing status', () => {
+    publishingArticleAction();
+  });
+
+  it('should edit an article', async () => {
+    const mockRequest = {
+      title: 'My new random title by a random user',
+      body: 'Go on fam again and again!!! Wooohooo!!!',
+      description: 'Go on fam again!!! Wooohooo!!!',
+      tagId: 1
+    };
+    const expectedResponse = {
+      article: {
+        rating: '0',
+        id: 1,
+        tagId: 1,
+        title: 'My new random title by a random user',
+        description: 'Go on fam again and again!!! Wooohooo!!!',
+        body: 'Go on fam again!!! Wooohooo!!!'
+      }
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+
+    const result = await saveEditedArticleAction(mockRequest);
+    expect(result.type).toEqual('SAVE_EDITED_ARTICLE');
+  });
+
+  it('should throw an error for status code 4XX', async () => {
+    const mockRequest = {
+      title: 'My random title by a random user',
+      body: 'Go on fam again!!! Wooohooo!!!',
+      description: 'Go on fam again!!! Wooohooo!!!',
+      tagId: 1
+    };
+    const mockResponseError = {
+      errors: { title: ['Title must be specified'] }
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponseError });
+    });
+
+    const result = await saveEditedArticleAction(mockRequest);
+    expect(result.type).toEqual('FETCH_DELETE_ERROR');
+  });
+
+  it('should throw an error for status code 5XX', async () => {
+    const mockRequest = {
+      title: 'My random title by a random user',
+      body: 'Go on fam again!!! Wooohooo!!!',
+      description: 'Go on fam again!!! Wooohooo!!!',
+      tagId: 1
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500 });
+    });
+
+    const result = await saveEditedArticleAction(mockRequest);
+    expect(result.type).toEqual('FETCH_DELETE_ERROR');
+  });
+});
+
+describe('Testing the delete article action', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should clear article errors', () => {
+    clearErrorsAction();
+  });
+
+  it('should show publishing status', () => {
+    publishingArticleAction();
+  });
+
+  it('should delete an article', async () => {
+    const mockRequest = 'article deleted successfully';
+    const expectedResponse = 'article deleted successfully';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+
+    const result = await deleteArticleAction(mockRequest);
+    expect(result.type).toEqual('DELETE_ARTICLE');
+  });
+
+  it('should throw an error for status code 4XX', async () => {
+    const mockRequest = 'slug-slugs-3';
+    const mockResponseError = {
+      errors: { title: ['Title must be specified'] }
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponseError });
+    });
+
+    const result = await deleteArticleAction(mockRequest);
+    expect(result.type).toEqual('FETCH_DELETE_ERROR');
+  });
+
+  it('should throw an error for status code 5XX', async () => {
+    const mockRequest = {
+      title: 'My random title by a random user',
+      body: 'Go on fam again!!! Wooohooo!!!',
+      description: 'Go on fam again!!! Wooohooo!!!',
+      tagId: 1
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500 });
+    });
+
+    const result = await deleteArticleAction(mockRequest);
+    expect(result.type).toEqual('FETCH_DELETE_ERROR');
+  });
+});
+
 describe('Testing get article action', () => {
   beforeEach(() => {
     moxios.install();
@@ -188,5 +333,12 @@ describe('Testing get article action', () => {
   it('should return the GETTING_ARTICLE action', () => {
     const result = gettingArticleAction();
     expect(result.type).toEqual(GETTING_ARTICLE);
+  });
+});
+
+describe('Delete article modal', () => {
+  it('it should return an action type', () => {
+    expect(confirmArticleDeleteAction().type).toEqual(OPEN_DELETE_CONFIRMATION_MODAL);
+    expect(closeArticleDeleteModalAction().type).toEqual(CLOSE_DELETE_CONFIRMATION_MODAL);
   });
 });

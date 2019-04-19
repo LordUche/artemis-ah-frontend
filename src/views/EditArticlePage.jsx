@@ -2,24 +2,19 @@ import React, { Fragment, Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  func, arrayOf, object, bool, object as objectProp
-} from 'prop-types';
+import { func, bool, object as objectProp } from 'prop-types';
 import Dropzone from 'react-dropzone';
 import dotenv from 'dotenv';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import TopNavBar from '../components/TopNav';
-import {
-  publishingArticleAction,
-  saveEditedArticleAction
-} from '../redux/actions/articleActions';
+import { publishingArticleAction, saveEditedArticleAction } from '../redux/actions/articleActions';
 import HelperUtils from '../utils/helperUtils';
 
 dotenv.config();
 
 /**
- * @class CreateArticle
+ * @class EditArticle
  * @description The create article component
  */
 export class EditArticlePage extends Component {
@@ -37,7 +32,8 @@ export class EditArticlePage extends Component {
     title: '',
     description: '',
     body: '',
-    slug: ''
+    slug: '',
+    mounted: false
   };
 
   /**
@@ -46,21 +42,25 @@ export class EditArticlePage extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
+    const { mounted } = this.state;
     const { articleCardData } = this.props;
 
     const {
       title, description, coverUrl, tag, body, slug
     } = articleCardData;
 
-    this.setState({
-      title,
-      description,
-      cover: coverUrl,
-      imagePreview: coverUrl,
-      tag,
-      body,
-      slug
-    });
+    if (!mounted) {
+      this.setState({
+        title,
+        description,
+        cover: coverUrl,
+        imagePreview: coverUrl,
+        tag,
+        body,
+        slug,
+        mounted: true
+      });
+    }
   }
 
   /**
@@ -152,6 +152,24 @@ export class EditArticlePage extends Component {
   };
 
   /**
+   * @method handleKeyPress
+   * @description Handles image upload to Cloudinary
+   * @returns {undefined}
+   */
+  handleKeyPressI = () => {
+    this.setState({ showDescriptionCount: true });
+  };
+
+  /**
+   * @method handleKeyPressII
+   * @description Handles image upload to Cloudinary
+   * @returns {undefined}
+   */
+  handleKeyPressII = () => {
+    this.setState({ showBodyCount: true });
+  };
+
+  /**
    * @method render
    * @returns {JSX} HTML Markup
    */
@@ -175,7 +193,6 @@ export class EditArticlePage extends Component {
     if (!cardData) {
       return <Redirect to="/profile" />;
     }
-
     return !isLoggedIn ? (
       <Redirect to="./" />
     ) : (
@@ -212,7 +229,7 @@ export class EditArticlePage extends Component {
                   <textarea
                     onChange={this.handleInputChange}
                     onKeyUp={this.handleCharacterCount}
-                    onKeyPress={() => this.setState({ showDescriptionCount: true })}
+                    onKeyPress={this.handleKeyPressI}
                     id="description"
                     name="description"
                     type="text"
@@ -270,7 +287,7 @@ export class EditArticlePage extends Component {
               <textarea
                 onKeyUp={this.handleReadingTime}
                 onChange={this.handleInputChange}
-                onKeyPress={() => this.setState({ showBodyCount: true })}
+                onKeyPress={this.handleKeyPressII}
                 id="body"
                 name="body"
                 type="text"
@@ -342,12 +359,10 @@ export const mapStateToProps = ({ auth, article }) => {
 EditArticlePage.propTypes = {
   isLoggedIn: bool.isRequired,
   publishingArticle: func.isRequired,
-  tagList: arrayOf(object).isRequired,
   saveEdited: func.isRequired,
   isPublishing: bool.isRequired,
   articleCardData: objectProp.isRequired
 };
-
 
 export default connect(
   mapStateToProps,
