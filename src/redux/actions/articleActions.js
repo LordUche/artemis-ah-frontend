@@ -1,5 +1,8 @@
 import 'babel-polyfill';
-import { get, post } from 'axios';
+import {
+  get, post, patch, delete as axiosDelete
+} from 'axios';
+import { toast } from 'react-toastify';
 import BASE_URL from './index';
 import {
   FETCH_TAGS,
@@ -8,10 +11,17 @@ import {
   CREATE_ARTICLE_ERROR,
   CLEAR_ARTICLE_ERROR,
   PUBLISHING_ARTICLE,
+  EDIT_ARTICLE,
+  SAVE_EDITED_ARTICLE,
+  OPEN_DELETE_CONFIRMATION_MODAL,
+  CLOSE_DELETE_CONFIRMATION_MODAL,
+  DELETE_ARTICLE,
+  FETCH_DELETE_ERROR,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
   GETTING_ARTICLE
 } from '../actionTypes';
+import notifyUser from '../../utils/Toast';
 
 /**
  * @method fetchTags
@@ -44,7 +54,8 @@ const createArticleAction = async (articleDetails) => {
   try {
     const request = await post(`${BASE_URL}/articles`, articleDetails, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken')}`
+        Authorization: `Bearer ${localStorage.getItem('authorsHavenToken')
+          || sessionStorage.getItem('authorsHavenToken')}`
       }
     });
 
@@ -77,6 +88,97 @@ const clearErrorsAction = () => ({ type: CLEAR_ARTICLE_ERROR });
 const publishingArticleAction = () => ({ type: PUBLISHING_ARTICLE });
 
 /**
+ * @description function for confirming article delete (this opens a modal)
+ * @returns {object} action
+ */
+const confirmArticleDeleteAction = () => ({ type: OPEN_DELETE_CONFIRMATION_MODAL });
+
+/**
+ * @description function for closing the confirm article deletion modal
+ * @returns {object} action
+ */
+const closeArticleDeleteModalAction = () => ({ type: CLOSE_DELETE_CONFIRMATION_MODAL });
+
+/**
+ * @description Edit an article
+ * @param {object} articleCardData
+ * @returns {object} Action object for redux
+ */
+const editArticle = articleCardData => ({
+  type: EDIT_ARTICLE,
+  payload: articleCardData
+});
+
+/**
+ * @description Saved edited article
+ * @param {object} payload
+ * @returns {object} Action object for redux
+ */
+const saveEditedArticleAction = async ({
+  title, body, description, cover, slug
+}) => {
+  const token = localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken');
+  try {
+    const response = await patch(
+      `${BASE_URL}/articles/${slug}`,
+      {
+        title,
+        body,
+        description,
+        cover
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    localStorage.removeItem('cardData');
+    const { article, message } = response.data;
+    localStorage.setItem('articleEditMessage', message);
+    const payload = article;
+    return {
+      type: SAVE_EDITED_ARTICLE,
+      payload,
+      data: { article }
+    };
+  } catch (error) {
+    return {
+      type: FETCH_DELETE_ERROR,
+      payload: error.response.data
+    };
+  }
+};
+
+/**
+ * @description delete article
+ * @param {string} slug
+ * @returns {object} Action object for redux
+ */
+const deleteArticleAction = async (slug) => {
+  const token = localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken');
+  try {
+    const response = await axiosDelete(`${BASE_URL}/articles/${slug}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const { message } = response.data;
+    notifyUser(toast(message));
+    localStorage.removeItem('deleteSlug');
+    return {
+      type: DELETE_ARTICLE,
+      data: { slug }
+    };
+  } catch (error) {
+    return {
+      type: FETCH_DELETE_ERROR,
+      payload: error.response.data
+    };
+  }
+};
+
+/**
  * @method getArticleAction
  * @param {string} articleSlug - The slug of the article to get
  * @param {string} token - The user's token
@@ -99,7 +201,7 @@ const getArticleAction = async (articleSlug, token) => {
       payload: gottenArticle
     };
   } catch (error) {
-    const networkErrorResponse = { message: 'Can\'t get Article right now, please try again later' };
+    const networkErrorResponse = { message: "Can't get Article right now, please try again later" };
     return {
       type: ERROR_GETTING_ARTICLE,
       payload: error.response ? error.response.data : networkErrorResponse
@@ -119,5 +221,10 @@ export {
   clearErrorsAction,
   publishingArticleAction,
   getArticleAction,
-  gettingArticleAction
+  gettingArticleAction,
+  deleteArticleAction,
+  saveEditedArticleAction,
+  confirmArticleDeleteAction,
+  closeArticleDeleteModalAction,
+  editArticle
 };

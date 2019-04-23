@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import React from 'react';
+import moxios from 'moxios';
 import { mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -44,5 +45,40 @@ describe('should match the shallow snapshot', () => {
   it('should match the state of component', () => {
     expect(wrapper.state('fetching')).toEqual(false);
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it('should match the state of component', () => {
+    const resetPassword = new ResetPassword();
+    const event = {
+      preventDefault: () => 'prevent default'
+    };
+
+    resetPassword.handleSubmit(event);
+  });
+});
+describe('Testing the delete article action', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  const resetPassword = new ResetPassword();
+  const event = {
+    preventDefault: () => 'prevent default'
+  };
+
+  resetPassword.handleSubmit(event);
+
+  it('should change a password', async () => {
+    const expectedResponse = 'password changed successfully';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+
+    await resetPassword.handleSubmit(event);
   });
 });

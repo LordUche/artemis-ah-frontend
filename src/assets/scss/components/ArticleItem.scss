@@ -95,17 +95,39 @@ $border-radius: 5px;
     
             &__user-actions {
                 float: right;
-    
-                a {
-                    margin-left: 19px;
-                }
 
                 &__edit {
+                    font-size: 1.5rem;
                     color: #000000;
+                    box-shadow: #ffffff;
+
+                    transition-property: box-shadow;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in-out;
+
+                    transition-property: font-size;
+                    transition-duration: 0.1s;
+                    transition-timing-function: ease-in-out;
+                }
+                &__edit:hover, &__delete:hover {
+                    font-size: 1.41rem;
+                    box-shadow: 1px 1px 1px 1px #787878;
+                    cursor: pointer;
                 }
 
                 &__delete {
+                    font-size: 1.5rem;
                     color: #F94A4A;
+                    margin-left: 0.5rem;
+                    box-shadow: #ffffff;
+
+                    transition-property: box-shadow;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in-out;
+
+                    transition-property: font-size;
+                    transition-duration: 0.1s;
+                    transition-timing-function: ease-in-out;
                 }
             }
         }
@@ -203,4 +225,11 @@ $border-radius: 5px;
             }
         }
     }
+}
+
+.default-toast {
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    color: $primary-color;
+    background: white;
 }

@@ -276,7 +276,7 @@ exports[`Loading Modal Component should have match the given snapshot 1`] = `
             <button
               className="ah-btn ah_signup_registered-link hasAccount"
               disabled={false}
-              id="login-register-btn"
+              id="login-reset-btn"
               onClick={[Function]}
               title=""
               type="button"
