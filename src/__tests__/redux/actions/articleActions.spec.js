@@ -9,7 +9,8 @@ import {
   deleteArticleAction,
   saveEditedArticleAction,
   confirmArticleDeleteAction,
-  closeArticleDeleteModalAction
+  closeArticleDeleteModalAction,
+  getAllArticles
 } from '../../../redux/actions/articleActions';
 
 import {
@@ -19,6 +20,65 @@ import {
   OPEN_DELETE_CONFIRMATION_MODAL,
   CLOSE_DELETE_CONFIRMATION_MODAL
 } from '../../../redux/actionTypes';
+
+
+describe('Test get all articles action', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should return fetched articles', async () => {
+    const expectedResponse = {
+      articles: [
+        {
+          id: 3,
+          slug: 'some-title-3',
+          title: 'some title',
+          description: 'some weird talk',
+          rating: '0',
+          totalClaps: 0,
+          createdAt: '2019-04-17T20:26:46.344Z',
+          updatedAt: '2019-04-17T20:26:46.347Z',
+          User: {
+            username: 'deedenedash',
+            bio: 'n/a',
+            image: 'https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/iReporter/avatar.png'
+          },
+          Tag: {
+            name: 'Food'
+          },
+          readTime: {
+            text: '< 1 min read',
+            minutes: 0.05,
+            time: 3000,
+            words: 10
+          }
+        }
+      ],
+      total: 3,
+      page: 1,
+      limit: 20
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const result = await getAllArticles();
+    expect(result.type).toEqual('GET_ARTICLES');
+  });
+  it('should return an error', async () => {
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500, response: {} });
+    });
+    const result = await getAllArticles();
+    expect(result.type).toEqual('GET_ARTICLES_ERROR');
+  });
+});
 
 describe('Testing article tag actions', () => {
   beforeEach(() => {

@@ -7,6 +7,8 @@ import {
   EDIT_ARTICLE,
   OPEN_DELETE_CONFIRMATION_MODAL,
   CLOSE_DELETE_CONFIRMATION_MODAL,
+  GET_ARTICLES,
+  GET_ARTICLES_ERROR,
   GETTING_ARTICLE,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE
@@ -14,6 +16,8 @@ import {
 
 export const initialState = {
   articleData: {},
+  articles: [],
+  loading: true,
   errors: {},
   isPublishing: false,
   articleCardData: JSON.parse(localStorage.getItem('cardData')) || {},
@@ -31,6 +35,18 @@ export const initialState = {
  */
 const articleReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case GET_ARTICLES:
+      return {
+        ...state,
+        articles: payload,
+        loading: false
+      };
+    case GET_ARTICLES_ERROR:
+      return {
+        ...state,
+        errors: payload,
+        loading: false
+      };
     case CREATE_ARTICLE:
       return {
         ...state,

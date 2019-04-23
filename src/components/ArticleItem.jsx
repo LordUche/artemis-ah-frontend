@@ -23,7 +23,8 @@ export const ArticleItem = ({
   showAuthor,
   modifyArticle,
   push,
-  deleteConfirmation
+  deleteConfirmation,
+  userActionClass
 }) => {
   const card = {
     title,
@@ -65,10 +66,12 @@ export const ArticleItem = ({
           <div className="article-item__body-wrapper__body__description">{description}</div>
         </div>
         <div className="article-item__body-wrapper__bottom-links">
-          <Link to={`/${slug}`} className="article-item__body-wrapper__bottom-links__read-more">
+          <Link to={`/article/${slug}`} className="article-item__body-wrapper__bottom-links__read-more">
             READ FULL ARTICLE &rarr;
           </Link>
-          <div className="article-item__body-wrapper__bottom-links__user-actions">
+          <div
+            className={`article-item__body-wrapper__bottom-links__user-actions ${userActionClass}`}
+          >
             <Button
               onClick={() => {
                 localStorage.setItem('cardData', JSON.stringify(card));
@@ -93,29 +96,18 @@ export const ArticleItem = ({
           </div>
         </div>
       </div>
-
-      <div className="stats-wrapper">
-        <span>
-          <i className="fa fa-star" />
-          {' '}
-          {rating}
-        </span>
-        <span className="stats-wrapper__read-time">
-          <i className="fa fa-clock" />
-          {' '}
-          {readTime}
-        </span>
-      </div>
     </div>
   );
 };
 
 ArticleItem.defaultProps = {
   showAuthor: true,
-  push: () => 'do nothing'
+  push: () => 'do nothing',
+  userActionClass: ''
 };
 
 ArticleItem.propTypes = {
+  userActionClass: stringProp,
   showAuthor: boolProp,
   title: stringProp.isRequired,
   description: stringProp.isRequired,

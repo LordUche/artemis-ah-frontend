@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default () => (
-  <div className="article-item-skeleton-screen">
+  <div className="article-item-skeleton-screen skeleton-fade">
     <div className="article-item-skeleton-screen__cover" />
     <div className="article-item-skeleton-screen__data">
       <div className="article-item-skeleton-screen__data__title" />

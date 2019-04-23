@@ -158,9 +158,10 @@ class TopNav extends Component {
    * @returns {JSX} top nav
    */
   render() {
+    const { navID } = this.props;
     return (
       <header className="ah-header">
-        <nav className="top-nav">{this.renderNavChildren()}</nav>
+        <nav className="top-nav" id={`${navID}`}>{this.renderNavChildren()}</nav>
       </header>
     );
   }
@@ -169,13 +170,15 @@ class TopNav extends Component {
 TopNav.propTypes = {
   username: string,
   isLoggedIn: bool,
-  image: string
+  image: string,
+  navID: string
 };
 
 TopNav.defaultProps = {
   image: 'https://res.cloudinary.com/artemisah/image/upload/v1554333407/authorshaven/ah-avatar.png',
   username: 'Default',
-  isLoggedIn: false
+  isLoggedIn: false,
+  navID: ''
 };
 
 /**

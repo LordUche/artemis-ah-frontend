@@ -17,11 +17,39 @@ import {
   CLOSE_DELETE_CONFIRMATION_MODAL,
   DELETE_ARTICLE,
   FETCH_DELETE_ERROR,
+  GET_ARTICLES,
+  GET_ARTICLES_ERROR,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
   GETTING_ARTICLE
 } from '../actionTypes';
 import notifyUser from '../../utils/Toast';
+
+/**
+ * @method GetArticles
+ * @description Method to get all articles
+ * @returns {object} Fetched articles
+ */
+const getAllArticles = async () => {
+  try {
+    const response = await get(`${BASE_URL}/articles`);
+    const { articles } = response.data;
+
+    return {
+      type: GET_ARTICLES,
+      payload: articles
+    };
+  } catch (error) {
+    return {
+      type: GET_ARTICLES_ERROR,
+      payload: error.response.data
+    };
+  }
+};
+
+/**
+ * @returns {string} loading
+ */
 
 /**
  * @method fetchTags
@@ -220,6 +248,7 @@ export {
   createArticleAction,
   clearErrorsAction,
   publishingArticleAction,
+  getAllArticles,
   getArticleAction,
   gettingArticleAction,
   deleteArticleAction,
