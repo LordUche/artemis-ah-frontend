@@ -8,6 +8,8 @@ import {
   fetchUserArticles,
   fetchUserFollowers,
   fetchUserFollowing,
+  followUser,
+  unfollowUser,
   updateUserDetails,
   resetEditState,
   resetProfile,
@@ -258,11 +260,27 @@ class ProfilePage extends Component {
         return <Button onClick={() => this.startEditProfile()} btnText="Edit Profile" />;
       }
 
-      return profile.user.isFollowing ? (
-        <Button btnText="Unfollow" onClick={() => alert('This is a separate feature story.')} />
-      ) : (
-        <Button btnText="Follow" onClick={() => alert('This is a separate feature story.')} />
-      );
+      const { dispatch } = this.props;
+
+      let btnProps;
+      // If user is following.
+      if (profile.user.isFollowing) {
+        btnProps = {
+          btnText: profile.followActionWorking ? 'Unfollowing...' : 'Unfollow',
+        };
+        if (!profile.followActionWorking) {
+          btnProps.onClick = () => unfollowUser(user.authToken, profile.user.username, dispatch);
+        }
+      } else {
+        btnProps = {
+          btnText: profile.followActionWorking ? 'Following...' : 'Follow',
+        };
+        if (!profile.followActionWorking) {
+          btnProps.onClick = () => followUser(user.authToken, profile.user.username, dispatch);
+        }
+      }
+
+      return <Button {...btnProps} />;
     }
 
     return <Button onClick={() => { window.location = '/'; }} btnText="Log In to Follow" />;

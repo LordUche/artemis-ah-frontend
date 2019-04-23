@@ -13,6 +13,12 @@ import {
   PROFILE_DETAILS_UPDATING,
   PROFILE_DETAILS_UPDATED,
   PROFILE_DETAILS_UPDATE_ERROR,
+  FOLLOW_ACTION_FOLLOWING_IN_PROGRESS,
+  FOLLOW_ACTION_UNFOLLOWING_IN_PROGRESS,
+  FOLLOW_ACTION_FOLLOWED,
+  FOLLOW_ACTION_UNFOLLOWED,
+  FOLLOW_ACTION_FOLLOW_FAILED,
+  FOLLOW_ACTION_UNFOLLOW_FAILED,
   PROFILE_RESET_EDIT_STATE,
   PROFILE_RESET,
 } from '../actionTypes';
@@ -65,6 +71,7 @@ export const getInitialState = () => ({
     }
   },
   editState: CONTENT_STATE_DEFAULT,
+  followActionWorking: false,
 });
 
 export default (state = getInitialState(), { type, data }) => {
@@ -153,6 +160,24 @@ export default (state = getInitialState(), { type, data }) => {
       return newState;
     case PROFILE_DETAILS_UPDATE_ERROR:
       newState.editState = CONTENT_STATE_UPDATE_FAILED;
+      return newState;
+
+    // User profile follow/unfollow action
+    case FOLLOW_ACTION_FOLLOWING_IN_PROGRESS:
+    case FOLLOW_ACTION_UNFOLLOWING_IN_PROGRESS:
+      newState.followActionWorking = true;
+      return newState;
+    case FOLLOW_ACTION_FOLLOWED:
+      newState.user.isFollowing = true;
+      newState.followActionWorking = false;
+      return newState;
+    case FOLLOW_ACTION_UNFOLLOWED:
+      newState.user.isFollowing = false;
+      newState.followActionWorking = false;
+      return newState;
+    case FOLLOW_ACTION_FOLLOW_FAILED:
+    case FOLLOW_ACTION_UNFOLLOW_FAILED:
+      newState.followActionWorking = false;
       return newState;
 
     // User profile edit state
