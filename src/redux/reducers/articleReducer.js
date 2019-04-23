@@ -3,6 +3,8 @@ import {
   CREATE_ARTICLE_ERROR,
   CLEAR_ARTICLE_ERROR,
   PUBLISHING_ARTICLE,
+  GET_ARTICLES,
+  GET_ARTICLES_ERROR,
   GETTING_ARTICLE,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE
@@ -10,6 +12,8 @@ import {
 
 export const initialState = {
   articleData: {},
+  articles: [],
+  loading: true,
   errors: {},
   isPublishing: false,
   isGetting: false,
@@ -24,6 +28,18 @@ export const initialState = {
  */
 const articleReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case GET_ARTICLES:
+      return {
+        ...state,
+        articles: payload,
+        loading: false
+      };
+    case GET_ARTICLES_ERROR:
+      return {
+        ...state,
+        errors: payload,
+        loading: false
+      };
     case CREATE_ARTICLE:
       return {
         ...state,
