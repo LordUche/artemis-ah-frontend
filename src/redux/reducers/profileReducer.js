@@ -89,6 +89,7 @@ export default (state = getInitialState(), { type, data }) => {
         contentState: CONTENT_STATE_FETCHED,
       };
 
+      newState.tabContent[TAB_ARTICLES].count = data.totalArticles;
       newState.tabContent[TAB_FOLLOWING].count = data.followingStats.following;
       newState.tabContent[TAB_FOLLOWERS].count = data.followingStats.followers;
 
