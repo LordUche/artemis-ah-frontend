@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { object as objectProp, func as funcProp } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Pagination from '../components/Pagination';
 import {
   fetchUserDetails,
   fetchUserArticles,
@@ -10,7 +11,7 @@ import {
   fetchUserFollowing,
   updateUserDetails,
   resetEditState,
-  resetProfile,
+  resetProfile
 } from '../redux/actions/profileActions';
 import Template from '../components/Template';
 import ArticleItem from '../components/ArticleItem';
@@ -29,14 +30,14 @@ import {
   CONTENT_STATE_FETCHING,
   CONTENT_STATE_FETCHING_FAILED,
   CONTENT_STATE_UPDATING,
-  CONTENT_STATE_UPDATED,
+  CONTENT_STATE_UPDATED
 } from '../constants/profileConstants';
 
 /**
  * @class ProfilePage
  * @description Component for profile page
  */
-class ProfilePage extends Component {
+export class ProfileView extends Component {
   /**
    * @param {object} props Props
    */
@@ -47,6 +48,7 @@ class ProfilePage extends Component {
       editMode: false,
       activeTab: TAB_ARTICLES,
       selectedImage: null,
+      currentPage: 1
     };
   }
 
@@ -55,13 +57,11 @@ class ProfilePage extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
-    const {
-      match, user, dispatch
-    } = this.props;
+    const { match, user, dispatch } = this.props;
 
     dispatch(resetProfile());
 
-    const viewingUsername = (match.params.username || user.username);
+    const viewingUsername = match.params.username || user.username;
     fetchUserDetails(viewingUsername, user.authToken, dispatch);
   }
 
@@ -86,17 +86,16 @@ class ProfilePage extends Component {
    * @returns {undefined}
    */
   componentDidUpdate(prevProps) {
-    const {
-      match, user, dispatch
-    } = this.props;
+    const { match, user, dispatch } = this.props;
 
-    const currentUsernameToView = (match.params.username || user.username);
-    if (prevProps.profile.user.username
+    const currentUsernameToView = match.params.username || user.username;
+    if (
+      prevProps.profile.user.username
       && currentUsernameToView !== prevProps.profile.user.username
     ) {
       dispatch(resetProfile());
 
-      const viewingUsername = (match.params.username || user.username);
+      const viewingUsername = match.params.username || user.username;
       fetchUserDetails(viewingUsername, user.authToken, dispatch);
     }
   }
@@ -109,7 +108,7 @@ class ProfilePage extends Component {
    */
   onTabClick(tab, event) {
     this.setState({
-      activeTab: tab,
+      activeTab: tab
     });
 
     event.preventDefault();
@@ -125,9 +124,9 @@ class ProfilePage extends Component {
     this.showSelectedImage(image);
 
     this.setState({
-      selectedImage: image,
+      selectedImage: image
     });
-  }
+  };
 
   /**
    * @returns {Node} The view for the users details.
@@ -146,7 +145,7 @@ class ProfilePage extends Component {
     if (user.contentState === CONTENT_STATE_FETCHED) {
       const aboutProps = {
         className: 'profile-section__blue-bg__data__about',
-        'data-gramm_editor': 'false',
+        'data-gramm_editor': 'false'
       };
       if (editMode) {
         aboutProps.className += ` ${aboutProps.className}--edit`;
@@ -176,7 +175,9 @@ class ProfilePage extends Component {
             <img
               src={user.profilePic}
               alt={user.fullname}
-              ref={(ref) => { this.profileImgElement = ref; }}
+              ref={(ref) => {
+                this.profileImgElement = ref;
+              }}
             />
             {this.getProfilePictureEditOverlay()}
           </div>
@@ -185,7 +186,9 @@ class ProfilePage extends Component {
             <div className="profile-section__blue-bg__data__username">{`@${user.username}`}</div>
             <div
               {...aboutProps}
-              ref={(ref) => { this.aboutUserElement = ref; }}
+              ref={(ref) => {
+                this.aboutUserElement = ref;
+              }}
             >
               {user.about}
             </div>
@@ -215,16 +218,20 @@ class ProfilePage extends Component {
     return (
       <div className="profile-section__blue-bg__picture-section__edit-wrapper">
         {profile.editState !== CONTENT_STATE_UPDATING && (
-        <div className="profile-section__blue-bg__picture-section__edit-wrapper__inner">
-          <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser">
-            <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner">
-              <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner__btn">
-                <i className="fa fa-camera" />
+          <div className="profile-section__blue-bg__picture-section__edit-wrapper__inner">
+            <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser">
+              <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner">
+                <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner__btn">
+                  <i className="fa fa-camera" />
+                </span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={event => this.onImageSelected(event)}
+                />
               </span>
-              <input type="file" accept="image/*" onChange={event => this.onImageSelected(event)} />
             </span>
-          </span>
-        </div>
+          </div>
         )}
       </div>
     );
@@ -244,7 +251,7 @@ class ProfilePage extends Component {
 
         if (editMode) {
           const saveBtnProps = {
-            btnText: 'Save Changes',
+            btnText: 'Save Changes'
           };
           if (profile.editState === CONTENT_STATE_UPDATING) {
             saveBtnProps.btnText = 'Updating ...';
@@ -265,7 +272,14 @@ class ProfilePage extends Component {
       );
     }
 
-    return <Button onClick={() => { window.location = '/'; }} btnText="Log In to Follow" />;
+    return (
+      <Button
+        onClick={() => {
+          window.location = '/';
+        }}
+        btnText="Log In to Follow"
+      />
+    );
   }
 
   /**
@@ -297,11 +311,17 @@ class ProfilePage extends Component {
               className={className}
             >
               <span className="profile-section__body__tab-container__tab__inner">
-                <span className="profile-section__body__tab-container__tab__inner__icon"><i className={`fa ${tabData.icon} fa-2x`} /></span>
+                <span className="profile-section__body__tab-container__tab__inner__icon">
+                  <i className={`fa ${tabData.icon} fa-2x`} />
+                </span>
                 <span className="profile-section__body__tab-container__tab__inner__body">
-                  <span className="profile-section__body__tab-container__tab__inner__body__num">{tabData.count}</span>
+                  <span className="profile-section__body__tab-container__tab__inner__body__num">
+                    {tabData.count}
+                  </span>
                   <br />
-                  <span className="profile-section__body__tab-container__tab__inner__body__label">{tabData.menuLabel}</span>
+                  <span className="profile-section__body__tab-container__tab__inner__body__label">
+                    {tabData.menuLabel}
+                  </span>
                 </span>
               </span>
             </a>
@@ -341,7 +361,9 @@ class ProfilePage extends Component {
         <div className="no-result">
           <div className="no-result__msg">You don&apos;t have any article.</div>
           <div className="no-result__link">
-            <Link to="/create-article" className="ah-btn">Create an Article</Link>
+            <Link to="/create-article" className="ah-btn">
+              Create an Article
+            </Link>
           </div>
         </div>
       );
@@ -351,7 +373,7 @@ class ProfilePage extends Component {
       <div className="no-result">
         {profile.user.fullname.split(' ')[0]}
         {' '}
-        does not have any article.
+does not have any article.
       </div>
     );
   }
@@ -376,7 +398,9 @@ class ProfilePage extends Component {
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
       content = (
         <BodyError
-          onRetry={() => { fetchUserArticles(profile.user.username, dispatch); }}
+          onRetry={() => {
+            fetchUserArticles(profile.user.username, dispatch);
+          }}
         />
       );
     } else if (contentState === CONTENT_STATE_FETCHED) {
@@ -386,11 +410,11 @@ class ProfilePage extends Component {
         content = articles.map((article, index) => (
           <ArticleItem
             key={index.toString()}
-            tag={(article.Tag ? article.Tag.name : 'no tag')}
+            tag={article.Tag ? article.Tag.name : 'no tag'}
             title={article.title}
             description={article.description}
             slug={article.slug}
-            coverUrl={(article.coverUrl || '')}
+            coverUrl={article.coverUrl || ''}
             rating={article.rating}
             readTime={article.readTime.text}
             author={article.User.username}
@@ -423,7 +447,7 @@ class ProfilePage extends Component {
       <div className="no-result">
         {profile.user.fullname.split(' ')[0]}
         {' '}
-        does not have any follower
+does not have any follower
       </div>
     );
   }
@@ -448,7 +472,9 @@ class ProfilePage extends Component {
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
       content = (
         <BodyError
-          onRetry={() => { fetchUserFollowers(profile.user.username, dispatch); }}
+          onRetry={() => {
+            fetchUserFollowers(profile.user.username, dispatch);
+          }}
         />
       );
     } else if (contentState === CONTENT_STATE_FETCHED) {
@@ -472,7 +498,7 @@ class ProfilePage extends Component {
     let title = 'Your';
     if (!user.isLoggedIn || (user.isLoggedIn && profile.user.username !== user.username)) {
       [title] = profile.user.fullname.split(' ');
-      title += (title.substr(-1) === 's' ? "'" : "'s");
+      title += title.substr(-1) === 's' ? "'" : "'s";
     }
     title += ' Followers';
 
@@ -486,16 +512,14 @@ class ProfilePage extends Component {
     const { user, profile } = this.props;
 
     if (user.isLoggedIn && profile.user.username === user.username) {
-      return (
-        <div className="no-result">You are not following anyone.</div>
-      );
+      return <div className="no-result">You are not following anyone.</div>;
     }
 
     return (
       <div className="no-result">
         {profile.user.fullname.split(' ')[0]}
         {' '}
-        is not following anyone.
+is not following anyone.
       </div>
     );
   }
@@ -520,7 +544,9 @@ class ProfilePage extends Component {
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
       content = (
         <BodyError
-          onRetry={() => { fetchUserFollowing(profile.user.username, dispatch); }}
+          onRetry={() => {
+            fetchUserFollowing(profile.user.username, dispatch);
+          }}
         />
       );
     } else if (contentState === CONTENT_STATE_FETCHED) {
@@ -547,6 +573,42 @@ class ProfilePage extends Component {
 
     return this.bodyTemplate(title, <div className="user-list">{content}</div>);
   }
+
+  /**
+   * @method handlePagination
+   * @description Handles pagination
+   * @param {object} event React synthetic object
+   * @returns {undefined}
+   */
+  handlePagination = (event) => {
+    const { profile, dispatch } = this.props;
+    const pageToDisplay = Number(event.currentTarget.dataset.page);
+    const { tabContent } = profile;
+    const { totalArticles, limit } = tabContent[TAB_ARTICLES];
+    const numberOfPages = Math.ceil(totalArticles / limit);
+    event.preventDefault();
+    const { id } = event.target;
+    switch (id) {
+      case 'first-page':
+        this.setState({ currentPage: 1 });
+        break;
+      case 'last-page':
+        this.setState({ currentPage: numberOfPages });
+        break;
+      case 'next-page':
+        this.setState({
+          currentPage: pageToDisplay <= numberOfPages ? pageToDisplay : numberOfPages
+        });
+        break;
+      case 'previous-page':
+        this.setState({ currentPage: pageToDisplay > 1 ? pageToDisplay : 1 });
+        break;
+      default:
+        this.setState({ currentPage: 1 });
+        break;
+    }
+    fetchUserArticles(profile.user.username, dispatch, pageToDisplay);
+  };
 
   /**
    * @param {string} title Title of current tab content
@@ -593,12 +655,7 @@ class ProfilePage extends Component {
 
     const { selectedImage } = this.state;
 
-    updateUserDetails(
-      user.authToken,
-      this.aboutUserElement.innerText,
-      selectedImage,
-      dispatch,
-    );
+    updateUserDetails(user.authToken, this.aboutUserElement.innerText, selectedImage, dispatch);
   }
 
   /**
@@ -609,7 +666,7 @@ class ProfilePage extends Component {
   shouldRedirectToHome() {
     const { user, match } = this.props;
 
-    return (!user.isLoggedIn && !match.params.username);
+    return !user.isLoggedIn && !match.params.username;
   }
 
   /**
@@ -622,15 +679,15 @@ class ProfilePage extends Component {
     }
 
     const { profile } = this.props;
-
-    const { user } = profile;
+    const { currentPage } = this.state;
+    const { user, tabContent } = profile;
+    const { totalArticles, limit } = tabContent[TAB_ARTICLES];
+    const numberOfPages = Math.ceil(totalArticles / limit);
 
     return user.contentState === CONTENT_STATE_FETCHING_FAILED ? (
       <Template>
         <div className="main-content-section">
-          <BodyError
-            onRetry={() => window.location.reload()}
-          />
+          <BodyError onRetry={() => window.location.reload()} />
         </div>
       </Template>
     ) : (
@@ -646,17 +703,24 @@ class ProfilePage extends Component {
               {user.contentState === CONTENT_STATE_FETCHED && this.getProfileBody()}
             </div>
           </div>
+          {numberOfPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              numberOfPages={numberOfPages}
+              handlePagination={this.handlePagination}
+            />
+          )}
         </div>
       </Template>
     );
   }
 }
 
-ProfilePage.propTypes = {
+ProfileView.propTypes = {
   match: objectProp.isRequired,
   user: objectProp.isRequired,
   profile: objectProp.isRequired,
-  dispatch: funcProp.isRequired,
+  dispatch: funcProp.isRequired
 };
 
 /**
@@ -670,10 +734,10 @@ const state2props = (state) => {
     user: {
       isLoggedIn: auth.isLoggedIn,
       authToken: auth.token,
-      username: user.username,
+      username: user.username
     },
-    profile,
+    profile
   };
 };
 
-export default connect(state2props)(ProfilePage);
+export default connect(state2props)(ProfileView);

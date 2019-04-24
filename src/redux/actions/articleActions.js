@@ -18,16 +18,17 @@ import {
 /**
  * @method GetArticles
  * @description Method to get all articles
+ * @param {number} pageNo Page number
  * @returns {object} Fetched articles
  */
-const getAllArticles = async () => {
+const getAllArticles = async (pageNo = 1) => {
   try {
-    const response = await get(`${BASE_URL}/articles`);
-    const { articles } = response.data;
+    const response = await get(`${BASE_URL}/articles?page=${pageNo}`);
+    const { articles, total, limit } = response.data;
 
     return {
       type: GET_ARTICLES,
-      payload: articles
+      payload: { articles, limit, total }
     };
   } catch (error) {
     return {
@@ -72,7 +73,8 @@ const createArticleAction = async (articleDetails) => {
   try {
     const request = await post(`${BASE_URL}/articles`, articleDetails, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken')}`
+        Authorization: `Bearer ${localStorage.getItem('authorsHavenToken')
+          || sessionStorage.getItem('authorsHavenToken')}`
       }
     });
 
@@ -127,7 +129,7 @@ const getArticleAction = async (articleSlug, token) => {
       payload: gottenArticle
     };
   } catch (error) {
-    const networkErrorResponse = { message: 'Can\'t get Article right now, please try again later' };
+    const networkErrorResponse = { message: "Can't get Article right now, please try again later" };
     return {
       type: ERROR_GETTING_ARTICLE,
       payload: error.response ? error.response.data : networkErrorResponse

@@ -143,6 +143,7 @@ describe('Hero hamburger menu', () => {
   const mockSmoothScrollListener = jest.fn();
   const hero = mount(
     <Hero
+      isLoggedIn
       showLoginModal={false}
       hideLoginModal={mockHideLoginModal}
       revealLoginModal={mockRevealLoginModal}

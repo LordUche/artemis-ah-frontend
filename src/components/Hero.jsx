@@ -134,7 +134,7 @@ class Hero extends Component {
             <button
               className="btn btn-write"
               type="button"
-              onClick={() => history.push('./create-article')}
+              onClick={isLoggedIn ? () => history.push('./create-article') : revealLoginModal}
             >
               Start Writing
             </button>
