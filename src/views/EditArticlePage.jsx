@@ -2,45 +2,38 @@ import React, { Fragment, Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  func, arrayOf, object, objectOf, bool, string
-} from 'prop-types';
+import { func, bool, object as objectProp } from 'prop-types';
 import Dropzone from 'react-dropzone';
 import dotenv from 'dotenv';
-import Select from 'react-select';
-import InputField from '../components/InputField';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import TopNavBar from '../components/TopNav';
-import icon from '../assets/img/add-image.svg';
-import {
-  fetchTagsAction,
-  createArticleAction,
-  clearErrorsAction,
-  publishingArticleAction
-} from '../redux/actions/articleActions';
+import { publishingArticleAction, saveEditedArticleAction } from '../redux/actions/articleActions';
 import HelperUtils from '../utils/helperUtils';
 
 dotenv.config();
 
 /**
- * @class CreateArticle
+ * @class EditArticle
  * @description The create article component
  */
-export class CreateArticlePage extends Component {
+export class EditArticlePage extends Component {
   state = {
     imageUploadFailed: false,
     imagePreview: '',
     charactersCount: 1000,
     bodyWordCount: 0,
     readingTime: 0,
+    showDescriptionCount: false,
+    showBodyCount: false,
     cover:
       'https://res.cloudinary.com/artemisah/image/upload/v1553005105/authorshaven/articlePicImage.png',
-    tags: {
-      value: '1',
-      label: 'Food'
-    },
-    tagId: 1
+    tag: '',
+    title: '',
+    description: '',
+    body: '',
+    slug: '',
+    mounted: false
   };
 
   /**
@@ -50,22 +43,26 @@ export class CreateArticlePage extends Component {
    */
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.clearErrorMessages();
-    const { fetchTags } = this.props;
-    fetchTags();
-  }
+    const { mounted } = this.state;
+    const { articleCardData } = this.props;
 
-  /**
-   * @method clearErrorMessages
-   * @description Clears error messages
-   * @returns {undefined}
-   */
-  clearErrorMessages = () => {
-    const { errors, clearErrors } = this.props;
-    if (Object.keys(errors).length < 1) {
-      clearErrors();
+    const {
+      title, description, coverUrl, tag, body, slug
+    } = articleCardData;
+
+    if (!mounted) {
+      this.setState({
+        title,
+        description,
+        cover: coverUrl,
+        imagePreview: coverUrl,
+        tag,
+        body,
+        slug,
+        mounted: true
+      });
     }
-  };
+  }
 
   /**
    * @method handleSubmitForm
@@ -76,26 +73,28 @@ export class CreateArticlePage extends Component {
   handleSubmitForm = async (event) => {
     event.preventDefault();
     const { publishingArticle } = this.props;
-    publishingArticle();
-
     const {
-      formData, tagId, title, body, description
+      formData, title, body, description, slug
     } = this.state;
+
+    publishingArticle();
 
     if (formData) {
       const secureUrl = await HelperUtils.uploadImage(formData);
       this.setState({ cover: secureUrl });
     }
     const { cover } = this.state;
-    const articleDetails = {
+
+    const editedDetails = {
       title,
-      tagId,
       body,
       description,
-      cover
+      cover,
+      slug
     };
-    const { createArticle } = this.props;
-    createArticle(articleDetails);
+
+    const { saveEdited } = this.props;
+    saveEdited(editedDetails);
   };
 
   /**
@@ -106,23 +105,9 @@ export class CreateArticlePage extends Component {
    */
   handleInputChange = (event) => {
     event.preventDefault();
-    this.clearErrorMessages();
     this.setState({
       [event.target.name]: event.target.value
     });
-  };
-
-  /**
-   * @method handleTagChange
-   * @description Handles Tag changes
-   * @param {object} tags - Value object from the react-select
-   * @returns {undefined}
-   */
-  handleTagChange = (tags) => {
-    this.setState({ tags });
-    const tagId = tags.value;
-    this.setState({ tagId });
-    this.clearErrorMessages();
   };
 
   /**
@@ -158,8 +143,9 @@ export class CreateArticlePage extends Component {
    */
   handleImageUpload = (file) => {
     const formData = new FormData();
+    const CLOUDINARY_UPLOAD_PRESET = 'vslx4tc8';
     formData.append('file', file[0]);
-    formData.append('upload_preset', 'vslx4tc8');
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
     this.setState({
       imagePreview: URL.createObjectURL(file[0])
     });
@@ -167,72 +153,84 @@ export class CreateArticlePage extends Component {
   };
 
   /**
+   * @method handleKeyPress
+   * @description Handles image upload to Cloudinary
+   * @returns {undefined}
+   */
+  handleKeyPressI = () => {
+    this.setState({ showDescriptionCount: true });
+  };
+
+  /**
+   * @method handleKeyPressII
+   * @description Handles image upload to Cloudinary
+   * @returns {undefined}
+   */
+  handleKeyPressII = () => {
+    this.setState({ showBodyCount: true });
+  };
+
+  /**
    * @method render
    * @returns {JSX} HTML Markup
    */
   render() {
-    const {
-      tagList, isLoggedIn, errors, isPublishing, newArticleSlug
-    } = this.props;
+    const { isLoggedIn, isPublishing } = this.props;
     const {
       imageUploadFailed,
-      tags: tagsList,
       imagePreview,
       charactersCount,
       bodyWordCount,
-      readingTime
+      readingTime,
+      title,
+      description,
+      tag,
+      body,
+      showDescriptionCount,
+      showBodyCount
     } = this.state;
-    const tags = tagList.map(tag => ({ value: tag.id, label: tag.name }));
+
+    const cardData = localStorage.getItem('cardData');
+    if (!cardData) {
+      return <Redirect to="/profile" />;
+    }
     return !isLoggedIn ? (
       <Redirect to="./" />
     ) : (
       <Fragment>
-        {newArticleSlug && !isPublishing && (<Redirect to={`/article/${newArticleSlug}`} />)}
         <TopNavBar />
-        {!newArticleSlug && (
         <section className="formbox">
           <div className="formbox__header">
-            <h3 className="title">Create Article</h3>
+            <h3 className="title">Edit Article</h3>
           </div>
-          {errors.status === '5XX' && (
-          <p className="server-error">
-              Oops, could not connect to the server at this time, try again.
-          </p>
-          )}
           <form onSubmit={this.handleSubmitForm} className="formbox__fields">
             <div className="formbox__control">
               <label htmlFor="tag">TAG</label>
-              <Select
-                options={tags}
-                onChange={this.handleTagChange}
-                value={tagsList}
-                className="formbox-select-parent"
-                classNamePrefix="formbox-select"
-              />
+              <span className="formbox__control__tag">{tag.toUpperCase()}</span>
             </div>
             <div className="formbox__segment">
               <div className="article-details">
                 <div className="formbox__control">
                   <label htmlFor="title">TITLE</label>
-                  {errors.title && <p className="error-message">{errors.title[0]}</p>}
-                  <InputField
+                  <input
                     id="title"
-                    inputType="text"
-                    inputName="title"
+                    type="text"
+                    name="title"
                     minLength="5"
                     maxLength="200"
                     required
-                    placeHolder="Enter Title"
-                    customClass="formbox__fields--input"
+                    placeholder="Enter Title"
+                    className="formbox__fields--input"
                     onChange={this.handleInputChange}
+                    value={title}
                   />
                 </div>
                 <div className="formbox__control">
                   <label htmlFor="description">DESCRIPTION</label>
-                  {errors.description && <p className="error-message">{errors.description[0]}</p>}
                   <textarea
                     onChange={this.handleInputChange}
                     onKeyUp={this.handleCharacterCount}
+                    onKeyPress={this.handleKeyPressI}
                     id="description"
                     name="description"
                     type="text"
@@ -240,13 +238,16 @@ export class CreateArticlePage extends Component {
                     required
                     minLength="5"
                     maxLength="1000"
+                    value={description}
                   />
                   <div className="word-count">
-                    <strong>{charactersCount}</strong>
+                    {showDescriptionCount && <strong>{charactersCount}</strong>}
                     {' '}
-                    {charactersCount === 1 ? 'character' : 'characters'}
+                    {showDescriptionCount && (
+                      <span>{charactersCount === 1 ? 'character' : 'characters'}</span>
+                    )}
                     {' '}
-left
+                    {showDescriptionCount && <span>left</span>}
                   </div>
                 </div>
               </div>
@@ -263,10 +264,16 @@ left
                       <div {...getRootProps()}>
                         <input {...getInputProps()} />
                         <div className="upload-control">
-                          {!imagePreview && <img className="icon" src={icon} alt="Upload Button" />}
+                          {!imagePreview && (
+                            <img
+                              className="coverURL"
+                              src="../src/assets/img/add-image.svg"
+                              alt="Upload Button"
+                            />
+                          )}
                           {!imagePreview && <p>Click here to add files.</p>}
                           {imagePreview && (
-                          <img className="preview" src={imagePreview} alt="File preview" />
+                            <img className="preview" src={imagePreview} alt="File preview" />
                           )}
                           {imagePreview && <p className="replace-image">Replace image</p>}
                         </div>
@@ -278,40 +285,42 @@ left
             </div>
             <div className="formbox__control">
               <label htmlFor="body">BODY</label>
-              {errors.body && <p className="error-message">{errors.body[0]}</p>}
               <textarea
                 onKeyUp={this.handleReadingTime}
                 onChange={this.handleInputChange}
+                onKeyPress={this.handleKeyPressII}
                 id="body"
                 name="body"
                 type="text"
                 className="formbox__fields--textarea"
                 required
                 minLength="10"
+                value={body}
               />
               <div className="reading-time">
                 <span>
-                  <strong>{bodyWordCount}</strong>
+                  {showBodyCount && <strong>{bodyWordCount}</strong>}
                   {' '}
-                  {bodyWordCount === 1 ? 'word' : 'words'}
+                  {showBodyCount && <span>{bodyWordCount === 1 ? 'word' : 'words'}</span>}
                   {' '}
                 </span>
                 <span>
-                  <strong>{readingTime === 0 ? `${readingTime} mins` : readingTime}</strong>
+                  {showBodyCount && (
+                    <strong>{readingTime === 0 ? `${readingTime} mins` : readingTime}</strong>
+                  )}
                 </span>
               </div>
             </div>
             {imageUploadFailed && <p>Image upload failed, try again</p>}
             <div className="formbox__control">
               <Button
-                btnText={isPublishing ? 'Publishing Article...' : 'Publish'}
+                btnText={isPublishing ? 'Saving Article...' : 'Save'}
                 isDisabled={isPublishing}
                 type="submit"
               />
             </div>
           </form>
         </section>
-        )}
         <Footer />
       </Fragment>
     );
@@ -324,12 +333,10 @@ left
  * @param {callback} dispatch - method to dispatch actions
  * @returns {undefined}
  */
-const matchDispatchToProps = dispatch => bindActionCreators(
+export const matchDispatchToProps = dispatch => bindActionCreators(
   {
-    fetchTags: fetchTagsAction,
-    createArticle: createArticleAction,
-    clearErrors: clearErrorsAction,
-    publishingArticle: publishingArticleAction
+    publishingArticle: publishingArticleAction,
+    saveEdited: saveEditedArticleAction
   },
   dispatch
 );
@@ -340,36 +347,25 @@ const matchDispatchToProps = dispatch => bindActionCreators(
  * @param {object} * - destructured state object
  * @returns {object} - state
  */
-export const mapStateToProps = ({ tags, auth, article }) => {
+export const mapStateToProps = ({ auth, article }) => {
   const { isLoggedIn } = auth;
-  const { tagList } = tags;
-  const { errors, isPublishing, newArticleSlug } = article;
+  const { articleCardData, isPublishing } = article;
   return {
-    tagList,
     isLoggedIn,
-    errors,
     isPublishing,
-    newArticleSlug
+    articleCardData
   };
 };
 
-CreateArticlePage.propTypes = {
+EditArticlePage.propTypes = {
   isLoggedIn: bool.isRequired,
-  fetchTags: func.isRequired,
-  clearErrors: func.isRequired,
   publishingArticle: func.isRequired,
-  tagList: arrayOf(object).isRequired,
-  createArticle: func.isRequired,
-  errors: objectOf(arrayOf(string)),
+  saveEdited: func.isRequired,
   isPublishing: bool.isRequired,
-  newArticleSlug: string.isRequired
-};
-
-CreateArticlePage.defaultProps = {
-  errors: {}
+  articleCardData: objectProp.isRequired
 };
 
 export default connect(
   mapStateToProps,
   matchDispatchToProps
-)(CreateArticlePage);
+)(EditArticlePage);

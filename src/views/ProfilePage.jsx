@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
-import { object as objectProp, func as funcProp } from 'prop-types';
+import { toast } from 'react-toastify';
+import { object as objectProp, func as funcProp, bool } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
   fetchUserDetails,
@@ -10,10 +12,16 @@ import {
   fetchUserFollowing,
   updateUserDetails,
   resetEditState,
-  resetProfile,
+  resetProfile
 } from '../redux/actions/profileActions';
+import {
+  closeArticleDeleteModalAction,
+  deleteArticleAction
+} from '../redux/actions/articleActions';
+import bin from '../assets/img/bin.png';
+import Modal from '../components/Modal';
 import Template from '../components/Template';
-import ArticleItem from '../components/ArticleItem';
+import ArticleItemComp from '../components/ArticleItem';
 import UserListItem from '../components/UserListItem';
 import Button from '../components/Button';
 import BodyError from '../components/PageContentLoadError';
@@ -29,14 +37,15 @@ import {
   CONTENT_STATE_FETCHING,
   CONTENT_STATE_FETCHING_FAILED,
   CONTENT_STATE_UPDATING,
-  CONTENT_STATE_UPDATED,
+  CONTENT_STATE_UPDATED
 } from '../constants/profileConstants';
+import notifyUser from '../utils/Toast';
 
 /**
  * @class ProfilePage
  * @description Component for profile page
  */
-class ProfilePage extends Component {
+export class ProfilePage extends Component {
   /**
    * @param {object} props Props
    */
@@ -46,7 +55,7 @@ class ProfilePage extends Component {
     this.state = {
       editMode: false,
       activeTab: TAB_ARTICLES,
-      selectedImage: null,
+      selectedImage: null
     };
   }
 
@@ -55,13 +64,11 @@ class ProfilePage extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
-    const {
-      match, user, dispatch
-    } = this.props;
+    const { match, user, dispatch } = this.props;
 
     dispatch(resetProfile());
 
-    const viewingUsername = (match.params.username || user.username);
+    const viewingUsername = match.params.username || user.username;
     fetchUserDetails(viewingUsername, user.authToken, dispatch);
   }
 
@@ -86,17 +93,16 @@ class ProfilePage extends Component {
    * @returns {undefined}
    */
   componentDidUpdate(prevProps) {
-    const {
-      match, user, dispatch
-    } = this.props;
+    const { match, user, dispatch } = this.props;
 
-    const currentUsernameToView = (match.params.username || user.username);
-    if (prevProps.profile.user.username
+    const currentUsernameToView = match.params.username || user.username;
+    if (
+      prevProps.profile.user.username
       && currentUsernameToView !== prevProps.profile.user.username
     ) {
       dispatch(resetProfile());
 
-      const viewingUsername = (match.params.username || user.username);
+      const viewingUsername = match.params.username || user.username;
       fetchUserDetails(viewingUsername, user.authToken, dispatch);
     }
   }
@@ -109,7 +115,7 @@ class ProfilePage extends Component {
    */
   onTabClick(tab, event) {
     this.setState({
-      activeTab: tab,
+      activeTab: tab
     });
 
     event.preventDefault();
@@ -125,9 +131,9 @@ class ProfilePage extends Component {
     this.showSelectedImage(image);
 
     this.setState({
-      selectedImage: image,
+      selectedImage: image
     });
-  }
+  };
 
   /**
    * @returns {Node} The view for the users details.
@@ -146,7 +152,7 @@ class ProfilePage extends Component {
     if (user.contentState === CONTENT_STATE_FETCHED) {
       const aboutProps = {
         className: 'profile-section__blue-bg__data__about',
-        'data-gramm_editor': 'false',
+        'data-gramm_editor': 'false'
       };
       if (editMode) {
         aboutProps.className += ` ${aboutProps.className}--edit`;
@@ -176,7 +182,9 @@ class ProfilePage extends Component {
             <img
               src={user.profilePic}
               alt={user.fullname}
-              ref={(ref) => { this.profileImgElement = ref; }}
+              ref={(ref) => {
+                this.profileImgElement = ref;
+              }}
             />
             {this.getProfilePictureEditOverlay()}
           </div>
@@ -185,7 +193,9 @@ class ProfilePage extends Component {
             <div className="profile-section__blue-bg__data__username">{`@${user.username}`}</div>
             <div
               {...aboutProps}
-              ref={(ref) => { this.aboutUserElement = ref; }}
+              ref={(ref) => {
+                this.aboutUserElement = ref;
+              }}
             >
               {user.about}
             </div>
@@ -215,16 +225,20 @@ class ProfilePage extends Component {
     return (
       <div className="profile-section__blue-bg__picture-section__edit-wrapper">
         {profile.editState !== CONTENT_STATE_UPDATING && (
-        <div className="profile-section__blue-bg__picture-section__edit-wrapper__inner">
-          <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser">
-            <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner">
-              <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner__btn">
-                <i className="fa fa-camera" />
+          <div className="profile-section__blue-bg__picture-section__edit-wrapper__inner">
+            <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser">
+              <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner">
+                <span className="profile-section__blue-bg__picture-section__edit-wrapper__inner__image-chooser__inner__btn">
+                  <i className="fa fa-camera" />
+                </span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={event => this.onImageSelected(event)}
+                />
               </span>
-              <input type="file" accept="image/*" onChange={event => this.onImageSelected(event)} />
             </span>
-          </span>
-        </div>
+          </div>
         )}
       </div>
     );
@@ -244,7 +258,7 @@ class ProfilePage extends Component {
 
         if (editMode) {
           const saveBtnProps = {
-            btnText: 'Save Changes',
+            btnText: 'Save Changes'
           };
           if (profile.editState === CONTENT_STATE_UPDATING) {
             saveBtnProps.btnText = 'Updating ...';
@@ -259,13 +273,20 @@ class ProfilePage extends Component {
       }
 
       return profile.user.isFollowing ? (
-        <Button btnText="Unfollow" onClick={() => alert('This is a separate feature story.')} />
+        <Button btnText="Unfollow" onClick={() => 'This is a separate feature story.'} />
       ) : (
-        <Button btnText="Follow" onClick={() => alert('This is a separate feature story.')} />
+        <Button btnText="Follow" onClick={() => 'This is a separate feature story.'} />
       );
     }
 
-    return <Button onClick={() => { window.location = '/'; }} btnText="Log In to Follow" />;
+    return (
+      <Button
+        onClick={() => {
+          window.location = '/';
+        }}
+        btnText="Log In to Follow"
+      />
+    );
   }
 
   /**
@@ -297,11 +318,17 @@ class ProfilePage extends Component {
               className={className}
             >
               <span className="profile-section__body__tab-container__tab__inner">
-                <span className="profile-section__body__tab-container__tab__inner__icon"><i className={`fa ${tabData.icon} fa-2x`} /></span>
+                <span className="profile-section__body__tab-container__tab__inner__icon">
+                  <i className={`fa ${tabData.icon} fa-2x`} />
+                </span>
                 <span className="profile-section__body__tab-container__tab__inner__body">
-                  <span className="profile-section__body__tab-container__tab__inner__body__num">{tabData.count}</span>
+                  <span className="profile-section__body__tab-container__tab__inner__body__num">
+                    {tabData.count}
+                  </span>
                   <br />
-                  <span className="profile-section__body__tab-container__tab__inner__body__label">{tabData.menuLabel}</span>
+                  <span className="profile-section__body__tab-container__tab__inner__body__label">
+                    {tabData.menuLabel}
+                  </span>
                 </span>
               </span>
             </a>
@@ -341,7 +368,9 @@ class ProfilePage extends Component {
         <div className="no-result">
           <div className="no-result__msg">You don&apos;t have any article.</div>
           <div className="no-result__link">
-            <Link to="/create-article" className="ah-btn">Create an Article</Link>
+            <Link to="/create-article" className="ah-btn">
+              Create an Article
+            </Link>
           </div>
         </div>
       );
@@ -351,7 +380,7 @@ class ProfilePage extends Component {
       <div className="no-result">
         {profile.user.fullname.split(' ')[0]}
         {' '}
-        does not have any article.
+does not have any article.
       </div>
     );
   }
@@ -360,11 +389,12 @@ class ProfilePage extends Component {
    * @returns {Node} The view for articles the user has publishes.
    */
   getArticles() {
-    const { profile, dispatch, user } = this.props;
+    const {
+      profile, dispatch, history, user
+    } = this.props;
     const { tabContent } = profile;
-
+    const { push } = history;
     const { articles, contentState } = tabContent[TAB_ARTICLES];
-
     if (contentState === CONTENT_STATE_DEFAULT) {
       fetchUserArticles(profile.user.username, dispatch);
     }
@@ -376,7 +406,9 @@ class ProfilePage extends Component {
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
       content = (
         <BodyError
-          onRetry={() => { fetchUserArticles(profile.user.username, dispatch); }}
+          onRetry={() => {
+            fetchUserArticles(profile.user.username, dispatch);
+          }}
         />
       );
     } else if (contentState === CONTENT_STATE_FETCHED) {
@@ -384,16 +416,18 @@ class ProfilePage extends Component {
         content = this.getNoArticleFoundMessage();
       } else {
         content = articles.map((article, index) => (
-          <ArticleItem
+          <ArticleItemComp
             key={index.toString()}
-            tag={(article.Tag ? article.Tag.name : 'no tag')}
+            tag={article.Tag ? article.Tag.name : 'no tag'}
             title={article.title}
+            body={article.body}
             description={article.description}
             slug={article.slug}
-            coverUrl={(article.coverUrl || '')}
+            coverUrl={article.coverUrl || ''}
             rating={article.rating}
             readTime={article.readTime.text}
             author={article.User.username}
+            push={push}
           />
         ));
       }
@@ -423,7 +457,7 @@ class ProfilePage extends Component {
       <div className="no-result">
         {profile.user.fullname.split(' ')[0]}
         {' '}
-        does not have any follower
+does not have any follower
       </div>
     );
   }
@@ -448,7 +482,9 @@ class ProfilePage extends Component {
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
       content = (
         <BodyError
-          onRetry={() => { fetchUserFollowers(profile.user.username, dispatch); }}
+          onRetry={() => {
+            fetchUserFollowers(profile.user.username, dispatch);
+          }}
         />
       );
     } else if (contentState === CONTENT_STATE_FETCHED) {
@@ -472,7 +508,7 @@ class ProfilePage extends Component {
     let title = 'Your';
     if (!user.isLoggedIn || (user.isLoggedIn && profile.user.username !== user.username)) {
       [title] = profile.user.fullname.split(' ');
-      title += (title.substr(-1) === 's' ? "'" : "'s");
+      title += title.substr(-1) === 's' ? "'" : "'s";
     }
     title += ' Followers';
 
@@ -486,16 +522,14 @@ class ProfilePage extends Component {
     const { user, profile } = this.props;
 
     if (user.isLoggedIn && profile.user.username === user.username) {
-      return (
-        <div className="no-result">You are not following anyone.</div>
-      );
+      return <div className="no-result">You are not following anyone.</div>;
     }
 
     return (
       <div className="no-result">
         {profile.user.fullname.split(' ')[0]}
         {' '}
-        is not following anyone.
+is not following anyone.
       </div>
     );
   }
@@ -520,7 +554,9 @@ class ProfilePage extends Component {
     } else if (contentState === CONTENT_STATE_FETCHING_FAILED) {
       content = (
         <BodyError
-          onRetry={() => { fetchUserFollowing(profile.user.username, dispatch); }}
+          onRetry={() => {
+            fetchUserFollowing(profile.user.username, dispatch);
+          }}
         />
       );
     } else if (contentState === CONTENT_STATE_FETCHED) {
@@ -593,12 +629,7 @@ class ProfilePage extends Component {
 
     const { selectedImage } = this.state;
 
-    updateUserDetails(
-      user.authToken,
-      this.aboutUserElement.innerText,
-      selectedImage,
-      dispatch,
-    );
+    updateUserDetails(user.authToken, this.aboutUserElement.innerText, selectedImage, dispatch);
   }
 
   /**
@@ -609,7 +640,7 @@ class ProfilePage extends Component {
   shouldRedirectToHome() {
     const { user, match } = this.props;
 
-    return (!user.isLoggedIn && !match.params.username);
+    return !user.isLoggedIn && !match.params.username;
   }
 
   /**
@@ -621,22 +652,46 @@ class ProfilePage extends Component {
       return <Redirect to="/" />;
     }
 
-    const { profile } = this.props;
+    if (localStorage.getItem('reload')) {
+      localStorage.removeItem('reload');
+      notifyUser(toast(localStorage.getItem('articleEditMessage')));
+      localStorage.removeItem('articleEditMessage');
+    }
+
+    const {
+      profile, isDeleteModalOpen, closeDeleteModal, deleteArticle
+    } = this.props;
 
     const { user } = profile;
 
     return user.contentState === CONTENT_STATE_FETCHING_FAILED ? (
       <Template>
         <div className="main-content-section">
-          <BodyError
-            onRetry={() => window.location.reload()}
-          />
+          <BodyError onRetry={() => window.location.reload()} />
         </div>
       </Template>
     ) : (
       <Template>
         <div className="profile-section main-content-section">
           <div className="profile-section__blue-bg">
+            {isDeleteModalOpen && (
+              <Modal
+                onClose={() => closeDeleteModal()}
+                modalHeader="Are you sure?"
+                customClass="delete_confirmation"
+              >
+                <Button
+                  imgSrc={bin}
+                  btnText="Delete Article"
+                  imgCustomClass="delete__article__btn__icon"
+                  customClass="delete__article__btn"
+                  onClick={async () => {
+                    await closeDeleteModal();
+                    deleteArticle(localStorage.getItem('deleteSlug'));
+                  }}
+                />
+              </Modal>
+            )}
             <div className="profile-section__container-center">{this.getUserDetailsView()}</div>
           </div>
 
@@ -657,7 +712,26 @@ ProfilePage.propTypes = {
   user: objectProp.isRequired,
   profile: objectProp.isRequired,
   dispatch: funcProp.isRequired,
+  history: objectProp.isRequired,
+  isDeleteModalOpen: bool.isRequired,
+  closeDeleteModal: funcProp.isRequired,
+  deleteArticle: funcProp.isRequired
 };
+
+/**
+ * @method mapDispatchToProps
+ * @description - Map dispatch actions to component props
+ * @param {callback} dispatch - method to dispatch actions
+ * @returns {undefined}
+ */
+const matchDispatchToProps = dispatch => bindActionCreators(
+  {
+    closeDeleteModal: closeArticleDeleteModalAction,
+    dispatch,
+    deleteArticle: deleteArticleAction
+  },
+  dispatch
+);
 
 /**
  * @description Maps redux state to the component's props.
@@ -665,15 +739,21 @@ ProfilePage.propTypes = {
  * @return {object} Props for ProfilePage component.
  */
 const state2props = (state) => {
-  const { auth, user, profile } = state;
+  const {
+    auth, user, profile, article
+  } = state;
   return {
     user: {
       isLoggedIn: auth.isLoggedIn,
       authToken: auth.token,
-      username: user.username,
+      username: user.username
     },
     profile,
+    isDeleteModalOpen: article.confirmationModal
   };
 };
 
-export default connect(state2props)(ProfilePage);
+export default connect(
+  state2props,
+  matchDispatchToProps
+)(ProfilePage);

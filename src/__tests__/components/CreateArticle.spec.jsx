@@ -1,11 +1,15 @@
+
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxPromise from 'redux-promise';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { ArticleItem } from '../../components/ArticleItem';
 import { CreateArticlePage, mapStateToProps } from '../../views/CreateArticle';
 import reducers from '../../redux/reducers';
+
+const createArticleInstance = new CreateArticlePage();
 
 const store = createStore(reducers, applyMiddleware(ReduxPromise));
 describe('Create article component', () => {
@@ -186,5 +190,52 @@ describe('Create article component', () => {
     );
     expect(createArticle.find('Redirect').exists()).toBe(true);
     expect(createArticle.find('Redirect').prop('to')).toBe('/article/abcd-1');
+  });
+
+  it('should test the onclick event on the edit and delete button', () => {
+    const mockFunc = jest.fn();
+    const articleCard = mount(
+      <Router>
+        <ArticleItem
+          title="xyz"
+          description="xyz"
+          coverUrl="xyz"
+          slug="xyz"
+          tag="xyz"
+          body="xyz"
+          rating="xyz"
+          readTime="xyz"
+          author="xyz"
+          showAuthor="xyz"
+          modifyArticle={mockFunc}
+          push={mockFunc}
+          deleteConfirmation={mockFunc}
+        />
+      </Router>
+    );
+    const editBtn = articleCard.find(
+      '.article-item__body-wrapper__bottom-links__user-actions__edit'
+    );
+    expect(editBtn.exists()).toBe(true);
+    editBtn.simulate('click');
+
+    const deleteBtn = articleCard.find(
+      '.article-item__body-wrapper__bottom-links__user-actions__delete'
+    );
+    expect(deleteBtn.exists()).toBe(true);
+    deleteBtn.simulate('click');
+  });
+
+  it('should mock a file upload', () => {
+    const mockImageData = new File(['image content'], { type: 'image/*' });
+    /**
+     * @description noop
+     * @returns {object} obj
+     */
+    const noOp = () => {};
+    if (typeof window.URL.createObjectURL === 'undefined') {
+      Object.defineProperty(window.URL, 'createObjectURL', { value: noOp });
+    }
+    createArticleInstance.handleImageUpload(mockImageData);
   });
 });

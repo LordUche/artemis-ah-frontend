@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { bool, string } from 'prop-types';
 import { connect } from 'react-redux';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
@@ -62,18 +62,18 @@ class TopNav extends Component {
           <div className="nav-component-container-online1">
             <Logo containerCustomClass="logoContainerClass" logoCustomClass="logoCustomClass" />
             <li>
-              <NavLink to="/create-article">{createArticleIcon(30, 30)}</NavLink>
+              <Link to="/create-article">{createArticleIcon(30, 30)}</Link>
             </li>
           </div>
 
           <ul className="nav-component-container-online2">
             <li>
-              <NavLink to="/explore">Explore &nbsp;</NavLink>
+              <Link to="/explore">Explore &nbsp;</Link>
             </li>
             <li>
-              <NavLink to="/notifications">
+              <Link to="/notifications">
                 {display === 'desktop' ? notificationIcon(20, 20) : notificationIcon(30, 30)}
-              </NavLink>
+              </Link>
             </li>
             <li>
               <UserNavAvatar
