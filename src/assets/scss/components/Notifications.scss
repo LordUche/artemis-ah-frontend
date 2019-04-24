@@ -1,0 +1,116 @@
+.notifications-div-wrapper,
+.modal-div-wrapper {
+  position: fixed;
+  top: 0;
+  background: rgba(255, 255, 255, 0.001);
+  right: 0;
+  z-index: 9000;
+  width: 100vw;
+  height: 100vh;
+}
+
+#notification-triangle,
+#notification-triangle2 {
+  color: rgb(255, 255, 255);
+  font-size: 5em;
+  position: absolute;
+  top: 57px;
+  right: 218px;
+  z-index: 1000;
+  text-shadow: -1px -1px 0 $primary-color, 1px -1px 0 $primary-color, 1px -1px 0 $primary-color, 1px -1px 0 $primary-color;
+}
+
+#notify-div-wrapper {
+  position: relative;
+  right: 0;
+}
+
+.notifications-div {
+  position: absolute;
+  top: 90px;
+  right: 0;
+  z-index: 500;
+  background: white;
+  padding: 10px 20px;
+  border: 1px solid $primary-color;
+  border-radius: 0 0 1em 1em;
+  box-shadow: 1px 1px 10px 1px $primary-color;
+  overflow: scroll;
+  max-height: 400px;
+  background: white;
+}
+
+#notifications-div {
+  box-shadow: inset 0px 11px 8px -10px rgb(255, 255, 255),
+    inset 0px -11px 8px -10px rgb(255, 255, 255);
+}
+
+.notifications-div-item {
+  background: rgb(238, 238, 238);
+  width: 280px;
+  display: flex;
+  padding: 15px 20px 25px;
+  position: relative;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  margin: 20px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+.notificationBellLink {
+  position: relative;
+}
+.notificationBeep {
+  background: #f94a4a;
+  color: white;
+  font-size: 1.2rem;
+  padding: 1px;
+  border-radius: 50%;
+  position: absolute;
+  right: -5px;
+  top: 0;
+  min-width: 20px;
+  text-align: center;
+  border: 1px solid white;
+}
+
+.notifications-div-item:hover {
+  background: rgb(246, 246, 246);
+}
+
+.notifications-div-item-info {
+  color: $primary-color;
+  margin: 0 15px;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.notifications-div-item-info-name {
+  color: #000000;
+}
+
+.notifications-div-item-time {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  font-size: 12px;
+  color: #26335e;
+}
+
+@media (max-width: 768px) {
+  #notification-triangle,
+  #notification-triangle2 {
+    top: 59px;
+    right: 143px;
+  }
+}
+@media (max-width: 400px) {
+  #notification-triangle,
+  #notification-triangle2 {
+    top: 37px;
+    right: 128px;
+  }
+  .notifications-div {
+    top: 70px;
+  }
+}

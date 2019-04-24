@@ -1,8 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
-import { bool, string } from 'prop-types';
+import {
+  bool, string, number, array as arrayProp
+} from 'prop-types';
 import { connect } from 'react-redux';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
+import Notifications from './Notifications';
 import Logo from './logo';
 
 // Components
@@ -21,7 +24,8 @@ class TopNav extends Component {
     menuClassStyleName: 'link-wrapper',
     showResponsiveNav: false,
     showLoginModal: false,
-    showSignUpModal: false
+    showSignUpModal: false,
+    showNotification: false
   };
 
   toggleResponsiveNav = () => {
@@ -29,6 +33,15 @@ class TopNav extends Component {
     this.setState({
       showResponsiveNav: !showResponsiveNav
     });
+  };
+
+  handleNotificationClick = () => {
+    const { showNotification } = this.state;
+    if (showNotification) {
+      this.setState({ showNotification: false });
+    } else {
+      this.setState({ showNotification: true });
+    }
   };
 
   toggleLoginModal = () => {
@@ -53,9 +66,21 @@ class TopNav extends Component {
    */
   renderNavChildren = () => {
     const {
-      display, menuClassStyleName, showResponsiveNav, showLoginModal, showSignUpModal
+      display,
+      menuClassStyleName,
+      showResponsiveNav,
+      showLoginModal,
+      showSignUpModal,
+      showNotification
     } = this.state;
-    const { isLoggedIn, username, image } = this.props;
+    const {
+      isLoggedIn,
+      username,
+      image,
+      hasNewNotifications,
+      notificationNumber,
+      notificationsData
+    } = this.props;
     if (isLoggedIn) {
       return (
         <Fragment>
@@ -71,8 +96,15 @@ class TopNav extends Component {
               <NavLink to="/explore">Explore &nbsp;</NavLink>
             </li>
             <li>
-              <NavLink to="/notifications">
+              <NavLink
+                to="#"
+                onClick={this.handleNotificationClick}
+                className="notificationBellLink"
+              >
                 {display === 'desktop' ? notificationIcon(20, 20) : notificationIcon(30, 30)}
+                {hasNewNotifications && (
+                  <div className="notificationBeep">{notificationNumber}</div>
+                )}
               </NavLink>
             </li>
             <li>
@@ -84,6 +116,29 @@ class TopNav extends Component {
               />
             </li>
           </ul>
+          {showNotification
+            && (notificationsData.length > 0 ? (
+              notificationsData.map((notify, index) => {
+                const key = index;
+                return (
+                  <Notifications
+                    key={key}
+                    message={notify.message}
+                    title={notify.title}
+                    type={notify.type}
+                    url={notify.url}
+                    onClick={this.handleNotificationClick}
+                  />
+                );
+              })
+            ) : (
+              <div id="notify-div-wrapper">
+                <i className="fas fa-caret-up" id="notification-triangle2" />
+                <div className="notifications-div" id="notifications-div">
+                  <span className="notifications-div-item"> You are all caught up :)</span>
+                </div>
+              </div>
+            ))}
         </Fragment>
       );
     }
@@ -107,13 +162,23 @@ class TopNav extends Component {
         <ul className="nav-component-container-offline2">
           <span className={menuClassStyleName}>
             <li className="nav-component-container-offline2_link">
-              <span id="top-nav-login" className="link_lookalike" onClick={this.toggleLoginModal} role="presentation">
+              <span
+                id="top-nav-login"
+                className="link_lookalike"
+                onClick={this.toggleLoginModal}
+                role="presentation"
+              >
                 Login
               </span>
             </li>
             <li className="nav-component-container-offline2_link">
-              <span id="top-nav-signup" className="link_lookalike" onClick={this.toggleSignUpModal} role="presentation">
-               Register
+              <span
+                id="top-nav-signup"
+                className="link_lookalike"
+                onClick={this.toggleSignUpModal}
+                role="presentation"
+              >
+                Register
               </span>
             </li>
             <li className="nav-component-container-offline2_link">
@@ -138,7 +203,7 @@ class TopNav extends Component {
             </li>
             <li className="nav-component-container-offline2_link">
               <span className="link_lookalike" onClick={this.toggleSignUpModal} role="presentation">
-               Register
+                Register
               </span>
             </li>
             <li className="nav-component-container-offline2_link">
@@ -161,7 +226,9 @@ class TopNav extends Component {
     const { navID } = this.props;
     return (
       <header className="ah-header">
-        <nav className="top-nav" id={`${navID}`}>{this.renderNavChildren()}</nav>
+        <nav className="top-nav" id={`${navID}`}>
+          {this.renderNavChildren()}
+        </nav>
       </header>
     );
   }
@@ -171,7 +238,10 @@ TopNav.propTypes = {
   username: string,
   isLoggedIn: bool,
   image: string,
-  navID: string
+  navID: string,
+  hasNewNotifications: bool.isRequired,
+  notificationNumber: number.isRequired,
+  notificationsData: arrayProp.isRequired
 };
 
 TopNav.defaultProps = {
@@ -186,13 +256,17 @@ TopNav.defaultProps = {
  * @param {object} store redux store
  * @returns {object} TopNav props
  */
-export const mapStateToProps = ({ auth, user }) => {
+export const mapStateToProps = ({ auth, user, notifications }) => {
   const { isLoggedIn } = auth;
   const { image, username } = user;
+  const { hasNewNotifications, notificationNumber, notificationsData } = notifications;
   return {
     isLoggedIn,
     image,
-    username
+    username,
+    hasNewNotifications,
+    notificationNumber,
+    notificationsData
   };
 };
 
