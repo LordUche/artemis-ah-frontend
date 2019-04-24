@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
  * @return {HTMLElement} Returns the article list item.
  */
 const ArticleItem = ({
-  title, description, coverUrl, slug, tag, rating, readTime, author, showAuthor
+  title, description, coverUrl, slug, tag, rating, readTime, author, showAuthor, userActionClass
 }) => (
   <div className="article-item">
     <div className="article-item__image-wrapper">
@@ -39,7 +39,7 @@ const ArticleItem = ({
       </div>
       <div className="article-item__body-wrapper__bottom-links">
         <Link to={`/${slug}`} className="article-item__body-wrapper__bottom-links__read-more">READ FULL ARTICLE &rarr;</Link>
-        <div className="article-item__body-wrapper__bottom-links__user-actions">
+        <div className={`article-item__body-wrapper__bottom-links__user-actions ${userActionClass}`}>
           <Link to="/#/edit" className="article-item__body-wrapper__bottom-links__user-actions__edit"><i className="fa fa-pencil-alt" /></Link>
           <Link to="/#/delete" className="article-item__body-wrapper__bottom-links__user-actions__delete"><i className="fa fa-trash" /></Link>
         </div>
@@ -63,9 +63,11 @@ const ArticleItem = ({
 
 ArticleItem.defaultProps = {
   showAuthor: true,
+  userActionClass: ''
 };
 
 ArticleItem.propTypes = {
+  userActionClass: stringProp,
   showAuthor: boolProp,
   title: stringProp.isRequired,
   description: stringProp.isRequired,

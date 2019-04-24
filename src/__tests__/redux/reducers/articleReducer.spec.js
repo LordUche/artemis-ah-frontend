@@ -4,6 +4,8 @@ import {
   CREATE_ARTICLE_ERROR,
   CLEAR_ARTICLE_ERROR,
   PUBLISHING_ARTICLE,
+  GET_ARTICLES,
+  GET_ARTICLES_ERROR,
   GETTING_ARTICLE,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE
@@ -99,6 +101,49 @@ describe('Test for Article Reducer', () => {
     expect(mockArticleReducer.isPublishing).toBe(true);
   });
 
+  it('Should update article', () => {
+    const mockArticle = [
+      {
+        id: 3,
+        slug: 'some-title-3',
+        title: 'some title',
+        description: 'some weird talk',
+        rating: '0',
+        totalClaps: 0,
+        createdAt: '2019-04-17T20:26:46.344Z',
+        updatedAt: '2019-04-17T20:26:46.347Z',
+        User: {
+          username: 'deedenedash',
+          bio: 'n/a',
+          image: 'https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/iReporter/avatar.png'
+        },
+        Tag: {
+          name: 'Food'
+        },
+        readTime: {
+          text: '< 1 min read',
+          minutes: 0.05,
+          time: 3000,
+          words: 10
+        }
+      }
+    ];
+    const mockArticleReducer = articleReducer(initialState, {
+      type: GET_ARTICLES,
+      payload: mockArticle
+    });
+    expect(mockArticleReducer.loading).toEqual(false);
+    expect(mockArticleReducer.articles[0]).toEqual(mockArticle[0]);
+  });
+
+  it('Should update error', () => {
+    const mockErrorPayload = { status: 500 };
+    const mockArticleReducer = articleReducer(initialState, {
+      type: GET_ARTICLES_ERROR,
+      payload: mockErrorPayload
+    });
+    expect(mockArticleReducer.errors.status).toEqual(500);
+  });
   it('should update isGetting when GETTING_ARTICLE action is dispatched', () => {
     const mockState = articleReducer(initialState, { type: GETTING_ARTICLE });
     expect(mockState.isGetting).toBe(true);
