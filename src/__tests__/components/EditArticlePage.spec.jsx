@@ -1,6 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { EditArticlePage, mapStateToProps, matchDispatchToProps } from '../../views/EditArticlePage';
+import {
+  EditArticlePage,
+  mapStateToProps,
+  matchDispatchToProps
+} from '../../views/EditArticlePage';
+import { Global } from '@jest/types';
 
 const MyEditPage = new EditArticlePage();
 
@@ -140,4 +145,23 @@ describe('Edit artricle page', () => {
     MyEditPage.handleKeyPressI();
     MyEditPage.handleKeyPressII();
   });
+});
+
+describe('Edit artricle page', () => {
+  const mockFunctionPA = jest.fn();
+  const mockFunctionCE = jest.fn();
+  const mockFunctionSE = jest.fn();
+
+  shallow(
+    <EditArticlePage
+      isLoggedIn={false}
+      errors={{}}
+      isPublishing
+      articleCardData=""
+      publishingArticle={mockFunctionPA}
+      clearErrors={mockFunctionCE}
+      saveEdited={mockFunctionSE}
+      tagList={{ food: 'food' }}
+    />
+  );
 });

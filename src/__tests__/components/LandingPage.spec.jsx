@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
-import { LandingPage, mapStateToProps } from '../../views/LandingPage';
+import { LandingPage, mapStateToProps, mapDispatchToProps } from '../../views/LandingPage';
 import Hero from '../../components/Hero';
 
 const { smoothScrollToAbout } = new LandingPage();
@@ -49,5 +49,9 @@ describe('Landing Page Component', () => {
       signedUp: false,
       user: state.user
     });
+  });
+
+  it('mock map Dispatch To Props', () => {
+    mapDispatchToProps(jest.fn());
   });
 });

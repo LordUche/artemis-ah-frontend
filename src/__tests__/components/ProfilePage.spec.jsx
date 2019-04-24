@@ -1,9 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { createStore, combineReducers } from 'redux';
 import { post as axiosPost } from 'axios';
+import { JestEnvironment } from '@jest/environment';
 import profileReducer from '../../redux/reducers/profileReducer';
 import {
   fetchUserDetails,
@@ -11,8 +12,14 @@ import {
   fetchUserFollowing,
   fetchUserFollowers
 } from '../../redux/actions/profileActions';
-import { TAB_ARTICLES, TAB_FOLLOWING, TAB_FOLLOWERS } from '../../constants/profileConstants';
-import ProfileView from '../../views/ProfilePage';
+import {
+  TAB_ARTICLES,
+  TAB_FOLLOWING,
+  TAB_FOLLOWERS,
+  CONTENT_STATE_UPDATED,
+  CONTENT_STATE_FETCHING_FAILED
+} from '../../constants/profileConstants';
+import ProfileView, { ProfilePage } from '../../views/ProfilePage';
 
 let user;
 
@@ -251,6 +258,42 @@ describe('Test the profile page.', () => {
       expect(profilePage.find('.profile-section__blue-bg__data__about--edit').exists()).toBe(true);
 
       done();
+    });
+  });
+
+  describe('Unit test component will mount', () => {
+    it('It should test component will mount', () => {
+      const nextProps = {
+        profile: CONTENT_STATE_UPDATED
+      };
+
+      const userdata = {
+        user: {
+          username: 'Daniel',
+          isLoggedIn: {
+            auth: true
+          },
+          authToken: {
+            auth: 'mock_token'
+          },
+          contentState: CONTENT_STATE_FETCHING_FAILED
+        }
+      };
+
+      const profile = shallow(
+        <ProfilePage
+          isLoggedIn
+          user={userdata}
+          profile={{ user: { contentState: CONTENT_STATE_FETCHING_FAILED } }}
+          isDeleteModalOpen={{ confirmationModal: true }}
+          closeDeleteModal={jest.fn()}
+          deleteArticle={jest.fn()}
+          match={{ params: { username: 'Daniel' } }}
+          history={{}}
+          dispatch={jest.fn()}
+        />
+      );
+      profile.instance().componentWillReceiveProps(nextProps);
     });
   });
 });

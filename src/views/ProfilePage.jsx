@@ -159,6 +159,20 @@ export class ProfilePage extends Component {
 
         if (editState !== CONTENT_STATE_UPDATING) {
           aboutProps.contentEditable = true;
+
+          // Prevent the browser from rendering html on paste.
+          aboutProps.onPaste = (event) => {
+            event.preventDefault();
+
+            const text = event.clipboardData.getData('text/plain').substr(0, 190);
+            document.execCommand('insertHTML', false, text);
+          };
+
+          aboutProps.onKeyDown = (event) => {
+            if (event.target.innerText.length > 190 && event.keyCode !== 8) {
+              event.preventDefault();
+            }
+          };
         }
       }
 
@@ -352,7 +366,7 @@ export class ProfilePage extends Component {
     if (user.isLoggedIn && user.username === profile.user.username) {
       return (
         <div className="no-result">
-          <div>You don&apos;t have any article.</div>
+          <div className="no-result__msg">You don&apos;t have any article.</div>
           <div className="no-result__link">
             <Link to="/create-article" className="ah-btn">
               Create an Article
