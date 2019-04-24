@@ -540,7 +540,7 @@ class ProfilePage extends Component {
     }
 
     const { user } = this.props;
-    let title = 'People you Follow';
+    let title = 'People you follow';
     if (!user.isLoggedIn || (user.isLoggedIn && profile.user.username !== user.username)) {
       title = `People ${profile.user.fullname.split(' ')[0]} Follows`;
     }

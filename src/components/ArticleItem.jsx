@@ -12,7 +12,7 @@ const ArticleItem = ({
   <div className="article-item">
     <div className="article-item__image-wrapper">
       <img src={coverUrl} alt="" />
-      <span className="tag">{tag.toUpperCase()}</span>
+      <span className="tag">{tag}</span>
       <div className="stats-wrapper">
         <span>
           <i className="fa fa-star" />

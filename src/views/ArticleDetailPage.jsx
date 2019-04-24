@@ -64,6 +64,8 @@ export class ArticleDetailPage extends Component {
       readTime,
       totalClaps
     } = articleGotten;
+    const shareUrl = window.location.href;
+    const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
     return (
       <Fragment>
         <TopNavBar />
@@ -189,7 +191,9 @@ export class ArticleDetailPage extends Component {
                 btnTitle="share via facebook"
                 customClass="article_detail_aside_share_button"
               >
-                <i className="fab fa-facebook-square article_detail_aside_share_button_icon article_detail_aside_share_button_facebook" />
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${title}`} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-facebook-square article_detail_aside_share_button_icon article_detail_aside_share_button_facebook" />
+                </a>
               </Button>
               <br />
               <Button
@@ -197,7 +201,18 @@ export class ArticleDetailPage extends Component {
                 btnTitle="share via twitter"
                 customClass="article_detail_aside_share_button"
               >
-                <i className="fab fa-twitter article_detail_aside_share_button_icon article_detail_aside_share_button_twitter" />
+                <a href={`https://twitter.com/share?url=${shareUrl}&text=${title}`} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-twitter article_detail_aside_share_button_icon article_detail_aside_share_button_twitter" />
+                </a>
+              </Button>
+              <Button
+                btnType="button"
+                btnTitle="share via mail"
+                customClass="article_detail_aside_share_button"
+              >
+                <a href={`mailto:?Subject=${title}&body=${mailBody}`}>
+                  <i className="far fa-envelope article_detail_aside_share_button_icon article_detail_aside_share_button_envelope" />
+                </a>
               </Button>
             </div>
             { isLoggedIn && (
