@@ -64,7 +64,7 @@ class ProfilePage extends Component {
     dispatch(resetProfile());
 
     const viewingUsername = (match.params.username || user.username);
-    fetchUserDetails(viewingUsername, user.authToken, dispatch);
+    return fetchUserDetails(viewingUsername, user.authToken, dispatch);
   }
 
   /**
@@ -92,14 +92,19 @@ class ProfilePage extends Component {
       match, user, dispatch
     } = this.props;
 
-    const currentUsernameToView = (match.params.username || user.username);
-    if (prevProps.profile.user.username
-      && currentUsernameToView !== prevProps.profile.user.username
+    const currentUsernameToView = (match.params.username ? match.params.username : user.username);
+    if (
+      (
+        !prevProps.profile.user.username
+        && prevProps.profile.user.contentState === CONTENT_STATE_FETCHING_FAILED
+      ) || (
+        prevProps.profile.user.username
+        && currentUsernameToView !== prevProps.profile.user.username
+      )
     ) {
       dispatch(resetProfile());
 
-      const viewingUsername = (match.params.username || user.username);
-      fetchUserDetails(viewingUsername, user.authToken, dispatch);
+      fetchUserDetails(currentUsernameToView, user.authToken, dispatch);
     }
   }
 

@@ -171,10 +171,12 @@ export default (state = getInitialState(), { type, data }) => {
     case FOLLOW_ACTION_FOLLOWED:
       newState.user.isFollowing = true;
       newState.followActionWorking = false;
+      newState.tabContent[TAB_FOLLOWERS].count += 1;
       return newState;
     case FOLLOW_ACTION_UNFOLLOWED:
       newState.user.isFollowing = false;
       newState.followActionWorking = false;
+      newState.tabContent[TAB_FOLLOWERS].count -= 1;
       return newState;
     case FOLLOW_ACTION_FOLLOW_FAILED:
     case FOLLOW_ACTION_UNFOLLOW_FAILED:

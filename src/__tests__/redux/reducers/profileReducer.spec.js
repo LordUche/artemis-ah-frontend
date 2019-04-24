@@ -14,6 +14,12 @@ import {
   PROFILE_DETAILS_UPDATING,
   PROFILE_DETAILS_UPDATED,
   PROFILE_DETAILS_UPDATE_ERROR,
+  FOLLOW_ACTION_FOLLOWING_IN_PROGRESS,
+  FOLLOW_ACTION_UNFOLLOWING_IN_PROGRESS,
+  FOLLOW_ACTION_FOLLOWED,
+  FOLLOW_ACTION_UNFOLLOWED,
+  FOLLOW_ACTION_FOLLOW_FAILED,
+  FOLLOW_ACTION_UNFOLLOW_FAILED,
   PROFILE_RESET_EDIT_STATE,
   PROFILE_RESET,
 } from '../../../redux/actionTypes';
@@ -281,6 +287,58 @@ describe('Test profile reducer', () => {
       expect(state.tabContent[TAB_FOLLOWERS].count).toBe(0);
       expect(state.tabContent[TAB_FOLLOWERS].followers.length).toBe(0);
       expect(state.tabContent[TAB_FOLLOWERS].contentState).toBe(CONTENT_STATE_DEFAULT);
+
+      done();
+    });
+  });
+
+  describe('Test feature to follow/unfollow a user', () => {
+    it('It should set followActionWorking to true if following is in progress', (done) => {
+      state = profileReducer(state, { type: FOLLOW_ACTION_FOLLOWING_IN_PROGRESS });
+
+      expect(state.followActionWorking).toBe(true);
+
+      done();
+    });
+
+    it('It should set followActionWorking to true if unfollowing is in progress', (done) => {
+      state = profileReducer(state, { type: FOLLOW_ACTION_UNFOLLOWING_IN_PROGRESS });
+
+      expect(state.followActionWorking).toBe(true);
+
+      done();
+    });
+
+    it('It should set isFollowing to true and followActionWorking to false if use was followed successfully', (done) => {
+      state = profileReducer(state, { type: FOLLOW_ACTION_FOLLOWED });
+
+      expect(state.user.isFollowing).toBe(true);
+      expect(state.followActionWorking).toBe(false);
+
+      done();
+    });
+
+    it('It should set isFollowing to false and followActionWorking to false if user was unfollowed successfully', (done) => {
+      state = profileReducer(state, { type: FOLLOW_ACTION_UNFOLLOWED });
+
+      expect(state.user.isFollowing).toBe(false);
+      expect(state.followActionWorking).toBe(false);
+
+      done();
+    });
+
+    it('It should set followActionWorking to false if was unsuccessful to follow a user', (done) => {
+      state = profileReducer(state, { type: FOLLOW_ACTION_FOLLOW_FAILED });
+
+      expect(state.followActionWorking).toBe(false);
+
+      done();
+    });
+
+    it('It should set followActionWorking to false if was unsuccessful to unfollow a user', (done) => {
+      state = profileReducer(state, { type: FOLLOW_ACTION_UNFOLLOW_FAILED });
+
+      expect(state.followActionWorking).toBe(false);
 
       done();
     });
