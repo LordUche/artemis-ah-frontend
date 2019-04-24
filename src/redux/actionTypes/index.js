@@ -1,5 +1,10 @@
 export const CHANGE_NAME = 'CHANGE_NAME';
 
+// Get all articles Action types
+export const GET_ARTICLES = 'GET_ARTICLES';
+export const GET_ARTICLES_ERROR = 'GET_ARTICLES_ERROR';
+export const ARTICLES_LOADING = 'ARTICLES_LOADING';
+
 // Auth Action types
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
