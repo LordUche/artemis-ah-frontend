@@ -14,7 +14,9 @@ import {
   PROFILE_DETAILS_UPDATED,
   PROFILE_DETAILS_UPDATE_ERROR,
   PROFILE_RESET_EDIT_STATE,
-  PROFILE_RESET
+  PROFILE_RESET,
+  DELETE_ARTICLE,
+  SAVE_EDITED_ARTICLE
 } from '../actionTypes';
 import {
   TAB_ARTICLES,
@@ -103,6 +105,14 @@ export default (state = getInitialState(), { type, data }) => {
         limit: data.limit,
         contentState: CONTENT_STATE_FETCHED
       });
+      return newState;
+    case DELETE_ARTICLE:
+      newState.tabContent[TAB_ARTICLES].articles = newState.tabContent[
+        TAB_ARTICLES
+      ].articles.filter(article => article.slug !== data.slug);
+      return newState;
+    case SAVE_EDITED_ARTICLE:
+      localStorage.setItem('reload', true);
       return newState;
     case PROFILE_ARTICLES_FETCH_ERROR:
       newState.tabContent[TAB_ARTICLES] = Object.assign(newState.tabContent[TAB_ARTICLES], {

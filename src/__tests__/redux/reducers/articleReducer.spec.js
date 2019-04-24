@@ -183,4 +183,15 @@ describe('Test for Article Reducer', () => {
     expect(mockState.articleGotten).toEqual({});
     expect(mockState.isGetting).toBe(false);
   });
+
+  it('should mock the article reducer', () => {
+    const data1 = { type: 'EDIT_ARTICLE', payload: {} };
+    const data2 = { type: 'SAVE_EDITED_ARTICLE', payload: {} };
+    const data3 = { type: 'OPEN_DELETE_CONFIRMATION_MODAL', payload: {} };
+    const data4 = { type: 'CLOSE_DELETE_CONFIRMATION_MODAL', payload: {} };
+    articleReducer(initialState, data1);
+    articleReducer(initialState, data2);
+    articleReducer(initialState, data3);
+    articleReducer(initialState, data4);
+  });
 });

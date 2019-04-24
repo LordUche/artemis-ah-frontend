@@ -9,7 +9,7 @@ import {
 
 // Import Component
 import TopNavBar from '../components/TopNav';
-import ArticleItem from '../components/ArticleItem';
+import ArticleItemComponent from '../components/ArticleItem';
 import Footer from '../components/Footer';
 import BodyError from '../components/PageContentLoadError';
 
@@ -45,7 +45,7 @@ export class Explore extends Component {
     const { articles } = this.props;
     if (!articles[0]) return 'No article available';
     return articles.map((article, index) => (
-      <ArticleItem
+      <ArticleItemComponent
         key={index.toString()}
         tag={article.Tag ? article.Tag.name : 'no tag'}
         title={article.title}

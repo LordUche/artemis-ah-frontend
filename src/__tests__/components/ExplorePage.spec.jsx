@@ -77,12 +77,15 @@ describe('Explore Page', () => {
     );
     expect(ExploreView.find('.explore').exists()).toEqual(true);
   });
+
   it('Should mount successfully with articles', () => {
     const ExploreView = shallow(
       <Explore getArticles={mockFunction} articles={returnedarticles} loading={false} errors={{}} />
     );
-    expect(ExploreView.find('ArticleItem').exists()).toEqual(true);
+
+    expect(ExploreView.find('ArticleItem').exists()).toEqual(false);
   });
+
   it('Should show body error', () => {
     const ExploreView = shallow(
       <Explore getArticles={mockFunction} articles={[]} loading={false} errors={loadError} />

@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
-import { object as objectProp, func as funcProp } from 'prop-types';
+import { toast } from 'react-toastify';
+import { object as objectProp, func as funcProp, bool } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Pagination from '../components/Pagination';
 import {
@@ -13,8 +15,14 @@ import {
   resetEditState,
   resetProfile
 } from '../redux/actions/profileActions';
+import {
+  closeArticleDeleteModalAction,
+  deleteArticleAction
+} from '../redux/actions/articleActions';
+import bin from '../assets/img/bin.png';
+import Modal from '../components/Modal';
 import Template from '../components/Template';
-import ArticleItem from '../components/ArticleItem';
+import ArticleItemComponent from '../components/ArticleItem';
 import UserListItem from '../components/UserListItem';
 import Button from '../components/Button';
 import BodyError from '../components/PageContentLoadError';
@@ -32,12 +40,13 @@ import {
   CONTENT_STATE_UPDATING,
   CONTENT_STATE_UPDATED
 } from '../constants/profileConstants';
+import notifyUser from '../utils/Toast';
 
 /**
  * @class ProfilePage
  * @description Component for profile page
  */
-export class ProfileView extends Component {
+export class ProfilePage extends Component {
   /**
    * @param {object} props Props
    */
@@ -266,9 +275,9 @@ export class ProfileView extends Component {
       }
 
       return profile.user.isFollowing ? (
-        <Button btnText="Unfollow" onClick={() => alert('This is a separate feature story.')} />
+        <Button btnText="Unfollow" onClick={() => 'This is a separate feature story.'} />
       ) : (
-        <Button btnText="Follow" onClick={() => alert('This is a separate feature story.')} />
+        <Button btnText="Follow" onClick={() => 'This is a separate feature story.'} />
       );
     }
 
@@ -382,11 +391,12 @@ does not have any article.
    * @returns {Node} The view for articles the user has publishes.
    */
   getArticles() {
-    const { profile, dispatch, user } = this.props;
+    const {
+      profile, dispatch, history, user
+    } = this.props;
     const { tabContent } = profile;
-
+    const { push } = history;
     const { articles, contentState } = tabContent[TAB_ARTICLES];
-
     if (contentState === CONTENT_STATE_DEFAULT) {
       fetchUserArticles(profile.user.username, dispatch);
     }
@@ -408,16 +418,18 @@ does not have any article.
         content = this.getNoArticleFoundMessage();
       } else {
         content = articles.map((article, index) => (
-          <ArticleItem
+          <ArticleItemComponent
             key={index.toString()}
             tag={article.Tag ? article.Tag.name : 'no tag'}
             title={article.title}
+            body={article.body}
             description={article.description}
             slug={article.slug}
             coverUrl={article.coverUrl || ''}
             rating={article.rating}
             readTime={article.readTime.text}
             author={article.User.username}
+            push={push}
           />
         ));
       }
@@ -678,11 +690,18 @@ is not following anyone.
       return <Redirect to="/" />;
     }
 
-    const { profile } = this.props;
+    const {
+      profile, isDeleteModalOpen, closeDeleteModal, deleteArticle
+    } = this.props;
     const { currentPage } = this.state;
     const { user, tabContent } = profile;
     const { totalArticles, limit } = tabContent[TAB_ARTICLES];
     const numberOfPages = Math.ceil(totalArticles / limit);
+    if (localStorage.getItem('reload')) {
+      localStorage.removeItem('reload');
+      notifyUser(toast(localStorage.getItem('articleEditMessage')));
+      localStorage.removeItem('articleEditMessage');
+    }
 
     return user.contentState === CONTENT_STATE_FETCHING_FAILED ? (
       <Template>
@@ -694,6 +713,24 @@ is not following anyone.
       <Template>
         <div className="profile-section main-content-section">
           <div className="profile-section__blue-bg">
+            {isDeleteModalOpen && (
+              <Modal
+                onClose={() => closeDeleteModal()}
+                modalHeader="Are you sure?"
+                customClass="delete_confirmation"
+              >
+                <Button
+                  imgSrc={bin}
+                  btnText="Delete Article"
+                  imgCustomClass="delete__article__btn__icon"
+                  customClass="delete__article__btn"
+                  onClick={async () => {
+                    await closeDeleteModal();
+                    deleteArticle(localStorage.getItem('deleteSlug'));
+                  }}
+                />
+              </Modal>
+            )}
             <div className="profile-section__container-center">{this.getUserDetailsView()}</div>
           </div>
 
@@ -716,12 +753,31 @@ is not following anyone.
   }
 }
 
-ProfileView.propTypes = {
+ProfilePage.propTypes = {
   match: objectProp.isRequired,
   user: objectProp.isRequired,
   profile: objectProp.isRequired,
-  dispatch: funcProp.isRequired
+  dispatch: funcProp.isRequired,
+  history: objectProp.isRequired,
+  isDeleteModalOpen: bool.isRequired,
+  closeDeleteModal: funcProp.isRequired,
+  deleteArticle: funcProp.isRequired
 };
+
+/**
+ * @method mapDispatchToProps
+ * @description - Map dispatch actions to component props
+ * @param {callback} dispatch - method to dispatch actions
+ * @returns {undefined}
+ */
+const matchDispatchToProps = dispatch => bindActionCreators(
+  {
+    closeDeleteModal: closeArticleDeleteModalAction,
+    dispatch,
+    deleteArticle: deleteArticleAction
+  },
+  dispatch
+);
 
 /**
  * @description Maps redux state to the component's props.
@@ -729,15 +785,21 @@ ProfileView.propTypes = {
  * @return {object} Props for ProfilePage component.
  */
 const state2props = (state) => {
-  const { auth, user, profile } = state;
+  const {
+    auth, user, profile, article
+  } = state;
   return {
     user: {
       isLoggedIn: auth.isLoggedIn,
       authToken: auth.token,
       username: user.username
     },
-    profile
+    profile,
+    isDeleteModalOpen: article.confirmationModal
   };
 };
 
-export default connect(state2props)(ProfileView);
+export default connect(
+  state2props,
+  matchDispatchToProps
+)(ProfilePage);

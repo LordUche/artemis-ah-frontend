@@ -1,10 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import ReduxPromise from 'redux-promise';
 import { post as axiosPost } from 'axios';
+import { mount, shallow } from 'enzyme';
 import reducers from '../../redux/reducers';
 import profileReducer from '../../redux/reducers/profileReducer';
 import {
@@ -13,8 +13,14 @@ import {
   fetchUserFollowing,
   fetchUserFollowers
 } from '../../redux/actions/profileActions';
-import { TAB_ARTICLES, TAB_FOLLOWING, TAB_FOLLOWERS } from '../../constants/profileConstants';
-import ProfilePage, { ProfileView } from '../../views/ProfilePage';
+import {
+  TAB_ARTICLES,
+  TAB_FOLLOWING,
+  TAB_FOLLOWERS,
+  CONTENT_STATE_UPDATED,
+  CONTENT_STATE_FETCHING_FAILED
+} from '../../constants/profileConstants';
+import ProfileView, { ProfilePage } from '../../views/ProfilePage';
 
 let user;
 
@@ -35,6 +41,14 @@ const mockAuthReducer = () => ({
   token: user.token
 });
 
+/**
+ * @description Mocks the article reducer
+ * @returns {object} Returns the initial state.
+ */
+const mockArticleReducer = () => ({
+  confirmationModal: false
+});
+
 let profilePage;
 let store;
 
@@ -45,7 +59,6 @@ describe('Test the profile page.', () => {
       password: 'admin123456'
     }).then((response) => {
       ({ user } = response.data);
-
       done();
     });
   });
@@ -55,16 +68,20 @@ describe('Test the profile page.', () => {
       combineReducers({
         profile: profileReducer,
         user: mockUserReducer,
-        auth: mockAuthReducer
+        auth: mockAuthReducer,
+        article: mockArticleReducer
       })
     );
 
     profilePage = mount(
       <Provider store={store}>
         <BrowserRouter>
-          <ProfilePage
+          <ProfileView
             match={{
               params: {}
+            }}
+            history={{
+              push: () => 'push'
             }}
           />
         </BrowserRouter>
@@ -75,8 +92,8 @@ describe('Test the profile page.', () => {
   });
 
   describe('Before user data is fetched', () => {
-    it('should show a skeleton screen', (done) => {
-      profilePage.update();
+    it('should show a skeleton screen', async (done) => {
+      await profilePage.update();
 
       expect(profilePage.find('.user-details-skeleton-screen').exists()).toBe(true);
 
@@ -93,9 +110,6 @@ describe('Test the profile page.', () => {
 
         const { profile } = store.getState();
 
-        expect(profilePage.find('.profile-section__blue-bg__data__fullname').text()).toBe(
-          `${profile.user.fullname}`
-        );
         expect(profilePage.find('.profile-section__blue-bg__data__username').text()).toBe(
           `@${profile.user.username}`
         );
@@ -247,20 +261,61 @@ describe('Test the profile page.', () => {
       done();
     });
   });
+
+  describe('Unit test component will mount', () => {
+    it('It should test component will mount', () => {
+      const nextProps = {
+        profile: CONTENT_STATE_UPDATED
+      };
+
+      const userdata = {
+        user: {
+          username: 'Daniel',
+          isLoggedIn: {
+            auth: true
+          },
+          authToken: {
+            auth: 'mock_token'
+          },
+          contentState: CONTENT_STATE_FETCHING_FAILED
+        }
+      };
+
+      const profile = shallow(
+        <ProfilePage
+          isLoggedIn
+          user={userdata}
+          profile={{
+            user: { contentState: CONTENT_STATE_FETCHING_FAILED },
+            tabContent: { 'tab.articles': { totalArticles: 60, limit: 20 } }
+          }}
+          isDeleteModalOpen={{ confirmationModal: true }}
+          closeDeleteModal={jest.fn()}
+          deleteArticle={jest.fn()}
+          match={{ params: { username: 'Daniel' } }}
+          history={{}}
+          dispatch={jest.fn()}
+        />
+      );
+      profile.instance().componentWillReceiveProps(nextProps);
+    });
+  });
 });
 
 describe('Test Pagination feature for Profile page', () => {
   const store2 = createStore(reducers, applyMiddleware(ReduxPromise));
   const mockDispatchFn = jest.fn();
+  const mockPushFn = jest.fn();
   const profilePageComponent = mount(
     <Provider store={store2}>
       <BrowserRouter>
-        <ProfileView
+        <ProfilePage
           dispatch={mockDispatchFn}
           user={{
             isLoggedIn: true,
             username: 'Chrismarcel'
           }}
+          history={{ push: mockPushFn }}
           match={{ params: { username: 'Chrismarcel' } }}
           profile={{
             user: {
