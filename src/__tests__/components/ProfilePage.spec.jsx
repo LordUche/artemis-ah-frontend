@@ -1,10 +1,10 @@
+import 'babel-polyfill';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { mount, shallow } from 'enzyme';
 import { createStore, combineReducers } from 'redux';
 import { post as axiosPost } from 'axios';
-import { JestEnvironment } from '@jest/environment';
 import profileReducer from '../../redux/reducers/profileReducer';
 import {
   fetchUserDetails,
@@ -52,6 +52,7 @@ let profilePage;
 let store;
 
 describe('Test the profile page.', () => {
+  jest.setTimeout(50000);
   beforeAll((done) => {
     axiosPost('https://authorshaven.herokuapp.com/api/users/login', {
       name: 'ayo',

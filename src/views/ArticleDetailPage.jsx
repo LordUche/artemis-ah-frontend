@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import {
-  objectOf, object, func, string, bool
+  objectOf, object, func, string, bool, shape, number
 } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 
@@ -141,7 +141,7 @@ export class ArticleDetailPage extends Component {
           )}
           <article className={`article_detail_body ${!isLoggedIn && 'article_detail_body_no_auth'}`}>
             {body.split('\n').map(section => (
-              <Fragment>
+              <Fragment key={section}>
                 <article className="article_detail_body_segment">
                   {section}
                 </article>
@@ -234,13 +234,29 @@ export class ArticleDetailPage extends Component {
 }
 
 ArticleDetailPage.propTypes = {
-  match: objectOf(object, string).isRequired,
+  match: shape({
+    isExact: bool,
+    params: object,
+    path: string,
+    url: string
+  }).isRequired,
   token: string,
   getArticle: func.isRequired,
   gettingArticle: func.isRequired,
   clearErrors: func.isRequired,
   errors: objectOf(string).isRequired,
-  articleGotten: objectOf(string),
+  articleGotten: shape({
+    title: string,
+    User: object,
+    Tag: object,
+    body: string,
+    coverUrl: string,
+    createdAt: string,
+    rating: string,
+    readTime: object,
+    totalClaps: number,
+    id: number
+  }),
   isGetting: bool.isRequired,
   isLoggedIn: bool.isRequired
 };
