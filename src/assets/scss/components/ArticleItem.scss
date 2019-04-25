@@ -62,6 +62,8 @@ $border-radius: 5px;
     
                 a {
                     color: #333333;
+                    display: block;
+                    width: calc(100% - 140px);
     
                     &:hover {
                         color: #000000;

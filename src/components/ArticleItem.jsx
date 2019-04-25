@@ -99,6 +99,18 @@ export const ArticleItem = ({
           </div>
         </div>
       </div>
+      <div className="stats-wrapper">
+        <span>
+          <i className="fa fa-star" />
+          {' '}
+          {rating}
+        </span>
+        <span className="stats-wrapper__read-time">
+          <i className="fa fa-clock" />
+          {' '}
+          {readTime}
+        </span>
+      </div>
     </div>
   );
 };
