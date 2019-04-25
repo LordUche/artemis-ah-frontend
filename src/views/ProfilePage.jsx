@@ -438,7 +438,6 @@ does not have any article.
     } else if (contentState === CONTENT_STATE_FETCHED) {
       if (articles.length < 1) {
         content = this.getNoArticleFoundMessage();
-        content = <ArticleItemSkeletonScreen />;
       } else {
         content = articles.map((article, index) => (
           <ArticleItemComponent
