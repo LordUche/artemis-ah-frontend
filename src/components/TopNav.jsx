@@ -1,11 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  bool, string, number, array as arrayProp
+  bool, string, number, array as arrayProp, func
 } from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import dotenv from 'dotenv';
+import Pusher from 'pusher-js';
+import HelperUtils from '../utils/helperUtils';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
 import Notifications from './Notifications';
+import {
+  getNotificationAction,
+  newNotificationAction,
+  notifyPopup
+} from '../redux/actions/notificationAction';
 import Logo from './logo';
 
 // Components
@@ -14,8 +23,11 @@ import Hamburger from './Hamburger';
 import AHLoginModal from '../views/LoginModal';
 import AHSignUpModal from '../views/SignUpView';
 
+dotenv.config();
+
 /**
  * @description top nav
+ * @param {string} urlPath - slug path for an aticle
  * @returns {JSX} top nav
  */
 class TopNav extends Component {
@@ -26,6 +38,42 @@ class TopNav extends Component {
     showLoginModal: false,
     showSignUpModal: false,
     showNotification: false
+  };
+
+  componentDidMount = () => {
+    const { fetchNotifications } = this.props;
+
+    fetchNotifications();
+  };
+
+  componentWillMount = () => {
+    const { newNotification } = this.props;
+
+    if (window.Notification.permission !== 'granted') {
+      window.Notification.requestPermission().then((permission) => {
+        notifyPopup(`Notification set to ${permission}`);
+      });
+    }
+
+    // Instantiate Pusher
+    const pusher = new Pusher(process.env.PUSHER_APP_KEY, {
+      cluster: 'eu',
+      forceTLS: true
+    });
+
+    // Get users id from token
+    const token = localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken');
+    const userObject = HelperUtils.verifyToken(token);
+    const { id } = userObject;
+
+    // Subscribe to an event
+    const channel = pusher.subscribe(`channel-${id}`);
+    channel.bind('notification', (info) => {
+      const { data } = info;
+      const { title, message } = data;
+      newNotification(data);
+      notifyPopup(title, message);
+    });
   };
 
   toggleResponsiveNav = () => {
@@ -118,24 +166,49 @@ class TopNav extends Component {
           </ul>
           {showNotification
             && (notificationsData.length > 0 ? (
-              notificationsData.map((notify, index) => {
-                const key = index;
-                return (
-                  <Notifications
-                    key={key}
-                    message={notify.message}
-                    title={notify.title}
-                    type={notify.type}
-                    url={notify.url}
-                    onClick={this.handleNotificationClick}
-                  />
-                );
-              })
+              <div
+                className="notifications-div-wrapper"
+                id="notifications-wrapper"
+                role="presentation"
+                onClick={this.handleNotificationClick}
+              >
+                <div id="notify-div-wrapper">
+                  <i className="fas fa-caret-up" id="notification-triangle" />
+                  <div className="notifications-div" id="notifications-div">
+                    {notificationsData.map((notify, index) => {
+                      const key = index;
+                      return (
+                        <Notifications
+                          key={key}
+                          message={notify.message}
+                          title={notify.title ? notify.title : 'Authors Haven'}
+                          type={notify.type}
+                          url={notify.url}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
             ) : (
-              <div id="notify-div-wrapper">
-                <i className="fas fa-caret-up" id="notification-triangle2" />
-                <div className="notifications-div" id="notifications-div">
-                  <span className="notifications-div-item"> You are all caught up :)</span>
+              <div
+                className="notifications-div-wrapper"
+                id="notifications-wrapper"
+                onClick={this.handleNotificationClick}
+                role="presentation"
+              >
+                <div id="notify-div-wrapper">
+                  <i className="fas fa-caret-up" id="notification-triangle" />
+                  <div className="notifications-div" id="notifications-div">
+                    <span className="notifications-div-item" style={{ cursor: 'auto' }}>
+                      <p className="notifications-div-item-info">
+                        <span className="notifications-div-item-info-name">
+                          You are all caught up :)
+                        </span>
+                        <br />
+                      </p>
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -241,7 +314,9 @@ TopNav.propTypes = {
   navID: string,
   hasNewNotifications: bool.isRequired,
   notificationNumber: number.isRequired,
-  notificationsData: arrayProp.isRequired
+  notificationsData: arrayProp.isRequired,
+  fetchNotifications: func.isRequired,
+  newNotification: func.isRequired
 };
 
 TopNav.defaultProps = {
@@ -250,6 +325,20 @@ TopNav.defaultProps = {
   isLoggedIn: false,
   navID: ''
 };
+
+/**
+ * @method mapDispatchToProps
+ * @description - Map dispatch actions to component props
+ * @param {callback} dispatch - method to dispatch actions
+ * @returns {undefined}
+ */
+const matchDispatchToProps = dispatch => bindActionCreators(
+  {
+    fetchNotifications: getNotificationAction,
+    newNotification: newNotificationAction
+  },
+  dispatch
+);
 
 /**
  *
@@ -270,6 +359,9 @@ export const mapStateToProps = ({ auth, user, notifications }) => {
   };
 };
 
-export default connect(mapStateToProps)(TopNav);
+export default connect(
+  mapStateToProps,
+  matchDispatchToProps
+)(TopNav);
 
 export { TopNav };
