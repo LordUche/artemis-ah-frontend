@@ -1,9 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { mount, shallow } from 'enzyme';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import ReduxPromise from 'redux-promise';
 import { post as axiosPost } from 'axios';
+import { mount, shallow } from 'enzyme';
+import reducers from '../../redux/reducers';
 import profileReducer from '../../redux/reducers/profileReducer';
 import {
   fetchUserDetails,
@@ -283,7 +285,10 @@ describe('Test the profile page.', () => {
         <ProfilePage
           isLoggedIn
           user={userdata}
-          profile={{ user: { contentState: CONTENT_STATE_FETCHING_FAILED } }}
+          profile={{
+            user: { contentState: CONTENT_STATE_FETCHING_FAILED },
+            tabContent: { 'tab.articles': { totalArticles: 60, limit: 20 } }
+          }}
           isDeleteModalOpen={{ confirmationModal: true }}
           closeDeleteModal={jest.fn()}
           deleteArticle={jest.fn()}
@@ -294,5 +299,110 @@ describe('Test the profile page.', () => {
       );
       profile.instance().componentWillReceiveProps(nextProps);
     });
+  });
+});
+
+describe('Test Pagination feature for Profile page', () => {
+  const store2 = createStore(reducers, applyMiddleware(ReduxPromise));
+  const mockDispatchFn = jest.fn();
+  const mockPushFn = jest.fn();
+  const profilePageComponent = mount(
+    <Provider store={store2}>
+      <BrowserRouter>
+        <ProfilePage
+          dispatch={mockDispatchFn}
+          user={{
+            isLoggedIn: true,
+            username: 'Chrismarcel'
+          }}
+          history={{ push: mockPushFn }}
+          match={{ params: { username: 'Chrismarcel' } }}
+          profile={{
+            user: {
+              fullname: 'Christopher James',
+              contentState: 'content.state.fetched'
+            },
+            tabContent: { 'tab.articles': { totalArticles: 60, limit: 20 } }
+          }}
+        />
+      </BrowserRouter>
+    </Provider>
+  );
+  profilePageComponent.setProps({ isLoggedIn: true });
+  it('should check that the pagination is correct', () => {
+    expect(
+      profilePageComponent
+        .find('.page__arrow-next')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(2);
+  });
+
+  it('should move to the next page and trigger the handlePagination function', () => {
+    const nextLink = profilePageComponent.find('#next-page');
+    nextLink.simulate('click');
+    expect(
+      profilePageComponent
+        .find('.page__arrow-next')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(3);
+  });
+
+  it('should move to the previous page and trigger the handlePagination function', () => {
+    const nextLink = profilePageComponent.find('#next-page');
+    nextLink.simulate('click');
+    // Move to next page
+    expect(
+      profilePageComponent
+        .find('.page__arrow-next')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(3);
+    const previousLink = profilePageComponent.find('#previous-page');
+    // Move to previous page
+    previousLink.simulate('click');
+    expect(
+      profilePageComponent
+        .find('.page__arrow-previous')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(1);
+  });
+
+  it('should move to the last page and trigger the handlePagination function', () => {
+    const lastLink = profilePageComponent.find('#last-page');
+    // Move to last page
+    lastLink.simulate('click');
+    expect(
+      profilePageComponent
+        .find('.page__arrow-last')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(3);
+  });
+
+  it('should move to the first page and trigger the handlePagination function', () => {
+    const firstLink = profilePageComponent.find('#first-page');
+    // Move to first page
+    firstLink.simulate('click');
+    expect(
+      profilePageComponent
+        .find('.page__arrow-first')
+        .at(0)
+        .prop('data-page')
+    ).toEqual('1');
+  });
+
+  it('cover for when page number is not specified', () => {
+    const randomLink = profilePageComponent.find('#first-page');
+    // Pass in a random data attribute
+    randomLink.simulate('click', { target: { id: 'random-page' } });
+    expect(
+      profilePageComponent
+        .find('.page__arrow-first')
+        .at(0)
+        .prop('data-page')
+    ).toEqual('1');
   });
 });

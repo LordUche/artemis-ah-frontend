@@ -1,0 +1,29 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+  & .disabled,
+  & .disabled > [class^="page__arrow"] {
+    color: #cccccc;
+  }
+
+  & [class^="page__arrow"] {
+    font-size: 5rem;
+    margin: 1.5rem 7rem;
+    color: $primary-color;
+  }
+
+  & p {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  & > .page__number {
+    margin-top: 1.5rem;
+
+    & > p {
+      font-size: 2.6rem;
+    }
+  }
+}

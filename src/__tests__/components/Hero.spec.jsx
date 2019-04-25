@@ -96,9 +96,9 @@ describe('Hero Component', () => {
   });
 
   it('should trigger history.push() method when the cta button is clicked', () => {
-    const ctaButtonExplore = hero.find('.btn').at(0);
+    const ctaButtonExplore = hero.find('Button').at(0);
     ctaButtonExplore.simulate('click');
-    const ctaButtonWrite = hero.find('.btn').at(1);
+    const ctaButtonWrite = hero.find('Button').at(1);
     ctaButtonWrite.simulate('click');
   });
 
@@ -143,6 +143,7 @@ describe('Hero hamburger menu', () => {
   const mockSmoothScrollListener = jest.fn();
   const hero = mount(
     <Hero
+      isLoggedIn
       showLoginModal={false}
       hideLoginModal={mockHideLoginModal}
       revealLoginModal={mockRevealLoginModal}
