@@ -192,8 +192,6 @@ export class Explore extends Component {
           </div>
         </div>
         <div className="explore_body">
-          {/* {this.cardSkeleton()}
-          {this.ShowBodyError()} */}
           {this.getArticleData()}
         </div>
         {numberOfPages > 1 && (

@@ -1,7 +1,7 @@
-/* eslint-disable react/no-access-state-in-setstate */
-/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import {
@@ -12,6 +12,8 @@ import {
   object,
   bool
 } from 'prop-types';
+import notifyUser from '../utils/Toast';
+
 
 // Import actions
 import {
@@ -23,9 +25,7 @@ import {
 
 // Import components
 import Button from './Button';
-
-// Import images
-// import profileImage from '../assets/img/index.png';
+import AHfooter from './Footer';
 
 /**
  * @class Comment
@@ -40,10 +40,17 @@ class Comment extends Component {
 
 
   /**
-   * @returns {Function} actions
+   * @returns {object} last comment
    */
   componentDidMount() {
     this.getAllComments();
+  }
+
+  /**
+   * @returns {object} comments
+   */
+  scrollToBottom() {
+    this.el.scrollIntoView({ block: 'end' });
   }
 
   /**
@@ -54,18 +61,25 @@ class Comment extends Component {
     getArticleComments(slug.articleSlug);
   }
 
+  /**
+   * @method showCommentPost
+   * @description shows post comment form
+   * @returns {HTMLElement} post comment form
+   */
   showCommentPost = () => {
     const { showPost } = this.state;
     const {
       loading,
       errors,
       posted,
-      // isLoggedIn
+      clearPostedValue
     } = this.props;
 
-    if (posted) this.getAllComments();
-
-    // if (!isLoggedIn)
+    if (posted) {
+      this.getAllComments();
+      clearPostedValue();
+      this.scrollToBottom();
+    }
 
     if (showPost && !posted) {
       return (
@@ -106,14 +120,21 @@ class Comment extends Component {
     this.setState({ comment: value });
   }
 
+  /**
+   * @method hidePostComment
+   * @description hides comment box
+   * @returns {object} state
+   */
   hidePostComment = () => {
     this.setState({ showPost: false });
   }
 
 
   /**
+   * @method handleSubmit
+   * @description handles comment submission
    * @param {object} e
-   * @returns {string} comment
+   * @returns {*} actions
    */
   handleSubmit = (e) => {
     const { postArticleComment, loadingPost, slug } = this.props;
@@ -123,6 +144,11 @@ class Comment extends Component {
     this.setState({ showPost: false });
   }
 
+  /**
+   * @method displayComments
+   * @description displays available comments
+   * @returns {HTMLElement} comments
+   */
   displayComments = () => {
     const { articleComments } = this.props;
     let comments = '';
@@ -156,11 +182,20 @@ class Comment extends Component {
     return comments;
   }
 
+  /**
+   * @method toggleCommentPost
+   * @description updates showPost state
+   * @returns {object} state
+   */
   toggleCommentPost = () => {
     const { showPost } = this.state;
-    const { clearPostedValue } = this.props;
-    clearPostedValue();
-    this.setState({ showPost: !showPost });
+    const { clearPostedValue, isLoggedIn } = this.props;
+
+    if (!isLoggedIn) notifyUser(toast('login to add a comment'));
+    else {
+      clearPostedValue();
+      this.setState({ showPost: !showPost });
+    }
   }
 
   /**
@@ -170,28 +205,28 @@ class Comment extends Component {
     const { showPost } = this.state;
     const postCommentClass = showPost ? 'hidePost' : '';
 
-    // if (posted) {
-    //   this.setState(this.state);
-    // }
-
-    console.log(this.props);
     return (
-      <div className="comment">
-        <div className="comment_box">
-          <i
-            className={`fas fa-reply comment_box_post ${postCommentClass}`}
-            onKeyPress={this.toggleCommentPost}
-            role="button"
-            tabIndex={0}
-            onClick={this.toggleCommentPost}
-          >
-            {' '}
-          Post Comment
-          </i>
-          {this.showCommentPost()}
+      <div>
+        <div className="comment">
+          <div className="comment_box">
+            <i
+              className={`fas fa-reply comment_box_post ${postCommentClass}`}
+              onKeyPress={this.toggleCommentPost}
+              role="button"
+              tabIndex={0}
+              onClick={this.toggleCommentPost}
+            >
+              {' '}
+            Post Comment
+            </i>
+            {this.showCommentPost()}
+          </div>
+          <br />
+          <h2>Comments</h2>
+          <div>{this.displayComments()}</div>
         </div>
-        <h2>Comments</h2>
-        {this.displayComments()}
+        <AHfooter />
+        <div ref={(el) => { this.el = el; }} />
       </div>
     );
   }
@@ -204,10 +239,10 @@ Comment.propTypes = {
   postArticleComment: func.isRequired,
   loadingPost: func.isRequired,
   loading: bool.isRequired,
-  errors: object.isRequired,
+  errors: objectOf(object).isRequired,
   posted: bool.isRequired,
   clearPostedValue: func.isRequired,
-  // isLoggedIn: bool.isRequired
+  isLoggedIn: bool.isRequired
 };
 
 /**

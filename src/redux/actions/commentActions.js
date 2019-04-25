@@ -14,7 +14,7 @@ import BASE_URL from './index';
  * @param {string} slug
  * @returns {object} comments
  */
-const getComments = async (slug) => {
+export const getComments = async (slug) => {
   const request = await get(`${BASE_URL}/articles/${slug}/comments`);
   const { comments } = request.data;
   return {
@@ -30,7 +30,7 @@ const getComments = async (slug) => {
  * @param {string} comment
  * @returns {object} comments
  */
-const postComment = async (slug, { comment }) => {
+export const postComment = async (slug, { comment }) => {
   try {
     const request = await post(`${BASE_URL}/articles/${slug}/comment`, { comment }, {
       headers: {
@@ -60,8 +60,3 @@ export const loadingComment = () => ({ type: COMMENT_LOADING });
  * @returns {boolean} loadIng
  */
 export const clearPosted = () => ({ type: CLEAR_POSTED });
-
-export {
-  getComments,
-  postComment,
-};
