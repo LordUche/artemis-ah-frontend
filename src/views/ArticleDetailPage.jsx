@@ -10,6 +10,7 @@ import { Link, Redirect } from 'react-router-dom';
 // Components
 import TopNavBar from '../components/TopNav';
 import Button from '../components/Button';
+import CommentsComponent from '../components/Comment';
 
 // Images
 import defaultClap from '../assets/img/defaultClap.svg';
@@ -35,6 +36,14 @@ export class ArticleDetailPage extends Component {
   }
 
   /**
+   * @returns {boolean} showLogin
+   */
+  showLoginModal = () => {
+    const { showLogin } = this.props;
+    if (showLogin) return true;
+  }
+
+  /**
  * @returns {HTMLElement} div
  */
   render() {
@@ -51,7 +60,7 @@ export class ArticleDetailPage extends Component {
         return <p key={i} />;
       });
     const {
-      isGetting, articleGotten, errors, isLoggedIn
+      isGetting, articleGotten, errors, isLoggedIn, match
     } = this.props;
     const {
       title,
@@ -68,7 +77,9 @@ export class ArticleDetailPage extends Component {
     const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
     return (
       <Fragment>
-        <TopNavBar />
+        <TopNavBar
+          showLogin={this.showLoginModal}
+        />
         {errors.message === 'article not found' && <Redirect to="/not-found" />}
         {errors.message === 'Can\'t get Article right now, please try again later' && (<p className="article_detail_error">{errors.message}</p>)}
         { isGetting && !errors.message && (
@@ -243,6 +254,10 @@ export class ArticleDetailPage extends Component {
           </div>
         </div>
         )}
+        <CommentsComponent
+          slug={match.params}
+          isLoggedIn={isLoggedIn}
+        />
       </Fragment>
     );
   }
@@ -257,7 +272,8 @@ ArticleDetailPage.propTypes = {
   errors: objectOf(string).isRequired,
   articleGotten: objectOf(string),
   isGetting: bool.isRequired,
-  isLoggedIn: bool.isRequired
+  isLoggedIn: bool.isRequired,
+  showLogin: bool.isRequired
 };
 
 ArticleDetailPage.defaultProps = {

@@ -28,6 +28,7 @@ import ResetPassword from './views/ResetPasswordPage';
 import ArticleDetailsPage from './views/ArticleDetailPage';
 import EditArticle from './views/EditArticlePage';
 
+import CommentComponent from './components/Comment';
 // Create Store
 const store = createStore(reducers, applyMiddleware(ReduxPromise));
 
@@ -50,6 +51,7 @@ const App = () => (
         <Route exact path="/explore" component={ExplorePage} />
         <Route exact path="/reset-password" component={ResetPassword} />
         <Route exact path="/article/:articleSlug" component={ArticleDetailsPage} />
+        <Route exact path="/comment" component={CommentComponent} />
         <Route component={PageNotFound} />
       </Switch>
     </BrowserRouter>

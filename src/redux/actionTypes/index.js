@@ -1,5 +1,12 @@
 export const CHANGE_NAME = 'CHANGE_NAME';
 
+// Comment action types
+export const GET_COMMENTS = 'GET_COMMENTS';
+export const POST_COMMENT = 'POST_COMENTS';
+export const POST_COMMENT_ERROR = 'POST_COMMENT_ERROR';
+export const COMMENT_LOADING = 'COMMENT_LOADING';
+export const CLEAR_POSTED = 'CLEAR_POSTED';
+
 // Get all articles Action types
 export const GET_ARTICLES = 'GET_ARTICLES';
 export const GET_ARTICLES_ERROR = 'GET_ARTICLES_ERROR';

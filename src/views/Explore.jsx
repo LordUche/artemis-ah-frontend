@@ -42,22 +42,29 @@ export class Explore extends Component {
    * @returns {object} Articles
    */
   getArticleData() {
-    const { articles } = this.props;
-    if (!articles[0]) return 'No article available';
-    return articles.map((article, index) => (
-      <ArticleItemComponent
-        key={index.toString()}
-        tag={article.Tag ? article.Tag.name : 'no tag'}
-        title={article.title}
-        description={article.description}
-        slug={article.slug}
-        coverUrl={article.coverUrl || ''}
-        rating={article.rating}
-        readTime={article.readTime.text}
-        author={article.User.username}
-        userActionClass="explore_hide"
-      />
-    ));
+    const { articles, errors, loading } = this.props;
+    let content = '';
+    if (loading) content = <ArticleItemSkeletonScreen />;
+    else if (Object.keys(errors).length > 0) {
+      content = <BodyError onRetry={() => { this.getArticleData(); }} />;
+    } else if (!articles[0]) content = 'No article available';
+    else {
+      content = articles.map((article, index) => (
+        <ArticleItemComponent
+          key={index.toString()}
+          tag={(article.Tag ? article.Tag.name : 'no tag')}
+          title={article.title}
+          description={article.description}
+          slug={article.slug}
+          coverUrl={(article.coverUrl || '')}
+          rating={article.rating}
+          readTime={article.readTime.text}
+          author={article.User.username}
+          userActionClass="explore_hide"
+        />
+      ));
+    }
+    return content;
   }
 
   /**
@@ -185,8 +192,8 @@ export class Explore extends Component {
           </div>
         </div>
         <div className="explore_body">
-          {this.cardSkeleton()}
-          {this.ShowBodyError()}
+          {/* {this.cardSkeleton()}
+          {this.ShowBodyError()} */}
           {this.getArticleData()}
         </div>
         {numberOfPages > 1 && (
