@@ -11,7 +11,9 @@ import {
   GET_ARTICLES_ERROR,
   GETTING_ARTICLE,
   GOT_ARTICLE,
-  ERROR_GETTING_ARTICLE
+  ERROR_GETTING_ARTICLE,
+  ARTICLE_BOOKMARK_ADDED,
+  ARTICLE_BOOKMARK_REMOVED
 } from '../actionTypes';
 
 export const initialState = {
@@ -119,6 +121,22 @@ const articleReducer = (state = initialState, { type, payload }) => {
         isGetting: false,
         articleDetailsGotten: {},
         errors: payload
+      };
+    case ARTICLE_BOOKMARK_ADDED:
+      return {
+        ...state,
+        articleGotten: {
+          ...state.articleGotten,
+          isBookmarked: true
+        }
+      };
+    case ARTICLE_BOOKMARK_REMOVED:
+      return {
+        ...state,
+        articleGotten: {
+          ...state.articleGotten,
+          isBookmarked: false
+        }
       };
     default:
       return state;

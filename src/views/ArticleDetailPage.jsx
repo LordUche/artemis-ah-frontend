@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -15,15 +16,22 @@ import Button from '../components/Button';
 import defaultClap from '../assets/img/defaultClap.svg';
 
 // Actions
-import { gettingArticleAction, getArticleAction, clearErrorsAction } from '../redux/actions/articleActions';
-/**
+import {
+  gettingArticleAction,
+  getArticleAction,
+  clearErrorsAction,
+  removeBookmarkAction,
+  bookmarkArticleAction
+} from '../redux/actions/articleActions';
+
+  /**
  * @description article detail view page
  * @returns {HTMLDivElement} profile
  */
 export class ArticleDetailPage extends Component {
   /**
- * @returns {HTMLElement} div
- */
+   * @returns {HTMLElement} div
+   */
   componentWillMount() {
     const {
       match, getArticle, gettingArticle, token, clearErrors
@@ -35,8 +43,48 @@ export class ArticleDetailPage extends Component {
   }
 
   /**
- * @returns {HTMLElement} div
- */
+   * @returns {HTMLElement} Returns the button to add to/remove from bookmark
+   */
+  getBookmarkToggleButton() {
+    const {
+      articleGotten,
+      token,
+      bookmarkArticle,
+      removeBookmark
+    } = this.props;
+
+    return !articleGotten.isBookmarked ? (
+      <a
+        href="#"
+        className="article_detail_bookmark"
+        onClick={(e) => {
+          bookmarkArticle(articleGotten.slug, token);
+          e.preventDefault();
+        }}
+      >
+        <i className="far fa-bookmark article_detail_bookmark_icon" />
+        {' '}
+        Add to Bookmark
+      </a>
+    ) : (
+      <a
+        href="#"
+        className="article_detail_bookmark bookmarked"
+        onClick={(e) => {
+          removeBookmark(articleGotten.slug, token);
+          e.preventDefault();
+        }}
+      >
+        <i className="fas fa-bookmark article_detail_bookmark_icon" />
+        {' '}
+        Remove from Bookmark
+      </a>
+    );
+  }
+
+  /**
+   * @returns {HTMLElement} div
+   */
   render() {
     const stars = Array(5)
       .fill(undefined)
@@ -64,6 +112,7 @@ export class ArticleDetailPage extends Component {
       readTime,
       totalClaps
     } = articleGotten;
+
     return (
       <Fragment>
         <TopNavBar />
@@ -133,12 +182,7 @@ export class ArticleDetailPage extends Component {
               </section>
             </section>
           </div>
-          { isLoggedIn && (
-          <div className="article_detail_bookmark">
-            <i className="far fa-bookmark article_detail_bookmark_icon" />
-            <p>Add to Bookmark</p>
-          </div>
-          )}
+          {isLoggedIn && this.getBookmarkToggleButton()}
           <article className={`article_detail_body ${!isLoggedIn && 'article_detail_body_no_auth'}`}>
             {body.split('\n').map(section => (
               <Fragment>
@@ -242,7 +286,9 @@ ArticleDetailPage.propTypes = {
   errors: objectOf(string).isRequired,
   articleGotten: objectOf(string),
   isGetting: bool.isRequired,
-  isLoggedIn: bool.isRequired
+  isLoggedIn: bool.isRequired,
+  removeBookmark: func.isRequired,
+  bookmarkArticle: func.isRequired
 };
 
 ArticleDetailPage.defaultProps = {
@@ -277,6 +323,8 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     getArticle: getArticleAction,
     gettingArticle: gettingArticleAction,
     clearErrors: clearErrorsAction,
+    removeBookmark: removeBookmarkAction,
+    bookmarkArticle: bookmarkArticleAction
   },
   dispatch
 );

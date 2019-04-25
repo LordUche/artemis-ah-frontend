@@ -21,7 +21,11 @@ import {
   GET_ARTICLES_ERROR,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
-  GETTING_ARTICLE
+  GETTING_ARTICLE,
+  ARTICLE_BOOKMARK_ADDED,
+  ARTICLE_BOOKMARK_ADD_ERROR,
+  ARTICLE_BOOKMARK_REMOVED,
+  ARTICLE_BOOKMARK_REMOVE_ERROR
 } from '../actionTypes';
 import notifyUser from '../../utils/Toast';
 
@@ -101,6 +105,59 @@ const createArticleAction = async (articleDetails) => {
       payload: error.response.data ? error.response.data.errors : errorResponse
     };
     return obj;
+  }
+};
+
+/**
+ * @param {*} articleSlug The slug of the article to bookmark
+ * @param {*} authToken The user's JWT authentication token.
+ * @returns {object} Returns the redux action object.
+ */
+const bookmarkArticleAction = async (articleSlug, authToken) => {
+  try {
+    const response = await post(`articles/${articleSlug}/bookmark`, null, {
+      baseURL: BASE_URL,
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    });
+
+    notifyUser(toast(response.data.message));
+
+    return {
+      type: ARTICLE_BOOKMARK_ADDED,
+      payload: response.data,
+    };
+  } catch (error) {
+    return {
+      type: ARTICLE_BOOKMARK_ADD_ERROR,
+    };
+  }
+};
+
+/**
+ * @param {*} articleSlug The slug of the article to remove from bookmark
+ * @param {*} authToken The user's JWT authentication token.
+ * @returns {object} Returns the redux action object.
+ */
+const removeBookmarkAction = async (articleSlug, authToken) => {
+  try {
+    const response = await axiosDelete(`articles/${articleSlug}/bookmark`, {
+      baseURL: BASE_URL,
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    });
+
+    notifyUser(toast(response.data.message));
+
+    return {
+      type: ARTICLE_BOOKMARK_REMOVED
+    };
+  } catch (error) {
+    return {
+      type: ARTICLE_BOOKMARK_REMOVE_ERROR
+    };
   }
 };
 
@@ -256,5 +313,7 @@ export {
   saveEditedArticleAction,
   confirmArticleDeleteAction,
   closeArticleDeleteModalAction,
-  editArticle
+  editArticle,
+  bookmarkArticleAction,
+  removeBookmarkAction
 };
