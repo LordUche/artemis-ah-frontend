@@ -17,6 +17,8 @@ import {
 export const initialState = {
   articleData: {},
   articles: [],
+  totalNumberOfArticles: 0,
+  limit: 0,
   loading: true,
   errors: {},
   isPublishing: false,
@@ -38,7 +40,9 @@ const articleReducer = (state = initialState, { type, payload }) => {
     case GET_ARTICLES:
       return {
         ...state,
-        articles: payload,
+        articles: payload.articles,
+        totalNumberOfArticles: payload.total,
+        limit: payload.limit,
         loading: false
       };
     case GET_ARTICLES_ERROR:
