@@ -10,7 +10,7 @@ import {
   followUser,
   unfollowUser
 } from '../../redux/actions/profileActions';
-import ProfilePage from '../../views/ProfilePage';
+import ProfilePageView from '../../views/ProfilePage';
 
 let user;
 
@@ -20,6 +20,14 @@ let user;
  */
 const mockUserReducer = () => ({
   username: user.username,
+});
+
+/**
+ * @description Mocks the article reducer
+ * @returns {object} Returns the initial state.
+ */
+const mockArticleReducer = () => ({
+  confirmationModal: false
 });
 
 /**
@@ -52,12 +60,13 @@ describe('Test the profile page.', () => {
       profile: profileReducer,
       user: mockUserReducer,
       auth: mockAuthReducer,
+      article: mockArticleReducer,
     }));
 
     profilePage = mount(
       <Provider store={store}>
         <BrowserRouter>
-          <ProfilePage
+          <ProfilePageView
             match={{
               params: {
                 username: 'danprocoder'
