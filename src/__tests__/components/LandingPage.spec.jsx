@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
-import { LandingPage } from '../../views/LandingPage';
+import { LandingPage, mapStateToProps, mapDispatchToProps } from '../../views/LandingPage';
 import Hero from '../../components/Hero';
 
 const { smoothScrollToAbout } = new LandingPage();
@@ -31,5 +31,27 @@ describe('Landing Page Component', () => {
     expect(landing.find('Hero').exists()).toBe(true);
     expect(hero.find('.scroll').exists()).toBe(true);
     hero.find('.scroll').simulate('click');
+  });
+
+  it('should return an object', () => {
+    const state = {
+      auth: {
+        isLoggedIn: true,
+        signedUp: false
+      },
+      user: {
+        email: 'shaolinmz@authorshaven.com'
+      }
+    };
+    expect(mapStateToProps(state)).toEqual({
+      email: 'shaolinmz@authorshaven.com',
+      isLoggedIn: true,
+      signedUp: false,
+      user: state.user
+    });
+  });
+
+  it('mock map Dispatch To Props', () => {
+    mapDispatchToProps(jest.fn());
   });
 });

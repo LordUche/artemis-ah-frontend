@@ -21,6 +21,8 @@ import {
   FOLLOW_ACTION_UNFOLLOW_FAILED,
   PROFILE_RESET_EDIT_STATE,
   PROFILE_RESET,
+  DELETE_ARTICLE,
+  SAVE_EDITED_ARTICLE
 } from '../actionTypes';
 import {
   TAB_ARTICLES,
@@ -32,7 +34,7 @@ import {
   CONTENT_STATE_FETCHING_FAILED,
   CONTENT_STATE_UPDATING,
   CONTENT_STATE_UPDATED,
-  CONTENT_STATE_UPDATE_FAILED,
+  CONTENT_STATE_UPDATE_FAILED
 } from '../../constants/profileConstants';
 
 /**
@@ -45,7 +47,7 @@ export const getInitialState = () => ({
     about: null,
     profilePic: null,
     isFollowing: false,
-    contentState: CONTENT_STATE_FETCHING,
+    contentState: CONTENT_STATE_FETCHING
   },
   tabContent: {
     [TAB_ARTICLES]: {
@@ -53,21 +55,21 @@ export const getInitialState = () => ({
       icon: 'fa-sticky-note',
       menuLabel: 'Articles',
       articles: [],
-      contentState: CONTENT_STATE_DEFAULT,
+      contentState: CONTENT_STATE_DEFAULT
     },
     [TAB_FOLLOWING]: {
       count: 0,
       icon: 'fa-user',
       menuLabel: 'Following',
       following: [],
-      contentState: CONTENT_STATE_DEFAULT,
+      contentState: CONTENT_STATE_DEFAULT
     },
     [TAB_FOLLOWERS]: {
       count: 0,
       icon: 'fa-user',
       menuLabel: 'Followers',
       followers: [],
-      contentState: CONTENT_STATE_DEFAULT,
+      contentState: CONTENT_STATE_DEFAULT
     }
   },
   editState: CONTENT_STATE_DEFAULT,
@@ -85,8 +87,8 @@ export default (state = getInitialState(), { type, data }) => {
         username: data.user.username,
         about: data.user.bio,
         profilePic: data.user.image,
-        isFollowing: (data.isFollowing === 'true'),
-        contentState: CONTENT_STATE_FETCHED,
+        isFollowing: data.isFollowing === 'true',
+        contentState: CONTENT_STATE_FETCHED
       };
 
       newState.tabContent[TAB_ARTICLES].count = data.totalArticles;
@@ -101,54 +103,62 @@ export default (state = getInitialState(), { type, data }) => {
     // User articles.
     case PROFILE_ARTICLES_FETCHING:
       newState.tabContent[TAB_ARTICLES] = Object.assign(newState.tabContent[TAB_ARTICLES], {
-        contentState: CONTENT_STATE_FETCHING,
+        contentState: CONTENT_STATE_FETCHING
       });
       return newState;
     case PROFILE_ARTICLES_FETCHED:
       newState.tabContent[TAB_ARTICLES] = Object.assign(newState.tabContent[TAB_ARTICLES], {
         articles: data.articles,
-        contentState: CONTENT_STATE_FETCHED,
+        contentState: CONTENT_STATE_FETCHED
       });
+      return newState;
+    case DELETE_ARTICLE:
+      newState.tabContent[TAB_ARTICLES].articles = newState.tabContent[
+        TAB_ARTICLES
+      ].articles.filter(article => article.slug !== data.slug);
+      return newState;
+    case SAVE_EDITED_ARTICLE:
+      localStorage.setItem('reload', true);
       return newState;
     case PROFILE_ARTICLES_FETCH_ERROR:
       newState.tabContent[TAB_ARTICLES] = Object.assign(newState.tabContent[TAB_ARTICLES], {
-        contentState: CONTENT_STATE_FETCHING_FAILED,
+        contentState: CONTENT_STATE_FETCHING_FAILED
       });
       return newState;
 
     // User followers
     case PROFILE_FOLLOWERS_FETCHING:
       newState.tabContent[TAB_FOLLOWERS] = Object.assign(newState.tabContent[TAB_FOLLOWERS], {
-        contentState: CONTENT_STATE_FETCHING,
+        contentState: CONTENT_STATE_FETCHING
       });
       return newState;
     case PROFILE_FOLLOWERS_FETCHED:
       newState.tabContent[TAB_FOLLOWERS] = Object.assign(newState.tabContent[TAB_FOLLOWERS], {
         followers: data.followers,
-        contentState: CONTENT_STATE_FETCHED,
+        contentState: CONTENT_STATE_FETCHED
       });
       return newState;
     case PROFILE_FOLLOWERS_FETCH_ERROR:
       newState.tabContent[TAB_FOLLOWERS] = Object.assign(newState.tabContent[TAB_FOLLOWERS], {
-        contentState: CONTENT_STATE_FETCHING_FAILED,
+        contentState: CONTENT_STATE_FETCHING_FAILED
       });
       return newState;
 
     // User following.
     case PROFILE_FOLLOWING_FETCHING:
       newState.tabContent[TAB_FOLLOWING] = Object.assign(newState.tabContent[TAB_FOLLOWING], {
-        contentState: CONTENT_STATE_FETCHING,
+        contentState: CONTENT_STATE_FETCHING
       });
       return newState;
     case PROFILE_FOLLOWING_FETCHED:
       newState.tabContent[TAB_FOLLOWING] = Object.assign(newState.tabContent[TAB_FOLLOWING], {
         following: data.following,
-        contentState: CONTENT_STATE_FETCHED,
+        contentState: CONTENT_STATE_FETCHED
       });
       return newState;
     case PROFILE_FOLLOWING_FETCH_ERROR:
       newState.tabContent[TAB_FOLLOWING] = Object.assign(newState.tabContent[TAB_FOLLOWING], {
-        contentState: CONTENT_STATE_FETCHING_FAILED,
+        contentState: CONTENT_STATE_FETCHING_FAILED
       });
       return newState;
 

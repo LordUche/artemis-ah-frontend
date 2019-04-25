@@ -4,6 +4,8 @@ import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 import { LoginModal, mapStateToProps } from '../../views/LoginModal';
 
+const loginModalView = new LoginModal();
+
 describe('Loading Modal Component', () => {
   it('should have match the given snapshot', () => {
     const mockFunction = jest.fn();
@@ -345,5 +347,27 @@ describe('Loading Modal Component', () => {
     loginModal.find('button.twitterMobile').simulate('click');
     loginModal.find('button.facebookMobile').simulate('click');
     loginModal.find('button.googleMobile').simulate('click');
+  });
+
+  it('Should describe the social media login button click', () => {
+    const mockFunction = jest.fn();
+    const mockLoadingAuth = jest.fn();
+    const mockLoginUser = jest.fn();
+    const loginModal = mount(
+      <LoginModal
+        errorMessages={{}}
+        onClose={mockFunction}
+        loginUser={mockLoginUser}
+        loadingAuth={mockLoadingAuth}
+        clearAuthError={mockFunction}
+        loading
+        isLoggedIn={false}
+      />
+    );
+    loginModal.find('#login-reset-btn').simulate('click');
+    const event = {
+      preventDefault: () => 'prevent default'
+    };
+    loginModalView.submitReset(event);
   });
 });

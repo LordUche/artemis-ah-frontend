@@ -10,7 +10,7 @@ import {
   followUser,
   unfollowUser
 } from '../../redux/actions/profileActions';
-import ProfilePage from '../../views/ProfilePage';
+import ProfilePageView from '../../views/ProfilePage';
 
 let user;
 
@@ -20,6 +20,14 @@ let user;
  */
 const mockUserReducer = () => ({
   username: user.username,
+});
+
+/**
+ * @description Mocks the article reducer
+ * @returns {object} Returns the initial state.
+ */
+const mockArticleReducer = () => ({
+  confirmationModal: false
 });
 
 /**
@@ -52,16 +60,20 @@ describe('Test the profile page.', () => {
       profile: profileReducer,
       user: mockUserReducer,
       auth: mockAuthReducer,
+      article: mockArticleReducer,
     }));
 
     profilePage = mount(
       <Provider store={store}>
         <BrowserRouter>
-          <ProfilePage
+          <ProfilePageView
             match={{
               params: {
                 username: 'danprocoder'
               },
+            }}
+            history={{
+              push: () => 'push'
             }}
           />
         </BrowserRouter>
@@ -74,7 +86,7 @@ describe('Test the profile page.', () => {
   describe('Test feature to follow/unfollow a user.', () => {
     it('It should load the next profile', async (done) => {
       Promise.all([
-        fetchUserDetails('danprocoder', user.token, store.dispatch.bind(store))
+        fetchUserDetails('danprocoder', user.token, store.dispatch)
       ])
         .then(() => {
           profilePage.update();
