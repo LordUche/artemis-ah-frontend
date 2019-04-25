@@ -77,26 +77,112 @@ describe('Explore Page', () => {
     );
     expect(ExploreView.find('.explore').exists()).toEqual(true);
   });
+
   it('Should mount successfully with articles', () => {
     const ExploreView = shallow(
-      <Explore
-        getArticles={mockFunction}
-        articles={returnedarticles}
-        loading={false}
-        errors={{}}
-      />
+      <Explore getArticles={mockFunction} articles={returnedarticles} loading={false} errors={{}} />
     );
-    expect(ExploreView.find('ArticleItem').exists()).toEqual(true);
+
+    expect(ExploreView.find('ArticleItem').exists()).toEqual(false);
   });
+
   it('Should show body error', () => {
     const ExploreView = shallow(
-      <Explore
-        getArticles={mockFunction}
-        articles={[]}
-        loading={false}
-        errors={loadError}
-      />
+      <Explore getArticles={mockFunction} articles={[]} loading={false} errors={loadError} />
     );
     expect(ExploreView.find('ErrorComponent').exists()).toEqual(true);
+  });
+});
+
+describe('Test Pagination feature for Profile page', () => {
+  const mockGetArtcleFn = jest.fn();
+  const explorePageComponent = mount(
+    <Provider store={store}>
+      <BrowserRouter>
+        <Explore
+          errors={{}}
+          articles={[{ readTime: { text: '' }, User: { username: 'Chrismarcel' } }]}
+          totalNumberOfArticles={60}
+          limit={20}
+          getArticles={mockGetArtcleFn}
+        />
+      </BrowserRouter>
+    </Provider>
+  );
+  it('should check that the pagination is correct', () => {
+    expect(
+      explorePageComponent
+        .find('.page__arrow-next')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(2);
+  });
+
+  it('should move to the next page and trigger the handlePagination function', () => {
+    const nextLink = explorePageComponent.find('#next-page');
+    nextLink.simulate('click');
+    expect(
+      explorePageComponent
+        .find('.page__arrow-next')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(3);
+  });
+
+  it('should move to the previous page and trigger the handlePagination function', () => {
+    const nextLink = explorePageComponent.find('#next-page');
+    nextLink.simulate('click');
+    // Move to next page
+    expect(
+      explorePageComponent
+        .find('.page__arrow-next')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(3);
+    const previousLink = explorePageComponent.find('#previous-page');
+    // Move to previous page
+    previousLink.simulate('click');
+    expect(
+      explorePageComponent
+        .find('.page__arrow-previous')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(1);
+  });
+
+  it('should move to the last page and trigger the handlePagination function', () => {
+    const lastLink = explorePageComponent.find('#last-page');
+    // Move to last page
+    lastLink.simulate('click');
+    expect(
+      explorePageComponent
+        .find('.page__arrow-last')
+        .at(0)
+        .prop('data-page')
+    ).toEqual(3);
+  });
+
+  it('should move to the first page and trigger the handlePagination function', () => {
+    const firstLink = explorePageComponent.find('#first-page');
+    // Move to first page
+    firstLink.simulate('click');
+    expect(
+      explorePageComponent
+        .find('.page__arrow-first')
+        .at(0)
+        .prop('data-page')
+    ).toEqual('1');
+  });
+
+  it('cover for when page number is not specified', () => {
+    const randomLink = explorePageComponent.find('#first-page');
+    // Pass in a random data attribute
+    randomLink.simulate('click', { target: { id: 'random-page' } });
+    expect(
+      explorePageComponent
+        .find('.page__arrow-first')
+        .at(0)
+        .prop('data-page')
+    ).toEqual('1');
   });
 });
