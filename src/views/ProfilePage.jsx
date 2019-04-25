@@ -5,6 +5,7 @@ import { object as objectProp, func as funcProp, bool } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Pagination from '../components/Pagination';
 import {
   fetchUserDetails,
   fetchUserArticles,
@@ -23,7 +24,7 @@ import {
 import bin from '../assets/img/bin.png';
 import Modal from '../components/Modal';
 import Template from '../components/Template';
-import ArticleItemComp from '../components/ArticleItem';
+import ArticleItemComponent from '../components/ArticleItem';
 import UserListItem from '../components/UserListItem';
 import Button from '../components/Button';
 import BodyError from '../components/PageContentLoadError';
@@ -57,7 +58,8 @@ export class ProfilePage extends Component {
     this.state = {
       editMode: false,
       activeTab: TAB_ARTICLES,
-      selectedImage: null
+      selectedImage: null,
+      currentPage: 1
     };
   }
 
@@ -438,7 +440,7 @@ does not have any article.
         content = this.getNoArticleFoundMessage();
       } else {
         content = articles.map((article, index) => (
-          <ArticleItemComp
+          <ArticleItemComponent
             key={index.toString()}
             tag={article.Tag ? article.Tag.name : 'no tag'}
             title={article.title}
@@ -607,6 +609,42 @@ is not following anyone.
   }
 
   /**
+   * @method handlePagination
+   * @description Handles pagination
+   * @param {object} event React synthetic object
+   * @returns {undefined}
+   */
+  handlePagination = (event) => {
+    const { profile, dispatch } = this.props;
+    const pageToDisplay = Number(event.currentTarget.dataset.page);
+    const { tabContent } = profile;
+    const { totalArticles, limit } = tabContent[TAB_ARTICLES];
+    const numberOfPages = Math.ceil(totalArticles / limit);
+    event.preventDefault();
+    const { id } = event.target;
+    switch (id) {
+      case 'first-page':
+        this.setState({ currentPage: 1 });
+        break;
+      case 'last-page':
+        this.setState({ currentPage: numberOfPages });
+        break;
+      case 'next-page':
+        this.setState({
+          currentPage: pageToDisplay <= numberOfPages ? pageToDisplay : numberOfPages
+        });
+        break;
+      case 'previous-page':
+        this.setState({ currentPage: pageToDisplay > 1 ? pageToDisplay : 1 });
+        break;
+      default:
+        this.setState({ currentPage: 1 });
+        break;
+    }
+    fetchUserArticles(profile.user.username, dispatch, pageToDisplay);
+  };
+
+  /**
    * @param {string} title Title of current tab content
    * @param {Node} body The body of the tab content.
    * @returns {Node} template
@@ -674,17 +712,18 @@ is not following anyone.
       return <Redirect to="/" />;
     }
 
+    const {
+      profile, isDeleteModalOpen, closeDeleteModal, deleteArticle
+    } = this.props;
+    const { currentPage } = this.state;
+    const { user, tabContent } = profile;
+    const { totalArticles, limit } = tabContent[TAB_ARTICLES];
+    const numberOfPages = Math.ceil(totalArticles / limit);
     if (localStorage.getItem('reload')) {
       localStorage.removeItem('reload');
       notifyUser(toast(localStorage.getItem('articleEditMessage')));
       localStorage.removeItem('articleEditMessage');
     }
-
-    const {
-      profile, isDeleteModalOpen, closeDeleteModal, deleteArticle
-    } = this.props;
-
-    const { user } = profile;
 
     return user.contentState === CONTENT_STATE_FETCHING_FAILED ? (
       <Template>
@@ -723,6 +762,13 @@ is not following anyone.
               {user.contentState === CONTENT_STATE_FETCHED && this.getProfileBody()}
             </div>
           </div>
+          {numberOfPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              numberOfPages={numberOfPages}
+              handlePagination={this.handlePagination}
+            />
+          )}
         </div>
       </Template>
     );

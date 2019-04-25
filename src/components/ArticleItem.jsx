@@ -55,7 +55,7 @@ export const ArticleItem = ({
       <div className="article-item__body-wrapper">
         <div className="article-item__body-wrapper__body">
           <div className="article-item__body-wrapper__body__title">
-            <Link to={`/${slug}`}>{title}</Link>
+            <Link to={`/article/${slug}`}>{title}</Link>
           </div>
           {showAuthor && (
             <div className="article-item__body-wrapper__body__author">
@@ -66,7 +66,10 @@ export const ArticleItem = ({
           <div className="article-item__body-wrapper__body__description">{description}</div>
         </div>
         <div className="article-item__body-wrapper__bottom-links">
-          <Link to={`/article/${slug}`} className="article-item__body-wrapper__bottom-links__read-more">
+          <Link
+            to={`/article/${slug}`}
+            className="article-item__body-wrapper__bottom-links__read-more"
+          >
             READ FULL ARTICLE &rarr;
           </Link>
           <div
