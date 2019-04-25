@@ -8,6 +8,7 @@ import illustration from '../assets/img/illustration.svg';
 import NavDropdown from './NavDropdown';
 import AHLoginModal from '../views/LoginModal';
 import Hamburger from './Hamburger';
+import Button from './Button';
 /**
  * @description Hero - Hero component for Landing Page view
  * @param {object} e event object
@@ -124,20 +125,19 @@ class Hero extends Component {
             <p className="hero__text--normal">Building a community of like minded authors.</p>
           </div>
           <div className="hero__cta">
-            <button
-              className="btn btn-explore"
-              type="button"
+            <Button
+              btnText="Explore Stories"
+              customClass="btn btn-explore"
+              btnType="button"
               onClick={() => history.push('./explore')}
-            >
-              Explore Stories
-            </button>
-            <button
-              className="btn btn-write"
-              type="button"
+            />
+
+            <Button
+              btnText="Start Writing"
+              customClass="btn btn-write"
+              btnType="button"
               onClick={isLoggedIn ? () => history.push('./create-article') : revealLoginModal}
-            >
-              Start Writing
-            </button>
+            />
           </div>
         </div>
         <div className="hero__illustration">
