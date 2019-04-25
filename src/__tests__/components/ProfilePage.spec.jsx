@@ -165,10 +165,7 @@ describe('Test the profile page.', () => {
         .find('.profile-section__body__tab-container__tab')
         .at(1)
         .simulate('click', { preventDefault: () => 1 });
-
-      expect(profilePage.find('.profile-section__body__content__title').text()).toBe(
-        'People you Follow'
-      );
+      expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
       expect(profilePage.find('.user-item-skeleton-screen').exists()).toBe(true);
 
       done();
@@ -182,11 +179,7 @@ describe('Test the profile page.', () => {
           .find('.profile-section__body__tab-container__tab')
           .at(1)
           .simulate('click', { preventDefault: () => 1 });
-
-        expect(profilePage.find('.profile-section__body__content__title').text()).toBe(
-          'People you Follow'
-        );
-
+        expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
         expect(profilePage.find('.user-list .user-item-skeleton-screen').exists()).toBe(false);
 
         const { profile } = store.getState();
