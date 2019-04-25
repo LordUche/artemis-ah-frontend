@@ -105,6 +105,8 @@ export default (state = getInitialState(), { type, data }) => {
     case PROFILE_ARTICLES_FETCHED:
       newState.tabContent[TAB_ARTICLES] = Object.assign(newState.tabContent[TAB_ARTICLES], {
         articles: data.articles,
+        totalArticles: data.total,
+        limit: data.limit,
         contentState: CONTENT_STATE_FETCHED
       });
       return newState;

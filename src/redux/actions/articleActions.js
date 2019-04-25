@@ -28,16 +28,17 @@ import notifyUser from '../../utils/Toast';
 /**
  * @method GetArticles
  * @description Method to get all articles
+ * @param {number} pageNo Page number
  * @returns {object} Fetched articles
  */
-const getAllArticles = async () => {
+const getAllArticles = async (pageNo = 1) => {
   try {
-    const response = await get(`${BASE_URL}/articles`);
-    const { articles } = response.data;
+    const response = await get(`${BASE_URL}/articles?page=${pageNo}`);
+    const { articles, total, limit } = response.data;
 
     return {
       type: GET_ARTICLES,
-      payload: articles
+      payload: { articles, limit, total }
     };
   } catch (error) {
     return {

@@ -5,7 +5,6 @@ import {
   mapStateToProps,
   matchDispatchToProps
 } from '../../views/EditArticlePage';
-import { Global } from '@jest/types';
 
 const MyEditPage = new EditArticlePage();
 

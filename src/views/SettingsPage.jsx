@@ -12,6 +12,7 @@ import ProfileOptionCard from '../components/ProfileOptionCard';
 import Button from '../components/Button';
 import AHLoginModal from './LoginModal';
 import AHSignUpModal from './SignUpView';
+import BodyError from '../components/PageContentLoadError';
 
 // Images
 import { settingsIcon } from '../assets/img__func/icons_svg';
@@ -24,6 +25,7 @@ import {
 } from '../redux/actions/profileActions';
 import {
   CONTENT_STATE_UPDATE_FAILED,
+  CONTENT_STATE_FETCHING_FAILED,
   CONTENT_STATE_UPDATING,
   CONTENT_STATE_UPDATED,
 } from '../constants/profileConstants';
@@ -142,12 +144,30 @@ export class Settings extends Component {
       activeTab, newEmailNotification, newInAppNotification, showLoginModal, showSignUpModal
     } = state;
     const {
-      inAppNotification, emailNotification, history, editState, dispatch
+      inAppNotification,
+      emailNotification,
+      history, editState,
+      dispatch,
+      contentState,
+      username,
+      token
     } = this.props;
     const inAppNotificationStatus = newInAppNotification === null
       ? inAppNotification : newInAppNotification;
     const emailNotificationStatus = newEmailNotification === null
       ? emailNotification : newEmailNotification;
+
+    const isLoading = editState === CONTENT_STATE_UPDATING;
+
+    if (contentState === CONTENT_STATE_FETCHING_FAILED) {
+      return (
+        <BodyError
+          onRetry={() => {
+            fetchUserDetails(username, token, dispatch);
+          }}
+        />
+      );
+    }
 
     if (editState === CONTENT_STATE_UPDATED) {
       notifyUser(toast('Successfully updated your settings'));
@@ -170,15 +190,15 @@ export class Settings extends Component {
               <ul className="settings_section_nav_list">
                 <li className={activeTab === 'Notifications' ? 'active' : ''} id="Notifications" onClick={toggleActiveTab} role="presentation">
                   Notifications
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round" strokeLineJoin="round"><polyline points="18 15 12 9 6 15" /></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15" /></svg>
                 </li>
                 <li className={activeTab === 'Password' ? 'active' : ''} id="Password" onClick={toggleActiveTab} role="presentation">
                   Change Password
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round" strokeLineJoin="round"><polyline points="18 15 12 9 6 15" /></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15" /></svg>
                 </li>
                 <li className={activeTab === 'Deactivate' ? 'active' : ''} id="Deactivate" onClick={toggleActiveTab} role="presentation">
                   Deactivate Account
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round" strokeLineJoin="round"><polyline points="18 15 12 9 6 15" /></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15" /></svg>
                 </li>
               </ul>
             </nav>
@@ -212,10 +232,10 @@ export class Settings extends Component {
                     { !emailNotificationStatus && (<input onChange={toggleEmailNotification} name="newEmailNotification" type="checkbox" />) }
                   </div>
                   <Button
-                    btnText="Save"
+                    btnText={isLoading ? 'Saving' : 'Save'}
                     btnType="submit"
                     customClass="settings_section_notification_btn"
-                    isDisabled={editState === CONTENT_STATE_UPDATING}
+                    isDisabled={isLoading}
                   />
                 </form>
               )}
@@ -237,7 +257,7 @@ export const mapStateToProps = ({ auth, profile, user }) => {
   const { isLoggedIn, token } = auth;
   const { username } = user;
   const { user: userProfile, editState } = profile;
-  const { inAppNotification, emailNotification } = userProfile;
+  const { inAppNotification, emailNotification, contentState } = userProfile;
   return {
     isLoggedIn,
     username,
@@ -245,6 +265,7 @@ export const mapStateToProps = ({ auth, profile, user }) => {
     emailNotification,
     token,
     editState,
+    contentState
   };
 };
 
@@ -270,6 +291,7 @@ Settings.propTypes = {
     replace: func
   }).isRequired,
   editState: string.isRequired,
+  contentState: string.isRequired
 };
 
 Settings.defaultProps = {

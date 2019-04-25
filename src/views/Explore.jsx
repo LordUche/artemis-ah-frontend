@@ -4,15 +4,12 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  func,
-  arrayOf,
-  object,
-  bool
+  func, arrayOf, object, bool, number
 } from 'prop-types';
 
 // Import Component
 import TopNavBar from '../components/TopNav';
-import AHArticleItem from '../components/ArticleItem';
+import ArticleItemComponent from '../components/ArticleItem';
 import Footer from '../components/Footer';
 import BodyError from '../components/PageContentLoadError';
 
@@ -22,11 +19,16 @@ import ArticleItemSkeletonScreen from '../skeletonscreens/ArticleItem';
 
 // Import Images
 import background from '../assets/img/Ellipse.png';
+import Pagination from '../components/Pagination';
 
 /**
  * @returns {HTMLElement} explore page
  */
 export class Explore extends Component {
+  state = {
+    currentPage: 1
+  };
+
   /**
    * @method componentDidMount
    * @returns {Function} Action call
@@ -40,25 +42,57 @@ export class Explore extends Component {
    * @returns {object} Articles
    */
   getArticleData() {
-    const { articles, } = this.props;
+    const { articles } = this.props;
     if (!articles[0]) return 'No article available';
-    return (
-      articles.map((article, index) => (
-        <AHArticleItem
-          key={index.toString()}
-          tag={(article.Tag ? article.Tag.name : 'no tag')}
-          title={article.title}
-          description={article.description}
-          slug={article.slug}
-          coverUrl={(article.coverUrl || '')}
-          rating={article.rating}
-          readTime={article.readTime.text}
-          author={article.User.username}
-          userActionClass="explore_hide"
-        />
-      ))
-    );
+    return articles.map((article, index) => (
+      <ArticleItemComponent
+        key={index.toString()}
+        tag={article.Tag ? article.Tag.name : 'no tag'}
+        title={article.title}
+        description={article.description}
+        slug={article.slug}
+        coverUrl={article.coverUrl || ''}
+        rating={article.rating}
+        readTime={article.readTime.text}
+        author={article.User.username}
+        userActionClass="explore_hide"
+      />
+    ));
   }
+
+  /**
+   * @method handlePagination
+   * @description Handles pagination
+   * @param {object} event React synthetic object
+   * @returns {undefined}
+   */
+  handlePagination = (event) => {
+    const { totalNumberOfArticles, getArticles, limit } = this.props;
+    const pageToDisplay = Number(event.currentTarget.dataset.page);
+    const numberOfPages = Math.ceil(totalNumberOfArticles / limit);
+    event.preventDefault();
+    const { id } = event.target;
+    switch (id) {
+      case 'first-page':
+        this.setState({ currentPage: 1 });
+        break;
+      case 'last-page':
+        this.setState({ currentPage: numberOfPages });
+        break;
+      case 'next-page':
+        this.setState({
+          currentPage: pageToDisplay <= numberOfPages ? pageToDisplay : numberOfPages
+        });
+        break;
+      case 'previous-page':
+        this.setState({ currentPage: pageToDisplay > 1 ? pageToDisplay : 1 });
+        break;
+      default:
+        this.setState({ currentPage: 1 });
+        break;
+    }
+    getArticles(pageToDisplay);
+  };
 
   /**
    * @returns {HTMLElement} skeleton
@@ -74,7 +108,13 @@ export class Explore extends Component {
   ShowBodyError() {
     const { errors } = this.props;
     if (Object.keys(errors).length > 0) {
-      return <BodyError onRetry={() => { this.getArticleData(); }} />;
+      return (
+        <BodyError
+          onRetry={() => {
+            this.getArticleData();
+          }}
+        />
+      );
     }
   }
 
@@ -103,16 +143,24 @@ export class Explore extends Component {
         borderRight: 'none',
         borderLeft: 'none',
         borderTop: 'none',
-        fontSize: 20,
-      }),
+        fontSize: 20
+      })
     };
+    const { currentPage } = this.state;
+    const { totalNumberOfArticles, limit } = this.props;
+    const numberOfPages = Math.ceil(totalNumberOfArticles / limit);
     return (
       <div className="explore">
         <div className="explore_header">
           <TopNavBar navID="explore_nav" />
           <img src={background} alt="" className="explore_header__img" />
           <div className="explore_header__text">Explore</div>
-          <input type="text" className="explore_header__input" placeholder="Search by title, author or tag" id="explore_input" />
+          <input
+            type="text"
+            className="explore_header__input"
+            placeholder="Search by title, author or tag"
+            id="explore_input"
+          />
           <div className="explore_header_filter">
             <div className="explore_header_filter__fields">
               <span className="explore_label">Search By</span>
@@ -141,6 +189,13 @@ export class Explore extends Component {
           {this.ShowBodyError()}
           {this.getArticleData()}
         </div>
+        {numberOfPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            numberOfPages={numberOfPages}
+            handlePagination={this.handlePagination}
+          />
+        )}
         <Footer />
       </div>
     );
@@ -153,8 +208,16 @@ export class Explore extends Component {
  * @returns {object} state
  */
 function mapStateToProps({ article }) {
-  const { articles, loading, errors } = article;
-  return { articles, loading, errors };
+  const {
+    articles, totalNumberOfArticles, limit, loading, errors
+  } = article;
+  return {
+    articles,
+    loading,
+    errors,
+    totalNumberOfArticles,
+    limit
+  };
 }
 
 /**
@@ -163,16 +226,24 @@ function mapStateToProps({ article }) {
  * @returns {object} actions
  */
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    getArticles: getAllArticles
-  }, dispatch);
+  return bindActionCreators(
+    {
+      getArticles: getAllArticles
+    },
+    dispatch
+  );
 }
 
 Explore.propTypes = {
   getArticles: func.isRequired,
   articles: arrayOf(object).isRequired,
   loading: bool.isRequired,
-  errors: object.isRequired
+  errors: object.isRequired,
+  totalNumberOfArticles: number.isRequired,
+  limit: number.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Explore);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Explore);
