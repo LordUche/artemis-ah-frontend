@@ -1,4 +1,10 @@
-import { get, post, put } from 'axios';
+import {
+  get,
+  post,
+  put,
+  patch,
+  delete as axiosDelete
+} from 'axios';
 import BASE_URL from './index';
 import {
   PROFILE_USER_DETAILS_FETCHED,
@@ -15,6 +21,12 @@ import {
   PROFILE_DETAILS_UPDATED,
   PROFILE_DETAILS_UPDATE_ERROR,
   PROFILE_DETAILS_UPDATING,
+  FOLLOW_ACTION_FOLLOWING_IN_PROGRESS,
+  FOLLOW_ACTION_UNFOLLOWING_IN_PROGRESS,
+  FOLLOW_ACTION_FOLLOWED,
+  FOLLOW_ACTION_UNFOLLOWED,
+  FOLLOW_ACTION_FOLLOW_FAILED,
+  FOLLOW_ACTION_UNFOLLOW_FAILED,
   PROFILE_RESET_EDIT_STATE,
   PROFILE_RESET,
 } from '../actionTypes';
@@ -115,6 +127,54 @@ export const fetchUserFollowing = (username, dispatch) => {
 };
 
 /**
+ * @param {string} authToken The logged in user's JWT authentication token.
+ * @param {string} username The username of the user to follow.
+ * @param {function} dispatch A reference to the dispatch function.
+ * @returns {Promise} Returns a promise to follow/unfollow the user.
+ */
+export const followUser = (authToken, username, dispatch) => {
+  dispatch({ type: FOLLOW_ACTION_FOLLOWING_IN_PROGRESS });
+
+  return post(`profiles/${username}/follow`, null, {
+    baseURL: BASE_URL,
+    headers: {
+      authorization: `Bearer ${authToken}`,
+    }
+  })
+    .then(response => response.data)
+    .then(() => {
+      dispatch({ type: FOLLOW_ACTION_FOLLOWED });
+    })
+    .catch(() => {
+      dispatch({ type: FOLLOW_ACTION_FOLLOW_FAILED });
+    });
+};
+
+/**
+ * @param {*} authToken The logged in user's JWT authentication token.
+ * @param {*} username The username of the user to unfollow.
+ * @param {*} dispatch A reference to the dispatch function.
+ * @returns {Promise} Returns a promise to unfollow the user.
+ */
+export const unfollowUser = (authToken, username, dispatch) => {
+  dispatch({ type: FOLLOW_ACTION_UNFOLLOWING_IN_PROGRESS });
+
+  return axiosDelete(`profiles/${username}/follow`, {
+    baseURL: BASE_URL,
+    headers: {
+      authorization: `Bearer ${authToken}`,
+    }
+  })
+    .then(response => response.data)
+    .then(() => {
+      dispatch({ type: FOLLOW_ACTION_UNFOLLOWED });
+    })
+    .catch(() => {
+      dispatch({ type: FOLLOW_ACTION_UNFOLLOW_FAILED });
+    });
+};
+
+/**
  * @description Uploads the user image to cloudinary.
  * @param {File} file The selected image.
  * @returns {Promise} Returns a promise to upload the image.
@@ -202,3 +262,26 @@ export const resetEditState = () => ({
 export const resetProfile = () => ({
   type: PROFILE_RESET,
 });
+
+/**
+ * @param {*} token The user's authorization token
+ * @param {*} details The user's new notification settings
+ * @param {*} dispatch Function to dispatch actions to redux store.
+ * @returns {undefined}
+ */
+export const updateUserNotificationDetails = async (token, details, dispatch) => {
+  dispatch({ type: PROFILE_DETAILS_UPDATING });
+  const { inAppNotification, emailNotification } = details;
+  const newNotificationDetails = { inAppNotification, emailNotification };
+  try {
+    const response = await patch(`${BASE_URL}/users/notification`, newNotificationDetails, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const { message } = response.data;
+    dispatch({ type: PROFILE_DETAILS_UPDATED, data: { message } });
+  } catch (err) {
+    dispatch({ type: PROFILE_DETAILS_UPDATE_ERROR });
+  }
+};

@@ -224,4 +224,86 @@ describe('Article details component', () => {
     expect(articleDetailPageProps.isGetting).toEqual(mockStore.article.isGetting);
     expect(articleDetailPageProps.articleGotten).toEqual(mockStore.article.articleGotten);
   });
+
+  describe('Test bookmark feature', () => {
+    let articlePage;
+
+    beforeAll((done) => {
+      const mockArticle = {
+        createdAt: new Date(),
+        title: 'zxcvbnm',
+        body: 'idjdfcnfhjfjfjf',
+        coverUrl: 'abc.jpg',
+        Tag: {
+          name: 'Health'
+        },
+        User: {
+          username: 'jimmyturner'
+        },
+        readTime: {
+          text: '2 mins read'
+        },
+        rating: '0',
+        isBookmarked: false,
+      };
+
+      articlePage = shallow(
+        <ArticleDetailPage
+          {... {
+            ...mockProps,
+            articleGotten: mockArticle,
+            isGetting: false,
+            bookmarkArticle: () => {
+              articlePage.setProps({
+                articleGotten: {
+                  ...mockArticle,
+                  isBookmarked: true
+                }
+              });
+            },
+            removeBookmark: () => {
+              articlePage.setProps({
+                articleGotten: {
+                  ...mockArticle,
+                  isBookmarked: false
+                }
+              });
+            }
+          }}
+        />
+      );
+
+      done();
+    });
+
+    it('It should have an "Add to Bookmark" option', (done) => {
+      expect(articlePage.find('.article_detail_bookmark').exists()).toBe(true);
+      expect(articlePage.find('.article_detail_bookmark.bookmarked').exists()).toBe(false);
+      expect(articlePage.find('.article_detail_bookmark span').text()).toBe('Add to Bookmark');
+
+      done();
+    });
+
+    it('"Add to bookmark" option should change to "remove from bookmark" when it is clicked', (done) => {
+      articlePage.find('.article_detail_bookmark').simulate('click', { preventDefault: () => 1 });
+      articlePage.update();
+
+      expect(articlePage.find('.article_detail_bookmark').exists()).toBe(true);
+      expect(articlePage.find('.article_detail_bookmark.bookmarked').exists()).toBe(true);
+      expect(articlePage.find('.article_detail_bookmark span').text()).toBe('Remove from Bookmark');
+
+      done();
+    });
+
+    it('"Remove from bookmark" button should change to "Add to bookmark" when it is called the second time', (done) => {
+      articlePage.find('.article_detail_bookmark').simulate('click', { preventDefault: () => 1 });
+      articlePage.update();
+
+      expect(articlePage.find('.article_detail_bookmark').exists()).toBe(true);
+      expect(articlePage.find('.article_detail_bookmark.bookmarked').exists()).toBe(false);
+      expect(articlePage.find('.article_detail_bookmark span').text()).toBe('Add to Bookmark');
+
+      done();
+    });
+  });
 });

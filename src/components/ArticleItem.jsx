@@ -38,7 +38,7 @@ export const ArticleItem = ({
     <div className="article-item">
       <div className="article-item__image-wrapper">
         <img src={coverUrl} alt="" />
-        <span className="tag">{tag.toUpperCase()}</span>
+        <span className="tag">{tag}</span>
         <div className="stats-wrapper">
           <span>
             <i className="fa fa-star" />
@@ -98,6 +98,18 @@ export const ArticleItem = ({
             </Button>
           </div>
         </div>
+      </div>
+      <div className="stats-wrapper">
+        <span>
+          <i className="fa fa-star" />
+          {' '}
+          {rating}
+        </span>
+        <span className="stats-wrapper__read-time">
+          <i className="fa fa-clock" />
+          {' '}
+          {readTime}
+        </span>
       </div>
     </div>
   );
