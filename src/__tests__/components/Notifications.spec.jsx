@@ -22,18 +22,20 @@ describe('Test the notification component', () => {
 });
 
 describe('Test the notification component', () => {
-  it('it should return the correct object', () => {
+  it('it should return the correct object', (done) => {
     expect(readNotificationAction('slug-path')).toEqual({
       type: 'READ_NOTIFICATION',
       payload: { url: 'slug-path' }
     });
+    done();
   });
 
-  it('it should return the correct object', () => {
+  it('it should return the correct object', (done) => {
     newNotificationAction('data', jest.fn());
+    done();
   });
 
-  it('it should test the notification reducer', () => {
+  it('it should test the notification reducer', (done) => {
     const initialState = {
       notificationsData: [{ url: 'python-url' }, { url: 'node-url' }, { url: 'java-url' }],
       hasNewNotifications: false,
@@ -47,5 +49,6 @@ describe('Test the notification component', () => {
       payload
     });
     notificationsReducer(initialState, { type: READ_NOTIFICATION, payload: { url: 'java-url' } });
+    done();
   });
 });

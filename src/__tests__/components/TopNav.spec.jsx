@@ -47,20 +47,23 @@ describe('test the side nav', () => {
     />
   );
 
-  it('should return a div for unauthenticated users', () => {
+  it('should return a div for unauthenticated users', (done) => {
     expect(topNav.find('div').exists()).toBe(true);
     // open notification
     topNavII.find('.nav-component-container-online2 .notificationBellLink').simulate('click');
     // close notification
     topNavII.find('.nav-component-container-online2 .notificationBellLink').simulate('click');
+    done();
   });
 
-  it('should return a div for authenticated', () => {
+  it('should return a div for authenticated', (done) => {
     expect(topNavII.find('div').exists()).toBe(true);
+    done();
   });
 
-  it('should return a div', () => {
+  it('should return a div', (done) => {
     expect(topNav.find('div').exists()).toBe(true);
+    done();
   });
 
   topNavII.setState({ display: 'desktop' });
@@ -78,19 +81,22 @@ describe('test the hamburger menu', () => {
     />
   );
 
-  it('should contain the hamburger component', () => {
+  it('should contain the hamburger component', (done) => {
     expect(topNav.find('Hamburger').exists()).toBe(true);
+    done();
   });
 
-  it('should hide the menu by default', () => {
+  it('should hide the menu by default', (done) => {
     expect(topNav.state('showResponsiveNav')).toEqual(false);
+    done();
   });
 
-  it('should toggle the menu when the toggle function is fired', () => {
+  it('should toggle the menu when the toggle function is fired', (done) => {
     topNav.instance().toggleResponsiveNav();
     expect(topNav.state('showResponsiveNav')).toEqual(true);
     topNav.instance().toggleResponsiveNav();
     expect(topNav.state('showResponsiveNav')).toEqual(false);
+    done();
   });
 });
 
@@ -104,14 +110,16 @@ describe('Navbar Links', () => {
       notificationNumber={2}
     />
   );
-  it('shows the login modal when login button is clicked', () => {
+  it('shows the login modal when login button is clicked', (done) => {
     topNav.find('span#top-nav-login').simulate('click');
     expect(topNav.state('showLoginModal')).toEqual(true);
     expect(topNav.state('showSignUpModal')).toEqual(false);
+    done();
   });
-  it('shows the sign up modal when signup button is clicked', () => {
+  it('shows the sign up modal when signup button is clicked', (done) => {
     topNav.find('span#top-nav-signup').simulate('click');
     expect(topNav.state('showSignUpModal')).toEqual(true);
     expect(topNav.state('showLoginModal')).toEqual(false);
+    done();
   });
 });
