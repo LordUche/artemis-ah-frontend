@@ -65,7 +65,6 @@ let profilePage;
 let store;
 
 describe('Test the profile page.', () => {
-  jest.setTimeout(50000);
   beforeAll((done) => {
     axiosPost('https://authorshaven.herokuapp.com/api/users/login', {
       name: 'ayo',
