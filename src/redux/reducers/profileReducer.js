@@ -41,7 +41,9 @@ export const getInitialState = () => ({
     about: null,
     profilePic: null,
     isFollowing: false,
-    contentState: CONTENT_STATE_FETCHING
+    contentState: CONTENT_STATE_FETCHING,
+    emailNotification: null,
+    inAppNotification: null
   },
   tabContent: {
     [TAB_ARTICLES]: {
@@ -81,7 +83,9 @@ export default (state = getInitialState(), { type, data }) => {
         about: data.user.bio,
         profilePic: data.user.image,
         isFollowing: data.isFollowing === 'true',
-        contentState: CONTENT_STATE_FETCHED
+        contentState: CONTENT_STATE_FETCHED,
+        emailNotification: data.user.emailNotification,
+        inAppNotification: data.user.inAppNotification
       };
 
       newState.tabContent[TAB_FOLLOWING].count = data.followingStats.following;
