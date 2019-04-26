@@ -137,7 +137,6 @@ describe('Test comment form', () => {
     postCommentBox.simulate('click');
     expect(CommentComponent.find('form').exists()).toEqual(true);
 
-    // const value = 'mitch';
     const commentTexeArea = CommentComponent.find('.comment_box__form__input').first();
     expect(commentTexeArea.exists()).toEqual(true);
     commentTexeArea.simulate('change', { target: { value: 'Changed' } });

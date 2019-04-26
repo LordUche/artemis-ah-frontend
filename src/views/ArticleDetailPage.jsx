@@ -36,14 +36,6 @@ export class ArticleDetailPage extends Component {
   }
 
   /**
-   * @returns {boolean} showLogin
-   */
-  showLoginModal = () => {
-    const { showLogin } = this.props;
-    if (showLogin) return true;
-  }
-
-  /**
  * @returns {HTMLElement} div
  */
   render() {
@@ -77,9 +69,7 @@ export class ArticleDetailPage extends Component {
     const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
     return (
       <Fragment>
-        <TopNavBar
-          showLogin={this.showLoginModal}
-        />
+        <TopNavBar />
         {errors.message === 'article not found' && <Redirect to="/not-found" />}
         {errors.message === 'Can\'t get Article right now, please try again later' && (<p className="article_detail_error">{errors.message}</p>)}
         { isGetting && !errors.message && (
@@ -289,7 +279,6 @@ ArticleDetailPage.propTypes = {
   }),
   isGetting: bool.isRequired,
   isLoggedIn: bool.isRequired,
-  showLogin: bool.isRequired
 };
 
 ArticleDetailPage.defaultProps = {
