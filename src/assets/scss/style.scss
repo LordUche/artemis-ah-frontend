@@ -14,8 +14,8 @@
 @import "./components/SkeletonFade.scss";
 @import "./views/ArticleDetailPage.scss";
 @import "./components/LandingPage.scss";
-@import "./skeletonscreens/ArticleItem.scss";
-@import "./ProfilePage.scss";
+@import './skeletonscreens/ArticleItem.scss';
+@import './ProfilePage.scss';
 @import "./components/Pagination.scss";
 @import "./components/ArticleItem.scss";
 @import "./components/PageContentLoadError.scss";
@@ -23,4 +23,5 @@
 @import "./skeletonscreens/ProfilePageUserDetails.scss";
 @import "./skeletonscreens/UserItem.scss";
 @import "./components/Comment.scss";
-
+@import './components/ProfileOptionCard.scss';
+@import './components/SettingsPage.scss';
