@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import {
   bool, string, number, array as arrayProp, func
 } from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import dotenv from 'dotenv';
 import Pusher from 'pusher-js';
 import HelperUtils from '../utils/helperUtils';
@@ -41,19 +40,12 @@ class TopNav extends Component {
   };
 
   componentDidMount = () => {
-    const { fetchNotifications } = this.props;
-
-    fetchNotifications();
+    const { token, dispatch } = this.props;
+    getNotificationAction(token, dispatch);
   };
 
   componentWillMount = () => {
-    const { newNotification } = this.props;
-
-    if (window.Notification.permission !== 'granted') {
-      window.Notification.requestPermission().then((permission) => {
-        notifyPopup(`Notification set to ${permission}`);
-      });
-    }
+    const { dispatch } = this.props;
 
     // Instantiate Pusher
     const pusher = new Pusher(process.env.PUSHER_APP_KEY, {
@@ -71,7 +63,14 @@ class TopNav extends Component {
     channel.bind('notification', (info) => {
       const { data } = info;
       const { title, message } = data;
-      newNotification(data);
+
+      if (window.Notification.permission !== 'granted') {
+        window.Notification.requestPermission().then((permission) => {
+          notifyPopup(`Notification set to ${permission}`);
+        });
+      }
+
+      newNotificationAction(data, dispatch);
       notifyPopup(title, message);
     });
   };
@@ -135,13 +134,13 @@ class TopNav extends Component {
           <div className="nav-component-container-online1">
             <Logo containerCustomClass="logoContainerClass" logoCustomClass="logoCustomClass" />
             <li>
-              <NavLink to="/create-article">{createArticleIcon(30, 30)}</NavLink>
+              <Link to="/create-article">{createArticleIcon(30, 30)}</Link>
             </li>
           </div>
 
           <ul className="nav-component-container-online2">
             <li>
-              <NavLink to="/explore">Explore &nbsp;</NavLink>
+              <Link to="/explore">Explore &nbsp;</Link>
             </li>
             <li>
               <NavLink
@@ -315,8 +314,8 @@ TopNav.propTypes = {
   hasNewNotifications: bool.isRequired,
   notificationNumber: number.isRequired,
   notificationsData: arrayProp.isRequired,
-  fetchNotifications: func.isRequired,
-  newNotification: func.isRequired
+  dispatch: func.isRequired,
+  token: string.isRequired
 };
 
 TopNav.defaultProps = {
@@ -327,26 +326,12 @@ TopNav.defaultProps = {
 };
 
 /**
- * @method mapDispatchToProps
- * @description - Map dispatch actions to component props
- * @param {callback} dispatch - method to dispatch actions
- * @returns {undefined}
- */
-const matchDispatchToProps = dispatch => bindActionCreators(
-  {
-    fetchNotifications: getNotificationAction,
-    newNotification: newNotificationAction
-  },
-  dispatch
-);
-
-/**
  *
  * @param {object} store redux store
  * @returns {object} TopNav props
  */
 export const mapStateToProps = ({ auth, user, notifications }) => {
-  const { isLoggedIn } = auth;
+  const { isLoggedIn, token } = auth;
   const { image, username } = user;
   const { hasNewNotifications, notificationNumber, notificationsData } = notifications;
   return {
@@ -355,13 +340,13 @@ export const mapStateToProps = ({ auth, user, notifications }) => {
     username,
     hasNewNotifications,
     notificationNumber,
-    notificationsData
+    notificationsData,
+    token
   };
 };
 
 export default connect(
-  mapStateToProps,
-  matchDispatchToProps
+  mapStateToProps
 )(TopNav);
 
 export { TopNav };

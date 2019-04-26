@@ -115,7 +115,8 @@ describe('Test for Article Reducer', () => {
         User: {
           username: 'deedenedash',
           bio: 'n/a',
-          image: 'https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/iReporter/avatar.png'
+          image:
+            'https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/iReporter/avatar.png'
         },
         Tag: {
           name: 'Food'
@@ -130,7 +131,7 @@ describe('Test for Article Reducer', () => {
     ];
     const mockArticleReducer = articleReducer(initialState, {
       type: GET_ARTICLES,
-      payload: mockArticle
+      payload: { articles: mockArticle }
     });
     expect(mockArticleReducer.loading).toEqual(false);
     expect(mockArticleReducer.articles[0]).toEqual(mockArticle[0]);
@@ -175,10 +176,22 @@ describe('Test for Article Reducer', () => {
       message: 'Network error'
     };
     const mockState = articleReducer(initialState, {
-      type: ERROR_GETTING_ARTICLE, payload: mockPayload
+      type: ERROR_GETTING_ARTICLE,
+      payload: mockPayload
     });
     expect(mockState.errors).toEqual(mockPayload);
     expect(mockState.articleGotten).toEqual({});
     expect(mockState.isGetting).toBe(false);
+  });
+
+  it('should mock the article reducer', () => {
+    const data1 = { type: 'EDIT_ARTICLE', payload: {} };
+    const data2 = { type: 'SAVE_EDITED_ARTICLE', payload: {} };
+    const data3 = { type: 'OPEN_DELETE_CONFIRMATION_MODAL', payload: {} };
+    const data4 = { type: 'CLOSE_DELETE_CONFIRMATION_MODAL', payload: {} };
+    articleReducer(initialState, data1);
+    articleReducer(initialState, data2);
+    articleReducer(initialState, data3);
+    articleReducer(initialState, data4);
   });
 });

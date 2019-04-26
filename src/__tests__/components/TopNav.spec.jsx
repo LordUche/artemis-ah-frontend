@@ -25,25 +25,34 @@ describe('test the side nav', () => {
   const topNav = shallow(
     <TopNav
       isLoggedIn={false}
+      image="image"
       notificationsData={[{}]}
       fetchNotifications={jest.fn()}
       newNotification={jest.fn()}
       hasNewNotifications={false}
       notificationNumber={2}
+      token="mock-token"
     />
   );
   const topNavII = shallow(
     <TopNav
       isLoggedIn
+      image="image"
       notificationsData={[{}]}
       fetchNotifications={jest.fn()}
       newNotification={jest.fn()}
       hasNewNotifications={false}
       notificationNumber={2}
+      token="mock-token"
     />
   );
+
   it('should return a div for unauthenticated users', () => {
     expect(topNav.find('div').exists()).toBe(true);
+    // open notification
+    topNavII.find('.nav-component-container-online2 .notificationBellLink').simulate('click');
+    // close notification
+    topNavII.find('.nav-component-container-online2 .notificationBellLink').simulate('click');
   });
 
   it('should return a div for authenticated', () => {

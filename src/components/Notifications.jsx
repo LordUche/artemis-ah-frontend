@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { string } from 'prop-types';
 
 /**
@@ -12,7 +11,11 @@ const Notifications = (props) => {
     message, title, type, url
   } = props;
   return (
-    <Link to={`/article${url}`} className="notifications-div-item">
+    <div
+      onClick={() => window.location.assign(`/article${url}`)}
+      className="notifications-div-item"
+      role="presentation"
+    >
       <p className="notifications-div-item-info">
         <span className="notifications-div-item-info-name">{`${title}`}</span>
         <br />
@@ -21,7 +24,7 @@ const Notifications = (props) => {
       <span className="notifications-div-item-time">
         {`New ${type}`.replace(/article.published/g, 'Article')}
       </span>
-    </Link>
+    </div>
   );
 };
 

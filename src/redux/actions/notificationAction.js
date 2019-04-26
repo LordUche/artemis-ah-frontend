@@ -6,21 +6,25 @@ import { GET_NOTIFICATIONS, READ_NOTIFICATION, NEW_NOTIFICATION } from '../actio
 /**
  * @method getNotificationAction
  * @description - Method to dispatch get notifications
+ * @param {string} token
+ * @param {function} dispatch
  * @returns {object} - notification action object
  */
-const getNotificationAction = async () => {
-  const token = localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken');
-
-  const request = await get(`${BASE_URL}/users/notifications`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-  const gottenNotification = request.data;
-  return {
-    type: GET_NOTIFICATIONS,
-    payload: gottenNotification
-  };
+const getNotificationAction = async (token, dispatch) => {
+  try {
+    const request = await get(`${BASE_URL}/users/notifications`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const gottenNotification = request.data;
+    return dispatch({
+      type: GET_NOTIFICATIONS,
+      payload: gottenNotification
+    });
+  } catch (err) {
+    return { err };
+  }
 };
 
 /**
@@ -38,9 +42,10 @@ const readNotificationAction = slugPathUrl => ({
  * @description - Method to dispatch read article action updating the applocation of read articles
  * @method newNotificationAction
  * @param {object} data
+ * @param {function} dispatch
  * @returns {object} action
  */
-const newNotificationAction = data => ({
+const newNotificationAction = (data, dispatch) => dispatch({
   type: NEW_NOTIFICATION,
   payload: { notifications: [data] }
 });

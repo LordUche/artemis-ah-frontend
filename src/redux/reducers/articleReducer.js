@@ -3,6 +3,10 @@ import {
   CREATE_ARTICLE_ERROR,
   CLEAR_ARTICLE_ERROR,
   PUBLISHING_ARTICLE,
+  SAVE_EDITED_ARTICLE,
+  EDIT_ARTICLE,
+  OPEN_DELETE_CONFIRMATION_MODAL,
+  CLOSE_DELETE_CONFIRMATION_MODAL,
   GET_ARTICLES,
   GET_ARTICLES_ERROR,
   GETTING_ARTICLE,
@@ -13,9 +17,14 @@ import {
 export const initialState = {
   articleData: {},
   articles: [],
+  totalNumberOfArticles: 0,
+  limit: 0,
   loading: true,
   errors: {},
   isPublishing: false,
+  articleCardData: JSON.parse(localStorage.getItem('cardData')) || {},
+  confirmationModal: false,
+  updatedArticle: {},
   isGetting: false,
   articleGotten: {},
   newArticleSlug: ''
@@ -31,7 +40,9 @@ const articleReducer = (state = initialState, { type, payload }) => {
     case GET_ARTICLES:
       return {
         ...state,
-        articles: payload,
+        articles: payload.articles,
+        totalNumberOfArticles: payload.total,
+        limit: payload.limit,
         loading: false
       };
     case GET_ARTICLES_ERROR:
@@ -65,6 +76,27 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isPublishing: true
+      };
+    case EDIT_ARTICLE:
+      return {
+        ...state,
+        articleCardData: payload
+      };
+    case SAVE_EDITED_ARTICLE:
+      return {
+        ...state,
+        isPublishing: false,
+        updatedArticle: payload
+      };
+    case OPEN_DELETE_CONFIRMATION_MODAL:
+      return {
+        ...state,
+        confirmationModal: true
+      };
+    case CLOSE_DELETE_CONFIRMATION_MODAL:
+      return {
+        ...state,
+        confirmationModal: false
       };
     case GETTING_ARTICLE:
       return {
