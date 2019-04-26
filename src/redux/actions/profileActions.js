@@ -2,6 +2,7 @@ import {
   get,
   post,
   put,
+  patch,
   delete as axiosDelete
 } from 'axios';
 import BASE_URL from './index';
@@ -261,3 +262,26 @@ export const resetEditState = () => ({
 export const resetProfile = () => ({
   type: PROFILE_RESET,
 });
+
+/**
+ * @param {*} token The user's authorization token
+ * @param {*} details The user's new notification settings
+ * @param {*} dispatch Function to dispatch actions to redux store.
+ * @returns {undefined}
+ */
+export const updateUserNotificationDetails = async (token, details, dispatch) => {
+  dispatch({ type: PROFILE_DETAILS_UPDATING });
+  const { inAppNotification, emailNotification } = details;
+  const newNotificationDetails = { inAppNotification, emailNotification };
+  try {
+    const response = await patch(`${BASE_URL}/users/notification`, newNotificationDetails, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const { message } = response.data;
+    dispatch({ type: PROFILE_DETAILS_UPDATED, data: { message } });
+  } catch (err) {
+    dispatch({ type: PROFILE_DETAILS_UPDATE_ERROR });
+  }
+};

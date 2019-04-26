@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import {
-  objectOf, object, func, string, bool
+  objectOf, object, func, string, bool, shape, number
 } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 
@@ -64,6 +64,8 @@ export class ArticleDetailPage extends Component {
       readTime,
       totalClaps
     } = articleGotten;
+    const shareUrl = window.location.href;
+    const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
     return (
       <Fragment>
         <TopNavBar />
@@ -141,7 +143,7 @@ export class ArticleDetailPage extends Component {
           )}
           <article className={`article_detail_body ${!isLoggedIn && 'article_detail_body_no_auth'}`}>
             {body.split('\n').map(section => (
-              <Fragment>
+              <Fragment key={section}>
                 <article className="article_detail_body_segment">
                   {section}
                 </article>
@@ -189,7 +191,9 @@ export class ArticleDetailPage extends Component {
                 btnTitle="share via facebook"
                 customClass="article_detail_aside_share_button"
               >
-                <i className="fab fa-facebook-square article_detail_aside_share_button_icon article_detail_aside_share_button_facebook" />
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${title}`} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-facebook-square article_detail_aside_share_button_icon article_detail_aside_share_button_facebook" />
+                </a>
               </Button>
               <br />
               <Button
@@ -197,7 +201,18 @@ export class ArticleDetailPage extends Component {
                 btnTitle="share via twitter"
                 customClass="article_detail_aside_share_button"
               >
-                <i className="fab fa-twitter article_detail_aside_share_button_icon article_detail_aside_share_button_twitter" />
+                <a href={`https://twitter.com/share?url=${shareUrl}&text=${title}`} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-twitter article_detail_aside_share_button_icon article_detail_aside_share_button_twitter" />
+                </a>
+              </Button>
+              <Button
+                btnType="button"
+                btnTitle="share via mail"
+                customClass="article_detail_aside_share_button"
+              >
+                <a href={`mailto:?Subject=${title}&body=${mailBody}`}>
+                  <i className="far fa-envelope article_detail_aside_share_button_icon article_detail_aside_share_button_envelope" />
+                </a>
               </Button>
             </div>
             { isLoggedIn && (
@@ -234,13 +249,29 @@ export class ArticleDetailPage extends Component {
 }
 
 ArticleDetailPage.propTypes = {
-  match: objectOf(object, string).isRequired,
+  match: shape({
+    isExact: bool,
+    params: object,
+    path: string,
+    url: string
+  }).isRequired,
   token: string,
   getArticle: func.isRequired,
   gettingArticle: func.isRequired,
   clearErrors: func.isRequired,
   errors: objectOf(string).isRequired,
-  articleGotten: objectOf(string),
+  articleGotten: shape({
+    title: string,
+    User: object,
+    Tag: object,
+    body: string,
+    coverUrl: string,
+    createdAt: string,
+    rating: string,
+    readTime: object,
+    totalClaps: number,
+    id: number
+  }),
   isGetting: bool.isRequired,
   isLoggedIn: bool.isRequired
 };

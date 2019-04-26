@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -53,6 +54,7 @@ let profilePage;
 let store;
 
 describe('Test the profile page.', () => {
+  jest.setTimeout(50000);
   beforeAll((done) => {
     axiosPost('https://authorshaven.herokuapp.com/api/users/login', {
       name: 'ayo',
@@ -165,10 +167,7 @@ describe('Test the profile page.', () => {
         .find('.profile-section__body__tab-container__tab')
         .at(1)
         .simulate('click', { preventDefault: () => 1 });
-
-      expect(profilePage.find('.profile-section__body__content__title').text()).toBe(
-        'People you Follow'
-      );
+      expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
       expect(profilePage.find('.user-item-skeleton-screen').exists()).toBe(true);
 
       done();
@@ -182,11 +181,7 @@ describe('Test the profile page.', () => {
           .find('.profile-section__body__tab-container__tab')
           .at(1)
           .simulate('click', { preventDefault: () => 1 });
-
-        expect(profilePage.find('.profile-section__body__content__title').text()).toBe(
-          'People you Follow'
-        );
-
+        expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
         expect(profilePage.find('.user-list .user-item-skeleton-screen').exists()).toBe(false);
 
         const { profile } = store.getState();

@@ -1,0 +1,71 @@
+@import '../base.scss';
+
+
+.profile_option_card{
+  width: 80%;
+  position: absolute;
+  top: 10vh;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background: $white-color;
+  box-shadow: 2px 4px 40px rgba(0,0,0,.25);
+  border-radius: 10px;
+  min-height: 80vh;
+    &_header{
+      display: flex;
+      border-bottom: 1px solid #E6E6E6;
+      padding: 40px;
+      align-items: center;
+
+      h3{
+        font-size: 30px;
+        color: $primary-color;
+        text-transform: uppercase;
+        margin: 0;
+        width: fit-content;
+      }
+
+      svg{
+        margin-right: 25px;
+      }
+    }
+
+    &_wrapper{
+      margin: -20px 0 0 192px;
+      min-height:45vh;
+      background: $primary-color;
+      position: relative;
+    }
+}
+
+@media screen and (max-width: 1000px){
+  .profile_option_card{
+    width: 96%;
+  }
+}
+
+@media screen and (max-width: 768px){
+  .profile_option_card{
+    &_wrapper{
+    margin: 0;
+    }
+    &_header{
+      h3{
+        font-size: 20px;
+      }
+
+      svg{
+        margin-right: 20px;
+        height: 30px;
+        width: 30px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 400px){
+.profile_option_card_wrapper {
+    margin-top: -15px;
+}
+}

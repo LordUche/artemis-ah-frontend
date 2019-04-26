@@ -281,8 +281,8 @@
         &_button{
           cursor: pointer;
           width: 100%;
-          margin: 10px auto;
           padding: 0;
+          background: none;
           
           &_icon{
             font-size: 35px;
@@ -293,6 +293,9 @@
           }
           &_twitter{
             color: #48A2D7;
+          }
+          &_envelope{
+            color: #808080;
           }
         }
       }
