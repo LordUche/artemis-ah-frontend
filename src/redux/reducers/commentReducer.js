@@ -7,7 +7,7 @@ import {
 } from '../actionTypes';
 
 
-const initialState = {
+export const initialState = {
   articleComments: [],
   errors: {},
   posted: false,
@@ -18,7 +18,7 @@ const initialState = {
  * @param {*} state
  * @returns {object} comment reducer
  */
-const commentReducer = (state = initialState, { type, payload }) => {
+export const commentReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case GET_COMMENTS:
       return {

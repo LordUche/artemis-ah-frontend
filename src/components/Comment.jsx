@@ -1,4 +1,3 @@
-/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -32,7 +31,7 @@ import AHfooter from './Footer';
  * @description add comment to articles
  * @returns {HTMLElement} comments
  */
-class Comment extends Component {
+export class Comment extends Component {
   state = {
     comment: '',
     showPost: false
@@ -44,13 +43,6 @@ class Comment extends Component {
    */
   componentDidMount() {
     this.getAllComments();
-  }
-
-  /**
-   * @returns {object} comments
-   */
-  scrollToBottom() {
-    this.el.scrollIntoView({ block: 'end' });
   }
 
   /**
@@ -137,10 +129,15 @@ class Comment extends Component {
    * @returns {*} actions
    */
   handleSubmit = (e) => {
-    const { postArticleComment, loadingPost, slug } = this.props;
+    const {
+      postArticleComment,
+      loadingPost,
+      slug,
+    } = this.props;
     e.preventDefault();
     loadingPost();
     postArticleComment(slug.articleSlug, this.state);
+
     this.setState({ showPost: false });
   }
 
@@ -155,29 +152,37 @@ class Comment extends Component {
 
     if (!articleComments[0]) comments = <div className="no_comment">No comment available</div>;
     else {
-      comments = articleComments.map((SingleComment, index) => (
-        <div key={index.toString()} className="comment_card">
-          <span className="item comment_card__image">
-            <img src={SingleComment.User.image} alt="user" />
+      comments = articleComments.map((SingleComment, index) => {
+        const comment = SingleComment.comment.split('\n').map((item, key) => (
+          <span key={key.toString()}>
+            {item}
+            <br />
           </span>
-          <span className="item comment_card__main">
-            <div className="comment_card__main__header">
-              <h3>
-                {SingleComment.User.firstname}
-                {' '}
-                {SingleComment.User.lastname}
-              </h3>
-              <i>{`${moment(SingleComment.createdAt).format('HH:mma')} on ${moment(SingleComment.createdAt).format('MMMM Do YYYY')}`}</i>
-            </div>
-            <div className="comment_card__main__body">
-              <p>{SingleComment.comment}</p>
-            </div>
-            <div className="comment_card__main__footer">
-              <i className="far fa-thumbs-up"><span className="comment_card__main__likes">{SingleComment.totalLikes}</span></i>
-            </div>
-          </span>
-        </div>
-      ));
+        ));
+        return (
+          <div key={index.toString()} className="comment_card">
+            <span className="item comment_card__image">
+              <img src={SingleComment.User.image} alt="user" />
+            </span>
+            <span className="item comment_card__main">
+              <div className="comment_card__main__header">
+                <h3>
+                  {SingleComment.User.firstname}
+                  {' '}
+                  {SingleComment.User.lastname}
+                </h3>
+                <i>{`${moment(SingleComment.createdAt).format('HH:mma')} on ${moment(SingleComment.createdAt).format('MMMM Do YYYY')}`}</i>
+              </div>
+              <div className="comment_card__main__body">
+                <p>{comment}</p>
+              </div>
+              <div className="comment_card__main__footer">
+                <i className="far fa-thumbs-up"><span className="comment_card__main__likes">{SingleComment.totalLikes}</span></i>
+              </div>
+            </span>
+          </div>
+        );
+      });
     }
     return comments;
   }
@@ -196,6 +201,13 @@ class Comment extends Component {
       clearPostedValue();
       this.setState({ showPost: !showPost });
     }
+  }
+
+  /**
+   * @returns {object} comments
+   */
+  scrollToBottom() {
+    this.el.scrollIntoView({ block: 'end' });
   }
 
   /**
@@ -226,7 +238,7 @@ class Comment extends Component {
           <div>{this.displayComments()}</div>
         </div>
         <AHfooter />
-        <div ref={(el) => { this.el = el; }} />
+        <div id="bottom" ref={(el) => { this.el = el; }} />
       </div>
     );
   }

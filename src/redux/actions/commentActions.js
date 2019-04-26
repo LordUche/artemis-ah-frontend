@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import { get, post } from 'axios';
 import {
   GET_COMMENTS,
@@ -6,6 +7,7 @@ import {
   COMMENT_LOADING,
   CLEAR_POSTED
 } from '../actionTypes';
+
 import BASE_URL from './index';
 
 /**
