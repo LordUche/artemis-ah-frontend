@@ -27,6 +27,7 @@ describe('Create article component', () => {
         clearErrors={clearErrorsFn}
         isPublishing={false}
         createArticle={createArticleFn}
+        newArticleSlug=""
       />
     );
     expect(createArticle.find('.title').exists()).toBe(true);
@@ -43,6 +44,7 @@ describe('Create article component', () => {
         clearErrors={clearErrorsFn}
         isPublishing={false}
         createArticle={createArticleFn}
+        newArticleSlug=""
       />
     );
     expect(createArticle.find('Redirect').exists()).toBe(true);
@@ -74,6 +76,7 @@ describe('Create article component', () => {
             clearErrors={clearErrorsFn}
             isPublishing={false}
             createArticle={createArticleFn}
+            newArticleSlug=""
           />
         </Router>
       </Provider>
@@ -95,6 +98,7 @@ describe('Create article component', () => {
             clearErrors={clearErrorsFn}
             isPublishing={false}
             createArticle={createArticleFn}
+            newArticleSlug=""
           />
         </Router>
       </Provider>
@@ -116,6 +120,7 @@ describe('Create article component', () => {
         isPublishing={false}
         createArticle={createArticleFn}
         errors={[]}
+        newArticleSlug=""
       />
     );
     const mockPreventDefault = jest.fn();
@@ -147,6 +152,7 @@ describe('Create article component', () => {
           description: ['The description error message'],
           body: ['The body error message']
         }}
+        newArticleSlug=""
       />
     );
     createArticle.setState({ charactersCount: 1 });
@@ -167,6 +173,7 @@ describe('Create article component', () => {
             clearErrors={clearErrorsFn}
             isPublishing={false}
             createArticle={createArticleFn}
+            newArticleSlug=""
           />
         </Router>
       </Provider>

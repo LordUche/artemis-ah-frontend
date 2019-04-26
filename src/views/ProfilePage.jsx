@@ -11,6 +11,8 @@ import {
   fetchUserArticles,
   fetchUserFollowers,
   fetchUserFollowing,
+  followUser,
+  unfollowUser,
   updateUserDetails,
   resetEditState,
   resetProfile
@@ -97,15 +99,19 @@ export class ProfilePage extends Component {
   componentDidUpdate(prevProps) {
     const { match, user, dispatch } = this.props;
 
-    const currentUsernameToView = match.params.username || user.username;
+    const currentUsernameToView = (match.params.username ? match.params.username : user.username);
     if (
-      prevProps.profile.user.username
-      && currentUsernameToView !== prevProps.profile.user.username
+      (
+        !prevProps.profile.user.username
+        && prevProps.profile.user.contentState === CONTENT_STATE_FETCHING_FAILED
+      ) || (
+        prevProps.profile.user.username
+        && currentUsernameToView !== prevProps.profile.user.username
+      )
     ) {
       dispatch(resetProfile());
 
-      const viewingUsername = match.params.username || user.username;
-      fetchUserDetails(viewingUsername, user.authToken, dispatch);
+      fetchUserDetails(currentUsernameToView, user.authToken, dispatch);
     }
   }
 
@@ -274,11 +280,27 @@ export class ProfilePage extends Component {
         return <Button onClick={() => this.startEditProfile()} btnText="Edit Profile" />;
       }
 
-      return profile.user.isFollowing ? (
-        <Button btnText="Unfollow" onClick={() => 'This is a separate feature story.'} />
-      ) : (
-        <Button btnText="Follow" onClick={() => 'This is a separate feature story.'} />
-      );
+      const { dispatch } = this.props;
+
+      let btnProps;
+      // If user is following.
+      if (profile.user.isFollowing) {
+        btnProps = {
+          btnText: profile.followActionWorking ? 'Unfollowing...' : 'Unfollow',
+        };
+        if (!profile.followActionWorking) {
+          btnProps.onClick = () => unfollowUser(user.authToken, profile.user.username, dispatch);
+        }
+      } else {
+        btnProps = {
+          btnText: profile.followActionWorking ? 'Following...' : 'Follow',
+        };
+        if (!profile.followActionWorking) {
+          btnProps.onClick = () => followUser(user.authToken, profile.user.username, dispatch);
+        }
+      }
+
+      return <Button {...btnProps} />;
     }
 
     return (

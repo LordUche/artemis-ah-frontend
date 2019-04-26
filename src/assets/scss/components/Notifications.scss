@@ -98,6 +98,20 @@
   color: #26335e;
 }
 
+
+.notificationBellLink:hover .notificationBeep {
+  animation: mover 0.2s infinite alternate;
+}
+  
+@keyframes mover {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
+
 @media (max-width: 768px) {
   #notification-triangle,
   #notification-triangle2 {
