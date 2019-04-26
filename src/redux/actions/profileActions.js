@@ -1,5 +1,9 @@
 import {
-  get, post, put, patch
+  get,
+  post,
+  put,
+  patch,
+  delete as axiosDelete
 } from 'axios';
 import BASE_URL from './index';
 import {
@@ -17,6 +21,12 @@ import {
   PROFILE_DETAILS_UPDATED,
   PROFILE_DETAILS_UPDATE_ERROR,
   PROFILE_DETAILS_UPDATING,
+  FOLLOW_ACTION_FOLLOWING_IN_PROGRESS,
+  FOLLOW_ACTION_UNFOLLOWING_IN_PROGRESS,
+  FOLLOW_ACTION_FOLLOWED,
+  FOLLOW_ACTION_UNFOLLOWED,
+  FOLLOW_ACTION_FOLLOW_FAILED,
+  FOLLOW_ACTION_UNFOLLOW_FAILED,
   PROFILE_RESET_EDIT_STATE,
   PROFILE_RESET,
 } from '../actionTypes';
@@ -113,6 +123,54 @@ export const fetchUserFollowing = (username, dispatch) => {
     })
     .catch(() => {
       dispatch({ type: PROFILE_FOLLOWING_FETCH_ERROR });
+    });
+};
+
+/**
+ * @param {string} authToken The logged in user's JWT authentication token.
+ * @param {string} username The username of the user to follow.
+ * @param {function} dispatch A reference to the dispatch function.
+ * @returns {Promise} Returns a promise to follow/unfollow the user.
+ */
+export const followUser = (authToken, username, dispatch) => {
+  dispatch({ type: FOLLOW_ACTION_FOLLOWING_IN_PROGRESS });
+
+  return post(`profiles/${username}/follow`, null, {
+    baseURL: BASE_URL,
+    headers: {
+      authorization: `Bearer ${authToken}`,
+    }
+  })
+    .then(response => response.data)
+    .then(() => {
+      dispatch({ type: FOLLOW_ACTION_FOLLOWED });
+    })
+    .catch(() => {
+      dispatch({ type: FOLLOW_ACTION_FOLLOW_FAILED });
+    });
+};
+
+/**
+ * @param {*} authToken The logged in user's JWT authentication token.
+ * @param {*} username The username of the user to unfollow.
+ * @param {*} dispatch A reference to the dispatch function.
+ * @returns {Promise} Returns a promise to unfollow the user.
+ */
+export const unfollowUser = (authToken, username, dispatch) => {
+  dispatch({ type: FOLLOW_ACTION_UNFOLLOWING_IN_PROGRESS });
+
+  return axiosDelete(`profiles/${username}/follow`, {
+    baseURL: BASE_URL,
+    headers: {
+      authorization: `Bearer ${authToken}`,
+    }
+  })
+    .then(response => response.data)
+    .then(() => {
+      dispatch({ type: FOLLOW_ACTION_UNFOLLOWED });
+    })
+    .catch(() => {
+      dispatch({ type: FOLLOW_ACTION_UNFOLLOW_FAILED });
     });
 };
 
