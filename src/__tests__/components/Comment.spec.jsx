@@ -4,6 +4,7 @@ import { mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
 import ReduxPromise from 'redux-promise';
 import { createStore, applyMiddleware } from 'redux';
+import { BrowserRouter } from 'react-router-dom';
 import reducers from '../../redux/reducers';
 import { Comment } from '../../components/Comment';
 
@@ -56,7 +57,7 @@ describe('Mount comment component', () => {
     const postCommentBox = CommentComponent.find('.comment_box_post');
     expect(postCommentBox.exists()).toEqual(true);
 
-    // Simulate posst comment click
+    // Simulate post comment click
     postCommentBox.simulate('click');
     expect(CommentComponent.find('form').exists()).toEqual(true);
 
@@ -81,7 +82,7 @@ describe('User should not be able to see comment box when not logged in', () => 
           isLoggedIn={false}
           articleComments={noArticle}
           errors={error}
-          posted={false}
+          posted
         />
       </Provider>
     );
@@ -95,18 +96,20 @@ describe('User should not be able to see comment box when not logged in', () => 
 describe('Should list available comments', () => {
   it('show comments', () => {
     const CommentComponent = mount(
-      <Comment
-        slug={slug}
-        getArticleComments={mockFunction}
-        postArticleComment={mockFunction}
-        loadingPost={false}
-        loading={false}
-        clearPostedValue={mockFunction}
-        isLoggedIn={false}
-        articleComments={articleComments}
-        errors={error}
-        posted={false}
-      />
+      <BrowserRouter>
+        <Comment
+          slug={slug}
+          getArticleComments={mockFunction}
+          postArticleComment={mockFunction}
+          loadingPost={false}
+          loading={false}
+          clearPostedValue={mockFunction}
+          isLoggedIn={false}
+          articleComments={articleComments}
+          errors={error}
+          posted={false}
+        />
+      </BrowserRouter>
     );
 
     const commentCard = CommentComponent.find('.comment_card');

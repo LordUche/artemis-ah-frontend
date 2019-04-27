@@ -71,7 +71,6 @@ export class Comment extends Component {
     if (posted) {
       this.getAllComments();
       clearPostedValue();
-      this.scrollToBottom();
     }
 
     if (showPost && !posted) {
@@ -207,13 +206,6 @@ export class Comment extends Component {
   }
 
   /**
-   * @returns {object} comments
-   */
-  scrollToBottom() {
-    this.el.scrollIntoView({ block: 'end' });
-  }
-
-  /**
    * @returns {HTMLElement} comments
    */
   render() {
@@ -241,7 +233,6 @@ export class Comment extends Component {
           <div>{this.displayComments()}</div>
         </div>
         <AHfooter />
-        <div id="bottom" ref={(el) => { this.el = el; }} />
       </div>
     );
   }
