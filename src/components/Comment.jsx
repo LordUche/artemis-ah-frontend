@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
@@ -166,11 +167,13 @@ export class Comment extends Component {
             </span>
             <span className="item comment_card__main">
               <div className="comment_card__main__header">
-                <h3>
-                  {SingleComment.User.firstname}
-                  {' '}
-                  {SingleComment.User.lastname}
-                </h3>
+                <Link to={`../profile/${SingleComment.User.username}`}>
+                  <h3>
+                    {SingleComment.User.firstname}
+                    {' '}
+                    {SingleComment.User.lastname}
+                  </h3>
+                </Link>
                 <i>{`${moment(SingleComment.createdAt).format('HH:mma')} on ${moment(SingleComment.createdAt).format('MMMM Do YYYY')}`}</i>
               </div>
               <div className="comment_card__main__body">
@@ -221,16 +224,16 @@ export class Comment extends Component {
       <div>
         <div className="comment">
           <div className="comment_box">
-            <i
-              className={`fas fa-reply comment_box_post ${postCommentClass}`}
+            <div
+              className={`comment_box_post ${postCommentClass}`}
               onKeyPress={this.toggleCommentPost}
               role="button"
               tabIndex={0}
               onClick={this.toggleCommentPost}
             >
-              {' '}
-            Post Comment
-            </i>
+              <i className="fas fa-reply" />
+              <span> Post Comment</span>
+            </div>
             {this.showCommentPost()}
           </div>
           <br />

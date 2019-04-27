@@ -14,6 +14,7 @@
       float: right;
       color: #2FC1FF;
       outline-color: #cccccc;
+      font-weight: $bold-font;
     }
 
     &_post:hover{
@@ -74,6 +75,7 @@
     &__header{
       h3{
         color: #2FC1FF;
+        text-transform: capitalize;
       }
 
       i{
