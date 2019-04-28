@@ -99,15 +99,11 @@ export class ProfilePage extends Component {
   componentDidUpdate(prevProps) {
     const { match, user, dispatch } = this.props;
 
-    const currentUsernameToView = (match.params.username ? match.params.username : user.username);
+    const currentUsernameToView = match.params.username ? match.params.username : user.username;
     if (
-      (
-        !prevProps.profile.user.username
-        && prevProps.profile.user.contentState === CONTENT_STATE_FETCHING_FAILED
-      ) || (
-        prevProps.profile.user.username
-        && currentUsernameToView !== prevProps.profile.user.username
-      )
+      (!prevProps.profile.user.username
+        && prevProps.profile.user.contentState === CONTENT_STATE_FETCHING_FAILED)
+      || (prevProps.profile.user.username && currentUsernameToView !== prevProps.profile.user.username)
     ) {
       dispatch(resetProfile());
 
@@ -286,14 +282,14 @@ export class ProfilePage extends Component {
       // If user is following.
       if (profile.user.isFollowing) {
         btnProps = {
-          btnText: profile.followActionWorking ? 'Unfollowing...' : 'Unfollow',
+          btnText: profile.followActionWorking ? 'Unfollowing...' : 'Unfollow'
         };
         if (!profile.followActionWorking) {
           btnProps.onClick = () => unfollowUser(user.authToken, profile.user.username, dispatch);
         }
       } else {
         btnProps = {
-          btnText: profile.followActionWorking ? 'Following...' : 'Follow',
+          btnText: profile.followActionWorking ? 'Following...' : 'Follow'
         };
         if (!profile.followActionWorking) {
           btnProps.onClick = () => followUser(user.authToken, profile.user.username, dispatch);
@@ -717,8 +713,8 @@ is not following anyone.
     } = this.props;
     const { currentPage } = this.state;
     const { user, tabContent } = profile;
-    const { totalArticles, limit } = tabContent[TAB_ARTICLES];
-    const numberOfPages = Math.ceil(totalArticles / limit);
+    const { count, limit } = tabContent[TAB_ARTICLES];
+    const numberOfPages = Math.ceil(count / limit);
     if (localStorage.getItem('reload')) {
       localStorage.removeItem('reload');
       notifyUser(toast(localStorage.getItem('articleEditMessage')));

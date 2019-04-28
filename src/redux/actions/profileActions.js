@@ -1,9 +1,5 @@
 import {
-  get,
-  post,
-  put,
-  patch,
-  delete as axiosDelete
+  get, post, put, patch, delete as axiosDelete
 } from 'axios';
 import BASE_URL from './index';
 import {
@@ -28,7 +24,7 @@ import {
   FOLLOW_ACTION_FOLLOW_FAILED,
   FOLLOW_ACTION_UNFOLLOW_FAILED,
   PROFILE_RESET_EDIT_STATE,
-  PROFILE_RESET,
+  PROFILE_RESET
 } from '../actionTypes';
 
 /**
@@ -40,14 +36,14 @@ import {
 export const fetchUserDetails = (username, token, dispatch) => get(`profiles/${username}`, {
   baseURL: BASE_URL,
   headers: {
-    authorization: `Bearer ${token}`,
+    authorization: `Bearer ${token}`
   }
 })
   .then(response => response.data)
   .then((data) => {
     dispatch({
       type: PROFILE_USER_DETAILS_FETCHED,
-      data,
+      data
     });
   })
   .catch(() => {
@@ -57,22 +53,24 @@ export const fetchUserDetails = (username, token, dispatch) => get(`profiles/${u
 /**
  * @param {string} username Username of the user.
  * @param {function} dispatch Function to dispatch actions to redux store.
+ * @param {number} pageToDisplay The page to display while paginating.
  * @returns {Promise} A promise to fetch.
  */
-export const fetchUserArticles = (username, dispatch) => {
+export const fetchUserArticles = (username, dispatch, pageToDisplay = 1) => {
   dispatch({ type: PROFILE_ARTICLES_FETCHING });
 
   return get('articles', {
     baseURL: BASE_URL,
     params: {
       author: username,
-    },
+      page: pageToDisplay
+    }
   })
     .then(response => response.data)
     .then((data) => {
       dispatch({
         type: PROFILE_ARTICLES_FETCHED,
-        data,
+        data
       });
     })
     .catch(() => {
@@ -89,13 +87,13 @@ export const fetchUserFollowers = (username, dispatch) => {
   dispatch({ type: PROFILE_FOLLOWERS_FETCHING });
 
   return get(`profiles/${username}/followers`, {
-    baseURL: BASE_URL,
+    baseURL: BASE_URL
   })
     .then(response => response.data)
     .then((data) => {
       dispatch({
         type: PROFILE_FOLLOWERS_FETCHED,
-        data,
+        data
       });
     })
     .catch(() => {
@@ -112,13 +110,13 @@ export const fetchUserFollowing = (username, dispatch) => {
   dispatch({ type: PROFILE_FOLLOWING_FETCHING });
 
   return get(`profiles/${username}/following`, {
-    baseURL: BASE_URL,
+    baseURL: BASE_URL
   })
     .then(response => response.data)
     .then((data) => {
       dispatch({
         type: PROFILE_FOLLOWING_FETCHED,
-        data,
+        data
       });
     })
     .catch(() => {
@@ -138,7 +136,7 @@ export const followUser = (authToken, username, dispatch) => {
   return post(`profiles/${username}/follow`, null, {
     baseURL: BASE_URL,
     headers: {
-      authorization: `Bearer ${authToken}`,
+      authorization: `Bearer ${authToken}`
     }
   })
     .then(response => response.data)
@@ -162,7 +160,7 @@ export const unfollowUser = (authToken, username, dispatch) => {
   return axiosDelete(`profiles/${username}/follow`, {
     baseURL: BASE_URL,
     headers: {
-      authorization: `Bearer ${authToken}`,
+      authorization: `Bearer ${authToken}`
     }
   })
     .then(response => response.data)
@@ -184,10 +182,7 @@ const uploadImage = (file) => {
   formData.append('file', file);
   formData.append('upload_preset', 'vslx4tc8');
 
-  return post(
-    'https://api.cloudinary.com/v1_1/artemisah/image/upload',
-    formData
-  );
+  return post('https://api.cloudinary.com/v1_1/artemisah/image/upload', formData);
 };
 
 /**
@@ -199,7 +194,7 @@ const uploadImage = (file) => {
  */
 export const saveUserDetails = (token, updatedBio, uploadedImageUrl, dispatch) => {
   const postData = {
-    bio: updatedBio,
+    bio: updatedBio
   };
   if (uploadedImageUrl) {
     postData.image = uploadedImageUrl;
@@ -208,14 +203,14 @@ export const saveUserDetails = (token, updatedBio, uploadedImageUrl, dispatch) =
   put('user', postData, {
     baseURL: BASE_URL,
     headers: {
-      authorization: `Bearer ${token}`,
-    },
+      authorization: `Bearer ${token}`
+    }
   })
     .then(response => response.data.user)
     .then((data) => {
       dispatch({
         type: PROFILE_DETAILS_UPDATED,
-        data,
+        data
       });
     })
     .catch(() => {
@@ -252,7 +247,7 @@ export const updateUserDetails = (token, updatedBio, selectedImage, dispatch) =>
  * @returns {object} Action object for redux.
  */
 export const resetEditState = () => ({
-  type: PROFILE_RESET_EDIT_STATE,
+  type: PROFILE_RESET_EDIT_STATE
 });
 
 /**
@@ -260,7 +255,7 @@ export const resetEditState = () => ({
  * @returns {object} Action object for redux
  */
 export const resetProfile = () => ({
-  type: PROFILE_RESET,
+  type: PROFILE_RESET
 });
 
 /**

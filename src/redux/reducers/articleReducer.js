@@ -11,7 +11,10 @@ import {
   GET_ARTICLES_ERROR,
   GETTING_ARTICLE,
   GOT_ARTICLE,
-  ERROR_GETTING_ARTICLE
+  ERROR_GETTING_ARTICLE,
+  RATED_ARTICLE,
+  RATING_ARTICLE,
+  RATING_ARTICLE_ERROR
 } from '../actionTypes';
 
 export const initialState = {
@@ -27,7 +30,9 @@ export const initialState = {
   updatedArticle: {},
   isGetting: false,
   articleGotten: {},
-  newArticleSlug: ''
+  newArticleSlug: '',
+  isRating: '',
+  ratingData: { rating: 0 }
 };
 
 /**
@@ -102,15 +107,19 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isGetting: true,
+        articleGotten: { ratingDetails: { ratings: [{ userId: 0 }] } },
         errors: {}
       };
     // eslint-disable-next-line no-case-declarations
     case GOT_ARTICLE:
-      const { article, clap } = payload;
+      const {
+        article, clap, rated, rating
+      } = payload;
       return {
         ...state,
         isGetting: false,
-        articleGotten: { ...article, clap },
+        articleGotten: { ...article, clap, rated },
+        ratingData: { rating },
         errors: {}
       };
     case ERROR_GETTING_ARTICLE:
@@ -118,6 +127,21 @@ const articleReducer = (state = initialState, { type, payload }) => {
         ...state,
         isGetting: false,
         articleDetailsGotten: {},
+        errors: payload
+      };
+    case RATED_ARTICLE:
+      return {
+        ...state,
+        ratingData: payload
+      };
+    case RATING_ARTICLE:
+      return {
+        ...state,
+        isRating: 'Rating article...'
+      };
+    case RATING_ARTICLE_ERROR:
+      return {
+        ...state,
         errors: payload
       };
     default:
