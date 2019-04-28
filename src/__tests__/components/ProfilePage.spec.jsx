@@ -167,7 +167,9 @@ describe('Test the profile page.', () => {
         .find('.profile-section__body__tab-container__tab')
         .at(1)
         .simulate('click', { preventDefault: () => 1 });
-      expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
+      expect(profilePage.find('.profile-section__body__content__title').text()).toBe(
+        'People you follow'
+      );
       expect(profilePage.find('.user-item-skeleton-screen').exists()).toBe(true);
 
       done();
@@ -181,7 +183,9 @@ describe('Test the profile page.', () => {
           .find('.profile-section__body__tab-container__tab')
           .at(1)
           .simulate('click', { preventDefault: () => 1 });
-        expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
+        expect(profilePage.find('.profile-section__body__content__title').text()).toBe(
+          'People you follow'
+        );
         expect(profilePage.find('.user-list .user-item-skeleton-screen').exists()).toBe(false);
 
         const { profile } = store.getState();
@@ -317,7 +321,7 @@ describe('Test Pagination feature for Profile page', () => {
               fullname: 'Christopher James',
               contentState: 'content.state.fetched'
             },
-            tabContent: { 'tab.articles': { totalArticles: 60, limit: 20 } }
+            tabContent: { 'tab.articles': { count: 60, limit: 20 } }
           }}
         />
       </BrowserRouter>
