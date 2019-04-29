@@ -1,5 +1,12 @@
 export const CHANGE_NAME = 'CHANGE_NAME';
 
+// Comment action types
+export const GET_COMMENTS = 'GET_COMMENTS';
+export const POST_COMMENT = 'POST_COMENTS';
+export const POST_COMMENT_ERROR = 'POST_COMMENT_ERROR';
+export const COMMENT_LOADING = 'COMMENT_LOADING';
+export const CLEAR_POSTED = 'CLEAR_POSTED';
+
 // Get all articles Action types
 export const GET_ARTICLES = 'GET_ARTICLES';
 export const GET_ARTICLES_ERROR = 'GET_ARTICLES_ERROR';
@@ -49,6 +56,12 @@ export const PUBLISHING_ARTICLE = 'PUBLISHING_ARTICLE';
 export const GETTING_ARTICLE = 'GETTING_ARTICLE';
 export const GOT_ARTICLE = 'GOT_ARTICLE';
 export const ERROR_GETTING_ARTICLE = 'ERROR_GETTING_ARTICLE';
+export const BOOKMARK_LOADING = 'BOOKMARK_LOADING';
+export const GOT_BOOKMARKS = 'GOT_BOOKMARKS';
+export const ERROR_GETTING_BOOKMARKS = 'ERROR_GETTING_BOOKMARKS';
+export const DELETED_BOOKMARK = 'DELETED_BOOKMARK';
+export const ERROR_DELETING_BOOKMARKS = 'ERROR_DELETING_BOOKMARKS';
+
 
 // Sign Up Action types
 export const SIGN_UP = 'SIGN_UP';

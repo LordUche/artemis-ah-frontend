@@ -293,9 +293,12 @@
           padding: 0;
 
           &_icon {
+            padding: 10px auto;
+            background: none;
             font-size: 35px;
             margin: 0 auto;
           }
+
           &_facebook {
             color: #385592;
           }
@@ -418,7 +421,7 @@
       position: relative;
       display: flex;
       justify-content: space-between;
-      width: 100vw;
+      width: 110vw;
       top: 0;
       right: 0;
       left: -50px;
@@ -430,56 +433,45 @@
         }
         &_button {
           margin: 0px 0;
-          width: 50%;
+          width: 30%;
           transform: scale(1.2);
         }
       }
-      &_clap,
-      &_share,
-      &_report {
-        margin-bottom: 0;
-        width: fit-content;
-      }
-      &_report_icon {
-        margin-bottom: -5px;
-        margin-top: 10px;
-      }
-    }
-    &_rating {
-      text-align: center;
-      font-size: 16px;
-      // margin-bottom: 30px;
-
-      &_average_number {
-        font-size: 24px;
-      }
-
-      &_star {
-        font-size: 35px;
-      }
-    }
-    &_author {
-      flex-wrap: wrap;
-      justify-content: center;
-
-      &_img {
-        min-width: 150px;
-      }
-
-      &_info {
-        margin: 20px 0 40px;
-        width: 100%;
-        font-size: 16px;
+      &_rating {
         text-align: center;
-      }
+        font-size: 16px;
 
-      &_follow {
-        &_btn {
-          top: auto;
-          bottom: 20px;
-          right: auto;
-          left: auto;
+        &_average_number {
+          font-size: 24px;
+        }
+
+        &_star {
+          font-size: 35px;
+        }
+      }
+      &_author {
+        flex-wrap: wrap;
+        justify-content: center;
+
+        &_img {
+          min-width: 150px;
+        }
+
+        &_info {
+          margin: 20px 0 40px;
+          width: 100%;
           font-size: 16px;
+          text-align: center;
+        }
+
+        &_follow {
+          &_btn {
+            top: auto;
+            bottom: 20px;
+            right: auto;
+            left: auto;
+            font-size: 16px;
+          }
         }
       }
     }

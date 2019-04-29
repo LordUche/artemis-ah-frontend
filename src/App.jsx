@@ -17,7 +17,7 @@ import reducers from './redux/reducers';
 // Import views
 import Landing from './views/LandingPage';
 import ProfileView from './views/ProfilePage';
-import BookmarkPage from './views/BookmarkPage';
+import BookmarksPage from './views/BookmarkPage';
 import ReadingStatsPage from './views/ReadingStatsPage';
 import HistoryPage from './views/HistoryPage';
 import SettingsPage from './views/SettingsPage';
@@ -28,6 +28,7 @@ import ResetPassword from './views/ResetPasswordPage';
 import ArticleDetailsPage from './views/ArticleDetailPage';
 import EditArticle from './views/EditArticlePage';
 
+import CommentComponent from './components/Comment';
 // Create Store
 const store = createStore(reducers, applyMiddleware(ReduxPromise));
 
@@ -43,13 +44,14 @@ const App = () => (
         <Route exact path="/" component={({ history }) => <Landing history={history} />} />
         <Route exact path="/create-article" component={CreateArticle} />
         <Route exact path="/edit-article" component={EditArticle} />
-        <Route exact path="/bookmarks" component={BookmarkPage} />
+        <Route exact path="/bookmarks" component={BookmarksPage} />
         <Route exact path="/settings" component={SettingsPage} />
         <Route exact path="/history" component={HistoryPage} />
         <Route exact path="/reading-stats" component={ReadingStatsPage} />
         <Route exact path="/explore" component={ExplorePage} />
         <Route exact path="/reset-password" component={ResetPassword} />
         <Route exact path="/article/:articleSlug" component={ArticleDetailsPage} />
+        <Route exact path="/comment" component={CommentComponent} />
         <Route component={PageNotFound} />
       </Switch>
     </BrowserRouter>

@@ -10,6 +10,7 @@ import { Link, Redirect } from 'react-router-dom';
 // Components
 import TopNavBar from '../components/TopNav';
 import Button from '../components/Button';
+import CommentsComponent from '../components/Comment';
 
 // Images
 import defaultClap from '../assets/img/defaultClap.svg';
@@ -57,7 +58,13 @@ export class ArticleDetailPage extends Component {
    */
   render() {
     const {
-      isGetting, articleGotten, errors, isLoggedIn, username, ratingData
+      isGetting,
+      articleGotten,
+      errors,
+      isLoggedIn,
+      username,
+      ratingData,
+      match
     } = this.props;
 
     const { userRated } = this.state;
@@ -306,6 +313,7 @@ export class ArticleDetailPage extends Component {
             </div>
           </div>
         )}
+        <CommentsComponent slug={match.params} isLoggedIn={isLoggedIn} />
       </Fragment>
     );
   }
