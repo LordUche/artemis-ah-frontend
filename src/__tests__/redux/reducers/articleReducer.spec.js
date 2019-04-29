@@ -284,7 +284,10 @@ describe('Test for Article Reducer', () => {
     });
     it('should update state and store bookmarked articles when GOT_BOOKMARKS action is dispatched', () => {
       const mockArticles = getMockArticles(5);
-      const mockState = articleReducer(initialState, { type: GOT_BOOKMARKS, payload: mockArticles });
+      const mockState = articleReducer(initialState, {
+        type: GOT_BOOKMARKS,
+        payload: mockArticles
+      });
       expect(mockState.loading).toBe(false);
       expect(mockState.errors).toEqual({});
       expect(mockState.bookmarkedArticles).toEqual(mockArticles);

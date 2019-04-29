@@ -32,6 +32,16 @@ const mockArticleReducer = () => ({
 });
 
 /**
+* @description Mocks the notification reducer
+* @returns {object} Returns the initial state.
+*/
+const notificationMockReducer = () => ({
+  hasNewNotifications: true,
+  notificationNumber: 1,
+  notificationsData: [{}]
+});
+
+/**
  * @description Mocks the auth reducer
  * @returns {object} Returns the initial state.
  */
@@ -62,6 +72,7 @@ describe('Test the profile page.', () => {
       user: mockUserReducer,
       auth: mockAuthReducer,
       article: mockArticleReducer,
+      notifications: notificationMockReducer
     }));
 
     profilePage = mount(

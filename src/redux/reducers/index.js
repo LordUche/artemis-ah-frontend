@@ -4,7 +4,8 @@ import userReducer from './userReducer';
 import profileReducer from './profileReducer';
 import tagReducer from './tagReducer';
 import articleReducer from './articleReducer';
-import commentReducer from './commentReducer';
+import notificationsReducer from './notificationsReducer';
+import commentsReducer from './commentReducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   profile: profileReducer,
   tags: tagReducer,
   article: articleReducer,
-  comments: commentReducer,
+  notifications: notificationsReducer,
+  comments: commentsReducer,
 });
 
 export default rootReducer;

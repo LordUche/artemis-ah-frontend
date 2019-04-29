@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import {
-  objectOf, object, func, string, bool, shape, number
+  object as objectProp, func, string, bool, object, shape, number
 } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 
@@ -24,8 +24,9 @@ import {
   removeBookmarkAction,
   bookmarkArticleAction
 } from '../redux/actions/articleActions';
+import { readNotificationAction } from '../redux/actions/notificationAction';
 
-  /**
+/**
  * @description article detail view page
  * @returns {HTMLDivElement} profile
  */
@@ -33,14 +34,15 @@ export class ArticleDetailPage extends Component {
   /**
    * @returns {HTMLElement} div
    */
-  componentWillMount() {
+  componentWillMount = async () => {
     const {
-      match, getArticle, gettingArticle, token, clearErrors
+      match, getArticle, gettingArticle, token, clearErrors, readNotifications
     } = this.props;
     const { articleSlug } = match.params;
     clearErrors();
     gettingArticle();
-    getArticle(articleSlug, token);
+    await getArticle(articleSlug, token);
+    await readNotifications(`/${articleSlug}`);
   }
 
   /**
@@ -100,7 +102,7 @@ export class ArticleDetailPage extends Component {
         return <p key={i} />;
       });
     const {
-      isGetting, articleGotten, errors, isLoggedIn, match
+      isGetting, articleGotten, errors, isLoggedIn, history, match
     } = this.props;
     const {
       title,
@@ -119,7 +121,7 @@ export class ArticleDetailPage extends Component {
 
     return (
       <Fragment>
-        <TopNavBar />
+        <TopNavBar history={history} />
         {errors.message === 'article not found' && <Redirect to="/not-found" />}
         {errors.message === 'Can\'t get Article right now, please try again later' && (<p className="article_detail_error">{errors.message}</p>)}
         { isGetting && !errors.message && (
@@ -309,7 +311,8 @@ ArticleDetailPage.propTypes = {
   getArticle: func.isRequired,
   gettingArticle: func.isRequired,
   clearErrors: func.isRequired,
-  errors: objectOf(string).isRequired,
+  readNotifications: func,
+  errors: objectProp.isRequired,
   articleGotten: shape({
     title: string,
     User: object,
@@ -325,12 +328,14 @@ ArticleDetailPage.propTypes = {
   isGetting: bool.isRequired,
   isLoggedIn: bool.isRequired,
   removeBookmark: func.isRequired,
-  bookmarkArticle: func.isRequired
+  bookmarkArticle: func.isRequired,
+  history: objectProp.isRequired
 };
 
 ArticleDetailPage.defaultProps = {
   token: '',
-  articleGotten: {}
+  articleGotten: {},
+  readNotifications: () => 'do nothing'
 };
 
 /**
@@ -361,9 +366,13 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     gettingArticle: gettingArticleAction,
     clearErrors: clearErrorsAction,
     removeBookmark: removeBookmarkAction,
-    bookmarkArticle: bookmarkArticleAction
+    bookmarkArticle: bookmarkArticleAction,
+    readNotifications: readNotificationAction,
   },
   dispatch
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleDetailPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ArticleDetailPage);

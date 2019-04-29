@@ -230,6 +230,7 @@ const saveEditedArticleAction = async ({
       data: { article }
     };
   } catch (error) {
+    notifyUser(toast('Update Failed'));
     return {
       type: FETCH_DELETE_ERROR,
       payload: error.response.data
@@ -258,6 +259,7 @@ const deleteArticleAction = async (slug) => {
       data: { slug }
     };
   } catch (error) {
+    notifyUser(toast('Delete Failed'));
     return {
       type: FETCH_DELETE_ERROR,
       payload: error.response.data
