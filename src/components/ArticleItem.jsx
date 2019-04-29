@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { string as stringProp, bool as boolProp, func } from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -24,7 +24,9 @@ export const ArticleItem = ({
   modifyArticle,
   push,
   deleteConfirmation,
-  userActionClass
+  deleteBookmarkConfirmation,
+  userActionClass,
+  forBookmarks
 }) => {
   const card = {
     title,
@@ -75,27 +77,42 @@ export const ArticleItem = ({
           <div
             className={`article-item__body-wrapper__bottom-links__user-actions ${userActionClass}`}
           >
-            <Button
-              onClick={() => {
-                localStorage.setItem('cardData', JSON.stringify(card));
-                modifyArticle(card);
-                push('./edit-article');
-              }}
-              btnType="button"
-              customClass="article-item__body-wrapper__bottom-links__user-actions__edit"
-            >
-              <i className="fa fa-pencil-alt" />
-            </Button>
-            <Button
-              customClass="article-item__body-wrapper__bottom-links__user-actions__delete"
-              onClick={() => {
-                localStorage.setItem('deleteSlug', slug);
-                deleteConfirmation();
-              }}
-              btnType="button"
-            >
-              <i className="fa fa-trash" />
-            </Button>
+            {!forBookmarks && (
+              <Fragment>
+                <Button
+                  onClick={() => {
+                    localStorage.setItem('cardData', JSON.stringify(card));
+                    modifyArticle(card);
+                    push('./edit-article');
+                  }}
+                  btnType="button"
+                  customClass="article-item__body-wrapper__bottom-links__user-actions__edit"
+                >
+                  <i className="fa fa-pencil-alt" />
+                </Button>
+                <Button
+                  customClass="article-item__body-wrapper__bottom-links__user-actions__delete"
+                  onClick={() => {
+                    localStorage.setItem('deleteSlug', slug);
+                    deleteConfirmation();
+                  }}
+                  btnType="button"
+                >
+                  <i className="fa fa-trash" />
+                </Button>
+              </Fragment>
+            )
+          }
+            {forBookmarks && (
+              <Button
+                customClass="article-item__body-wrapper__bottom-links__user-actions__delete"
+                onClick={deleteBookmarkConfirmation}
+                btnType="button"
+              >
+                <i className="fa fa-trash" />
+              </Button>
+            )
+          }
           </div>
         </div>
       </div>
@@ -118,7 +135,9 @@ export const ArticleItem = ({
 ArticleItem.defaultProps = {
   showAuthor: true,
   push: () => 'do nothing',
-  userActionClass: ''
+  userActionClass: '',
+  forBookmarks: false,
+  deleteBookmarkConfirmation: () => 'Do nothing'
 };
 
 ArticleItem.propTypes = {
@@ -134,8 +153,10 @@ ArticleItem.propTypes = {
   author: stringProp.isRequired,
   body: stringProp.isRequired,
   modifyArticle: func.isRequired,
+  deleteBookmarkConfirmation: func,
   push: func,
-  deleteConfirmation: func.isRequired
+  deleteConfirmation: func.isRequired,
+  forBookmarks: boolProp
 };
 
 /**

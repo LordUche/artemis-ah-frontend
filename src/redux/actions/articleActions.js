@@ -21,7 +21,12 @@ import {
   GET_ARTICLES_ERROR,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
-  GETTING_ARTICLE
+  GETTING_ARTICLE,
+  DELETED_BOOKMARK,
+  BOOKMARK_LOADING,
+  ERROR_DELETING_BOOKMARKS,
+  GOT_BOOKMARKS,
+  ERROR_GETTING_BOOKMARKS
 } from '../actionTypes';
 import notifyUser from '../../utils/Toast';
 
@@ -240,6 +245,66 @@ const getArticleAction = async (articleSlug, token) => {
  */
 const gettingArticleAction = () => ({ type: GETTING_ARTICLE });
 
+/**
+ * @method getBookmarksAction
+ * @description Method to get all bookmarked articles
+ * @param {string} token user's token
+ * @returns {object} action
+ */
+const getBookmarksAction = async (token) => {
+  try {
+    const response = await get(`${BASE_URL}/bookmarks`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return {
+      type: GOT_BOOKMARKS,
+      payload: response.data.userBookmarks || []
+    };
+  } catch (error) {
+    return {
+      type: ERROR_GETTING_BOOKMARKS,
+      payload: error.response.data
+    };
+  }
+};
+
+/**
+ * @method deleteBookmarksAction
+ * @description Method to unbookmark an article
+ * @param {string} article the article to be removed from bookmarks
+ * @param {string} token the user's token
+ * @returns {object} action
+ */
+const deleteBookmarkAction = async (article, token) => {
+  try {
+    const response = await axiosDelete(`${BASE_URL}/articles/${article.slug}/bookmark`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return {
+      type: DELETED_BOOKMARK,
+      payload: article || response.data
+    };
+  } catch (error) {
+    return {
+      type: ERROR_DELETING_BOOKMARKS,
+      payload: error.response.data || { message: 'Server Error' }
+    };
+  }
+};
+
+/**
+ * @method bookmarkLoading
+ * @description Method to trigger loading state due to bookmark actions
+ * @returns {object} action
+ */
+const bookmarkLoadingAction = () => ({ type: BOOKMARK_LOADING });
+
 export {
   fetchTagsAction,
   createArticleAction,
@@ -252,5 +317,8 @@ export {
   saveEditedArticleAction,
   confirmArticleDeleteAction,
   closeArticleDeleteModalAction,
-  editArticle
+  editArticle,
+  getBookmarksAction,
+  deleteBookmarkAction,
+  bookmarkLoadingAction
 };

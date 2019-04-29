@@ -281,7 +281,7 @@
         &_button{
           cursor: pointer;
           width: 100%;
-          padding: 0;
+          padding: 10px auto;;
           background: none;
           
           &_icon{
@@ -410,7 +410,7 @@
     position: relative;
     display: flex;
     justify-content: space-between;
-    width: 100vw;
+    width: 110vw;
     top: 0;
     right: 0;
     left: -50px;
@@ -422,7 +422,7 @@
       }
       &_button{
       margin: 0px 0;
-      width: 50%;
+      width: 30%;
       transform: scale(1.2);
       }
     }
