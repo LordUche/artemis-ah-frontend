@@ -25,7 +25,7 @@ export const SideNav = ({ isLoggedIn }) => (
               Bookmarked
               {' '}
               <br />
-              Article
+              Articles
             </div>
           </NavLink>
         </li>
