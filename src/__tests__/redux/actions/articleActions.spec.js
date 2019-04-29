@@ -10,7 +10,10 @@ import {
   saveEditedArticleAction,
   confirmArticleDeleteAction,
   closeArticleDeleteModalAction,
-  getAllArticles
+  getAllArticles,
+  bookmarkLoadingAction,
+  deleteBookmarkAction,
+  getBookmarksAction
 } from '../../../redux/actions/articleActions';
 
 import {
@@ -18,8 +21,14 @@ import {
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
   OPEN_DELETE_CONFIRMATION_MODAL,
-  CLOSE_DELETE_CONFIRMATION_MODAL
+  CLOSE_DELETE_CONFIRMATION_MODAL,
+  BOOKMARK_LOADING,
+  DELETED_BOOKMARK,
+  ERROR_DELETING_BOOKMARKS,
+  ERROR_GETTING_BOOKMARKS,
+  GOT_BOOKMARKS
 } from '../../../redux/actionTypes';
+import getMockArticles from '../../../__mocks__/articles';
 
 
 describe('Test get all articles action', () => {
@@ -400,5 +409,100 @@ describe('Delete article modal', () => {
   it('it should return an action type', () => {
     expect(confirmArticleDeleteAction().type).toEqual(OPEN_DELETE_CONFIRMATION_MODAL);
     expect(closeArticleDeleteModalAction().type).toEqual(CLOSE_DELETE_CONFIRMATION_MODAL);
+  });
+});
+
+describe('Test bookmark actions', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should return bookmarked articles when the user has some', async () => {
+    const mockResponse = {
+      userBookmarks: getMockArticles(8)
+    };
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const { type, payload } = await getBookmarksAction(mockToken);
+    expect(type).toEqual(GOT_BOOKMARKS);
+    expect(payload).toEqual(mockResponse.userBookmarks);
+  });
+
+  it('should return empty array when the user has no bookmarked articles', async () => {
+    const mockResponse = {
+      message: 'You have no bookmarks'
+    };
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const { type, payload } = await getBookmarksAction(mockToken);
+    expect(type).toEqual(GOT_BOOKMARKS);
+    expect(payload).toEqual([]);
+  });
+
+  it('should return an error when there was an error getting bookmarks', async () => {
+    const mockResponse = {
+      message: 'Server Error'
+    };
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500, response: mockResponse });
+    });
+    const { type, payload } = await getBookmarksAction(mockToken);
+    expect(type).toEqual(ERROR_GETTING_BOOKMARKS);
+    expect(payload.message).toEqual(mockResponse.message);
+  });
+  it('should dispatch the DELETED_BOOKMARK type action when bookmarked article is deleted successfully', async () => {
+    const mockResponse = {
+      message: 'You have successfully removed the article from your bookmarks'
+    };
+    const mockArticle = getMockArticles(1)[0];
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const { type, payload } = await deleteBookmarkAction(mockArticle, mockToken);
+    expect(type).toEqual(DELETED_BOOKMARK);
+    expect(payload).toEqual(mockArticle);
+  });
+  it('should dispatch the ERROR_DELETING_BOOKMARKS type action with error message supplied when bookmarked article is not deleted successfully', async () => {
+    const mockResponse = {
+      message: 'Bad Request'
+    };
+    const mockArticle = getMockArticles(1)[0];
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponse });
+    });
+    const { type, payload } = await deleteBookmarkAction(mockArticle, mockToken);
+    expect(type).toEqual(ERROR_DELETING_BOOKMARKS);
+    expect(payload).toEqual(mockResponse);
+  });
+  it('should dispatch the ERROR_DELETING_BOOKMARKS type action when bookmarked article is not deleted successfully due to server errors', async () => {
+    const mockArticle = getMockArticles(1)[0];
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500 });
+    });
+    const { type, payload } = await deleteBookmarkAction(mockArticle, mockToken);
+    expect(type).toEqual(ERROR_DELETING_BOOKMARKS);
+    expect(payload).toEqual({ message: 'Server Error' });
+  });
+  it('should dispatch the BOOKMARK_LOADING type action when bookmark operations are going on', () => {
+    const { type } = bookmarkLoadingAction();
+    expect(type).toEqual(BOOKMARK_LOADING);
   });
 });
