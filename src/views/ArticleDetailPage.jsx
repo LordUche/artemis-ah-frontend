@@ -11,6 +11,7 @@ import { Link, Redirect } from 'react-router-dom';
 // Components
 import TopNavBar from '../components/TopNav';
 import Button from '../components/Button';
+import CommentsComponent from '../components/Comment';
 
 // Images
 import defaultClap from '../assets/img/defaultClap.svg';
@@ -99,7 +100,7 @@ export class ArticleDetailPage extends Component {
         return <p key={i} />;
       });
     const {
-      isGetting, articleGotten, errors, isLoggedIn
+      isGetting, articleGotten, errors, isLoggedIn, match
     } = this.props;
     const {
       title,
@@ -288,6 +289,10 @@ export class ArticleDetailPage extends Component {
           </div>
         </div>
         )}
+        <CommentsComponent
+          slug={match.params}
+          isLoggedIn={isLoggedIn}
+        />
       </Fragment>
     );
   }
