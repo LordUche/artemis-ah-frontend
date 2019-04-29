@@ -13,7 +13,12 @@ import {
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
   ARTICLE_BOOKMARK_ADDED,
-  ARTICLE_BOOKMARK_REMOVED
+  ARTICLE_BOOKMARK_REMOVED,
+  BOOKMARK_LOADING,
+  DELETED_BOOKMARK,
+  ERROR_GETTING_BOOKMARKS,
+  ERROR_DELETING_BOOKMARKS,
+  GOT_BOOKMARKS
 } from '../actionTypes';
 
 export const initialState = {
@@ -29,7 +34,9 @@ export const initialState = {
   updatedArticle: {},
   isGetting: false,
   articleGotten: {},
-  newArticleSlug: ''
+  newArticleSlug: '',
+  bookmarkedArticles: [],
+  bookmarkDeleted: {}
 };
 
 /**
@@ -72,7 +79,8 @@ const articleReducer = (state = initialState, { type, payload }) => {
         isPublishing: false,
         isGetting: false,
         newArticleSlug: '',
-        errors: {}
+        errors: {},
+        bookmarkDeleted: {}
       };
     case PUBLISHING_ARTICLE:
       return {
@@ -137,6 +145,41 @@ const articleReducer = (state = initialState, { type, payload }) => {
           ...state.articleGotten,
           isBookmarked: false
         }
+      };
+    case ERROR_DELETING_BOOKMARKS:
+      return {
+        ...state,
+        errors: payload,
+        bookmarkDeleted: {},
+        loading: false
+      };
+    case ERROR_GETTING_BOOKMARKS:
+      return {
+        ...state,
+        errors: payload,
+        loading: false
+      };
+    case GOT_BOOKMARKS:
+      return {
+        ...state,
+        errors: {},
+        bookmarkedArticles: payload,
+        loading: false
+      };
+    case DELETED_BOOKMARK:
+      return {
+        ...state,
+        errors: {},
+        bookmarkDeleted: payload,
+        loading: false,
+        bookmarkedArticles: state.bookmarkedArticles.filter(a => a.slug !== payload.slug)
+      };
+    case BOOKMARK_LOADING:
+      return {
+        ...state,
+        errors: {},
+        loading: true,
+        deletedBookmark: {}
       };
     default:
       return state;

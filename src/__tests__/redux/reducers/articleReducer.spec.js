@@ -10,8 +10,15 @@ import {
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
   ARTICLE_BOOKMARK_ADDED,
-  ARTICLE_BOOKMARK_REMOVED
+  ARTICLE_BOOKMARK_REMOVED,
+  BOOKMARK_LOADING,
+  DELETED_BOOKMARK,
+  ERROR_DELETING_BOOKMARKS,
+  ERROR_GETTING_BOOKMARKS,
+  GOT_BOOKMARKS
 } from '../../../redux/actionTypes';
+import getMockArticles from '../../../__mocks__/articles';
+
 
 describe('Test for Article Reducer', () => {
   it('should validate create articles reducer', () => {
@@ -254,6 +261,49 @@ describe('Test for Article Reducer', () => {
       expect(newState.articleGotten.isBookmarked).toBe(false);
 
       done();
+    });
+  });
+
+  describe('Test actions to load bookmarks and perform actions on bookmarks', () => {
+    it('should update state when BOOKMARK_LOADING action is dispatched', () => {
+      const mockState = articleReducer(initialState, { type: BOOKMARK_LOADING });
+      expect(mockState.loading).toBe(true);
+      expect(mockState.errors).toEqual({});
+      expect(mockState.deletedBookmark).toEqual({});
+    });
+    it('should update state when ERROR_DELETING_BOOKMARKS action is dispatched', () => {
+      const mockState = articleReducer(initialState, { type: ERROR_DELETING_BOOKMARKS, payload: { message: 'Server Error' } });
+      expect(mockState.loading).toBe(false);
+      expect(mockState.errors).toEqual({ message: 'Server Error' });
+      expect(mockState.bookmarkDeleted).toEqual({});
+    });
+    it('should update state when ERROR_GETTING_BOOKMARKS action is dispatched', () => {
+      const mockState = articleReducer(initialState, { type: ERROR_GETTING_BOOKMARKS, payload: { message: 'Server Error' } });
+      expect(mockState.loading).toBe(false);
+      expect(mockState.errors).toEqual({ message: 'Server Error' });
+    });
+    it('should update state and store bookmarked articles when GOT_BOOKMARKS action is dispatched', () => {
+      const mockArticles = getMockArticles(5);
+      const mockState = articleReducer(initialState, { type: GOT_BOOKMARKS, payload: mockArticles });
+      expect(mockState.loading).toBe(false);
+      expect(mockState.errors).toEqual({});
+      expect(mockState.bookmarkedArticles).toEqual(mockArticles);
+    });
+    it('should update state when DELETED_BOOKMARK action is dispatched', () => {
+      const mockArticle = getMockArticles(1)[0];
+      const initialReducerState = articleReducer(initialState, {
+        type: GOT_BOOKMARKS,
+        payload: [mockArticle]
+      });
+      expect(initialReducerState.bookmarkedArticles).toEqual([mockArticle]);
+      const mockState = articleReducer(initialReducerState, {
+        type: DELETED_BOOKMARK,
+        payload: mockArticle
+      });
+      expect(mockState.loading).toBe(false);
+      expect(mockState.errors).toEqual({});
+      expect(mockState.bookmarkDeleted).toEqual(mockArticle);
+      expect(mockState.bookmarkedArticles).toEqual([]);
     });
   });
 });
