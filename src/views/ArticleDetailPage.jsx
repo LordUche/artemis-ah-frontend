@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import {
-  objectOf, object, func, string, bool, shape, number
+  object as objectProp,
+  func,
+  string,
+  bool,
+  object,
+  objectOf,
+  shape,
+  number
 } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 
@@ -22,6 +29,7 @@ import {
   clearErrorsAction,
   rateArticleAction
 } from '../redux/actions/articleActions';
+import { readNotificationAction } from '../redux/actions/notificationAction';
 /**
  * @description article detail view page
  * @param {object} event - Synthetic React Event
@@ -35,15 +43,16 @@ export class ArticleDetailPage extends Component {
   /**
    * @returns {HTMLElement} div
    */
-  componentWillMount() {
+  componentWillMount = async () => {
     const {
-      match, getArticle, gettingArticle, token, clearErrors
+      match, getArticle, gettingArticle, token, clearErrors, readNotifications
     } = this.props;
     const { articleSlug } = match.params;
     clearErrors();
     gettingArticle();
-    getArticle(articleSlug, token);
-  }
+    await getArticle(articleSlug, token);
+    await readNotifications(`/${articleSlug}`);
+  };
 
   rateArticle = (event) => {
     const { articleGotten, rateArticleFn } = this.props;
@@ -64,7 +73,8 @@ export class ArticleDetailPage extends Component {
       isLoggedIn,
       username,
       ratingData,
-      match
+      match,
+      history
     } = this.props;
 
     const { userRated } = this.state;
@@ -122,7 +132,7 @@ export class ArticleDetailPage extends Component {
     const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
     return (
       <Fragment>
-        <TopNavBar />
+        <TopNavBar history={history} />
         {errors.message === 'article not found' && <Redirect to="/not-found" />}
         {errors.message === "Can't get Article right now, please try again later" && (
           <p className="article_detail_error">{errors.message}</p>
@@ -330,7 +340,8 @@ ArticleDetailPage.propTypes = {
   getArticle: func.isRequired,
   gettingArticle: func.isRequired,
   clearErrors: func.isRequired,
-  errors: objectOf(string).isRequired,
+  readNotifications: func,
+  errors: objectProp.isRequired,
   articleGotten: shape({
     title: string,
     User: object,
@@ -347,12 +358,14 @@ ArticleDetailPage.propTypes = {
   isLoggedIn: bool.isRequired,
   rateArticleFn: func.isRequired,
   username: string.isRequired,
-  ratingData: objectOf.isRequired
+  ratingData: objectOf.isRequired,
+  history: objectProp.isRequired
 };
 
 ArticleDetailPage.defaultProps = {
   token: '',
-  articleGotten: {}
+  articleGotten: {},
+  readNotifications: () => 'do nothing'
 };
 
 /**
@@ -387,7 +400,8 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     getArticle: getArticleAction,
     gettingArticle: gettingArticleAction,
     clearErrors: clearErrorsAction,
-    rateArticleFn: rateArticleAction
+    rateArticleFn: rateArticleAction,
+    readNotifications: readNotificationAction
   },
   dispatch
 );

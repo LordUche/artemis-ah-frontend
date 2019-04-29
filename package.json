@@ -9,7 +9,7 @@
     "serve": " npm run build && npm run start",
     "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
-    "test": "jest ./src/__tests__ --coverage --no-cache -u",
+    "test": "jest ./src/__tests__ --coverage --no-cache -u --forceExit",
     "nightwatch": "nightwatch -c tests/nightwatch.conf.js -e"
   },
   "repository": {
@@ -52,6 +52,7 @@
     "moxios": "^0.4.0",
     "nuka-carousel": "^4.5.3",
     "prop-types": "^15.7.2",
+    "pusher-js": "^4.4.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.3",

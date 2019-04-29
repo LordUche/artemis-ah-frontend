@@ -50,11 +50,21 @@ const mockArticleReducer = () => ({
   confirmationModal: false
 });
 
+/**
+* @description Mocks the notification reducer
+* @returns {object} Returns the initial state.
+*/
+const notificationMockReducer = () => ({
+  hasNewNotifications: true,
+  notificationNumber: 1,
+  notificationsData: [{}]
+});
+
+
 let profilePage;
 let store;
 
 describe('Test the profile page.', () => {
-  jest.setTimeout(50000);
   beforeAll((done) => {
     axiosPost('https://authorshaven.herokuapp.com/api/users/login', {
       name: 'ayo',
@@ -71,7 +81,8 @@ describe('Test the profile page.', () => {
         profile: profileReducer,
         user: mockUserReducer,
         auth: mockAuthReducer,
-        article: mockArticleReducer
+        article: mockArticleReducer,
+        notifications: notificationMockReducer
       })
     );
 
