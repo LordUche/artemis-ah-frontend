@@ -1,0 +1,24 @@
+.bookmark_section{
+  padding: 20px 5% 30px;
+  width: 100%;
+  height: 60vh;
+  overflow: auto;
+
+  &_empty_text{
+    margin: 10% auto;
+    font-size: 16px;
+    opacity: .5;
+    width: 271px;
+  }
+
+  .article-item{
+    &:last-of-type{
+    margin-bottom: 100px;
+    }
+  }
+
+  .pagination{
+    margin-top: 30px;
+  }
+}
+

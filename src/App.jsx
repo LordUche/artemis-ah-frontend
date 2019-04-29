@@ -17,7 +17,7 @@ import reducers from './redux/reducers';
 // Import views
 import Landing from './views/LandingPage';
 import ProfileView from './views/ProfilePage';
-import BookmarkPage from './views/BookmarkPage';
+import BookmarksPage from './views/BookmarkPage';
 import ReadingStatsPage from './views/ReadingStatsPage';
 import HistoryPage from './views/HistoryPage';
 import SettingsPage from './views/SettingsPage';
@@ -43,7 +43,7 @@ const App = () => (
         <Route exact path="/" component={({ history }) => <Landing history={history} />} />
         <Route exact path="/create-article" component={CreateArticle} />
         <Route exact path="/edit-article" component={EditArticle} />
-        <Route exact path="/bookmarks" component={BookmarkPage} />
+        <Route exact path="/bookmarks" component={BookmarksPage} />
         <Route exact path="/settings" component={SettingsPage} />
         <Route exact path="/history" component={HistoryPage} />
         <Route exact path="/reading-stats" component={ReadingStatsPage} />
