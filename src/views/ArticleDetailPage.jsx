@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import {
-  objectOf, object, func, string, bool, shape, number
+  object as objectProp, func, string, bool, object, shape, number
 } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 
@@ -16,28 +16,34 @@ import CommentsComponent from '../components/Comment';
 import defaultClap from '../assets/img/defaultClap.svg';
 
 // Actions
-import { gettingArticleAction, getArticleAction, clearErrorsAction } from '../redux/actions/articleActions';
+import {
+  gettingArticleAction,
+  getArticleAction,
+  clearErrorsAction
+} from '../redux/actions/articleActions';
+import { readNotificationAction } from '../redux/actions/notificationAction';
 /**
  * @description article detail view page
  * @returns {HTMLDivElement} profile
  */
 export class ArticleDetailPage extends Component {
   /**
- * @returns {HTMLElement} div
- */
-  componentWillMount() {
+   * @returns {HTMLElement} div
+   */
+  componentWillMount = async () => {
     const {
-      match, getArticle, gettingArticle, token, clearErrors
+      match, getArticle, gettingArticle, token, clearErrors, readNotifications
     } = this.props;
     const { articleSlug } = match.params;
     clearErrors();
     gettingArticle();
-    getArticle(articleSlug, token);
+    await getArticle(articleSlug, token);
+    await readNotifications(`/${articleSlug}`);
   }
 
   /**
- * @returns {HTMLElement} div
- */
+   * @returns {HTMLElement} div
+   */
   render() {
     const stars = Array(5)
       .fill(undefined)
@@ -52,7 +58,7 @@ export class ArticleDetailPage extends Component {
         return <p key={i} />;
       });
     const {
-      isGetting, articleGotten, errors, isLoggedIn, match
+      isGetting, articleGotten, errors, isLoggedIn, history, match
     } = this.props;
     const {
       title,
@@ -69,7 +75,7 @@ export class ArticleDetailPage extends Component {
     const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
     return (
       <Fragment>
-        <TopNavBar />
+        <TopNavBar history={history} />
         {errors.message === 'article not found' && <Redirect to="/not-found" />}
         {errors.message === 'Can\'t get Article right now, please try again later' && (<p className="article_detail_error">{errors.message}</p>)}
         { isGetting && !errors.message && (
@@ -264,7 +270,8 @@ ArticleDetailPage.propTypes = {
   getArticle: func.isRequired,
   gettingArticle: func.isRequired,
   clearErrors: func.isRequired,
-  errors: objectOf(string).isRequired,
+  readNotifications: func,
+  errors: objectProp.isRequired,
   articleGotten: shape({
     title: string,
     User: object,
@@ -279,11 +286,13 @@ ArticleDetailPage.propTypes = {
   }),
   isGetting: bool.isRequired,
   isLoggedIn: bool.isRequired,
+  history: objectProp.isRequired
 };
 
 ArticleDetailPage.defaultProps = {
   token: '',
-  articleGotten: {}
+  articleGotten: {},
+  readNotifications: () => 'do nothing'
 };
 
 /**
@@ -313,8 +322,12 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     getArticle: getArticleAction,
     gettingArticle: gettingArticleAction,
     clearErrors: clearErrorsAction,
+    readNotifications: readNotificationAction
   },
   dispatch
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleDetailPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ArticleDetailPage);
