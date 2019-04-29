@@ -49,10 +49,6 @@ const getAllArticles = async (pageNo = 1) => {
 };
 
 /**
- * @returns {string} loading
- */
-
-/**
  * @method fetchTags
  * @description - Method to dispatch fetch tags actions
  * @returns {object} - The fetch tags action object
