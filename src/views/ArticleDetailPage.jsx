@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,9 +20,12 @@ import defaultClap from '../assets/img/defaultClap.svg';
 import {
   gettingArticleAction,
   getArticleAction,
-  clearErrorsAction
+  clearErrorsAction,
+  removeBookmarkAction,
+  bookmarkArticleAction
 } from '../redux/actions/articleActions';
 import { readNotificationAction } from '../redux/actions/notificationAction';
+
 /**
  * @description article detail view page
  * @returns {HTMLDivElement} profile
@@ -39,6 +43,46 @@ export class ArticleDetailPage extends Component {
     gettingArticle();
     await getArticle(articleSlug, token);
     await readNotifications(`/${articleSlug}`);
+  }
+
+  /**
+   * @returns {HTMLElement} Returns the button to add to/remove from bookmark
+   */
+  getBookmarkToggleButton() {
+    const {
+      articleGotten,
+      token,
+      bookmarkArticle,
+      removeBookmark
+    } = this.props;
+
+    return !articleGotten.isBookmarked ? (
+      <a
+        href="#"
+        className="article_detail_bookmark"
+        onClick={(e) => {
+          bookmarkArticle(articleGotten.slug, token);
+          e.preventDefault();
+        }}
+      >
+        <i className="far fa-bookmark article_detail_bookmark_icon" />
+        {' '}
+        <span>Add to Bookmark</span>
+      </a>
+    ) : (
+      <a
+        href="#"
+        className="article_detail_bookmark bookmarked"
+        onClick={(e) => {
+          removeBookmark(articleGotten.slug, token);
+          e.preventDefault();
+        }}
+      >
+        <i className="fas fa-bookmark article_detail_bookmark_icon" />
+        {' '}
+        <span>Remove from Bookmark</span>
+      </a>
+    );
   }
 
   /**
@@ -71,8 +115,10 @@ export class ArticleDetailPage extends Component {
       readTime,
       totalClaps
     } = articleGotten;
+
     const shareUrl = window.location.href;
     const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
+
     return (
       <Fragment>
         <TopNavBar history={history} />
@@ -142,12 +188,7 @@ export class ArticleDetailPage extends Component {
               </section>
             </section>
           </div>
-          { isLoggedIn && (
-          <div className="article_detail_bookmark">
-            <i className="far fa-bookmark article_detail_bookmark_icon" />
-            <p>Add to Bookmark</p>
-          </div>
-          )}
+          {isLoggedIn && this.getBookmarkToggleButton()}
           <article className={`article_detail_body ${!isLoggedIn && 'article_detail_body_no_auth'}`}>
             {body.split('\n').map(section => (
               <Fragment key={section}>
@@ -286,6 +327,8 @@ ArticleDetailPage.propTypes = {
   }),
   isGetting: bool.isRequired,
   isLoggedIn: bool.isRequired,
+  removeBookmark: func.isRequired,
+  bookmarkArticle: func.isRequired,
   history: objectProp.isRequired
 };
 
@@ -322,7 +365,9 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     getArticle: getArticleAction,
     gettingArticle: gettingArticleAction,
     clearErrors: clearErrorsAction,
-    readNotifications: readNotificationAction
+    removeBookmark: removeBookmarkAction,
+    bookmarkArticle: bookmarkArticleAction,
+    readNotifications: readNotificationAction,
   },
   dispatch
 );
