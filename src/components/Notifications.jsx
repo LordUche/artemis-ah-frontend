@@ -1,5 +1,6 @@
 import React from 'react';
 import { string } from 'prop-types';
+import moment from 'moment';
 
 /**
  * @description Notifications component
@@ -8,22 +9,22 @@ import { string } from 'prop-types';
  */
 const Notifications = (props) => {
   const {
-    message, title, type, url
+    message, title, time, url
   } = props;
   return (
     <div
-      onClick={() => window.location.assign(`/article${url}`)}
+      onClick={() => {
+        window.location.assign(`/article${url}`);
+      }}
       className="notifications-div-item"
       role="presentation"
     >
       <p className="notifications-div-item-info">
-        <span className="notifications-div-item-info-name">{`${title}`}</span>
+        <span className="notifications-div-item-info-name">{`${title}`.slice(0, 30)}</span>
         <br />
-        {message}
+        {`${message}`.slice(0, 50)}
       </p>
-      <span className="notifications-div-item-time">
-        {`New ${type}`.replace(/article.published/g, 'Article')}
-      </span>
+      <span className="notifications-div-item-time">{`${moment(time).format('lll')}`}</span>
     </div>
   );
 };
@@ -31,14 +32,14 @@ const Notifications = (props) => {
 Notifications.propTypes = {
   message: string,
   title: string,
-  type: string,
+  time: string,
   url: string
 };
 
 Notifications.defaultProps = {
   message: '',
   title: '',
-  type: '',
+  time: '',
   url: ''
 };
 

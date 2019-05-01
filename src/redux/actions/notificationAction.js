@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import { get } from 'axios';
 import BASE_URL from './index';
-import { GET_NOTIFICATIONS, READ_NOTIFICATION, NEW_NOTIFICATION } from '../actionTypes';
+import { GET_NOTIFICATIONS } from '../actionTypes';
 
 /**
  * @method getNotificationAction
@@ -28,29 +28,6 @@ const getNotificationAction = async (token, dispatch) => {
 };
 
 /**
- * @description - Method to dispatch read article action updating the application of articles seen
- * @method readNotificationAction
- * @param {string} slugPathUrl
- * @returns {object} action
- */
-const readNotificationAction = slugPathUrl => ({
-  type: READ_NOTIFICATION,
-  payload: { url: slugPathUrl }
-});
-
-/**
- * @description - Method to dispatch read article action updating the applocation of read articles
- * @method newNotificationAction
- * @param {object} data
- * @param {function} dispatch
- * @returns {object} action
- */
-const newNotificationAction = (data, dispatch) => dispatch({
-  type: NEW_NOTIFICATION,
-  payload: { notifications: [data] }
-});
-
-/**
  * @description notify function
  * @param {string} title - title of notification
  * @param {string} body - body of notification
@@ -62,5 +39,5 @@ const notifyPopup = (title = '', body = '') => new Notification(title, {
 });
 
 export {
-  getNotificationAction, readNotificationAction, newNotificationAction, notifyPopup
+  getNotificationAction, notifyPopup
 };
