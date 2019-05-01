@@ -35,19 +35,20 @@ ul.dropdown__body li {
   margin-right: 0;
   display: block;
 
-  &:first-child > a {
+  &:first-child > a, :first-child > span {
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
   }
 
-  &:last-child > a {
+  &:last-child > a, :last-child > span {
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
   }
 
-  & > a {
+  & > a, > span {
     display: block;
     margin-right: 0;
+    // color: $primary-color;
     padding: 1.5rem 5rem 1.5rem 2rem;
     cursor: pointer;
     width: 100%;

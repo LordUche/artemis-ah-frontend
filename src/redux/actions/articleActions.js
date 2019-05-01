@@ -58,6 +58,31 @@ const getAllArticles = async (pageNo = 1) => {
 };
 
 /**
+ * @method GetArticles
+ * @description Method to get all articles
+ * @param {string} keyword Filter Parameter
+ * @returns {object} Fetched articles
+ */
+const filterArticles = async (keyword) => {
+  try {
+    const response = await get(`${BASE_URL}/filter?tag=${keyword}`);
+    const { articles } = response.data;
+    const total = articles.length;
+    const limit = 20;
+
+    return {
+      type: GET_ARTICLES,
+      payload: { articles, limit, total }
+    };
+  } catch (error) {
+    return {
+      type: GET_ARTICLES_ERROR,
+      payload: error.response.data
+    };
+  }
+};
+
+/**
  * @method fetchTags
  * @description - Method to dispatch fetch tags actions
  * @returns {object} - The fetch tags action object
@@ -381,5 +406,6 @@ export {
   removeBookmarkAction,
   getBookmarksAction,
   deleteBookmarkAction,
-  bookmarkLoadingAction
+  bookmarkLoadingAction,
+  filterArticles
 };

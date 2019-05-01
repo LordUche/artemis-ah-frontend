@@ -39,21 +39,24 @@ const store = createStore(reducers, applyMiddleware(ReduxPromise));
 const App = () => (
   <Provider store={store}>
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/profile/:username?" component={ProfileView} />
-        <Route exact path="/" component={({ history }) => <Landing history={history} />} />
-        <Route exact path="/create-article" component={CreateArticle} />
-        <Route exact path="/edit-article" component={EditArticle} />
-        <Route exact path="/bookmarks" component={BookmarksPage} />
-        <Route exact path="/settings" component={SettingsPage} />
-        <Route exact path="/history" component={HistoryPage} />
-        <Route exact path="/reading-stats" component={ReadingStatsPage} />
-        <Route exact path="/explore" component={ExplorePage} />
-        <Route exact path="/reset-password" component={ResetPassword} />
-        <Route exact path="/article/:articleSlug" component={ArticleDetailsPage} />
-        <Route exact path="/comment" component={CommentComponent} />
-        <Route component={PageNotFound} />
-      </Switch>
+      <div>
+        <Switch>
+          <Route exact path="/profile/:username?" component={ProfileView} />
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/create-article" component={CreateArticle} />
+          <Route exact path="/edit-article" component={EditArticle} />
+          <Route exact path="/bookmarks" component={BookmarksPage} />
+          <Route exact path="/settings" component={SettingsPage} />
+          <Route exact path="/history" component={HistoryPage} />
+          <Route exact path="/reading-stats" component={ReadingStatsPage} />
+          <Route exact path="/explore/" component={ExplorePage} />
+          <Route exact path="/explore/:tag" component={ExplorePage} />
+          <Route exact path="/reset-password" component={ResetPassword} />
+          <Route exact path="/article/:articleSlug" component={ArticleDetailsPage} />
+          <Route exact path="/comment" component={CommentComponent} />
+          <Route component={PageNotFound} />
+        </Switch>
+      </div>
     </BrowserRouter>
     <ToastContainer
       pauseOnFocusLoss={false}

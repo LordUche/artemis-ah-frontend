@@ -17,7 +17,7 @@
     &__text {
       text-align: center;
       font-size: 30px;
-      padding-top: 3%;
+      padding-top: 4%;
       color: #ffffff;
       position: absolute;
       z-index: 1;
@@ -85,7 +85,7 @@
 .explore_label {
   color: #ffffff;
   padding-right: 5%;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .explore_select {
@@ -164,11 +164,16 @@
 
     &__input {
       width: 90%;
-      margin-top: 14%;
+      margin-top: 20%;
     }
 
     &_filter {
       width: 80%;
+    }
+
+    &__text {
+      padding-top: 6%;
+      font-size: 25px;
     }
   }
 }
@@ -177,7 +182,10 @@
   /* For mobile phones: */
   .explore_header {
     &__input {
-      margin-top: 17%;
+      margin-top: 23%;
+    }
+    &__text {
+      padding-top: 8%;
     }
   }
 }

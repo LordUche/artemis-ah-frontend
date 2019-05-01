@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Fragment, Component } from 'react';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link, withRouter } from 'react-router-dom';
 import {
   object, shape, func, bool, string, number
 } from 'prop-types';
@@ -169,30 +171,20 @@ class Hero extends Component {
                   </Fragment>
                 )}
                 <NavDropdown parentLinkName="Explore">
-                  <li>
-                    <Router>
-                      <Link to="./filter?tag=Food">Food</Link>
-                    </Router>
+                  <li onClick={() => history.push('./explore/Food')}>
+                    <span className="link_lookalike">Food</span>
                   </li>
-                  <li>
-                    <Router>
-                      <Link to="./filter?tag=Technology">Technology</Link>
-                    </Router>
+                  <li onClick={() => history.push('./explore/Technology')}>
+                    <span className="link_lookalike">Technology</span>
                   </li>
-                  <li>
-                    <Router>
-                      <Link to="./filter?tag=Health">Health</Link>
-                    </Router>
+                  <li onClick={() => history.push('./explore/Health')}>
+                    <span className="link_lookalike">Health</span>
                   </li>
-                  <li>
-                    <Router>
-                      <Link to="./filter?tag=Finance">Finance</Link>
-                    </Router>
+                  <li onClick={() => history.push('./explore/Finance')}>
+                    <span className="link_lookalike">Finance</span>
                   </li>
-                  <li>
-                    <Router>
-                      <Link to="./filter?tag=Arts">Arts</Link>
-                    </Router>
+                  <li onClick={() => history.push('./explore/Arts')}>
+                    <span className="link_lookalike">Arts</span>
                   </li>
                 </NavDropdown>
                 <li>
@@ -253,4 +245,4 @@ Hero.propTypes = {
   }).isRequired
 };
 
-export default Hero;
+export default withRouter(Hero);
