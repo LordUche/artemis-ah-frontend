@@ -5,6 +5,8 @@ import {
   POST_COMMENT_ERROR,
   COMMENT_LOADING,
   CLEAR_POSTED,
+  LIKE_COMMENT_ERROR,
+  TOGGLE_COMMENT_LIKE,
 } from '../../../redux/actionTypes';
 
 const errors = {
@@ -32,6 +34,7 @@ const articleComments = [
     totalLikes: 0,
     createdAt: '2019-04-25T02:31:17.654Z',
     updatedAt: '2019-04-25T02:31:17.654Z',
+    hasLiked: false,
     User: {
       firstname: 'Adaeze',
       lastname: 'Odurukwe',
@@ -78,5 +81,48 @@ describe('Comment Reducer', () => {
       payload: errors
     });
     expect(mockommentReducer.errors).toEqual(returned);
+  });
+
+  it('Should update comment when it is liked', () => {
+    const initialMockCommentState = commentReducer(initialState, {
+      type: GET_COMMENTS,
+      payload: articleComments
+    });
+    expect(initialMockCommentState.articleComments[0]).toEqual(articleComments[0]);
+
+    const { id } = articleComments[0];
+    const mockCommentState = commentReducer(initialMockCommentState, {
+      type: TOGGLE_COMMENT_LIKE,
+      payload: { id }
+    });
+
+    expect(mockCommentState.articleComments[0].hasLiked).toEqual(true);
+    expect(mockCommentState.articleComments[0].totalLikes).toEqual(1);
+  });
+
+  it('Should revert comment when the post request to API fails', () => {
+    const initialMockCommentState = commentReducer(initialState, {
+      type: GET_COMMENTS,
+      payload: articleComments
+    });
+    expect(initialMockCommentState.articleComments[0]).toEqual(articleComments[0]);
+
+    const { id } = articleComments[0];
+    const mockCommentState = commentReducer(initialMockCommentState, {
+      type: TOGGLE_COMMENT_LIKE,
+      payload: { id }
+    });
+
+    expect(mockCommentState.articleComments[0].hasLiked).toEqual(false);
+    expect(mockCommentState.articleComments[0].totalLikes).toEqual(0);
+
+    const newMockCommentState = commentReducer(mockCommentState, {
+      type: LIKE_COMMENT_ERROR,
+      payload: { id }
+    });
+
+    expect(newMockCommentState.articleComments[0].hasLiked).toEqual(true);
+    expect(newMockCommentState.articleComments[0].totalLikes).toEqual(1);
+    expect(newMockCommentState.errors.message).toEqual('Cannot perform action right now, please check your connection and try again later');
   });
 });

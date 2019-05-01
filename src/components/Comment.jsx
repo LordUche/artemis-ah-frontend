@@ -20,7 +20,9 @@ import {
   getComments,
   postComment,
   loadingComment,
-  clearPosted
+  clearPosted,
+  toggleCommentLikeAction,
+  postToggleCommentLikeAction
 } from '../redux/actions/commentActions';
 
 // Import components
@@ -50,8 +52,8 @@ export class Comment extends Component {
    * @returns {object} comments
    */
   getAllComments() {
-    const { getArticleComments, slug } = this.props;
-    getArticleComments(slug.articleSlug);
+    const { getArticleComments, slug, token } = this.props;
+    getArticleComments(slug.articleSlug, token);
   }
 
   /**
@@ -142,6 +144,21 @@ export class Comment extends Component {
   }
 
   /**
+   * @param {number} id
+   * @returns {undefined}
+   */
+  toggleLike = (id) => {
+    const {
+      toggleCommentLike, postToggleCommentLike, slug, token, isLoggedIn
+    } = this.props;
+    if (!isLoggedIn) notifyUser(toast('Login to like a comment'));
+    else {
+      toggleCommentLike(id);
+      postToggleCommentLike(slug.articleSlug, id, token);
+    }
+  }
+
+  /**
    * @method displayComments
    * @description displays available comments
    * @returns {HTMLElement} comments
@@ -159,27 +176,28 @@ export class Comment extends Component {
             <br />
           </span>
         ));
+        const { User, createdAt, hasLiked } = SingleComment;
         return (
           <div key={index.toString()} className="comment_card">
             <span className="item comment_card__image">
-              <img src={SingleComment.User.image} alt="user" />
+              <img src={User.image} alt="user" />
             </span>
             <span className="item comment_card__main">
               <div className="comment_card__main__header">
-                <Link to={`../profile/${SingleComment.User.username}`}>
+                <Link to={`../profile/${User.username}`}>
                   <h3>
-                    {SingleComment.User.firstname}
+                    {User.firstname}
                     {' '}
-                    {SingleComment.User.lastname}
+                    {User.lastname}
                   </h3>
                 </Link>
-                <i>{`${moment(SingleComment.createdAt).format('HH:mma')} on ${moment(SingleComment.createdAt).format('MMMM Do YYYY')}`}</i>
+                <i>{`${moment(createdAt).format('HH:mma')} on ${moment(createdAt).format('MMMM Do YYYY')}`}</i>
               </div>
               <div className="comment_card__main__body">
                 <p>{comment}</p>
               </div>
               <div className="comment_card__main__footer">
-                <i className="far fa-thumbs-up"><span className="comment_card__main__likes">{SingleComment.totalLikes}</span></i>
+                <i title={hasLiked ? 'Unlike this comment' : 'Like this comment'} className={`like-icon far fa-thumbs-up ${hasLiked ? 'liked' : ''}`} onClick={() => this.toggleLike(SingleComment.id)} role="presentation"><span className="comment_card__main__likes">{SingleComment.totalLikes}</span></i>
               </div>
             </span>
           </div>
@@ -210,6 +228,11 @@ export class Comment extends Component {
    */
   render() {
     const { showPost } = this.state;
+    const { errors, clearPostedValue } = this.props;
+    if (errors.message) {
+      notifyUser(toast(`${errors.message}`, { className: 'error-toast' }));
+      clearPostedValue();
+    }
     const postCommentClass = showPost ? 'hidePost' : '';
 
     return (
@@ -248,7 +271,14 @@ Comment.propTypes = {
   errors: objectOf(object).isRequired,
   posted: bool.isRequired,
   clearPostedValue: func.isRequired,
-  isLoggedIn: bool.isRequired
+  toggleCommentLike: func.isRequired,
+  postToggleCommentLike: func.isRequired,
+  isLoggedIn: bool.isRequired,
+  token: string
+};
+
+Comment.defaultProps = {
+  token: ''
 };
 
 /**
@@ -256,7 +286,7 @@ Comment.propTypes = {
  * @param {*} state
  * @returns {object} state
  */
-function mapStateToProps({ comments }) {
+const mapStateToProps = ({ comments }) => {
   const {
     articleComments,
     errors,
@@ -269,20 +299,20 @@ function mapStateToProps({ comments }) {
     posted,
     loading
   };
-}
+};
 
 /**
  * @function mapDispatchToProps
  * @param {*} dispatch
  * @returns {Functions} actions
  */
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    getArticleComments: getComments,
-    postArticleComment: postComment,
-    loadingPost: loadingComment,
-    clearPostedValue: clearPosted
-  }, dispatch);
-}
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getArticleComments: getComments,
+  postArticleComment: postComment,
+  loadingPost: loadingComment,
+  clearPostedValue: clearPosted,
+  toggleCommentLike: toggleCommentLikeAction,
+  postToggleCommentLike: postToggleCommentLikeAction
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comment);

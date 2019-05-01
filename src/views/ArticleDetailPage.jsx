@@ -58,7 +58,7 @@ export class ArticleDetailPage extends Component {
         return <p key={i} />;
       });
     const {
-      isGetting, articleGotten, errors, isLoggedIn, history, match
+      isGetting, articleGotten, errors, isLoggedIn, history, match, token
     } = this.props;
     const {
       title,
@@ -250,10 +250,19 @@ export class ArticleDetailPage extends Component {
           </div>
         </div>
         )}
+        {!isLoggedIn && (
         <CommentsComponent
           slug={match.params}
-          isLoggedIn={isLoggedIn}
+          isLoggedIn={false}
         />
+        )}
+        {isLoggedIn && (
+        <CommentsComponent
+          slug={match.params}
+          isLoggedIn
+          token={token}
+        />
+        )}
       </Fragment>
     );
   }

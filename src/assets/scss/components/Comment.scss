@@ -5,6 +5,14 @@
   margin: auto;
   font-size: 1.6rem;
 
+  .like-icon{
+    cursor: pointer;
+  }
+
+  .liked{
+    color: #06A5E9;
+  }
+
   &_box{
     width: 100%;
     margin-bottom: 5%;

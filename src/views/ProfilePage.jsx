@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { toast } from 'react-toastify';
 import { object as objectProp, func as funcProp, bool } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
@@ -268,13 +268,24 @@ export class ProfilePage extends Component {
           const saveBtnProps = {
             btnText: 'Save Changes'
           };
+          const cancelBtnProps = {
+            btnText: 'Cancel'
+          };
           if (profile.editState === CONTENT_STATE_UPDATING) {
             saveBtnProps.btnText = 'Updating ...';
+            saveBtnProps.isDisabled = true;
+            cancelBtnProps.isDisabled = true;
           } else {
             saveBtnProps.onClick = this.saveUpdate.bind(this);
+            cancelBtnProps.onClick = this.closeEditProfile.bind(this);
           }
 
-          return <Button {...saveBtnProps} />;
+          return (
+            <Fragment>
+              <Button {...saveBtnProps} />
+              <Button {...cancelBtnProps} />
+            </Fragment>
+          );
         }
 
         return <Button onClick={() => this.startEditProfile()} btnText="Edit Profile" />;
@@ -676,6 +687,17 @@ is not following anyone.
   startEditProfile() {
     this.setState({
       editMode: true
+    });
+  }
+
+  /**
+   * @method closeEditProfile
+   * @description Called when the "Cancel" button is clicked
+   * @returns {undefined}
+   */
+  closeEditProfile() {
+    this.setState({
+      editMode: false
     });
   }
 

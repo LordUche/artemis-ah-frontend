@@ -3,7 +3,9 @@ import {
   postComment,
   getComments,
   clearPosted,
-  loadingComment
+  loadingComment,
+  postToggleCommentLikeAction,
+  toggleCommentLikeAction
 } from '../../../redux/actions/commentActions';
 
 import {
@@ -12,6 +14,9 @@ import {
   POST_COMMENT_ERROR,
   COMMENT_LOADING,
   CLEAR_POSTED,
+  LIKE_COMMENT_ERROR,
+  TOGGLE_COMMENT_LIKE,
+  TOGGLE_COMMENT_LIKE_SUCCESS
 } from '../../../redux/actionTypes';
 
 describe('Test comment actions', () => {
@@ -23,7 +28,7 @@ describe('Test comment actions', () => {
     moxios.uninstall();
   });
 
-  it('Should fetch all comments', async () => {
+  it('Should fetch all comments with or without a token', async () => {
     const expectedResponse = {
       message: 'Comments successfully retrieved',
       comments: [
@@ -47,12 +52,20 @@ describe('Test comment actions', () => {
         },
       ]
     };
+    const mockArticleSlug = 'hjfhfh-1';
+    const mockToken = 'jfhfhfhhdhd';
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
-      request.respondWith({ status: 200, response: expectedResponse });
+      request.respondWith({ status: 200, response: expectedResponse })
+        .then(() => moxios.wait(() => {
+          const secondRequest = moxios.requests.mostRecent();
+          secondRequest.respondWith({ status: 200, response: expectedResponse });
+        }));
     });
-    const result = await getComments();
+    const result = await getComments(mockArticleSlug, mockToken);
     expect(result.type).toEqual(GET_COMMENTS);
+    const otherResult = await getComments(mockArticleSlug);
+    expect(otherResult.type).toEqual(GET_COMMENTS);
   });
 
   it('Should return error', async () => {
@@ -109,5 +122,40 @@ describe('Test comment actions', () => {
 
   it('Dispatches the auth clear posted action', () => {
     expect(clearPosted()).toEqual({ type: CLEAR_POSTED });
+  });
+  it('Dispatches the toggle comment like action with the right payload', () => {
+    expect(toggleCommentLikeAction(2)).toEqual({ type: TOGGLE_COMMENT_LIKE, payload: { id: 2 } });
+  });
+  it('Should dispatch the TOGGLE_COMMENT_LIKE_SUCCESS action when it sucessfully likes/unlikes a comment', async () => {
+    const slug = 'me-myself-i';
+    const expectedResponse = {
+      message: 'Comment liked successfully',
+    };
+    const mockCommentId = 2;
+    const mockToken = 'kfjfjjf';
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const result = await postToggleCommentLikeAction(slug, mockCommentId, mockToken);
+    expect(result.type).toEqual(TOGGLE_COMMENT_LIKE_SUCCESS);
+    expect(result.payload).toEqual(expectedResponse.message);
+  });
+  it('Should dispatch the LIKE_COMMENT_ERROR action when it fails to like/unlike a comment', async () => {
+    const slug = 'me-myself-i';
+    const expectedResponse = {
+      message: 'Error',
+    };
+    const mockCommentId = 2;
+    const mockToken = 'kfjfjjf';
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500, response: expectedResponse });
+    });
+    const result = await postToggleCommentLikeAction(slug, mockCommentId, mockToken);
+    expect(result.type).toEqual(LIKE_COMMENT_ERROR);
+    expect(result.payload).toEqual({ id: mockCommentId });
   });
 });
