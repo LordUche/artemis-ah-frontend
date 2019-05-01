@@ -3,7 +3,10 @@ import {
   postComment,
   getComments,
   clearPosted,
-  loadingComment
+  loadingComment,
+  editCommentLoading,
+  clearEditComment,
+  editComment
 } from '../../../redux/actions/commentActions';
 
 import {
@@ -103,11 +106,47 @@ describe('Test comment actions', () => {
     expect(result.type).toEqual(POST_COMMENT);
   });
 
+  it('Should update the comment', async () => {
+    const slug = 'me-myself-i';
+    const mockRequest = {
+      comment: 'Comment must not be empty.'
+    };
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: 'successfully updated' });
+    });
+    const result = await editComment(slug, mockRequest, 29);
+    expect(result.type).toEqual('EDIT_COMMENT');
+  });
+
+  it('Should throw an error while trying to update a comment', async () => {
+    const slug = 'me-myself-i';
+    const mockRequest = {
+      comment: ''
+    };
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: 'Update failed' });
+    });
+    const result = await editComment(slug, mockRequest, 29);
+    expect(result.type).toEqual('EDIT_COMMENT_ERROR');
+  });
+
   it('Dispatches the auth loading action', () => {
     expect(loadingComment()).toEqual({ type: COMMENT_LOADING });
   });
 
   it('Dispatches the auth clear posted action', () => {
     expect(clearPosted()).toEqual({ type: CLEAR_POSTED });
+  });
+
+  it('Dispatches the edit comment loading action', () => {
+    expect(editCommentLoading()).toEqual({ type: 'EDIT_LOADING' });
+  });
+
+  it('Dispatches the clear edit commment action', () => {
+    expect(clearEditComment()).toEqual({ type: 'CLEAR_EDITED' });
   });
 });

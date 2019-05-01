@@ -3,7 +3,11 @@ export const CHANGE_NAME = 'CHANGE_NAME';
 // Comment action types
 export const GET_COMMENTS = 'GET_COMMENTS';
 export const POST_COMMENT = 'POST_COMENTS';
+export const EDIT_COMMENT = 'EDIT_COMMENT';
+export const EDIT_COMMENT_ERROR = 'EDIT_COMMENT_ERROR';
 export const POST_COMMENT_ERROR = 'POST_COMMENT_ERROR';
+export const CLEAR_EDITED = 'CLEAR_EDITED';
+export const EDIT_LOADING = 'EDIT_LOADING';
 export const COMMENT_LOADING = 'COMMENT_LOADING';
 export const CLEAR_POSTED = 'CLEAR_POSTED';
 
