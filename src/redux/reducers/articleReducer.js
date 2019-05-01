@@ -15,6 +15,8 @@ import {
   RATED_ARTICLE,
   RATING_ARTICLE,
   RATING_ARTICLE_ERROR,
+  ARTICLE_BOOKMARK_ADDED,
+  ARTICLE_BOOKMARK_REMOVED,
   BOOKMARK_LOADING,
   DELETED_BOOKMARK,
   ERROR_GETTING_BOOKMARKS,
@@ -151,6 +153,22 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         errors: payload
+      };
+    case ARTICLE_BOOKMARK_ADDED:
+      return {
+        ...state,
+        articleGotten: {
+          ...state.articleGotten,
+          isBookmarked: true
+        }
+      };
+    case ARTICLE_BOOKMARK_REMOVED:
+      return {
+        ...state,
+        articleGotten: {
+          ...state.articleGotten,
+          isBookmarked: false
+        }
       };
     case ERROR_DELETING_BOOKMARKS:
       return {
