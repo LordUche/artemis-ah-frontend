@@ -8,8 +8,17 @@ import {
   GET_ARTICLES_ERROR,
   GETTING_ARTICLE,
   GOT_ARTICLE,
-  ERROR_GETTING_ARTICLE
+  ERROR_GETTING_ARTICLE,
+  ARTICLE_BOOKMARK_ADDED,
+  ARTICLE_BOOKMARK_REMOVED,
+  BOOKMARK_LOADING,
+  DELETED_BOOKMARK,
+  ERROR_DELETING_BOOKMARKS,
+  ERROR_GETTING_BOOKMARKS,
+  GOT_BOOKMARKS
 } from '../../../redux/actionTypes';
+import getMockArticles from '../../../__mocks__/articles';
+
 
 describe('Test for Article Reducer', () => {
   it('should validate create articles reducer', () => {
@@ -193,5 +202,111 @@ describe('Test for Article Reducer', () => {
     articleReducer(initialState, data2);
     articleReducer(initialState, data3);
     articleReducer(initialState, data4);
+  });
+
+  describe('Test article bookmarking feature', () => {
+    let newState;
+
+    beforeAll((done) => {
+      const mockArticle = [
+        {
+          id: 3,
+          slug: 'some-title-3',
+          title: 'some title',
+          description: 'some weird talk',
+          rating: '0',
+          totalClaps: 0,
+          createdAt: '2019-04-17T20:26:46.344Z',
+          updatedAt: '2019-04-17T20:26:46.347Z',
+          User: {
+            username: 'deedenedash',
+            bio: 'n/a',
+            image:
+              'https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/iReporter/avatar.png'
+          },
+          Tag: {
+            name: 'Food'
+          },
+          readTime: {
+            text: '< 1 min read',
+            minutes: 0.05,
+            time: 3000,
+            words: 10
+          }
+        }
+      ];
+      newState = articleReducer(initialState, {
+        type: GET_ARTICLES,
+        payload: { articles: mockArticle }
+      });
+
+      done();
+    });
+
+    it('should set isBookmarked to true when ARTICLE_BOOKMARK_ADDED is dispatched', (done) => {
+      newState = articleReducer(newState, {
+        type: ARTICLE_BOOKMARK_ADDED
+      });
+
+      expect(newState.articleGotten.isBookmarked).toBe(true);
+
+      done();
+    });
+
+    it('should set isBookmarked to false when ARTICLE_BOOKMARK_REMOVED is dispatched', (done) => {
+      newState = articleReducer(newState, {
+        type: ARTICLE_BOOKMARK_REMOVED
+      });
+
+      expect(newState.articleGotten.isBookmarked).toBe(false);
+
+      done();
+    });
+  });
+
+  describe('Test actions to load bookmarks and perform actions on bookmarks', () => {
+    it('should update state when BOOKMARK_LOADING action is dispatched', () => {
+      const mockState = articleReducer(initialState, { type: BOOKMARK_LOADING });
+      expect(mockState.loading).toBe(true);
+      expect(mockState.errors).toEqual({});
+      expect(mockState.deletedBookmark).toEqual({});
+    });
+    it('should update state when ERROR_DELETING_BOOKMARKS action is dispatched', () => {
+      const mockState = articleReducer(initialState, { type: ERROR_DELETING_BOOKMARKS, payload: { message: 'Server Error' } });
+      expect(mockState.loading).toBe(false);
+      expect(mockState.errors).toEqual({ message: 'Server Error' });
+      expect(mockState.bookmarkDeleted).toEqual({});
+    });
+    it('should update state when ERROR_GETTING_BOOKMARKS action is dispatched', () => {
+      const mockState = articleReducer(initialState, { type: ERROR_GETTING_BOOKMARKS, payload: { message: 'Server Error' } });
+      expect(mockState.loading).toBe(false);
+      expect(mockState.errors).toEqual({ message: 'Server Error' });
+    });
+    it('should update state and store bookmarked articles when GOT_BOOKMARKS action is dispatched', () => {
+      const mockArticles = getMockArticles(5);
+      const mockState = articleReducer(initialState, {
+        type: GOT_BOOKMARKS,
+        payload: mockArticles
+      });
+      expect(mockState.loading).toBe(false);
+      expect(mockState.errors).toEqual({});
+      expect(mockState.bookmarkedArticles).toEqual(mockArticles);
+    });
+    it('should update state when DELETED_BOOKMARK action is dispatched', () => {
+      const mockArticle = getMockArticles(1)[0];
+      const initialReducerState = articleReducer(initialState, {
+        type: GOT_BOOKMARKS,
+        payload: [mockArticle]
+      });
+      expect(initialReducerState.bookmarkedArticles).toEqual([mockArticle]);
+      const mockState = articleReducer(initialReducerState, {
+        type: DELETED_BOOKMARK,
+        payload: mockArticle
+      });
+      expect(mockState.loading).toBe(false);
+      expect(mockState.errors).toEqual({});
+      expect(mockState.bookmarkDeleted).toEqual(mockArticle);
+      expect(mockState.bookmarkedArticles).toEqual([]);
+    });
   });
 });

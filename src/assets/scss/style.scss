@@ -4,6 +4,7 @@
 @import "./components/Modal.scss";
 @import "./components/topNav.scss";
 @import "./components/sideNav.scss";
+@import "./components/Notifications.scss";
 @import "./components/NavDropdown.scss";
 @import "./components/CreateArticle.scss";
 @import "../scss/views/LoginModal.scss";
@@ -17,10 +18,12 @@
 @import './skeletonscreens/ArticleItem.scss';
 @import './ProfilePage.scss';
 @import "./components/Pagination.scss";
-@import './components/ArticleItem.scss';
-@import './components/PageContentLoadError.scss';
-@import './components/UserListItem.scss';
-@import './skeletonscreens/ProfilePageUserDetails.scss';
-@import './skeletonscreens/UserItem.scss';
+@import "./components/ArticleItem.scss";
+@import "./components/PageContentLoadError.scss";
+@import "./components/UserListItem.scss";
+@import "./skeletonscreens/ProfilePageUserDetails.scss";
+@import "./skeletonscreens/UserItem.scss";
+@import "./components/Comment.scss";
 @import './components/ProfileOptionCard.scss';
 @import './components/SettingsPage.scss';
+@import './components/BookmarkPage.scss';

@@ -50,11 +50,21 @@ const mockArticleReducer = () => ({
   confirmationModal: false
 });
 
+/**
+* @description Mocks the notification reducer
+* @returns {object} Returns the initial state.
+*/
+const notificationMockReducer = () => ({
+  hasNewNotifications: true,
+  notificationNumber: 1,
+  notificationsData: [{}]
+});
+
+
 let profilePage;
 let store;
 
 describe('Test the profile page.', () => {
-  jest.setTimeout(50000);
   beforeAll((done) => {
     axiosPost('https://authorshaven.herokuapp.com/api/users/login', {
       name: 'ayo',
@@ -71,7 +81,8 @@ describe('Test the profile page.', () => {
         profile: profileReducer,
         user: mockUserReducer,
         auth: mockAuthReducer,
-        article: mockArticleReducer
+        article: mockArticleReducer,
+        notifications: notificationMockReducer
       })
     );
 
@@ -167,7 +178,9 @@ describe('Test the profile page.', () => {
         .find('.profile-section__body__tab-container__tab')
         .at(1)
         .simulate('click', { preventDefault: () => 1 });
-      expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
+      expect(profilePage.find('.profile-section__body__content__title').text()).toBe(
+        'People you follow'
+      );
       expect(profilePage.find('.user-item-skeleton-screen').exists()).toBe(true);
 
       done();
@@ -181,7 +194,9 @@ describe('Test the profile page.', () => {
           .find('.profile-section__body__tab-container__tab')
           .at(1)
           .simulate('click', { preventDefault: () => 1 });
-        expect(profilePage.find('.profile-section__body__content__title').text()).toBe('People you follow');
+        expect(profilePage.find('.profile-section__body__content__title').text()).toBe(
+          'People you follow'
+        );
         expect(profilePage.find('.user-list .user-item-skeleton-screen').exists()).toBe(false);
 
         const { profile } = store.getState();
@@ -317,7 +332,7 @@ describe('Test Pagination feature for Profile page', () => {
               fullname: 'Christopher James',
               contentState: 'content.state.fetched'
             },
-            tabContent: { 'tab.articles': { totalArticles: 60, limit: 20 } }
+            tabContent: { 'tab.articles': { count: 60, limit: 20 } }
           }}
         />
       </BrowserRouter>

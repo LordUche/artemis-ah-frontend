@@ -1,8 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { bool, string } from 'prop-types';
+import {
+  bool, string, number, array as arrayProp, func
+} from 'prop-types';
 import { connect } from 'react-redux';
+import dotenv from 'dotenv';
+import Pusher from 'pusher-js';
+import HelperUtils from '../utils/helperUtils';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
+import NotificationComp from './Notifications';
+import { getNotificationAction, notifyPopup } from '../redux/actions/notificationAction';
 import Logo from './logo';
 
 // Components
@@ -11,8 +18,11 @@ import Hamburger from './Hamburger';
 import AHLoginModal from '../views/LoginModal';
 import AHSignUpModal from '../views/SignUpView';
 
+dotenv.config();
+
 /**
  * @description top nav
+ * @param {string} urlPath - slug path for an aticle
  * @returns {JSX} top nav
  */
 class TopNav extends Component {
@@ -21,7 +31,44 @@ class TopNav extends Component {
     menuClassStyleName: 'link-wrapper',
     showResponsiveNav: false,
     showLoginModal: false,
-    showSignUpModal: false
+    showSignUpModal: false,
+    showNotification: false
+  };
+
+  componentDidMount = () => {
+    const { token, dispatch } = this.props;
+    setTimeout(() => {
+      getNotificationAction(token, dispatch);
+    }, 1000);
+  };
+
+  componentWillMount = () => {
+    const { dispatch, token } = this.props;
+
+    // Instantiate Pusher
+    const pusher = new Pusher(process.env.PUSHER_APP_KEY, {
+      cluster: 'eu',
+      forceTLS: true
+    });
+
+    // Get users id from token
+    const userObject = HelperUtils.verifyToken(token);
+    const { id } = userObject;
+
+    // Subscribe to an event
+    const channel = pusher.subscribe(`channel-${id}`);
+    channel.bind('notification', (info) => {
+      const { data } = info;
+      const { title, message } = data;
+
+      if (window.Notification.permission !== 'granted') {
+        window.Notification.requestPermission().then((permission) => {
+          notifyPopup(`Notification set to ${permission}`);
+        });
+      }
+      notifyPopup(title, message);
+      getNotificationAction(token, dispatch);
+    });
   };
 
   toggleResponsiveNav = () => {
@@ -29,6 +76,15 @@ class TopNav extends Component {
     this.setState({
       showResponsiveNav: !showResponsiveNav
     });
+  };
+
+  handleNotificationClick = () => {
+    const { showNotification } = this.state;
+    if (showNotification) {
+      this.setState({ showNotification: false });
+    } else {
+      this.setState({ showNotification: true });
+    }
   };
 
   toggleLoginModal = () => {
@@ -53,9 +109,21 @@ class TopNav extends Component {
    */
   renderNavChildren = () => {
     const {
-      display, menuClassStyleName, showResponsiveNav, showLoginModal, showSignUpModal
+      display,
+      menuClassStyleName,
+      showResponsiveNav,
+      showLoginModal,
+      showSignUpModal,
+      showNotification
     } = this.state;
-    const { isLoggedIn, username, image } = this.props;
+    const {
+      isLoggedIn,
+      username,
+      image,
+      hasNewNotifications,
+      notificationNumber,
+      notificationsData
+    } = this.props;
     if (isLoggedIn) {
       return (
         <Fragment>
@@ -71,9 +139,16 @@ class TopNav extends Component {
               <Link to="/explore">Explore &nbsp;</Link>
             </li>
             <li>
-              <Link to="/notifications">
+              <NavLink
+                to="#"
+                onClick={this.handleNotificationClick}
+                className="notificationBellLink"
+              >
                 {display === 'desktop' ? notificationIcon(20, 20) : notificationIcon(30, 30)}
-              </Link>
+                {hasNewNotifications && (
+                  <div className="notificationBeep">{notificationNumber}</div>
+                )}
+              </NavLink>
             </li>
             <li>
               <UserNavAvatar
@@ -84,6 +159,54 @@ class TopNav extends Component {
               />
             </li>
           </ul>
+          {showNotification
+            && (notificationsData.length > 0 ? (
+              <div
+                className="notifications-div-wrapper"
+                id="notifications-wrapper"
+                role="presentation"
+                onClick={this.handleNotificationClick}
+              >
+                <div id="notify-div-wrapper">
+                  <i className="fas fa-caret-up" id="notification-triangle" />
+                  <div className="notifications-div" id="notifications-div">
+                    {notificationsData.map((notify, index) => {
+                      const key = index;
+                      return (
+                        <NotificationComp
+                          key={key}
+                          message={notify.message}
+                          title={notify.title}
+                          time={notify.updatedAt}
+                          url={notify.url}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div
+                className="notifications-div-wrapper"
+                id="notifications-wrapper"
+                onClick={this.handleNotificationClick}
+                role="presentation"
+              >
+                <div id="notify-div-wrapper">
+                  <i className="fas fa-caret-up" id="notification-triangle" />
+                  <div className="notifications-div" id="notifications-div">
+                    <span className="notifications-div-item" style={{ cursor: 'auto' }}>
+                      <p className="notifications-div-item-info">
+                        <span className="notifications-div-item-info-name">
+                          You are all caught up :)
+                        </span>
+                        <br />
+                      </p>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
         </Fragment>
       );
     }
@@ -107,13 +230,23 @@ class TopNav extends Component {
         <ul className="nav-component-container-offline2">
           <span className={menuClassStyleName}>
             <li className="nav-component-container-offline2_link">
-              <span id="top-nav-login" className="link_lookalike" onClick={this.toggleLoginModal} role="presentation">
+              <span
+                id="top-nav-login"
+                className="link_lookalike"
+                onClick={this.toggleLoginModal}
+                role="presentation"
+              >
                 Login
               </span>
             </li>
             <li className="nav-component-container-offline2_link">
-              <span id="top-nav-signup" className="link_lookalike" onClick={this.toggleSignUpModal} role="presentation">
-               Register
+              <span
+                id="top-nav-signup"
+                className="link_lookalike"
+                onClick={this.toggleSignUpModal}
+                role="presentation"
+              >
+                Register
               </span>
             </li>
             <li className="nav-component-container-offline2_link">
@@ -138,7 +271,7 @@ class TopNav extends Component {
             </li>
             <li className="nav-component-container-offline2_link">
               <span className="link_lookalike" onClick={this.toggleSignUpModal} role="presentation">
-               Register
+                Register
               </span>
             </li>
             <li className="nav-component-container-offline2_link">
@@ -161,7 +294,9 @@ class TopNav extends Component {
     const { navID } = this.props;
     return (
       <header className="ah-header">
-        <nav className="top-nav" id={`${navID}`}>{this.renderNavChildren()}</nav>
+        <nav className="top-nav" id={`${navID}`}>
+          {this.renderNavChildren()}
+        </nav>
       </header>
     );
   }
@@ -171,7 +306,12 @@ TopNav.propTypes = {
   username: string,
   isLoggedIn: bool,
   image: string,
-  navID: string
+  navID: string,
+  hasNewNotifications: bool.isRequired,
+  notificationNumber: number.isRequired,
+  notificationsData: arrayProp.isRequired,
+  dispatch: func.isRequired,
+  token: string.isRequired
 };
 
 TopNav.defaultProps = {
@@ -186,13 +326,18 @@ TopNav.defaultProps = {
  * @param {object} store redux store
  * @returns {object} TopNav props
  */
-export const mapStateToProps = ({ auth, user }) => {
-  const { isLoggedIn } = auth;
+export const mapStateToProps = ({ auth, user, notifications }) => {
+  const { isLoggedIn, token } = auth;
   const { image, username } = user;
+  const { hasNewNotifications, notificationNumber, notificationsData } = notifications;
   return {
     isLoggedIn,
     image,
-    username
+    username,
+    hasNewNotifications,
+    notificationNumber,
+    notificationsData,
+    token
   };
 };
 

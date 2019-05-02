@@ -158,6 +158,7 @@ describe('Create article component', () => {
     createArticle.setState({ charactersCount: 1 });
     createArticle.setState({ bodyWordCount: 1 });
     createArticle.setState({ imageUploadFailed: true });
+    expect(createArticle.find('.formbox-select-parent').exists()).toBe(true);
   });
 
   it('should trigger function for calculating read time', () => {
@@ -180,6 +181,7 @@ describe('Create article component', () => {
     const bodyElement = createArticle.find('[name="body"]');
     expect(bodyElement.exists()).toBe(true);
     bodyElement.simulate('keyup', { value: 'c' });
+    expect(createArticle.find('.formbox-select-parent').exists()).toBe(true);
   });
 
   it('should redirect to article page after article is published', () => {
@@ -204,6 +206,7 @@ describe('Create article component', () => {
     const articleCard = mount(
       <Router>
         <ArticleItem
+          isLoggedIn
           title="xyz"
           description="xyz"
           coverUrl="xyz"
@@ -213,6 +216,7 @@ describe('Create article component', () => {
           rating="xyz"
           readTime="xyz"
           author="xyz"
+          username="xyz"
           showAuthor="xyz"
           modifyArticle={mockFunc}
           push={mockFunc}
@@ -231,6 +235,9 @@ describe('Create article component', () => {
     );
     expect(deleteBtn.exists()).toBe(true);
     deleteBtn.simulate('click');
+
+    ArticleItem.defaultProps.push();
+    ArticleItem.defaultProps.deleteBookmarkConfirmation();
   });
 
   it('should mock a file upload', () => {
