@@ -63,7 +63,7 @@ export class Comment extends Component {
   showCommentPost = () => {
     const { showPost } = this.state;
     const {
-      loading, errors, posted, clearPostedValue
+      loading, errors, posted, clearPostedValue, highlighted
     } = this.props;
 
     if (posted) {
@@ -71,7 +71,8 @@ export class Comment extends Component {
       clearPostedValue();
     }
 
-    if (showPost && !posted) {
+    if ((showPost || highlighted) && !posted) {
+      window.scrollTo(0, 765);
       return (
         <form className="comment_box__form" onSubmit={this.handleSubmit}>
           <textarea
@@ -197,6 +198,8 @@ export class Comment extends Component {
    * @returns {object} state
    */
   hidePostComment = () => {
+    const { closeComment } = this.props;
+    closeComment();
     this.setState({ showPost: false });
   };
 
@@ -228,7 +231,7 @@ export class Comment extends Component {
       toggleCommentLike(id);
       postToggleCommentLike(slug.articleSlug, id, token);
     }
-  }
+  };
 
   /**
    * @method displayComments
@@ -249,9 +252,7 @@ export class Comment extends Component {
             <br />
           </span>
         ));
-        const {
-          User, hasLiked, updatedAt
-        } = SingleComment;
+        const { User, hasLiked, updatedAt } = SingleComment;
         return (
           <Fragment>
             <div key={index.toString()} className="comment_card">
@@ -268,16 +269,23 @@ export class Comment extends Component {
                     </h3>
                   </Link>
                   <i>
-                    {`${moment(updatedAt).format('HH:mma')} on ${moment(
-                      updatedAt
-                    ).format('MMMM Do YYYY')}`}
+                    {`${moment(updatedAt).format('HH:mma')} on ${moment(updatedAt).format(
+                      'MMMM Do YYYY'
+                    )}`}
                   </i>
                 </div>
                 <div className="comment_card__main__body">
                   <p>{comment}</p>
                 </div>
                 <div className="comment_card__main__footer">
-                  <i title={hasLiked ? 'Unlike this comment' : 'Like this comment'} className={`like-icon far fa-thumbs-up ${hasLiked ? 'liked' : ''}`} onClick={() => this.toggleLike(SingleComment.id)} role="presentation"><span className="comment_card__main__likes">{SingleComment.totalLikes}</span></i>
+                  <i
+                    title={hasLiked ? 'Unlike this comment' : 'Like this comment'}
+                    className={`like-icon far fa-thumbs-up ${hasLiked ? 'liked' : ''}`}
+                    onClick={() => this.toggleLike(SingleComment.id)}
+                    role="presentation"
+                  >
+                    <span className="comment_card__main__likes">{SingleComment.totalLikes}</span>
+                  </i>
                   {`${showEditCommentTextarea}` !== `true-${SingleComment.id}`
                     && isLoggedIn
                     && username === SingleComment.User.username && (
@@ -377,7 +385,9 @@ Comment.propTypes = {
   clearEditCommentAction: func,
   toggleCommentLike: func.isRequired,
   postToggleCommentLike: func.isRequired,
-  token: string
+  token: string,
+  highlighted: bool,
+  closeComment: func
 };
 
 Comment.defaultProps = {
@@ -386,7 +396,9 @@ Comment.defaultProps = {
   editCommentLoadingAction: () => false,
   clearEditCommentAction: () => false,
   editLoading: false,
-  edited: false
+  edited: false,
+  highlighted: false,
+  closeComment: () => false
 };
 
 /**
