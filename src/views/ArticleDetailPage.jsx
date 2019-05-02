@@ -4,7 +4,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import {
-  object as objectProp, func, string, bool, object, shape, number
+  object as objectProp,
+  func,
+  string,
+  bool,
+  object,
+  objectOf,
+  shape,
+  number
 } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 
@@ -21,15 +28,21 @@ import {
   gettingArticleAction,
   getArticleAction,
   clearErrorsAction,
+  rateArticleAction,
   removeBookmarkAction,
   bookmarkArticleAction
 } from '../redux/actions/articleActions';
 
 /**
  * @description article detail view page
+ * @param {object} event - Synthetic React Event
  * @returns {HTMLDivElement} profile
  */
 export class ArticleDetailPage extends Component {
+  state = {
+    userRated: false
+  };
+
   /**
    * @returns {HTMLElement} div
    */
@@ -80,25 +93,31 @@ export class ArticleDetailPage extends Component {
     );
   }
 
+  rateArticle = (event) => {
+    const { articleGotten, rateArticleFn } = this.props;
+    const { slug } = articleGotten;
+    const rating = event.target.id;
+    this.setState({ userRated: true });
+    rateArticleFn(slug, rating);
+  };
+
   /**
    * @returns {HTMLElement} div
    */
   render() {
-    const stars = Array(5)
-      .fill(undefined)
-      .map((val, index) => {
-        const i = index;
-        return <i key={i} className="far fa-star article_detail_rating_star" />;
-      });
-    const skeletonText = Array(10)
-      .fill(undefined)
-      .map((val, index) => {
-        const i = index;
-        return <p key={i} />;
-      });
     const {
-      isGetting, articleGotten, errors, isLoggedIn, history, match
+      isGetting,
+      articleGotten,
+      errors,
+      isLoggedIn,
+      username,
+      ratingData,
+      match,
+      history
     } = this.props;
+
+    const { userRated } = this.state;
+
     const {
       title,
       User,
@@ -108,8 +127,45 @@ export class ArticleDetailPage extends Component {
       createdAt,
       rating,
       readTime,
-      totalClaps
+      totalClaps,
+      rated
     } = articleGotten;
+
+    const { rating: currentRating } = ratingData;
+
+    // Handle necessary conditions to validate user can rate
+
+    const authorUsername = User && User.username;
+    const userOwnsArticle = username === authorUsername;
+    const userCanRate = isLoggedIn && !userOwnsArticle;
+
+    const averageRating = Number(currentRating) || Number(rating);
+    const userHasRated = rated || userRated;
+
+    const stars = Array(5)
+      .fill(undefined)
+      .map((val, index) => {
+        const i = index;
+        const rateValue = index + 1;
+        const filled = rateValue <= averageRating && userHasRated ? 'filled' : '';
+        return (
+          <i
+            role="presentation"
+            onClick={!userHasRated ? this.rateArticle : () => {}}
+            key={i}
+            id={rateValue}
+            className={`far fa-star article_detail_rating_star ${filled}`}
+          />
+        );
+      })
+      .reverse();
+
+    const skeletonText = Array(10)
+      .fill(undefined)
+      .map((val, index) => {
+        const i = index;
+        return <p key={i} />;
+      });
 
     const shareUrl = window.location.href;
     const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
@@ -192,7 +248,7 @@ export class ArticleDetailPage extends Component {
               className={`article_detail_body ${!isLoggedIn && 'article_detail_body_no_auth'}`}
             >
               {body.split('\n').map(section => (
-                <Fragment key={section}>
+                <Fragment>
                   <article className="article_detail_body_segment">{section}</article>
                   <br />
                 </Fragment>
@@ -201,20 +257,24 @@ export class ArticleDetailPage extends Component {
             <div
               className={`article_detail_rating ${!isLoggedIn && 'article_detail_rating_no_auth'}`}
             >
-              {isLoggedIn && (
+              {userCanRate && (
                 <Fragment>
-                  <p>How did you enjoy this article?</p>
+                  <p>
+                    {userHasRated && userCanRate
+                      ? 'You have rated this article'
+                      : 'How did you enjoy this article?'}
+                  </p>
                   <section className="article_detail_rating_stars">{stars}</section>
                 </Fragment>
               )}
-              {Number(rating) !== 0 && (
+              {(averageRating !== 0 || userOwnsArticle) && (
                 <p className="article_detail_rating_average">
-                  Average:
+                  Average rating:
                   {' '}
-                  <span className="article_detail_rating_average_number">{rating}</span>
+                  <span className="article_detail_rating_average_number">{averageRating}</span>
                 </p>
               )}
-              {Number(rating) === 0 && (
+              {averageRating === 0 && userCanRate && (
                 <p className="article_detail_rating_average">This article has not yet been rated</p>
               )}
             </div>
@@ -330,6 +390,9 @@ ArticleDetailPage.propTypes = {
   }),
   isGetting: bool.isRequired,
   isLoggedIn: bool.isRequired,
+  rateArticleFn: func.isRequired,
+  username: string.isRequired,
+  ratingData: objectOf.isRequired,
   removeBookmark: func.isRequired,
   bookmarkArticle: func.isRequired,
   history: objectProp.isRequired
@@ -345,15 +408,20 @@ ArticleDetailPage.defaultProps = {
  * @param {object} store redux store
  * @returns {object} component props
  */
-export const mapStateToProps = ({ auth, article }) => {
+export const mapStateToProps = ({ auth, article, user }) => {
+  const { username } = user;
   const { token, isLoggedIn } = auth;
-  const { errors, isGetting, articleGotten } = article;
+  const {
+    errors, isGetting, articleGotten, ratingData
+  } = article;
   return {
+    username,
     token,
     errors,
     isGetting,
     isLoggedIn,
-    articleGotten
+    articleGotten,
+    ratingData
   };
 };
 
@@ -367,6 +435,7 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     getArticle: getArticleAction,
     gettingArticle: gettingArticleAction,
     clearErrors: clearErrorsAction,
+    rateArticleFn: rateArticleAction,
     removeBookmark: removeBookmarkAction,
     bookmarkArticle: bookmarkArticleAction
   },

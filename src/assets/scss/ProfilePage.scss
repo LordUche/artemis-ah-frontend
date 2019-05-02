@@ -1,4 +1,4 @@
-$color-blue: #5863F8;
+$color-blue: #5863f8;
 $color-white: #ffffff;
 
 @keyframes borderEffect {
@@ -12,329 +12,328 @@ $color-white: #ffffff;
 }
 
 @keyframes fadeInDarkOverlay {
-    0% {
-        background: rgba(0,0,0,0);
-    }
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
 
-    100% {
-        background: rgba(0,0,0,0.5);
-    }
+  100% {
+    background: rgba(0, 0, 0, 0.5);
+  }
 }
 
 @keyframes spread {
-    0% {
-        left: 50%;
-        right: 50%;
-    }
+  0% {
+    left: 50%;
+    right: 50%;
+  }
 
-    100% {
-        left: 0;
-        right: 0;
-    }
+  100% {
+    left: 0;
+    right: 0;
+  }
 }
 
 .profile-section {
-    &__blue-bg {
-        background: $color-blue;
-        color: #ffffff;
-        padding: 30px 0 65px 0;
-        height: 245px;
+  margin-bottom: 80px;
 
-        &__user-wrapper {
-            display: flex;
-            justify-content: left;
-        }
+  &__blue-bg {
+    background: $color-blue;
+    color: #ffffff;
+    padding: 30px 0 65px 0;
+    height: 245px;
 
-        &__picture-section {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            border-radius: 5px;
-            overflow: hidden;
-            background: #ffffff;
+    &__user-wrapper {
+      display: flex;
+      justify-content: left;
+    }
 
-            img {
-                width: 100%;
-                height: 100%;
-            }
+    &__picture-section {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      border-radius: 5px;
+      overflow: hidden;
+      background: #ffffff;
 
-            &__edit-wrapper {
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+      &__edit-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        animation: fadeInDarkOverlay 0.15s forwards;
+
+        &__inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+
+          &__image-chooser {
+            position: absolute;
+            bottom: 8px;
+            left: 6px;
+            width: 22px;
+            height: 21px;
+
+            &__inner {
+              display: block;
+              width: 22px;
+              height: 21px;
+              position: relative;
+              overflow: hidden;
+
+              input[type="file"] {
                 position: absolute;
+                left: 0;
                 top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                animation: fadeInDarkOverlay 0.15s forwards;
-
-                &__inner {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-
-                    &__image-chooser {
-                        position: absolute;
-                        bottom: 8px;
-                        left: 6px;
-                        width: 22px;
-                        height: 21px;
-
-                        &__inner {
-                            display: block;
-                            width: 22px;
-                            height: 21px;
-                            position: relative;
-                            overflow: hidden;
-
-                            input[type=file] {
-                                position: absolute;
-                                left: 0;
-                                top: 0;
-                                bottom: 0;
-                                right: 0;
-                            }
-
-                            &__btn {
-                                color: #ffffff;
-                                background: rgba(0,0,0,0);
-                                border: none;
-                                outline: none;
-                                font-size: 19px;
-                                text-align: center;
-                                transition: background 0.3s, color 0.3s;
-                                border-radius: 50%;
-                                display: block;
-                            }
-                            
-                            input[type=file] {
-                                opacity: 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        &__data {
-            margin-left: 30px;
-            position: relative;
-
-            &__fullname {
-                font-weight: bold;
-                font-size: 17px;
-            }
-
-            &__username {
-                font-size: 13px;
-                line-height: 100%;
-                color: #d0d3ff;
-            }
-
-            &__about {
-                font-size: 15px;
-                margin-top: 9px;
-            }
-
-            &__about--edit {
-                position: relative;
-                outline: none;
-                border: none;
-                background: #ffffff;
-                color: #222222;
-                padding: 3px 5px;
-                border-radius: 5px;
-                width: 510px;
-                height: 62px;
-            }
-
-            &__btn-wrapper {
-                position: absolute;
                 bottom: 0;
-                left: 0;
-                width: 150px;
+                right: 0;
+              }
 
-                button {
-                    height: 34px;
-                    padding: 0 15px;
-                }
+              &__btn {
+                color: #ffffff;
+                background: rgba(0, 0, 0, 0);
+                border: none;
+                outline: none;
+                font-size: 19px;
+                text-align: center;
+                transition: background 0.3s, color 0.3s;
+                border-radius: 50%;
+                display: block;
+              }
+
+              input[type="file"] {
+                opacity: 0;
+              }
             }
+          }
         }
+      }
+    }
+
+    &__data {
+      margin-left: 30px;
+      position: relative;
+
+      &__fullname {
+        font-weight: bold;
+        font-size: 17px;
+      }
+
+      &__username {
+        font-size: 13px;
+        line-height: 100%;
+        color: #d0d3ff;
+      }
+
+      &__about {
+        font-size: 15px;
+        margin-top: 9px;
+      }
+
+      &__about--edit {
+        position: relative;
+        outline: none;
+        border: none;
+        background: #ffffff;
+        color: #222222;
+        padding: 3px 5px;
+        border-radius: 5px;
+        width: 510px;
+        height: 62px;
+      }
+
+      &__btn-wrapper {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 150px;
+
+        button {
+          height: 34px;
+          padding: 0 15px;
+        }
+      }
+    }
+  }
+
+  &__body {
+    padding-bottom: 30px;
+
+    .user-list {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      &-item {
+        width: 48.5%;
+      }
+    }
+
+    &__tab-container {
+      background: #ffffff;
+      margin-top: -35px;
+      box-shadow: 0 1px 7px rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+      overflow: hidden;
+      display: flex;
+      justify-content: left;
+
+      &__tab {
+        height: 70px;
+        box-sizing: border-box;
+        width: 280px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #8a92fa;
+
+        &__inner {
+          display: inline-block;
+
+          &__icon {
+            vertical-align: top;
+          }
+
+          &__icon,
+          &__body {
+            display: inline-block;
+          }
+
+          &__body {
+            margin-left: 8px;
+            line-height: 100%;
+            text-align: center;
+
+            &__num {
+              font-size: 23px;
+              font-weight: bold;
+            }
+
+            &__label {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+
+      &__tab--active {
+        position: relative;
+        color: $color-blue;
+
+        &::after {
+          display: block;
+          content: "";
+          position: absolute;
+          bottom: 0;
+          height: 4px;
+          background: $color-blue;
+          animation: spread 0.2s forwards;
+        }
+      }
+    }
+
+    &__content {
+      padding-top: 20px;
+
+      &__title {
+        font-weight: bold;
+        text-align: center;
+        font-size: 22px;
+      }
+
+      .article-item-skeleton-screen {
+        margin-top: 20px;
+      }
+
+      .user-list-item,
+      .user-item-skeleton-screen {
+        margin-top: 30px;
+      }
+    }
+
+    .no-result {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 17px;
+      width: 100%;
+
+      &__link {
+        margin-top: 5px;
+
+        a {
+          background: $color-blue;
+          color: $color-white;
+        }
+      }
+    }
+  }
+
+  &__container-center {
+    width: 840px;
+    margin: 0 auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    &__container-center {
+      width: 91%;
+    }
+
+    &__blue-bg {
+      height: auto;
+      text-align: center;
+
+      &__user-wrapper {
+        display: block;
+      }
+
+      &__picture-section {
+        display: inline-block;
+      }
+
+      &__data {
+        margin-left: 0;
+
+        &__fullname {
+          margin-top: 15px;
+        }
+
+        &__btn-wrapper {
+          position: static;
+          width: 100%;
+          margin-top: 15px;
+        }
+
+        &__about--edit {
+          width: 100%;
+        }
+      }
     }
 
     &__body {
-        padding-bottom: 30px;
-
-        .user-list {
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-
-            &-item {
-                width: 48.5%;
+      &__tab-container {
+        &__tab {
+          &__inner {
+            &__icon {
+              display: none;
             }
+          }
         }
+      }
 
-        &__tab-container {
-            background: #ffffff;
-            margin-top: -35px;
-            box-shadow: 0 1px 7px rgba(0,0,0,0.3);
-            border-radius: 5px;
-            overflow: hidden;
-            display: flex;
-            justify-content: left;
+      .user-list {
+        display: block;
 
-            &__tab {
-                height: 70px;
-                box-sizing: border-box;
-                width: 280px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: #8A92FA;
-                
-                &__inner {
-                    display: inline-block;
-
-                    &__icon {
-                        vertical-align: top;
-                    }
-                    
-                    &__icon,
-                    &__body {
-                        display: inline-block;
-                    }
-        
-                    &__body {
-                        margin-left: 8px;
-                        line-height: 100%;
-                        text-align: center;
-                        
-                        &__num {
-                            font-size: 23px;
-                            font-weight: bold;
-                        }
-
-                        &__label {
-                            font-size: 14px;
-                        }
-                    }
-                }
-            }
-
-            &__tab--active {
-                position: relative;
-                color: $color-blue;
-
-                &::after {
-                    display: block;
-                    content: '';
-                    position: absolute;
-                    bottom: 0;
-                    height: 4px;
-                    background: $color-blue;
-                    animation: spread 0.20s forwards;
-                }
-            }
+        &-item {
+          width: 100%;
         }
-
-        &__content {
-            padding-top: 20px;
-
-            &__title {
-                font-weight: bold;
-                text-align: center;
-                font-size: 22px;
-            }
-
-            .article-item-skeleton-screen {
-                margin-top: 20px;
-            }
-
-            .user-list-item,
-            .user-item-skeleton-screen {
-                margin-top: 30px;
-            }
-        }
-
-        .no-result {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 17px;
-            width: 100%;
-
-            &__link {
-                margin-top: 5px;
-
-                a {
-                    background: $color-blue;
-                    color: $color-white;
-                }
-            }
-        }
+      }
     }
-
-    &__container-center {
-        width: 840px;
-        margin: 0 auto;
-    }
-
-
-    @media screen and (max-width: 768px) {
-        &__container-center {
-            width: 91%;
-        }
-
-        &__blue-bg {
-            height: auto;
-            text-align: center;
-
-            &__user-wrapper {
-                display: block;
-            }
-
-            &__picture-section {
-                display: inline-block;
-            }
-
-            &__data {
-                margin-left: 0;
-
-                &__fullname {
-                    margin-top: 15px;
-                }
-                
-                &__btn-wrapper {
-                    position: static;
-                    width: 100%;
-                    margin-top: 15px;
-                }
-
-                &__about--edit {
-                    width: 100%;
-                }
-            }
-        }
-
-        &__body {
-            &__tab-container {
-                &__tab {
-                    &__inner {
-                        &__icon {
-                            display: none;
-                        }
-                    }
-                }
-            }
-
-            .user-list {
-                display: block;
-
-                &-item {
-                    width: 100%;
-                }
-            }
-
-            padding-bottom: 110px;
-        }
-    }
+  }
 }

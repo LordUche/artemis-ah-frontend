@@ -75,7 +75,7 @@ export const getInitialState = () => ({
     }
   },
   editState: CONTENT_STATE_DEFAULT,
-  followActionWorking: false,
+  followActionWorking: false
 });
 
 export default (state = getInitialState(), { type, data }) => {

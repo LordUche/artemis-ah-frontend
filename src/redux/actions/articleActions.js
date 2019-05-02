@@ -22,6 +22,9 @@ import {
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
   GETTING_ARTICLE,
+  RATING_ARTICLE,
+  RATED_ARTICLE,
+  RATING_ARTICLE_ERROR,
   ARTICLE_BOOKMARK_ADDED,
   ARTICLE_BOOKMARK_ADD_ERROR,
   ARTICLE_BOOKMARK_REMOVED,
@@ -127,11 +130,11 @@ const bookmarkArticleAction = async (articleSlug, authToken) => {
 
     return {
       type: ARTICLE_BOOKMARK_ADDED,
-      payload: response.data,
+      payload: response.data
     };
   } catch (error) {
     return {
-      type: ARTICLE_BOOKMARK_ADD_ERROR,
+      type: ARTICLE_BOOKMARK_ADD_ERROR
     };
   }
 };
@@ -282,8 +285,8 @@ const getArticleAction = async (articleSlug, token) => {
     };
   }
   try {
-    const request = await get(`${BASE_URL}/articles/${articleSlug}`, requestOptions);
-    const gottenArticle = request.data;
+    const articleRequest = await get(`${BASE_URL}/articles/${articleSlug}`, requestOptions);
+    const gottenArticle = articleRequest.data;
 
     return {
       type: GOT_ARTICLE,
@@ -297,6 +300,39 @@ const getArticleAction = async (articleSlug, token) => {
     };
   }
 };
+
+/**
+ * @method rateArticleAction
+ * @param {string} slug - The slug of the article to be rated
+ * @param {number} rating - The value to rate the article (between 1 - 5)
+ * @description - Method to dispatch rate article actions
+ * @returns {object} - The new rated article action object
+ */
+const rateArticleAction = async (slug, rating) => {
+  const token = localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken');
+  try {
+    const request = await post(
+      `${BASE_URL}/articles/${slug}/ratings`,
+      { rating },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return {
+      type: RATED_ARTICLE,
+      payload: request.data
+    };
+  } catch (error) {
+    return {
+      type: RATING_ARTICLE_ERROR,
+      payload: error
+    };
+  }
+};
+
+/**
+ * @description function for displaying rating state
+ * @returns {object} action
+ */
+const ratingArticleAction = () => ({ type: RATING_ARTICLE });
 
 /**
  * @description function for displaying loading state
@@ -377,6 +413,8 @@ export {
   confirmArticleDeleteAction,
   closeArticleDeleteModalAction,
   editArticle,
+  rateArticleAction,
+  ratingArticleAction,
   bookmarkArticleAction,
   removeBookmarkAction,
   getBookmarksAction,
