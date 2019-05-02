@@ -5,7 +5,6 @@ import {
   bool, func, objectOf, object
 } from 'prop-types';
 import { Redirect } from 'react-router-dom';
-// import { post } from 'axios';
 import { post } from 'axios';
 
 // Social Media Auth URL's

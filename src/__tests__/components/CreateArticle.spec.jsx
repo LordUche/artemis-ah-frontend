@@ -206,6 +206,7 @@ describe('Create article component', () => {
     const articleCard = mount(
       <Router>
         <ArticleItem
+          isLoggedIn
           title="xyz"
           description="xyz"
           coverUrl="xyz"
@@ -215,6 +216,7 @@ describe('Create article component', () => {
           rating="xyz"
           readTime="xyz"
           author="xyz"
+          username="xyz"
           showAuthor="xyz"
           modifyArticle={mockFunc}
           push={mockFunc}
