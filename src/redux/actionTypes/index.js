@@ -24,6 +24,7 @@ export const LOGIN_USER = 'LOGIN_USER';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const CLEAR_AUTH_ERROR = 'CLEAR_AUTH_ERROR';
 export const AUTH_LOADING = 'AUTH_LOADING';
+export const LOGOUT_USER = 'LOGOUT_USER';
 
 // Profile action types
 export const PROFILE_USER_DETAILS_FETCHED = 'PROFILE_USER_DETAILS_FETCHED';

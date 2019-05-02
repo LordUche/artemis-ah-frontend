@@ -4,7 +4,8 @@ import {
   AUTH_LOADING,
   CLEAR_AUTH_ERROR,
   SIGN_UP,
-  SIGN_UP_ERROR
+  SIGN_UP_ERROR,
+  LOGOUT_USER
 } from '../actionTypes';
 
 /**
@@ -65,6 +66,13 @@ const authReducer = (state = initialState(localStorage, sessionStorage), { type,
         ...state,
         errorMessages: [],
         signedUp: false,
+      };
+    case LOGOUT_USER:
+      return {
+        ...state,
+        isLoggedIn: false,
+        signedUp: false,
+        token: ''
       };
     default:
       return state;
