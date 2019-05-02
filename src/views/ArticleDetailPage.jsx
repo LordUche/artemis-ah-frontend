@@ -23,6 +23,8 @@ import CommentsComponent from '../components/Comment';
 
 // Images
 import defaultClap from '../assets/img/defaultClap.svg';
+import hasClapped from '../assets/img/clap.svg';
+
 
 // Actions
 import {
@@ -31,7 +33,9 @@ import {
   clearErrorsAction,
   rateArticleAction,
   removeBookmarkAction,
-  bookmarkArticleAction
+  bookmarkArticleAction,
+  articleClapAction
+
 } from '../redux/actions/articleActions';
 
 /**
@@ -106,6 +110,14 @@ export class ArticleDetailPage extends Component {
     rateArticleFn(slug, rating);
   };
 
+  userClap = () => {
+    const {
+      match, articleClap, token
+    } = this.props;
+    const { articleSlug } = match.params;
+    articleClap(articleSlug, token);
+  };
+
   /**
    * @returns {HTMLElement} div
    */
@@ -133,6 +145,7 @@ export class ArticleDetailPage extends Component {
       createdAt,
       rating,
       readTime,
+      clap,
       totalClaps,
       rated
     } = articleGotten;
@@ -299,12 +312,11 @@ export class ArticleDetailPage extends Component {
             </div>
             <aside className="article_detail_aside">
               {isLoggedIn && (
-                <div className="article_detail_aside_clap">
-                  <img
-                    src={defaultClap}
-                    alt="clap icon"
-                    className="article_detail_aside_clap_img"
-                  />
+                <div className="article_detail_aside_clap" onClick={this.userClap} role="presentation">
+                  {clap
+                    ? <img src={hasClapped} alt="clap icon" className="article_detail_aside_clap_img" />
+                    : <img src={defaultClap} alt="clap icon" className="article_detail_aside_clap_img" />
+                  }
                   <p className="article_detail_aside_clap_text">{totalClaps}</p>
                 </div>
               )}
@@ -345,7 +357,11 @@ export class ArticleDetailPage extends Component {
                   btnTitle="share via mail"
                   customClass="article_detail_aside_share_button"
                 >
-                  <a href={`mailto:?Subject=${title}&body=${mailBody}`}>
+                  <a
+                    href={`mailto:?Subject=${title}&body=${mailBody}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <i className="far fa-envelope article_detail_aside_share_button_icon article_detail_aside_share_button_envelope" />
                   </a>
                 </Button>
@@ -418,6 +434,7 @@ ArticleDetailPage.propTypes = {
   }),
   isGetting: bool.isRequired,
   isLoggedIn: bool.isRequired,
+  articleClap: func.isRequired,
   rateArticleFn: func.isRequired,
   username: string.isRequired,
   ratingData: objectOf.isRequired,
@@ -440,7 +457,7 @@ export const mapStateToProps = ({ auth, article, user }) => {
   const { username } = user;
   const { token, isLoggedIn } = auth;
   const {
-    errors, isGetting, articleGotten, ratingData
+    errors, isGetting, articleGotten, ratingData, clapMsg
   } = article;
   return {
     username,
@@ -449,6 +466,7 @@ export const mapStateToProps = ({ auth, article, user }) => {
     isGetting,
     isLoggedIn,
     articleGotten,
+    clapMsg,
     ratingData
   };
 };
@@ -463,6 +481,7 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     getArticle: getArticleAction,
     gettingArticle: gettingArticleAction,
     clearErrors: clearErrorsAction,
+    articleClap: articleClapAction,
     rateArticleFn: rateArticleAction,
     removeBookmark: removeBookmarkAction,
     bookmarkArticle: bookmarkArticleAction

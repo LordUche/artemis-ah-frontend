@@ -7,7 +7,8 @@ import {
   AUTH_LOADING,
   CLEAR_AUTH_ERROR,
   SIGN_UP,
-  SIGN_UP_ERROR
+  SIGN_UP_ERROR,
+  LOGOUT_USER
 } from '../actionTypes';
 
 /**
@@ -65,6 +66,37 @@ export const storeInSession = ({
   sessionStorage.authorsHavenBio = bio;
   sessionStorage.authorsHavenImage = image;
   sessionStorage.authorsHavenToken = token;
+};
+
+/**
+ * @description function for removing platform data in localStorage and sessionStorage
+ * @param {object} localStorage the local storage to be used ( to be mocked for testing )
+ * @param {object} sessionStorage the session storage to be used ( to be mocked for testing )
+ * @returns {undefined}
+ */
+export const removeFromStorage = (localStorage, sessionStorage) => {
+  delete localStorage.authorsHavenUsername;
+  delete localStorage.authorsHavenEmail;
+  delete localStorage.authorsHavenBio;
+  delete localStorage.authorsHavenImage;
+  delete localStorage.authorsHavenToken;
+  delete sessionStorage.authorsHavenUsername;
+  delete sessionStorage.authorsHavenEmail;
+  delete sessionStorage.authorsHavenBio;
+  delete sessionStorage.authorsHavenImage;
+  delete sessionStorage.authorsHavenToken;
+};
+
+/**
+ * @description function for dispatching action for logging out user
+ * @param {function} dispatch Function to dispatch actions to redux store.
+ * @returns {object} action
+ */
+export const logoutUserAction = (dispatch) => {
+  removeFromStorage(localStorage, sessionStorage);
+  dispatch({
+    type: LOGOUT_USER
+  });
 };
 
 /**

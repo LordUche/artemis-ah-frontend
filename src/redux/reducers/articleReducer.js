@@ -12,6 +12,7 @@ import {
   GETTING_ARTICLE,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
+  ARTICLE_CLAP,
   RATED_ARTICLE,
   RATING_ARTICLE,
   RATING_ARTICLE_ERROR,
@@ -37,6 +38,7 @@ export const initialState = {
   updatedArticle: {},
   isGetting: false,
   articleGotten: {},
+  clapMsg: '',
   newArticleSlug: '',
   isRating: '',
   ratingData: { rating: 0 },
@@ -50,6 +52,13 @@ export const initialState = {
  * @returns {object} - The transformed state
  */
 const articleReducer = (state = initialState, { type, payload }) => {
+  let newTotalClaps, newClap;
+  if (type === ARTICLE_CLAP) {
+    const { articleGotten } = state;
+    const { totalClaps, clap } = articleGotten;
+    newClap = !clap;
+    newTotalClaps = newClap ? totalClaps + 1 : totalClaps - 1;
+  }
   switch (type) {
     case GET_ARTICLES:
       return {
@@ -140,6 +149,12 @@ const articleReducer = (state = initialState, { type, payload }) => {
         isGetting: false,
         articleDetailsGotten: {},
         errors: payload
+      };
+    case ARTICLE_CLAP:
+      return {
+        ...state,
+        clapMsg: payload,
+        articleGotten: { ...state.articleGotten, totalClaps: newTotalClaps, clap: newClap }
       };
     case RATED_ARTICLE:
       return {
