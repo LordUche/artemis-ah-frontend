@@ -5,15 +5,15 @@
   margin: auto;
   font-size: 1.6rem;
 
-  .like-icon{
+  .like-icon {
     cursor: pointer;
   }
 
-  .liked{
-    color: #06A5E9;
+  .liked {
+    color: #06a5e9;
   }
 
-  &_box{
+  &_box {
     width: 100%;
     margin-bottom: 5%;
 
@@ -145,6 +145,22 @@
 .edit_comment_toggle:hover {
   text-shadow: 0.5px 0.1px 0.5px #999999;
   text-decoration: underline;
+}
+
+.highlighted-comment {
+  margin: 1rem 0;
+  padding: 2rem 1.5rem;
+  background: #fff2de;
+  position: relative;
+
+  & > span {
+    position: absolute;
+    top: 1rem;
+  }
+
+  & > p {
+    margin-left: 2.5rem;
+  }
 }
 
 @media only screen and (max-width: 1000px) {

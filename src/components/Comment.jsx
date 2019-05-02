@@ -210,11 +210,13 @@ export class Comment extends Component {
    * @returns {*} actions
    */
   handleSubmit = (e) => {
-    const { postArticleComment, loadingPost, slug } = this.props;
+    const {
+      postArticleComment, loadingPost, slug, selectedText, closeComment
+    } = this.props;
     e.preventDefault();
     loadingPost();
-    postArticleComment(slug.articleSlug, this.state);
-
+    postArticleComment(slug.articleSlug, this.state, selectedText);
+    closeComment();
     this.setState({ showPost: false });
   };
 
@@ -253,6 +255,7 @@ export class Comment extends Component {
           </span>
         ));
         const { User, hasLiked, updatedAt } = SingleComment;
+        const articleIsHighlighted = SingleComment.highlighted !== 'N/A';
         return (
           <Fragment>
             <div key={index.toString()} className="comment_card">
@@ -274,6 +277,14 @@ export class Comment extends Component {
                     )}`}
                   </i>
                 </div>
+                {articleIsHighlighted && (
+                  <div className="highlighted-comment">
+                    <span>
+                      <i className="fas fa-quote-left" />
+                    </span>
+                    <p>{SingleComment.highlighted}</p>
+                  </div>
+                )}
                 <div className="comment_card__main__body">
                   <p>{comment}</p>
                 </div>
@@ -334,7 +345,8 @@ export class Comment extends Component {
   render() {
     const { showPost } = this.state;
     const { errors, clearPostedValue } = this.props;
-    if (errors.message) {
+    const errorMsg = !errors ? '' : errors.message;
+    if (errorMsg) {
       notifyUser(toast(`${errors.message}`, { className: 'error-toast' }));
       clearPostedValue();
     }
@@ -387,7 +399,8 @@ Comment.propTypes = {
   postToggleCommentLike: func.isRequired,
   token: string,
   highlighted: bool,
-  closeComment: func
+  closeComment: func,
+  selectedText: string
 };
 
 Comment.defaultProps = {
@@ -398,7 +411,8 @@ Comment.defaultProps = {
   editLoading: false,
   edited: false,
   highlighted: false,
-  closeComment: () => false
+  closeComment: () => false,
+  selectedText: 'N/A'
 };
 
 /**

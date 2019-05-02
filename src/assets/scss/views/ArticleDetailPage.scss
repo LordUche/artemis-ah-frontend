@@ -211,6 +211,20 @@
           direction: rtl;
         }
       }
+      &_star.rated {
+        cursor: default;
+
+        &:hover,
+        &.filled,
+        &:hover ~ & {
+          font-weight: unset;
+        }
+
+        &s {
+          margin: 10px 0;
+          direction: rtl;
+        }
+      }
       &_average {
         color: #969696;
 
