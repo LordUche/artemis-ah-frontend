@@ -262,7 +262,7 @@
       font-size: 18px;
       width: 100px;
       position: fixed;
-      top: 250px;
+      top: 25%;
       right: 70px;
       &_clap {
         color: #adadad;
@@ -296,7 +296,7 @@
         &_button {
           cursor: pointer;
           width: 100%;
-          padding: 0;
+          padding: 10;
 
           &_icon {
             padding: 10px auto;
@@ -356,7 +356,7 @@
       transform: scale(0.8);
       right: -5px;
       &_share_button {
-        margin: 20px auto;
+        margin: 10px auto;
       }
     }
     &_body {

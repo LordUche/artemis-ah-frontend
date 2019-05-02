@@ -18,7 +18,8 @@ import {
   removeBookmarkAction,
   rateArticleAction,
   ratingArticleAction,
-  editArticle
+  editArticle,
+  filterArticles,
 } from '../../../redux/actions/articleActions';
 
 import {
@@ -31,7 +32,9 @@ import {
   DELETED_BOOKMARK,
   ERROR_DELETING_BOOKMARKS,
   ERROR_GETTING_BOOKMARKS,
-  GOT_BOOKMARKS
+  GOT_BOOKMARKS,
+  GET_ARTICLES,
+  GET_ARTICLES_ERROR,
 } from '../../../redux/actionTypes';
 import getMockArticles from '../../../__mocks__/articles';
 
@@ -93,6 +96,59 @@ describe('Test get all articles action', () => {
     expect(result.type).toEqual('GET_ARTICLES_ERROR');
   });
 });
+
+describe('Test filter articles action', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should return fetched articles', async () => {
+    const expectedResponse = {
+      articles: [
+        {
+          id: 3,
+          slug: 'some-title-3',
+          title: 'some title',
+          description: 'some weird talk',
+          rating: '0',
+          totalClaps: 0,
+          createdAt: '2019-04-17T20:26:46.344Z',
+          updatedAt: '2019-04-17T20:26:46.347Z',
+          User: {
+            username: 'deedenedash',
+            bio: 'n/a',
+            image: 'https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/iReporter/avatar.png'
+          },
+          Tag: {
+            name: 'Food'
+          },
+        }
+      ],
+      total: 3,
+      page: 1,
+      limit: 20
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const result = await filterArticles();
+    expect(result.type).toEqual(GET_ARTICLES);
+  });
+  it('should return an error', async () => {
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 404, response: { message: 'No article found with that match' } });
+    });
+    const result = await filterArticles();
+    expect(result.type).toEqual(GET_ARTICLES_ERROR);
+  });
+});
+
 
 describe('Testing article tag actions', () => {
   beforeEach(() => {

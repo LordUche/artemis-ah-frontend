@@ -30,7 +30,8 @@ describe('Article details component', () => {
     getArticle: mockGetArticleFn,
     gettingArticle: mockGettingArticleFn,
     clearErrors: mockClearErrorsFn,
-    rateArticleFn: mockRateArticleFn
+    rateArticleFn: mockRateArticleFn,
+    articleClap: jest.fn()
   };
   const articleDetailPage = mount(
     <Provider store={store}>
@@ -369,7 +370,8 @@ describe('Article details component', () => {
       expect(articlePage.find('.article_detail_bookmark').exists()).toBe(true);
       expect(articlePage.find('.article_detail_bookmark.bookmarked').exists()).toBe(false);
       expect(articlePage.find('.article_detail_bookmark span').text()).toBe('Add to Bookmark');
-
+      articlePage.instance().userClap();
+      articlePage.instance().closeCommentBox();
       done();
     });
   });

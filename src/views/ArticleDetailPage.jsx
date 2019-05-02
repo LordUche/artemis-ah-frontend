@@ -14,6 +14,7 @@ import {
   number
 } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
+import Highlight from 'react-highlight-pop';
 
 // Components
 import TopNavBar from '../components/TopNav';
@@ -22,6 +23,8 @@ import CommentsComponent from '../components/Comment';
 
 // Images
 import defaultClap from '../assets/img/defaultClap.svg';
+import hasClapped from '../assets/img/clap.svg';
+
 
 // Actions
 import {
@@ -30,7 +33,9 @@ import {
   clearErrorsAction,
   rateArticleAction,
   removeBookmarkAction,
-  bookmarkArticleAction
+  bookmarkArticleAction,
+  articleClapAction
+
 } from '../redux/actions/articleActions';
 
 /**
@@ -93,12 +98,24 @@ export class ArticleDetailPage extends Component {
     );
   }
 
+  closeCommentBox = () => {
+    this.setState({ highlighted: false });
+  };
+
   rateArticle = (event) => {
     const { articleGotten, rateArticleFn } = this.props;
     const { slug } = articleGotten;
     const rating = event.target.id;
     this.setState({ userRated: true });
     rateArticleFn(slug, rating);
+  };
+
+  userClap = () => {
+    const {
+      match, articleClap, token
+    } = this.props;
+    const { articleSlug } = match.params;
+    articleClap(articleSlug, token);
   };
 
   /**
@@ -113,7 +130,8 @@ export class ArticleDetailPage extends Component {
       username,
       ratingData,
       match,
-      history
+      history,
+      token
     } = this.props;
 
     const { userRated } = this.state;
@@ -127,6 +145,7 @@ export class ArticleDetailPage extends Component {
       createdAt,
       rating,
       readTime,
+      clap,
       totalClaps,
       rated
     } = articleGotten;
@@ -169,6 +188,7 @@ export class ArticleDetailPage extends Component {
 
     const shareUrl = window.location.href;
     const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
+    const { highlighted } = this.state;
 
     return (
       <Fragment>
@@ -249,7 +269,19 @@ export class ArticleDetailPage extends Component {
             >
               {body.split('\n').map(section => (
                 <Fragment>
-                  <article className="article_detail_body_segment">{section}</article>
+                  <Highlight
+                    popoverItems={itemClass => (
+                      <span
+                        role="presentation"
+                        onClick={() => this.setState({ highlighted: true })}
+                        className={itemClass}
+                      >
+                        Comment
+                      </span>
+                    )}
+                  >
+                    <article className="article_detail_body_segment">{section}</article>
+                  </Highlight>
                   <br />
                 </Fragment>
               ))}
@@ -280,12 +312,11 @@ export class ArticleDetailPage extends Component {
             </div>
             <aside className="article_detail_aside">
               {isLoggedIn && (
-                <div className="article_detail_aside_clap">
-                  <img
-                    src={defaultClap}
-                    alt="clap icon"
-                    className="article_detail_aside_clap_img"
-                  />
+                <div className="article_detail_aside_clap" onClick={this.userClap} role="presentation">
+                  {clap
+                    ? <img src={hasClapped} alt="clap icon" className="article_detail_aside_clap_img" />
+                    : <img src={defaultClap} alt="clap icon" className="article_detail_aside_clap_img" />
+                  }
                   <p className="article_detail_aside_clap_text">{totalClaps}</p>
                 </div>
               )}
@@ -326,7 +357,11 @@ export class ArticleDetailPage extends Component {
                   btnTitle="share via mail"
                   customClass="article_detail_aside_share_button"
                 >
-                  <a href={`mailto:?Subject=${title}&body=${mailBody}`}>
+                  <a
+                    href={`mailto:?Subject=${title}&body=${mailBody}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <i className="far fa-envelope article_detail_aside_share_button_icon article_detail_aside_share_button_envelope" />
                   </a>
                 </Button>
@@ -358,7 +393,16 @@ export class ArticleDetailPage extends Component {
             </div>
           </div>
         )}
-        <CommentsComponent slug={match.params} isLoggedIn={isLoggedIn} />
+        {!isLoggedIn && <CommentsComponent slug={match.params} isLoggedIn={false} />}
+        {isLoggedIn && (
+          <CommentsComponent
+            highlighted={highlighted}
+            slug={match.params}
+            isLoggedIn
+            token={token}
+            closeComment={this.closeCommentBox}
+          />
+        )}
       </Fragment>
     );
   }
@@ -390,6 +434,7 @@ ArticleDetailPage.propTypes = {
   }),
   isGetting: bool.isRequired,
   isLoggedIn: bool.isRequired,
+  articleClap: func.isRequired,
   rateArticleFn: func.isRequired,
   username: string.isRequired,
   ratingData: objectOf.isRequired,
@@ -412,7 +457,7 @@ export const mapStateToProps = ({ auth, article, user }) => {
   const { username } = user;
   const { token, isLoggedIn } = auth;
   const {
-    errors, isGetting, articleGotten, ratingData
+    errors, isGetting, articleGotten, ratingData, clapMsg
   } = article;
   return {
     username,
@@ -421,6 +466,7 @@ export const mapStateToProps = ({ auth, article, user }) => {
     isGetting,
     isLoggedIn,
     articleGotten,
+    clapMsg,
     ratingData
   };
 };
@@ -435,6 +481,7 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     getArticle: getArticleAction,
     gettingArticle: gettingArticleAction,
     clearErrors: clearErrorsAction,
+    articleClap: articleClapAction,
     rateArticleFn: rateArticleAction,
     removeBookmark: removeBookmarkAction,
     bookmarkArticle: bookmarkArticleAction

@@ -33,7 +33,9 @@ import {
   BOOKMARK_LOADING,
   ERROR_DELETING_BOOKMARKS,
   GOT_BOOKMARKS,
-  ERROR_GETTING_BOOKMARKS
+  ERROR_GETTING_BOOKMARKS,
+  ARTICLE_CLAP,
+  ARTICLE_CLAP_ERROR
 } from '../actionTypes';
 import notifyUser from '../../utils/Toast';
 
@@ -47,6 +49,31 @@ const getAllArticles = async (pageNo = 1) => {
   try {
     const response = await get(`${BASE_URL}/articles?page=${pageNo}`);
     const { articles, total, limit } = response.data;
+
+    return {
+      type: GET_ARTICLES,
+      payload: { articles, limit, total }
+    };
+  } catch (error) {
+    return {
+      type: GET_ARTICLES_ERROR,
+      payload: error.response.data
+    };
+  }
+};
+
+/**
+ * @method filterArticles
+ * @description Method to get all articles
+ * @param {string} keyword Filter Parameter
+ * @returns {object} Fetched articles
+ */
+const filterArticles = async (keyword) => {
+  try {
+    const response = await get(`${BASE_URL}/filter?tag=${keyword}`);
+    const { articles } = response.data;
+    const total = articles.length;
+    const limit = 20;
 
     return {
       type: GET_ARTICLES,
@@ -400,6 +427,35 @@ const deleteBookmarkAction = async (article, token) => {
  */
 const bookmarkLoadingAction = () => ({ type: BOOKMARK_LOADING });
 
+/**
+ * @method createArticleAction
+ * @description - Method to dispatch article clap actions
+ * @param {object} slug - The slug for article
+ * @param {string} token - The user's token
+ * @returns {object} - The create article action object
+ */
+const articleClapAction = async (slug, token) => {
+  try {
+    const request = await post(`${BASE_URL}/articles/${slug}/clapToggle`, {}, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    });
+    const articleClap = request.data;
+    return {
+      type: ARTICLE_CLAP,
+      payload: articleClap
+    };
+  } catch (error) {
+    const errorResponse = { status: 'Can not like an article' };
+    const obj = {
+      type: ARTICLE_CLAP_ERROR,
+      payload: error.response.data ? error.response.data.errors : errorResponse
+    };
+    return obj;
+  }
+};
+
 export {
   fetchTagsAction,
   createArticleAction,
@@ -419,5 +475,7 @@ export {
   removeBookmarkAction,
   getBookmarksAction,
   deleteBookmarkAction,
-  bookmarkLoadingAction
+  bookmarkLoadingAction,
+  filterArticles,
+  articleClapAction,
 };

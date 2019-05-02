@@ -22,6 +22,7 @@ const articleComments = [
     totalLikes: 0,
     createdAt: '2019-04-25T02:31:17.654Z',
     updatedAt: '2019-04-25T02:31:17.654Z',
+    hasLiked: false,
     User: {
       firstname: 'Adaeze',
       lastname: 'Odurukwe',
@@ -49,6 +50,8 @@ describe('Mount comment component', () => {
           isLoggedIn
           articleComments={noArticle}
           errors={error}
+          toggleCommentLike={mockFunction}
+          postToggleCommentLike={mockFunction}
         />
       </Provider>
     );
@@ -83,6 +86,8 @@ describe('User should not be able to see comment box when not logged in', () => 
           articleComments={noArticle}
           errors={error}
           posted
+          toggleCommentLike={mockFunction}
+          postToggleCommentLike={mockFunction}
         />
       </Provider>
     );
@@ -108,6 +113,8 @@ describe('Should list available comments', () => {
           articleComments={articleComments}
           errors={error}
           posted={false}
+          toggleCommentLike={mockFunction}
+          postToggleCommentLike={mockFunction}
         />
       </BrowserRouter>
     );
@@ -131,6 +138,8 @@ describe('Test comment form', () => {
         articleComments={noArticle}
         errors={error}
         posted={false}
+        toggleCommentLike={mockFunction}
+        postToggleCommentLike={mockFunction}
       />
     );
     const postCommentBox = CommentComponent.find('.comment_box_post');
@@ -148,6 +157,122 @@ describe('Test comment form', () => {
   });
 });
 
+describe('Liking comments', () => {
+  it('Should not like/unlike comment if user is not logged in', () => {
+    const mockToggleCommentLike = jest.fn();
+    const mockPostToggleCommentLike = jest.fn();
+    const CommentComponent = mount(
+      <Provider store={store}>
+        <BrowserRouter>
+          <Comment
+            slug={slug}
+            getArticleComments={mockFunction}
+            postArticleComment={mockFunction}
+            loadingPost={false}
+            loading={false}
+            clearPostedValue={mockFunction}
+            isLoggedIn={false}
+            articleComments={articleComments}
+            errors={error}
+            posted
+            toggleCommentLike={mockToggleCommentLike}
+            postToggleCommentLike={mockPostToggleCommentLike}
+          />
+        </BrowserRouter>
+      </Provider>
+    );
+
+    const likeCommentIcon = CommentComponent.find('.like-icon');
+    likeCommentIcon.simulate('click');
+    expect(mockToggleCommentLike.mock.calls.length).toEqual(0);
+    expect(mockPostToggleCommentLike.mock.calls.length).toEqual(0);
+  });
+  it('Should like/unlike comment if user is logged in', () => {
+    const mockToggleCommentLike = jest.fn();
+    const mockPostToggleCommentLike = jest.fn();
+    const CommentComponent = mount(
+      <Provider store={store}>
+        <BrowserRouter>
+          <Comment
+            slug={slug}
+            getArticleComments={mockFunction}
+            postArticleComment={mockFunction}
+            loadingPost={false}
+            loading={false}
+            clearPostedValue={mockFunction}
+            isLoggedIn
+            articleComments={articleComments}
+            errors={error}
+            posted
+            toggleCommentLike={mockToggleCommentLike}
+            postToggleCommentLike={mockPostToggleCommentLike}
+          />
+        </BrowserRouter>
+      </Provider>
+    );
+
+    const likeCommentIcon = CommentComponent.find('.like-icon');
+    expect(mockToggleCommentLike.mock.calls.length).toEqual(0);
+    expect(mockPostToggleCommentLike.mock.calls.length).toEqual(0);
+    likeCommentIcon.simulate('click');
+    expect(mockToggleCommentLike.mock.calls.length).toEqual(1);
+    expect(mockPostToggleCommentLike.mock.calls.length).toEqual(1);
+  });
+  it('Should not render liked icon when comment is not liked', () => {
+    const mockToggleCommentLike = jest.fn();
+    const mockPostToggleCommentLike = jest.fn();
+    const CommentComponent = mount(
+      <Provider store={store}>
+        <BrowserRouter>
+          <Comment
+            slug={slug}
+            getArticleComments={mockFunction}
+            postArticleComment={mockFunction}
+            loadingPost={false}
+            loading={false}
+            clearPostedValue={mockFunction}
+            isLoggedIn
+            articleComments={articleComments}
+            errors={error}
+            posted
+            toggleCommentLike={mockToggleCommentLike}
+            postToggleCommentLike={mockPostToggleCommentLike}
+          />
+        </BrowserRouter>
+      </Provider>
+    );
+
+    const likedCommentIcon = CommentComponent.find('.liked');
+    expect(likedCommentIcon.exists()).toBe(false);
+  });
+  it('Should render liked icon when comment is liked', () => {
+    const mockToggleCommentLike = jest.fn();
+    const mockPostToggleCommentLike = jest.fn();
+    const CommentComponent = mount(
+      <Provider store={store}>
+        <BrowserRouter>
+          <Comment
+            slug={slug}
+            getArticleComments={mockFunction}
+            postArticleComment={mockFunction}
+            loadingPost={false}
+            loading={false}
+            clearPostedValue={mockFunction}
+            isLoggedIn
+            articleComments={[{ ...articleComments[0], hasLiked: true }]}
+            errors={error}
+            posted
+            toggleCommentLike={mockToggleCommentLike}
+            postToggleCommentLike={mockPostToggleCommentLike}
+          />
+        </BrowserRouter>
+      </Provider>
+    );
+
+    const likedCommentIcon = CommentComponent.find('.liked');
+    expect(likedCommentIcon.exists()).toBe(true);
+  });
+});
 describe('Edit comment', () => {
   it('show edit comment button if user is logged in and he/she owns the comment', () => {
     const CommentComponent = mount(

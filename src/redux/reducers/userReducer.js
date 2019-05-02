@@ -1,4 +1,4 @@
-import { LOGIN_USER, SIGN_UP } from '../actionTypes';
+import { LOGIN_USER, SIGN_UP, PROFILE_DETAILS_UPDATED } from '../actionTypes';
 
 /**
  * @description function to return initial state
@@ -19,7 +19,8 @@ export const initialState = (localStorage, sessionStorage) => ({
  * @param {object} action the action dispatched
  * @returns {object} the new state
  */
-const userReducer = (state = initialState(localStorage, sessionStorage), { type, payload }) => {
+const userReducer = (state = initialState(localStorage, sessionStorage),
+  { type, payload, data }) => {
   switch (type) {
     case SIGN_UP:
       return {
@@ -33,6 +34,13 @@ const userReducer = (state = initialState(localStorage, sessionStorage), { type,
         email: payload.email,
         bio: payload.bio,
         image: payload.image
+      };
+    case PROFILE_DETAILS_UPDATED:
+      return {
+        ...state,
+        image: data.image,
+        username: data.username,
+        bio: data.bio
       };
     default:
       return state;

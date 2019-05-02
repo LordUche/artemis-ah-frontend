@@ -5,7 +5,8 @@ import {
   clearAuthErrorAction,
   loginUserAction,
   socialLoginUserAction,
-  signUp
+  signUp,
+  removeFromStorage
 } from '../../../redux/actions/authActions';
 
 import HelperUtils from '../../../utils/helperUtils';
@@ -91,6 +92,37 @@ describe('storing data in local storage', () => {
     expect(mockLocalStorage.authorsHavenBio).toEqual('abc');
     expect(mockLocalStorage.authorsHavenImage).toEqual('jkl.png');
     expect(mockLocalStorage.authorsHavenToken).toEqual('mno');
+  });
+});
+
+describe('remove data in local and session storage', () => {
+  it('should remove the data in local and session storage', () => {
+    const mockLocalStorage = {
+      authorsHavenEmail: 'sss@ddd.com',
+      authorsHavenUsername: 'sssdd',
+      authorsHavenBio: 'abcdefg',
+      authorsHavenImage: 'shdgfdgh.jpg',
+      authorsHavenToken: 'befgsufghfgf'
+    };
+    const mockSessionStorage = {
+      authorsHavenEmail: 'sss@ddd.com',
+      authorsHavenUsername: 'sssdd',
+      authorsHavenBio: 'abcdefg',
+      authorsHavenImage: 'shdgfdgh.jpg',
+      authorsHavenToken: 'befgsufghfgf'
+    };
+    removeFromStorage(mockLocalStorage, mockSessionStorage);
+    expect(mockLocalStorage.authorsHavenUsername).not.toBeDefined();
+    expect(mockLocalStorage.authorsHavenEmail).not.toBeDefined();
+    expect(mockLocalStorage.authorsHavenBio).not.toBeDefined();
+    expect(mockLocalStorage.authorsHavenImage).not.toBeDefined();
+    expect(mockLocalStorage.authorsHavenToken).not.toBeDefined();
+
+    expect(mockSessionStorage.authorsHavenUsername).not.toBeDefined();
+    expect(mockSessionStorage.authorsHavenEmail).not.toBeDefined();
+    expect(mockSessionStorage.authorsHavenBio).not.toBeDefined();
+    expect(mockSessionStorage.authorsHavenImage).not.toBeDefined();
+    expect(mockSessionStorage.authorsHavenToken).not.toBeDefined();
   });
 });
 
