@@ -235,6 +235,9 @@ describe('Create article component', () => {
     );
     expect(deleteBtn.exists()).toBe(true);
     deleteBtn.simulate('click');
+
+    ArticleItem.defaultProps.push();
+    ArticleItem.defaultProps.deleteBookmarkConfirmation();
   });
 
   it('should mock a file upload', () => {

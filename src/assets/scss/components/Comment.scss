@@ -1,30 +1,30 @@
-@import './base.scss';
+@import "./base.scss";
 
-.comment{
+.comment {
   width: 60%;
   margin: auto;
   font-size: 1.6rem;
 
-  &_box{
+  &_box {
     width: 100%;
     margin-bottom: 5%;
 
-    &_post{
+    &_post {
       padding: 10px 0;
       float: right;
-      color: #2FC1FF;
+      color: #2fc1ff;
       outline-color: #cccccc;
       font-weight: $bold-font;
     }
 
-    &_post:hover{
+    &_post:hover {
       cursor: pointer;
     }
 
-    &__form{
+    &__form {
       width: 100%;
 
-      &__input{
+      &__input {
         width: 100%;
         height: 150px;
         padding: 10px;
@@ -34,7 +34,7 @@
         overflow-y: scroll;
       }
 
-      &__submit{
+      &__submit {
         float: right;
         box-shadow: 0 0 2px #000000;
         background: $primary-color;
@@ -42,7 +42,7 @@
         width: 20%;
       }
 
-      &__cancel{
+      &__cancel {
         float: right;
         background: #ffffff;
         box-shadow: 0 0 2px #000000;
@@ -52,17 +52,17 @@
     }
   }
 }
-.comment_card{
+.comment_card {
   width: 100%;
   padding: 1% 0;
   margin: 2% 0;
   display: grid;
   grid-template-columns: 10% 90%;
-  border-bottom: 1px solid #F4F4F4;
+  border-bottom: 1px solid #f4f4f4;
 
-  &__image{
+  &__image {
     text-align: center;
-    img{
+    img {
       width: 50px;
       height: 50px;
       object-fit: cover;
@@ -70,77 +70,108 @@
     }
   }
 
-  &__main{
-
-    &__header{
-      h3{
-        color: #2FC1FF;
+  &__main {
+    &__header {
+      h3 {
+        color: #2fc1ff;
         text-transform: capitalize;
       }
 
-      i{
+      i {
         font-size: 12px;
         color: #888888;
       }
     }
-    
-    &__body{
+
+    &__body {
       margin: 2% 0;
     }
 
-    &__footer{
+    &__footer {
       color: #888888;
+      position: relative;
     }
 
-    &__likes{
+    &__likes {
       padding-left: 5px;
     }
   }
 }
 
-.hidePost{
+.hidePost {
   display: none;
 }
-.no_comment{
+.no_comment {
   margin: 3% 0;
   font-style: italic;
   color: #999999;
 }
 
+.full_comment_wrapper {
+  margin-bottom: 5em;
+}
+.edit_comment_container {
+  width: 100%;
+}
+
+.comment_input_form {
+  width: 100%;
+}
+
+.comment_input_form #edit_comment_textarea {
+  width: 100%;
+}
+
+.edit_comment_button_wrapper {
+  text-align: right;
+}
+
+.edit_comment_toggle {
+  cursor: pointer;
+  font-weight: bold;
+  position: absolute;
+  right: 2em;
+}
+
+.edit_comment_toggle:hover {
+  text-shadow: 0.5px 0.1px 0.5px #999999;
+  text-decoration: underline;
+}
+
 @media only screen and (max-width: 1000px) {
   /* For mobile devices: */
-  .comment_card{
+  .comment_card {
     grid-template-columns: 20% 80%;
   }
 }
 
 @media only screen and (max-width: 768px) {
   /* For mobile devices: */
-  .comment{
+  .comment {
     width: 80%;
-    &_box{
+    &_box {
       width: 100%;
       margin-bottom: 5%;
-  
-      &_post{
+
+      &_post {
         padding: 10px 0;
         float: right;
-        color: #2FC1FF;
+        color: #2fc1ff;
         outline-color: #cccccc;
       }
-  
-      &_post:hover{
+
+      &_post:hover {
         cursor: pointer;
       }
-  
-      &__form{
+
+      &__form {
         width: 100%;
-  
-        &__submit{
+
+        &__submit {
           width: 30%;
         }
-  
-        &__cancel{
+
+        &__cancel {
           width: 30%;
         }
       }
@@ -150,7 +181,7 @@
 
 @media only screen and (max-width: 320px) {
   /* For mobile devices: */
-  .comment_card{
+  .comment_card {
     grid-template-columns: 25% 75%;
   }
 }
