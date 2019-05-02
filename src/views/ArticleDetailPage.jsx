@@ -58,14 +58,6 @@ export class ArticleDetailPage extends Component {
     await readNotifications(`/${articleSlug}`);
   };
 
-  rateArticle = (event) => {
-    const { articleGotten, rateArticleFn } = this.props;
-    const { slug } = articleGotten;
-    const rating = event.target.id;
-    this.setState({ userRated: true });
-    rateArticleFn(slug, rating);
-  };
-
   /**
    * @returns {HTMLElement} Returns the button to add to/remove from bookmark
    */
@@ -102,6 +94,14 @@ export class ArticleDetailPage extends Component {
       </a>
     );
   }
+
+  rateArticle = (event) => {
+    const { articleGotten, rateArticleFn } = this.props;
+    const { slug } = articleGotten;
+    const rating = event.target.id;
+    this.setState({ userRated: true });
+    rateArticleFn(slug, rating);
+  };
 
   /**
    * @returns {HTMLElement} div
