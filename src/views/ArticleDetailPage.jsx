@@ -14,6 +14,7 @@ import {
   number
 } from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
+import Highlight from 'react-highlight-pop';
 
 // Components
 import TopNavBar from '../components/TopNav';
@@ -93,6 +94,10 @@ export class ArticleDetailPage extends Component {
     );
   }
 
+  closeCommentBox = () => {
+    this.setState({ highlighted: false });
+  };
+
   rateArticle = (event) => {
     const { articleGotten, rateArticleFn } = this.props;
     const { slug } = articleGotten;
@@ -170,6 +175,7 @@ export class ArticleDetailPage extends Component {
 
     const shareUrl = window.location.href;
     const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
+    const { highlighted } = this.state;
 
     return (
       <Fragment>
@@ -250,7 +256,19 @@ export class ArticleDetailPage extends Component {
             >
               {body.split('\n').map(section => (
                 <Fragment>
-                  <article className="article_detail_body_segment">{section}</article>
+                  <Highlight
+                    popoverItems={itemClass => (
+                      <span
+                        role="presentation"
+                        onClick={() => this.setState({ highlighted: true })}
+                        className={itemClass}
+                      >
+                        Comment
+                      </span>
+                    )}
+                  >
+                    <article className="article_detail_body_segment">{section}</article>
+                  </Highlight>
                   <br />
                 </Fragment>
               ))}
@@ -359,18 +377,15 @@ export class ArticleDetailPage extends Component {
             </div>
           </div>
         )}
-        {!isLoggedIn && (
-        <CommentsComponent
-          slug={match.params}
-          isLoggedIn={false}
-        />
-        )}
+        {!isLoggedIn && <CommentsComponent slug={match.params} isLoggedIn={false} />}
         {isLoggedIn && (
-        <CommentsComponent
-          slug={match.params}
-          isLoggedIn
-          token={token}
-        />
+          <CommentsComponent
+            highlighted={highlighted}
+            slug={match.params}
+            isLoggedIn
+            token={token}
+            closeComment={this.closeCommentBox}
+          />
         )}
       </Fragment>
     );
