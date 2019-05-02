@@ -123,12 +123,14 @@ const articleReducer = (state = initialState, { type, payload }) => {
     // eslint-disable-next-line no-case-declarations
     case GOT_ARTICLE:
       const {
-        article, clap, rated, rating
+        article, clap, rated, rating, isBookmarked
       } = payload;
       return {
         ...state,
         isGetting: false,
-        articleGotten: { ...article, clap, rated },
+        articleGotten: {
+          ...article, clap, rated, isBookmarked
+        },
         ratingData: { rating },
         errors: {}
       };

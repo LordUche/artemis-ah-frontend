@@ -1,19 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import {
-  objectOf,
-  string,
-  func,
-  arrayOf,
-  object,
-  bool
+  objectOf, string, func, arrayOf, object, bool
 } from 'prop-types';
 import notifyUser from '../utils/Toast';
-
 
 // Import actions
 import {
@@ -22,7 +16,10 @@ import {
   loadingComment,
   clearPosted,
   toggleCommentLikeAction,
-  postToggleCommentLikeAction
+  postToggleCommentLikeAction,
+  editComment,
+  editCommentLoading,
+  clearEditComment
 } from '../redux/actions/commentActions';
 
 // Import components
@@ -32,14 +29,16 @@ import AHfooter from './Footer';
 /**
  * @class Comment
  * @description add comment to articles
+ * @param {object} e - event object
  * @returns {HTMLElement} comments
  */
 export class Comment extends Component {
   state = {
     comment: '',
-    showPost: false
-  }
-
+    showPost: false,
+    editedComment: '',
+    showEditCommentTextarea: ''
+  };
 
   /**
    * @returns {object} last comment
@@ -64,10 +63,7 @@ export class Comment extends Component {
   showCommentPost = () => {
     const { showPost } = this.state;
     const {
-      loading,
-      errors,
-      posted,
-      clearPostedValue
+      loading, errors, posted, clearPostedValue
     } = this.props;
 
     if (posted) {
@@ -101,7 +97,88 @@ export class Comment extends Component {
         </form>
       );
     }
-  }
+  };
+
+  handleEditChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  /**
+   * @method handleEditSubmit
+   * @description method that submits the edit form
+   * @param {object} e
+   * @returns {undefined}
+   */
+  handleEditSubmit = (e) => {
+    e.preventDefault();
+    const { slug, editCommentAction, editCommentLoadingAction } = this.props;
+    const { editedComment, commentId } = this.state;
+    editCommentLoadingAction();
+    editCommentAction(slug.articleSlug, editedComment, commentId);
+  };
+
+  /**
+   * @description edit comment form method
+   * @param {string} value
+   * @returns {JSX} JSX
+   */
+  editComment = () => {
+    const { editedComment } = this.state;
+    const { editLoading, edited, clearEditCommentAction } = this.props;
+    if (edited) {
+      this.cancelEditComment();
+      clearEditCommentAction();
+    }
+    return (
+      <form className="comment_input_form" onSubmit={this.handleEditSubmit}>
+        <textarea
+          placeholder="Enter Comment"
+          className="comment_box__form__input"
+          onChange={this.handleEditChange}
+          name="editedComment"
+          minLength="2"
+          id="edit_comment_textarea"
+          required
+          value={editedComment}
+        />
+        <Button
+          customClass="comment_box__form__cancel"
+          btnText="Cancel"
+          btnType="button"
+          btnId="edit_comment_button"
+          onClick={this.cancelEditComment}
+          isDisabled={editLoading}
+        />
+        <Button
+          customClass="comment_box__form__submit"
+          btnText={editLoading ? 'Updating' : 'Save'}
+          btnType="submit"
+          btnId="edit_comment_submit_button"
+          isDisabled={editLoading}
+        />
+      </form>
+    );
+  };
+
+  /**
+   * @method toggleEditComment
+   * @description Toggle Edit Comment textarea input field
+   * @param {number} commentId
+   * @param {string} editedComment
+   * @returns {undefined}
+   */
+  toggleEditComment = (commentId, editedComment) => {
+    this.setState({ showEditCommentTextarea: `true-${commentId}`, editedComment, commentId });
+  };
+
+  /**
+   * @method cancelEditComment
+   * @description Cancel edit comment
+   * @returns {string} comment
+   */
+  cancelEditComment = () => {
+    this.setState({ showEditCommentTextarea: '' });
+  };
 
   /**
    * @method handleChange
@@ -112,7 +189,7 @@ export class Comment extends Component {
   handleChange = (e) => {
     const { value } = e.target;
     this.setState({ comment: value });
-  }
+  };
 
   /**
    * @method hidePostComment
@@ -121,8 +198,7 @@ export class Comment extends Component {
    */
   hidePostComment = () => {
     this.setState({ showPost: false });
-  }
-
+  };
 
   /**
    * @method handleSubmit
@@ -131,17 +207,13 @@ export class Comment extends Component {
    * @returns {*} actions
    */
   handleSubmit = (e) => {
-    const {
-      postArticleComment,
-      loadingPost,
-      slug,
-    } = this.props;
+    const { postArticleComment, loadingPost, slug } = this.props;
     e.preventDefault();
     loadingPost();
     postArticleComment(slug.articleSlug, this.state);
 
     this.setState({ showPost: false });
-  }
+  };
 
   /**
    * @param {number} id
@@ -164,7 +236,8 @@ export class Comment extends Component {
    * @returns {HTMLElement} comments
    */
   displayComments = () => {
-    const { articleComments } = this.props;
+    const { showEditCommentTextarea } = this.state;
+    const { articleComments, username, isLoggedIn } = this.props;
     let comments = '';
 
     if (!articleComments[0]) comments = <div className="no_comment">No comment available</div>;
@@ -176,36 +249,60 @@ export class Comment extends Component {
             <br />
           </span>
         ));
-        const { User, createdAt, hasLiked } = SingleComment;
+        const {
+          User, hasLiked, updatedAt
+        } = SingleComment;
         return (
-          <div key={index.toString()} className="comment_card">
-            <span className="item comment_card__image">
-              <img src={User.image} alt="user" />
-            </span>
-            <span className="item comment_card__main">
-              <div className="comment_card__main__header">
-                <Link to={`../profile/${User.username}`}>
-                  <h3>
-                    {User.firstname}
-                    {' '}
-                    {User.lastname}
-                  </h3>
-                </Link>
-                <i>{`${moment(createdAt).format('HH:mma')} on ${moment(createdAt).format('MMMM Do YYYY')}`}</i>
-              </div>
-              <div className="comment_card__main__body">
-                <p>{comment}</p>
-              </div>
-              <div className="comment_card__main__footer">
-                <i title={hasLiked ? 'Unlike this comment' : 'Like this comment'} className={`like-icon far fa-thumbs-up ${hasLiked ? 'liked' : ''}`} onClick={() => this.toggleLike(SingleComment.id)} role="presentation"><span className="comment_card__main__likes">{SingleComment.totalLikes}</span></i>
-              </div>
-            </span>
-          </div>
+          <Fragment>
+            <div key={index.toString()} className="comment_card">
+              <span className="item comment_card__image">
+                <img src={User.image} alt="user" />
+              </span>
+              <span className="item comment_card__main">
+                <div className="comment_card__main__header">
+                  <Link to={`../profile/${User.username}`}>
+                    <h3>
+                      {User.firstname}
+                      {' '}
+                      {User.lastname}
+                    </h3>
+                  </Link>
+                  <i>
+                    {`${moment(updatedAt).format('HH:mma')} on ${moment(
+                      updatedAt
+                    ).format('MMMM Do YYYY')}`}
+                  </i>
+                </div>
+                <div className="comment_card__main__body">
+                  <p>{comment}</p>
+                </div>
+                <div className="comment_card__main__footer">
+                  <i title={hasLiked ? 'Unlike this comment' : 'Like this comment'} className={`like-icon far fa-thumbs-up ${hasLiked ? 'liked' : ''}`} onClick={() => this.toggleLike(SingleComment.id)} role="presentation"><span className="comment_card__main__likes">{SingleComment.totalLikes}</span></i>
+                  {`${showEditCommentTextarea}` !== `true-${SingleComment.id}`
+                    && isLoggedIn
+                    && username === SingleComment.User.username && (
+                      <i
+                        className="fas fa-edit edit_comment_toggle"
+                        role="presentation"
+                        onClick={() => {
+                          this.toggleEditComment(SingleComment.id, SingleComment.comment);
+                        }}
+                      >
+                        <span>Edit</span>
+                      </i>
+                  )}
+                </div>
+              </span>
+            </div>
+            <div className="edit_comment_container">
+              {`${showEditCommentTextarea}` === `true-${SingleComment.id}` && this.editComment()}
+            </div>
+          </Fragment>
         );
       });
     }
     return comments;
-  }
+  };
 
   /**
    * @method toggleCommentPost
@@ -221,7 +318,7 @@ export class Comment extends Component {
       clearPostedValue();
       this.setState({ showPost: !showPost });
     }
-  }
+  };
 
   /**
    * @returns {HTMLElement} comments
@@ -237,7 +334,7 @@ export class Comment extends Component {
 
     return (
       <div>
-        <div className="comment">
+        <div className="comment full_comment_wrapper">
           <div className="comment_box">
             <div
               className={`comment_box_post ${postCommentClass}`}
@@ -271,14 +368,25 @@ Comment.propTypes = {
   errors: objectOf(object).isRequired,
   posted: bool.isRequired,
   clearPostedValue: func.isRequired,
+  isLoggedIn: bool.isRequired,
+  username: string,
+  editCommentAction: func.isRequired,
+  editCommentLoadingAction: func,
+  editLoading: bool,
+  edited: bool,
+  clearEditCommentAction: func,
   toggleCommentLike: func.isRequired,
   postToggleCommentLike: func.isRequired,
-  isLoggedIn: bool.isRequired,
   token: string
 };
 
 Comment.defaultProps = {
-  token: ''
+  token: '',
+  username: '',
+  editCommentLoadingAction: () => false,
+  clearEditCommentAction: () => false,
+  editLoading: false,
+  edited: false
 };
 
 /**
@@ -286,18 +394,19 @@ Comment.defaultProps = {
  * @param {*} state
  * @returns {object} state
  */
-const mapStateToProps = ({ comments }) => {
+export const mapStateToProps = ({ comments, user }) => {
   const {
-    articleComments,
-    errors,
-    posted,
-    loading
+    articleComments, errors, posted, loading, editLoading, edited
   } = comments;
+  const { username } = user;
   return {
     articleComments,
     errors,
     posted,
-    loading
+    loading,
+    username,
+    editLoading,
+    edited
   };
 };
 
@@ -306,13 +415,22 @@ const mapStateToProps = ({ comments }) => {
  * @param {*} dispatch
  * @returns {Functions} actions
  */
-const mapDispatchToProps = dispatch => bindActionCreators({
-  getArticleComments: getComments,
-  postArticleComment: postComment,
-  loadingPost: loadingComment,
-  clearPostedValue: clearPosted,
-  toggleCommentLike: toggleCommentLikeAction,
-  postToggleCommentLike: postToggleCommentLikeAction
-}, dispatch);
+export const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    getArticleComments: getComments,
+    postArticleComment: postComment,
+    loadingPost: loadingComment,
+    clearPostedValue: clearPosted,
+    editCommentAction: editComment,
+    editCommentLoadingAction: editCommentLoading,
+    clearEditCommentAction: clearEditComment,
+    toggleCommentLike: toggleCommentLikeAction,
+    postToggleCommentLike: postToggleCommentLikeAction
+  },
+  dispatch
+);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Comment);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Comment);

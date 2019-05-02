@@ -104,7 +104,7 @@ export class ProfilePage extends Component {
       (!prevProps.profile.user.username
         && prevProps.profile.user.contentState === CONTENT_STATE_FETCHING_FAILED)
       || (prevProps.profile.user.username
-          && currentUsernameToView !== prevProps.profile.user.username)
+        && currentUsernameToView !== prevProps.profile.user.username)
     ) {
       dispatch(resetProfile());
 
@@ -811,14 +811,16 @@ ProfilePage.propTypes = {
  * @param {callback} dispatch - method to dispatch actions
  * @returns {undefined}
  */
-const matchDispatchToProps = dispatch => bindActionCreators(
-  {
-    closeDeleteModal: closeArticleDeleteModalAction,
-    dispatch,
-    deleteArticle: deleteArticleAction
-  },
-  dispatch
-);
+const matchDispatchToProps = (dispatch) => {
+  const actions = bindActionCreators(
+    {
+      closeDeleteModal: closeArticleDeleteModalAction,
+      deleteArticle: deleteArticleAction
+    },
+    dispatch
+  );
+  return Object.assign(actions, { dispatch });
+};
 
 /**
  * @description Maps redux state to the component's props.

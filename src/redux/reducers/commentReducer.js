@@ -6,14 +6,19 @@ import {
   CLEAR_POSTED,
   LIKE_COMMENT_ERROR,
   TOGGLE_COMMENT_LIKE,
+  EDIT_COMMENT,
+  EDIT_COMMENT_ERROR,
+  EDIT_LOADING,
+  CLEAR_EDITED
 } from '../actionTypes';
-
 
 export const initialState = {
   articleComments: [],
   errors: {},
   posted: false,
-  loading: false
+  loading: false,
+  edited: false,
+  editLoading: false
 };
 
 /**
@@ -28,12 +33,29 @@ export const commentReducer = (state = initialState, { type, payload }) => {
     chosenComment = articleComments.find(c => c.id === id);
     remainingComments = articleComments.filter(c => c.id !== id);
   }
+  let newArticleComment;
+  if (type === EDIT_COMMENT) {
+    const oldComments = state.articleComments;
+    const editedCommentInStore = state.articleComments.find(obj => obj.id === payload.id);
+    const index = state.articleComments.findIndex(obj => obj.id === payload.id);
+    const updatedComment = { ...editedCommentInStore, ...payload };
+    oldComments[index] = updatedComment;
+    newArticleComment = oldComments.filter(comment => comment.id);
+  }
+
   switch (type) {
     case GET_COMMENTS:
       return {
         ...state,
         articleComments: payload,
         errors: {}
+      };
+    case EDIT_COMMENT:
+      return {
+        ...state,
+        articleComments: newArticleComment,
+        editLoading: false,
+        edited: true
       };
     case POST_COMMENT:
       return {
@@ -48,11 +70,21 @@ export const commentReducer = (state = initialState, { type, payload }) => {
         errors: payload.errors,
         loading: false
       };
+    case EDIT_COMMENT_ERROR:
+      return {
+        ...state,
+        editLoading: false
+      };
     case COMMENT_LOADING:
       return {
         ...state,
         loading: true,
         errors: {}
+      };
+    case EDIT_LOADING:
+      return {
+        ...state,
+        editLoading: true
       };
     case CLEAR_POSTED:
       return {
@@ -76,6 +108,11 @@ export const commentReducer = (state = initialState, { type, payload }) => {
         ...state,
         articleComments: [...remainingComments, chosenComment].sort((a, b) => b.id - a.id),
         errors: { message: 'Cannot perform action right now, please check your connection and try again later' }
+      };
+    case CLEAR_EDITED:
+      return {
+        ...state,
+        edited: false
       };
     default:
       return state;

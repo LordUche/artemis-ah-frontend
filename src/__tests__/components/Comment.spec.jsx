@@ -6,7 +6,7 @@ import ReduxPromise from 'redux-promise';
 import { createStore, applyMiddleware } from 'redux';
 import { BrowserRouter } from 'react-router-dom';
 import reducers from '../../redux/reducers';
-import { Comment } from '../../components/Comment';
+import { Comment, mapStateToProps, mapDispatchToProps } from '../../components/Comment';
 
 const store = createStore(reducers, applyMiddleware(ReduxPromise));
 const slug = { articleSlug: 'hi-girl' };
@@ -28,13 +28,13 @@ const articleComments = [
       lastname: 'Odurukwe',
       username: 'deedee',
       email: 'daizyodurukwe@gmail.com',
-      image: 'https://res.cloudinary.com/artemisah/image/upload/v1554333407/authorshaven/ah-avatar.png'
+      image:
+        'https://res.cloudinary.com/artemisah/image/upload/v1554333407/authorshaven/ah-avatar.png'
     }
   }
 ];
 const noArticle = [];
 const error = { comment: [] };
-
 
 describe('Mount comment component', () => {
   it('Should mount without failing', () => {
@@ -271,5 +271,95 @@ describe('Liking comments', () => {
 
     const likedCommentIcon = CommentComponent.find('.liked');
     expect(likedCommentIcon.exists()).toBe(true);
+  });
+});
+describe('Edit comment', () => {
+  it('show edit comment button if user is logged in and he/she owns the comment', () => {
+    const CommentComponent = mount(
+      <BrowserRouter>
+        <Comment
+          slug={slug}
+          getArticleComments={mockFunction}
+          postArticleComment={mockFunction}
+          loadingPost={false}
+          loading={false}
+          clearPostedValue={mockFunction}
+          isLoggedIn
+          username="deedee"
+          articleComments={articleComments}
+          errors={error}
+          posted={false}
+          editCommentAction={mockFunction}
+        />
+      </BrowserRouter>
+    );
+
+    const editButton = CommentComponent.find('i.edit_comment_toggle');
+    expect(editButton.exists()).toEqual(true);
+    editButton.simulate('click');
+
+    const editTextArea = CommentComponent.find('#edit_comment_textarea');
+    expect(editTextArea.exists()).toEqual(true);
+    editTextArea.simulate('change');
+
+    const editCommentSubmitButton = CommentComponent.find('#edit_comment_submit_button');
+    expect(editCommentSubmitButton.exists()).toEqual(true);
+    editCommentSubmitButton.simulate('submit');
+
+    const cancelButton = CommentComponent.find('#edit_comment_button');
+    expect(cancelButton.exists()).toEqual(true);
+    cancelButton.simulate('click');
+  });
+
+  it('should mock mapStateToProp', () => {
+    const comments = {
+      articleComments: '',
+      errors: '',
+      posted: '',
+      loading: '',
+      editLoading: '',
+      edited: ''
+    };
+    const user = {
+      username: ''
+    };
+    expect(mapStateToProps({ comments, user })).toEqual({
+      articleComments: '',
+      errors: '',
+      posted: '',
+      loading: '',
+      editLoading: '',
+      edited: '',
+      username: ''
+    });
+  });
+  it('should mock mapDispatchToProps', () => {
+    const dispatch = mockFunction;
+    mapDispatchToProps(dispatch);
+  });
+  it('should mock default props directly', () => {
+    Comment.defaultProps.clearEditCommentAction();
+  });
+  it('should mock the editComment method with shallow', () => {
+    const CommentComponentII = shallow(
+      <Comment
+        slug={slug}
+        getArticleComments={mockFunction}
+        postArticleComment={mockFunction}
+        loadingPost={false}
+        loading={false}
+        clearPostedValue={mockFunction}
+        isLoggedIn
+        username="deedee"
+        articleComments={articleComments}
+        errors={error}
+        posted={false}
+        editCommentAction={mockFunction}
+        edited
+        editLoading
+      />
+    );
+    CommentComponentII.setProps({ edited: true });
+    CommentComponentII.instance().editComment();
   });
 });

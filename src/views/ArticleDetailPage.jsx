@@ -32,7 +32,6 @@ import {
   removeBookmarkAction,
   bookmarkArticleAction
 } from '../redux/actions/articleActions';
-import { readNotificationAction } from '../redux/actions/notificationAction';
 
 /**
  * @description article detail view page
@@ -47,15 +46,14 @@ export class ArticleDetailPage extends Component {
   /**
    * @returns {HTMLElement} div
    */
-  componentWillMount = async () => {
+  componentWillMount = () => {
     const {
-      match, getArticle, gettingArticle, token, clearErrors, readNotifications
+      match, getArticle, gettingArticle, token, clearErrors
     } = this.props;
     const { articleSlug } = match.params;
     clearErrors();
     gettingArticle();
-    await getArticle(articleSlug, token);
-    await readNotifications(`/${articleSlug}`);
+    getArticle(articleSlug, token);
   };
 
   /**
@@ -390,7 +388,6 @@ ArticleDetailPage.propTypes = {
   getArticle: func.isRequired,
   gettingArticle: func.isRequired,
   clearErrors: func.isRequired,
-  readNotifications: func,
   errors: objectProp.isRequired,
   articleGotten: shape({
     title: string,
@@ -416,8 +413,7 @@ ArticleDetailPage.propTypes = {
 
 ArticleDetailPage.defaultProps = {
   token: '',
-  articleGotten: {},
-  readNotifications: () => 'do nothing'
+  articleGotten: {}
 };
 
 /**
@@ -453,7 +449,6 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     gettingArticle: gettingArticleAction,
     clearErrors: clearErrorsAction,
     rateArticleFn: rateArticleAction,
-    readNotifications: readNotificationAction,
     removeBookmark: removeBookmarkAction,
     bookmarkArticle: bookmarkArticleAction
   },
