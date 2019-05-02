@@ -5,7 +5,15 @@
   margin: auto;
   font-size: 1.6rem;
 
-  &_box {
+  .like-icon{
+    cursor: pointer;
+  }
+
+  .liked{
+    color: #06A5E9;
+  }
+
+  &_box{
     width: 100%;
     margin-bottom: 5%;
 
@@ -94,6 +102,7 @@
 
     &__likes {
       padding-left: 5px;
+      font-family: "Nunito", "Courier New", Courier, monospace;
     }
   }
 }

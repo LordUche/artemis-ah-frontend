@@ -125,7 +125,8 @@ export class ArticleDetailPage extends Component {
       username,
       ratingData,
       match,
-      history
+      history,
+      token
     } = this.props;
 
     const { userRated } = this.state;
@@ -374,7 +375,19 @@ export class ArticleDetailPage extends Component {
             </div>
           </div>
         )}
-        <CommentsComponent slug={match.params} isLoggedIn={isLoggedIn} />
+        {!isLoggedIn && (
+        <CommentsComponent
+          slug={match.params}
+          isLoggedIn={false}
+        />
+        )}
+        {isLoggedIn && (
+        <CommentsComponent
+          slug={match.params}
+          isLoggedIn
+          token={token}
+        />
+        )}
       </Fragment>
     );
   }
