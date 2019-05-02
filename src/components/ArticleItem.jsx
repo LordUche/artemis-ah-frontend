@@ -26,7 +26,9 @@ export const ArticleItem = ({
   deleteConfirmation,
   deleteBookmarkConfirmation,
   userActionClass,
-  forBookmarks
+  forBookmarks,
+  isLoggedIn,
+  username
 }) => {
   const card = {
     title,
@@ -77,7 +79,7 @@ export const ArticleItem = ({
           <div
             className={`article-item__body-wrapper__bottom-links__user-actions ${userActionClass}`}
           >
-            {!forBookmarks && (
+            {(username === author) && isLoggedIn && !forBookmarks && (
               <Fragment>
                 <Button
                   onClick={() => {
@@ -101,8 +103,7 @@ export const ArticleItem = ({
                   <i className="fa fa-trash" />
                 </Button>
               </Fragment>
-            )
-          }
+            )}
             {forBookmarks && (
               <Button
                 customClass="article-item__body-wrapper__bottom-links__user-actions__delete"
@@ -111,8 +112,7 @@ export const ArticleItem = ({
               >
                 <i className="fa fa-trash" />
               </Button>
-            )
-          }
+            )}
           </div>
         </div>
       </div>
@@ -137,7 +137,9 @@ ArticleItem.defaultProps = {
   push: () => 'do nothing',
   userActionClass: '',
   forBookmarks: false,
-  deleteBookmarkConfirmation: () => 'Do nothing'
+  deleteBookmarkConfirmation: () => 'Do nothing',
+  isLoggedIn: false,
+  username: 'default_username'
 };
 
 ArticleItem.propTypes = {
@@ -156,7 +158,9 @@ ArticleItem.propTypes = {
   deleteBookmarkConfirmation: func,
   push: func,
   deleteConfirmation: func.isRequired,
-  forBookmarks: boolProp
+  forBookmarks: boolProp,
+  isLoggedIn: boolProp,
+  username: stringProp
 };
 
 /**
@@ -172,7 +176,21 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
   dispatch
 );
 
+/**
+ *
+ * @param {object} store redux store
+ * @returns {object} TopNav props
+ */
+export const mapStateToProps = ({ auth, user }) => {
+  const { isLoggedIn } = auth;
+  const { username } = user;
+  return {
+    isLoggedIn,
+    username
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ArticleItem);

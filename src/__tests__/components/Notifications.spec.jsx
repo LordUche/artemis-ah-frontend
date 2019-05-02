@@ -1,17 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Notifications from '../../components/Notifications';
-import {
-  readNotificationAction,
-  newNotificationAction
-} from '../../redux/actions/notificationAction';
-import { NEW_NOTIFICATION, GET_NOTIFICATIONS, READ_NOTIFICATION } from '../../redux/actionTypes';
+import { GET_NOTIFICATIONS } from '../../redux/actionTypes';
 import notificationsReducer from '../../redux/reducers/notificationsReducer';
 
 describe('Test the notification component', () => {
   it('it should render a page with the correct content', (done) => {
     const page = shallow(
-      <Notifications message="message" title="This is the title" type="comment" url="/url-path" />
+      <Notifications message="message" title="This is the title" time="mock_time" url="/url-path" />
     );
 
     expect(page.find('.notifications-div-item-info-name').text()).toBe('This is the title');
@@ -22,19 +18,6 @@ describe('Test the notification component', () => {
 });
 
 describe('Test the notification component', () => {
-  it('it should return the correct object', (done) => {
-    expect(readNotificationAction('slug-path')).toEqual({
-      type: 'READ_NOTIFICATION',
-      payload: { url: 'slug-path' }
-    });
-    done();
-  });
-
-  it('it should return the correct object', (done) => {
-    newNotificationAction('data', jest.fn());
-    done();
-  });
-
   it('it should test the notification reducer', (done) => {
     const initialState = {
       notificationsData: [{ url: 'python-url' }, { url: 'node-url' }, { url: 'java-url' }],
@@ -43,12 +26,10 @@ describe('Test the notification component', () => {
     };
     const payload = { notifications: [2] || { length: 2 } };
 
-    notificationsReducer(initialState, { type: NEW_NOTIFICATION, payload });
     notificationsReducer(initialState, {
       type: GET_NOTIFICATIONS,
       payload
     });
-    notificationsReducer(initialState, { type: READ_NOTIFICATION, payload: { url: 'java-url' } });
     done();
   });
 });
