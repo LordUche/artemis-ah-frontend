@@ -75,7 +75,8 @@ export const getInitialState = () => ({
     }
   },
   editState: CONTENT_STATE_DEFAULT,
-  followActionWorking: false
+  followActionWorking: false,
+  errors: []
 });
 
 export default (state = getInitialState(), { type, data }) => {
@@ -98,6 +99,7 @@ export default (state = getInitialState(), { type, data }) => {
       newState.tabContent[TAB_ARTICLES].count = data.totalArticles;
       newState.tabContent[TAB_FOLLOWING].count = data.followingStats.following;
       newState.tabContent[TAB_FOLLOWERS].count = data.followingStats.followers;
+      newState.errors = [];
 
       return newState;
     case PROFILE_USER_DETAILS_FETCH_ERROR:
@@ -106,11 +108,13 @@ export default (state = getInitialState(), { type, data }) => {
 
     // User articles.
     case PROFILE_ARTICLES_FETCHING:
+      newState.errors = [];
       newState.tabContent[TAB_ARTICLES] = Object.assign(newState.tabContent[TAB_ARTICLES], {
         contentState: CONTENT_STATE_FETCHING
       });
       return newState;
     case PROFILE_ARTICLES_FETCHED:
+      newState.errors = [];
       newState.tabContent[TAB_ARTICLES] = Object.assign(newState.tabContent[TAB_ARTICLES], {
         articles: data.articles,
         totalArticles: data.total,
@@ -170,13 +174,18 @@ export default (state = getInitialState(), { type, data }) => {
 
     // User profile update
     case PROFILE_DETAILS_UPDATING:
+      newState.errors = [];
       newState.editState = CONTENT_STATE_UPDATING;
       return newState;
     case PROFILE_DETAILS_UPDATED:
       newState.editState = CONTENT_STATE_UPDATED;
+      newState.user.username = data.username;
+      newState.user.about = data.bio;
+      newState.user.profilePic = data.image;
       return newState;
     case PROFILE_DETAILS_UPDATE_ERROR:
       newState.editState = CONTENT_STATE_UPDATE_FAILED;
+      newState.errors = [{ message: data }];
       return newState;
 
     // User profile follow/unfollow action
@@ -201,6 +210,7 @@ export default (state = getInitialState(), { type, data }) => {
 
     // User profile edit state
     case PROFILE_RESET_EDIT_STATE:
+      newState.errors = [];
       newState.editState = CONTENT_STATE_DEFAULT;
       return newState;
 

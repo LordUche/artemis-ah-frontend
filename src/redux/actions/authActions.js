@@ -8,7 +8,8 @@ import {
   CLEAR_AUTH_ERROR,
   SIGN_UP,
   SIGN_UP_ERROR,
-  LOGOUT_USER
+  LOGOUT_USER,
+  RESET_NEW_USER
 } from '../actionTypes';
 
 /**
@@ -139,6 +140,12 @@ export const socialLoginUserAction = (user) => {
  * @returns {object} action
  */
 export const loadingAuthAction = () => ({ type: AUTH_LOADING });
+
+/**
+ * @description function for dispatching action to update newUser field in store to false
+ * @returns {object} action
+ */
+export const resetNewUserAction = () => ({ type: RESET_NEW_USER });
 
 /**
  * @description function for clearing auth errors

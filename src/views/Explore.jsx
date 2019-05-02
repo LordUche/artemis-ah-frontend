@@ -51,6 +51,7 @@ export class Explore extends Component {
       case '/explore/:tag':
         key = tag;
         initialFunction = getFiltered;
+        this.setState({ selected: { value: tag, label: tag } });
         break;
       default:
         initialFunction = getArticles;
