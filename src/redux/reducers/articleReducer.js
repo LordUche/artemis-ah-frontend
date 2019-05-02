@@ -12,6 +12,11 @@ import {
   GETTING_ARTICLE,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
+  RATED_ARTICLE,
+  RATING_ARTICLE,
+  RATING_ARTICLE_ERROR,
+  ARTICLE_BOOKMARK_ADDED,
+  ARTICLE_BOOKMARK_REMOVED,
   BOOKMARK_LOADING,
   DELETED_BOOKMARK,
   ERROR_GETTING_BOOKMARKS,
@@ -33,6 +38,8 @@ export const initialState = {
   isGetting: false,
   articleGotten: {},
   newArticleSlug: '',
+  isRating: '',
+  ratingData: { rating: 0 },
   bookmarkedArticles: [],
   bookmarkDeleted: {}
 };
@@ -110,15 +117,19 @@ const articleReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isGetting: true,
+        articleGotten: { ratingDetails: { ratings: [{ userId: 0 }] } },
         errors: {}
       };
     // eslint-disable-next-line no-case-declarations
     case GOT_ARTICLE:
-      const { article, clap } = payload;
+      const {
+        article, clap, rated, rating
+      } = payload;
       return {
         ...state,
         isGetting: false,
-        articleGotten: { ...article, clap },
+        articleGotten: { ...article, clap, rated },
+        ratingData: { rating },
         errors: {}
       };
     case ERROR_GETTING_ARTICLE:
@@ -127,6 +138,37 @@ const articleReducer = (state = initialState, { type, payload }) => {
         isGetting: false,
         articleDetailsGotten: {},
         errors: payload
+      };
+    case RATED_ARTICLE:
+      return {
+        ...state,
+        ratingData: payload
+      };
+    case RATING_ARTICLE:
+      return {
+        ...state,
+        isRating: 'Rating article...'
+      };
+    case RATING_ARTICLE_ERROR:
+      return {
+        ...state,
+        errors: payload
+      };
+    case ARTICLE_BOOKMARK_ADDED:
+      return {
+        ...state,
+        articleGotten: {
+          ...state.articleGotten,
+          isBookmarked: true
+        }
+      };
+    case ARTICLE_BOOKMARK_REMOVED:
+      return {
+        ...state,
+        articleGotten: {
+          ...state.articleGotten,
+          isBookmarked: false
+        }
       };
     case ERROR_DELETING_BOOKMARKS:
       return {
