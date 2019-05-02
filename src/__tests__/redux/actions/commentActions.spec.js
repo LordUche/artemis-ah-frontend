@@ -6,7 +6,9 @@ import {
   loadingComment,
   editCommentLoading,
   clearEditComment,
-  editComment
+  editComment,
+  editHistoryCommentLoading,
+  getCommentEditHistory
 } from '../../../redux/actions/commentActions';
 
 import {
@@ -134,6 +136,22 @@ describe('Test comment actions', () => {
     expect(result.type).toEqual('EDIT_COMMENT_ERROR');
   });
 
+  it('Should fetch users edit comment history', async () => {
+    const expectedResponse = {
+      message: 'Retrieved successfully',
+      history: {
+        comment: 'just checking',
+        updatedAt: '2019-04-25T02:31:17.654Z'
+      }
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const result = await getCommentEditHistory();
+    expect(result.type).toEqual('GET_EDIT_COMMENT_HISTORY');
+  });
+
   it('Dispatches the auth loading action', () => {
     expect(loadingComment()).toEqual({ type: COMMENT_LOADING });
   });
@@ -148,5 +166,8 @@ describe('Test comment actions', () => {
 
   it('Dispatches the clear edit commment action', () => {
     expect(clearEditComment()).toEqual({ type: 'CLEAR_EDITED' });
+  });
+  it('Dispatches the get edit commment history loading action', () => {
+    expect(editHistoryCommentLoading()).toEqual({ type: 'GET_COMMENT_EDIT_HISTORY_LOADING' });
   });
 });

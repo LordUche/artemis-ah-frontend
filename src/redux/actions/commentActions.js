@@ -11,7 +11,9 @@ import {
   EDIT_COMMENT,
   EDIT_COMMENT_ERROR,
   EDIT_LOADING,
-  CLEAR_EDITED
+  CLEAR_EDITED,
+  GET_EDIT_COMMENT_HISTORY,
+  GET_COMMENT_EDIT_HISTORY_LOADING
 } from '../actionTypes';
 
 import BASE_URL from './index';
@@ -28,6 +30,30 @@ export const getComments = async (slug) => {
   return {
     type: GET_COMMENTS,
     payload: comments
+  };
+};
+
+/**
+ * @function getCommentEditHistory
+ * @description Retrieves comments for a particular article
+ * @param {string} slug
+ * @param {number} commentId
+ * @param {string} token
+ * @returns {object} comment hstory
+ */
+export const getCommentEditHistory = async (slug, commentId, token) => {
+  const request = await get(
+    `${BASE_URL}/articles/${slug}/comment/${commentId}/history`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+  const { history } = request.data;
+  return {
+    type: GET_EDIT_COMMENT_HISTORY,
+    payload: history
   };
 };
 
@@ -97,6 +123,11 @@ export const editComment = async (slug, comment, commentId) => {
     };
   }
 };
+
+/**
+ * @returns {boolean} loading
+ */
+export const editHistoryCommentLoading = () => ({ type: GET_COMMENT_EDIT_HISTORY_LOADING });
 
 /**
  * @returns {boolean} loadIng
