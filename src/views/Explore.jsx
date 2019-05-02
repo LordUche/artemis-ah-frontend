@@ -3,9 +3,12 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Redirect } from 'react-router-dom';
 import {
-  func, arrayOf, object, bool, number
+  func, arrayOf, object, bool, number, shape, string
 } from 'prop-types';
+import HelperUtils from '../utils/helperUtils';
+
 
 // Import Component
 import TopNavBar from '../components/TopNav';
@@ -14,7 +17,7 @@ import Footer from '../components/Footer';
 import BodyError from '../components/PageContentLoadError';
 
 // Import Actions
-import { getAllArticles } from '../redux/actions/articleActions';
+import { getAllArticles, filterArticles, clearErrorsAction } from '../redux/actions/articleActions';
 import ArticleItemSkeletonScreen from '../skeletonscreens/ArticleItem';
 
 // Import Images
@@ -26,7 +29,8 @@ import Pagination from '../components/Pagination';
  */
 export class Explore extends Component {
   state = {
-    currentPage: 1
+    currentPage: 1,
+    selected: '',
   };
 
   /**
@@ -34,35 +38,60 @@ export class Explore extends Component {
    * @returns {Function} Action call
    */
   componentDidMount() {
-    const { getArticles } = this.props;
-    getArticles();
+    const { getArticles, getFiltered } = this.props;
+    const { match } = this.props;
+    const { path } = match;
+    const { tag } = match.params;
+    let initialFunction = '';
+    let key = '';
+    switch (path) {
+      case '/explore':
+        initialFunction = getArticles;
+        break;
+      case '/explore/:tag':
+        key = tag;
+        initialFunction = getFiltered;
+        break;
+      default:
+        initialFunction = getArticles;
+    }
+    initialFunction(key);
   }
 
   /**
    * @returns {object} Articles
    */
   getArticleData() {
-    const { articles, errors, loading } = this.props;
+    const {
+      articles,
+      errors,
+      loading,
+      getArticles
+    } = this.props;
     let content = '';
     if (loading) content = <ArticleItemSkeletonScreen />;
     else if (Object.keys(errors).length > 0) {
-      content = <BodyError onRetry={() => { this.getArticleData(); }} />;
+      content = <BodyError onRetry={() => { getArticles(); }} />;
     } else if (!articles[0]) content = 'No article available';
     else {
-      content = articles.map((article, index) => (
-        <ArticleItemComponent
-          key={index.toString()}
-          tag={(article.Tag ? article.Tag.name : 'no tag')}
-          title={article.title}
-          description={article.description}
-          slug={article.slug}
-          coverUrl={(article.coverUrl || '')}
-          rating={article.rating}
-          readTime={article.readTime.text}
-          author={article.User.username}
-          userActionClass="explore_hide"
-        />
-      ));
+      content = articles.map((article, index) => {
+        const readTime = HelperUtils.estimateReadingTime(article.body);
+        return (
+          <ArticleItemComponent
+            key={index.toString()}
+            tag={(article.Tag ? article.Tag.name : 'no tag')}
+            title={article.title}
+            description={article.description}
+            slug={article.slug}
+            body={article.body}
+            coverUrl={(article.coverUrl || '')}
+            rating={article.rating}
+            readTime={readTime.text}
+            author={article.User.username}
+            userActionClass="explore_hide"
+          />
+        );
+      });
     }
     return content;
   }
@@ -102,33 +131,34 @@ export class Explore extends Component {
   };
 
   /**
-   * @returns {HTMLElement} skeleton
+   * @method handleChange
+   * @param {string} selected
+   * @returns {string} selected
    */
-  cardSkeleton() {
-    const { loading } = this.props;
-    if (loading) return <ArticleItemSkeletonScreen />;
+  handleChange = (selected) => {
+    const { history } = this.props;
+    if (window.location.href === './explore') history.push(`/${selected.value}`);
+    else history.push(`/explore/${selected.value}`);
+    this.setState({ selected }, () => { this.loadFilteredArticles(); });
   }
 
-  /**
-   * @returns {HTMLElement} body error
-   */
-  ShowBodyError() {
-    const { errors } = this.props;
-    if (Object.keys(errors).length > 0) {
-      return (
-        <BodyError
-          onRetry={() => {
-            this.getArticleData();
-          }}
-        />
-      );
-    }
+  loadFilteredArticles = () => {
+    const { match, getFiltered } = this.props;
+    const { tag } = match.params;
+    const keyword = tag.charAt(0).toUpperCase() + tag.slice(1);
+    getFiltered(keyword);
+  }
+
+  redirect = () => {
+    const { history } = this.props;
+    history.push('/explore');
   }
 
   /**
    * @returns {HTMLElement} explore page
    */
   render() {
+    const { selected } = this.state;
     const search = [
       { value: 'all', label: 'All' },
       { value: 'title', label: 'Title' },
@@ -136,12 +166,11 @@ export class Explore extends Component {
       { value: 'tag', label: 'Tag' }
     ];
     const tags = [
-      { value: '', label: 'Select Tag' },
-      { value: 'art', label: 'Art' },
-      { value: 'food', label: 'Food' },
-      { value: 'technology', label: 'Technology' },
-      { value: 'finance', label: 'Finance' },
-      { value: 'health', label: 'Health' }
+      { value: 'Art', label: 'Art' },
+      { value: 'Food', label: 'Food' },
+      { value: 'Technology', label: 'Technology' },
+      { value: 'Finance', label: 'Finance' },
+      { value: 'Health', label: 'Health' }
     ];
     const customStyles = {
       control: base => ({
@@ -150,13 +179,19 @@ export class Explore extends Component {
         borderRight: 'none',
         borderLeft: 'none',
         borderTop: 'none',
-        fontSize: 20
+        fontSize: 15
       })
     };
     const { currentPage } = this.state;
-    const { totalNumberOfArticles, limit } = this.props;
+    const {
+      totalNumberOfArticles,
+      limit,
+      errors,
+      clear,
+      getArticles
+    } = this.props;
     const numberOfPages = Math.ceil(totalNumberOfArticles / limit);
-    return (
+    return errors.message === 'No article found with that match' ? (clear() && getArticles() && <Redirect to="/explore" />) : (
       <div className="explore">
         <div className="explore_header">
           <TopNavBar navID="explore_nav" />
@@ -185,7 +220,8 @@ export class Explore extends Component {
                 options={tags}
                 className="explore_select"
                 classNamePrefix="explore_select_input"
-                defaultValue={tags[0]}
+                onChange={this.handleChange}
+                value={selected}
                 styles={customStyles}
               />
             </div>
@@ -233,7 +269,9 @@ function mapStateToProps({ article }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      getArticles: getAllArticles
+      getArticles: getAllArticles,
+      getFiltered: filterArticles,
+      clear: clearErrorsAction,
     },
     dispatch
   );
@@ -241,11 +279,32 @@ function mapDispatchToProps(dispatch) {
 
 Explore.propTypes = {
   getArticles: func.isRequired,
+  getFiltered: func.isRequired,
+  clear: func.isRequired,
   articles: arrayOf(object).isRequired,
   loading: bool.isRequired,
   errors: object.isRequired,
   totalNumberOfArticles: number.isRequired,
-  limit: number.isRequired
+  limit: number.isRequired,
+  match: shape({
+    isExact: bool,
+    params: object,
+    path: string,
+    url: string
+  }).isRequired,
+  history: shape({
+    action: string,
+    block: func,
+    createHref: func,
+    go: func,
+    goBack: func,
+    goForward: func,
+    length: number,
+    listen: func,
+    location: object,
+    push: func,
+    replace: func
+  }).isRequired,
 };
 
 export default connect(

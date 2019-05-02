@@ -107,14 +107,24 @@ class FeaturedCategories extends Component {
     const loadingData = new Array(5).fill().map(() => <SkeletonCard />);
     const featuredArticlesCards = featuredArticles.map(article => (
       <div
-        role="presentation"
-        onClick={() => history.push(`./article/${article.slug}`)}
         key={article.id}
         className="featured__card"
         style={{ background: `url(${article.coverUrl})`, backgroundSize: 'cover' }}
       >
-        <span className="category">{article.Tag.name}</span>
-        <span className="title">{article.title}</span>
+        <span
+          className="category"
+          role="presentation"
+          onClick={() => history.push(`./explore/${article.Tag.name}`)}
+        >
+          {article.Tag.name}
+        </span>
+        <span
+          role="presentation"
+          onClick={() => history.push(`./article/${article.slug}`)}
+          className="title"
+        >
+          {article.title}
+        </span>
       </div>
     ));
     const totalSlides = featuredArticles.length;
