@@ -115,7 +115,6 @@ $color-white: #ffffff;
         }
       }
     }
-
     &__data {
       margin-left: 30px;
       position: relative;
@@ -152,11 +151,13 @@ $color-white: #ffffff;
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 150px;
+        display: flex;
+        min-width: 150px;
 
         button {
-          height: 34px;
-          padding: 0 15px;
+            height: 34px;
+            padding: 0 15px;
+            margin-right: 10px;
         }
       }
     }
@@ -308,6 +309,7 @@ $color-white: #ffffff;
           position: static;
           width: 100%;
           margin-top: 15px;
+          justify-content: center;
         }
 
         &__about--edit {

@@ -4,6 +4,10 @@
     padding: 0;
     color: #656464;
 
+    &_modal{
+      width: 800px;
+    }
+
     &_required_text{
       color: $red-color;
       text-align: center;
@@ -86,7 +90,7 @@
         left: 10px;
         right: 0;
         margin: 0 auto;
-        width: fit-content;
+        width: 50px;
         z-index: 1011;
         background: $white-color;
       }
@@ -239,7 +243,7 @@
             }
 
             button{
-              width:fit-content;
+              width: 60px;
               margin: 10px auto;
             }
 
