@@ -49,6 +49,8 @@ export const PUBLISHING_ARTICLE = 'PUBLISHING_ARTICLE';
 export const GETTING_ARTICLE = 'GETTING_ARTICLE';
 export const GOT_ARTICLE = 'GOT_ARTICLE';
 export const ERROR_GETTING_ARTICLE = 'ERROR_GETTING_ARTICLE';
+export const ARTICLE_CLAP = 'ARTICLE_CLAP';
+export const ARTICLE_CLAP_ERROR = 'ARTICLE_CLAP_ERROR';
 
 // Sign Up Action types
 export const SIGN_UP = 'SIGN_UP';

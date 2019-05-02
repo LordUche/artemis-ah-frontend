@@ -21,7 +21,9 @@ import {
   GET_ARTICLES_ERROR,
   GOT_ARTICLE,
   ERROR_GETTING_ARTICLE,
-  GETTING_ARTICLE
+  GETTING_ARTICLE,
+  ARTICLE_CLAP,
+  ARTICLE_CLAP_ERROR
 } from '../actionTypes';
 import notifyUser from '../../utils/Toast';
 
@@ -239,6 +241,35 @@ const getArticleAction = async (articleSlug, token) => {
 };
 
 /**
+ * @method createArticleAction
+ * @description - Method to dispatch article clap actions
+ * @param {object} slug - The slug for article
+ * @param {string} token - The user's token
+ * @returns {object} - The create article action object
+ */
+const articleClapAction = async (slug, token) => {
+  try {
+    const request = await post(`${BASE_URL}/articles/${slug}/clapToggle`, {}, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    });
+    const articleClap = request.data;
+    return {
+      type: ARTICLE_CLAP,
+      payload: articleClap
+    };
+  } catch (error) {
+    const errorResponse = { status: 'Can not like an article' };
+    const obj = {
+      type: ARTICLE_CLAP_ERROR,
+      payload: error.response.data ? error.response.data.errors : errorResponse
+    };
+    return obj;
+  }
+};
+
+/**
  * @description function for displaying loading state
  * @returns {object} action
  */
@@ -256,5 +287,6 @@ export {
   saveEditedArticleAction,
   confirmArticleDeleteAction,
   closeArticleDeleteModalAction,
-  editArticle
+  editArticle,
+  articleClapAction
 };

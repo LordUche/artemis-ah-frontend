@@ -11,7 +11,8 @@ import {
   GET_ARTICLES_ERROR,
   GETTING_ARTICLE,
   GOT_ARTICLE,
-  ERROR_GETTING_ARTICLE
+  ERROR_GETTING_ARTICLE,
+  ARTICLE_CLAP
 } from '../actionTypes';
 
 export const initialState = {
@@ -27,7 +28,7 @@ export const initialState = {
   updatedArticle: {},
   isGetting: false,
   articleGotten: {},
-  newArticleSlug: ''
+  clapMsg: ''
 };
 
 /**
@@ -36,6 +37,13 @@ export const initialState = {
  * @returns {object} - The transformed state
  */
 const articleReducer = (state = initialState, { type, payload }) => {
+  let newTotalClaps, newClap;
+  if (type === ARTICLE_CLAP) {
+    const { articleGotten } = state;
+    const { totalClaps, clap } = articleGotten;
+    newClap = !clap;
+    newTotalClaps = newClap ? totalClaps + 1 : totalClaps - 1;
+  }
   switch (type) {
     case GET_ARTICLES:
       return {
@@ -119,6 +127,12 @@ const articleReducer = (state = initialState, { type, payload }) => {
         isGetting: false,
         articleDetailsGotten: {},
         errors: payload
+      };
+    case ARTICLE_CLAP:
+      return {
+        ...state,
+        clapMsg: payload,
+        articleGotten: { ...state.articleGotten, totalClaps: newTotalClaps, clap: newClap }
       };
     default:
       return state;
