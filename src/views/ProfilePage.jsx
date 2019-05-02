@@ -104,7 +104,7 @@ export class ProfilePage extends Component {
       (!prevProps.profile.user.username
         && prevProps.profile.user.contentState === CONTENT_STATE_FETCHING_FAILED)
       || (prevProps.profile.user.username
-        && currentUsernameToView !== prevProps.profile.user.username)
+         && currentUsernameToView !== prevProps.profile.user.username)
     ) {
       dispatch(resetProfile());
 

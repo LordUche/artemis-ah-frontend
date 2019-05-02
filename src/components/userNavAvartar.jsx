@@ -1,23 +1,41 @@
 import React from 'react';
-import { string } from 'prop-types';
+import { string, func } from 'prop-types';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+// Components
+import NavDropdown from './NavDropdown';
+
+// Actions
+import { logoutUserAction } from '../redux/actions/authActions';
 
 /**
  * @description top nav
  * @param {object} props
  * @returns {JSX} top nav
  */
-const UserNavAvatar = (props) => {
+export const UserNavAvatar = (props) => {
   const {
-    username, imgSrc, customImageClassName, customLinkClassName
+    username, imgSrc, customImageClassName, customLinkClassName, dispatch
   } = props;
   return (
     <NavLink to="/profile" className={customLinkClassName}>
       <img src={imgSrc} alt="profile avatar" className={customImageClassName} />
       &nbsp;
-      <span className="username">{username}</span>
-      &nbsp;
-      <i className="fas fa-angle-down" />
+      <NavDropdown parentLinkName={username} icon="angle-down">
+        <li>
+          <span className="link_lookalike" onClick={() => window.location.assign('/profile')} role="presentation">
+            <i className="fas fa-user" />
+          Profile
+          </span>
+        </li>
+        <li>
+          <span className="link_lookalike" onClick={() => logoutUserAction(dispatch)} role="presentation">
+            <i className="fas fa-sign-out-alt" />
+          Logout
+          </span>
+        </li>
+      </NavDropdown>
     </NavLink>
   );
 };
@@ -26,7 +44,8 @@ UserNavAvatar.propTypes = {
   username: string,
   imgSrc: string,
   customLinkClassName: string,
-  customImageClassName: string
+  customImageClassName: string,
+  dispatch: func.isRequired
 };
 
 UserNavAvatar.defaultProps = {
@@ -37,4 +56,4 @@ UserNavAvatar.defaultProps = {
   customLinkClassName: ''
 };
 
-export default UserNavAvatar;
+export default connect(null, null)(UserNavAvatar);
