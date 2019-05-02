@@ -49,6 +49,7 @@ const App = () => (
         <Route exact path="/history" component={HistoryPage} />
         <Route exact path="/reading-stats" component={ReadingStatsPage} />
         <Route exact path="/explore" component={ExplorePage} />
+        <Route exact path="/explore/:tag" component={ExplorePage} />
         <Route exact path="/reset-password" component={ResetPassword} />
         <Route exact path="/article/:articleSlug" component={ArticleDetailsPage} />
         <Route exact path="/comment" component={CommentComponent} />

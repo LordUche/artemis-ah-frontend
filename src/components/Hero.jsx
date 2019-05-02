@@ -170,29 +170,54 @@ class Hero extends Component {
                 )}
                 <NavDropdown parentLinkName="Explore">
                   <li>
-                    <Router>
-                      <Link to="./filter?tag=Food">Food</Link>
-                    </Router>
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onKeyPress={() => history.push('./explore/Food')}
+                      onClick={() => history.push('./explore/Food')}
+                    >
+                      <span className="link_lookalike">Food</span>
+                    </div>
                   </li>
                   <li>
-                    <Router>
-                      <Link to="./filter?tag=Technology">Technology</Link>
-                    </Router>
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onKeyPress={() => history.push('./explore/Technology')}
+                      onClick={() => history.push('./explore/Technology')}
+                    >
+                      <span className="link_lookalike">Technology</span>
+                    </div>
                   </li>
                   <li>
-                    <Router>
-                      <Link to="./filter?tag=Health">Health</Link>
-                    </Router>
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onKeyPress={() => history.push('./explore/Health')}
+                      onClick={() => history.push('./explore/Technology')}
+                    >
+                      <span className="link_lookalike">Health</span>
+                    </div>
                   </li>
                   <li>
-                    <Router>
-                      <Link to="./filter?tag=Finance">Finance</Link>
-                    </Router>
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onKeyPress={() => history.push('./explore/Finance')}
+                      onClick={() => history.push('./explore/Finance')}
+                    >
+                      <span className="link_lookalike">Finance</span>
+                    </div>
                   </li>
                   <li>
-                    <Router>
-                      <Link to="./filter?tag=Arts">Arts</Link>
-                    </Router>
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onKeyPress={() => history.push('./explore/Arts')}
+                      onClick={() => history.push('./explore/Arts')}
+                    >
+                      <span className="link_lookalike">Arts</span>
+                    </div>
                   </li>
                 </NavDropdown>
                 <li>
