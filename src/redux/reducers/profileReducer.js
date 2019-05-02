@@ -87,6 +87,7 @@ export default (state = getInitialState(), { type, data }) => {
     case PROFILE_USER_DETAILS_FETCHED:
       newState.user = {
         fullname: `${data.user.firstname} ${data.user.lastname}`,
+        firstname: data.user.firstname,
         username: data.user.username,
         about: data.user.bio,
         profilePic: data.user.image,

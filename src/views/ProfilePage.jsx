@@ -204,6 +204,7 @@ export class ProfilePage extends Component {
             {!editMode && <div className="profile-section__blue-bg__data__username">{`@${user.username}`}</div>}
             {editMode && (
             <div className="profile-section__blue-bg__data__username">
+              <span>@</span>
               <input id="profile_username_input" value={usernameValue} name="username" onChange={this.handleUsernameChange} />
             </div>
             )}
@@ -787,7 +788,7 @@ is not following anyone.
 
     if (newUser && user.contentState === CONTENT_STATE_FETCHED) {
       notifyUser(toast(`Hello ${user.firstname || 'there'}!, Welcome to Author's Haven. We're glad to have you on board.`));
-      setTimeout(notifyUser(toast('Personalize your account by clicking the Edit Profile Button')), 3000);
+      setTimeout(() => notifyUser(toast('Personalize your account by clicking the Edit Profile Button')), 4000);
       resetNewUser();
     }
 

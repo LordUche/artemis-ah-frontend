@@ -13,7 +13,7 @@ export const initialState = (localStorage, sessionStorage) => ({
   email: localStorage.authorsHavenEmail || sessionStorage.authorsHavenEmail || '',
   bio: localStorage.authorsHavenBio || sessionStorage.authorsHavenBio || '',
   image: localStorage.authorsHavenImage || sessionStorage.authorsHavenImage || '',
-  newUser: false
+  newUser: localStorage.authorsHavenNewUser || sessionStorage.authorsHavenNewUser || false
 });
 
 /**
@@ -40,6 +40,8 @@ const userReducer = (state = initialState(localStorage, sessionStorage),
         newUser: payload.newUser || false
       };
     case RESET_NEW_USER:
+      delete localStorage.authorsHavenNewUser;
+      delete sessionStorage.authorsHavenNewUser;
       return {
         ...state,
         newUser: false
