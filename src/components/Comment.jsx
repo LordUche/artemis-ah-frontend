@@ -72,7 +72,7 @@ export class Comment extends Component {
     }
 
     if ((showPost || highlighted) && !posted) {
-      document.documentElement.scrollTo(0, 765);
+      window.scrollTo(0, 765);
       return (
         <form className="comment_box__form" onSubmit={this.handleSubmit}>
           <textarea
