@@ -48,6 +48,52 @@
 
 .ah-profile-link {
   padding-right: 50px;
+
+  .dropdown__trigger{
+    padding: 0;
+
+    i {
+      margin-left: 5px;
+    }
+
+    .dropdown__body{
+      top: 35px;
+      left: -85px;
+      border-radius: 0;
+
+      &.open{
+        height: 104px;
+         > li {
+           margin-right: 0;
+         }
+      }
+
+      li{
+        &:first-child > a {
+          border-radius: 0;
+        }
+        span {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          &:hover{
+            color: #ffffff;
+            background: #5863f8;
+          }
+          i{
+            margin-right: 10px;
+          }
+        }
+        &:last-child > a {
+          border-radius: 0;
+        }
+        padding: 0;
+        > a, > span{
+          padding: 15px 50px;
+        }
+      }
+    }
+  }
 }
 
 .default-avatar-class,
@@ -180,6 +226,18 @@ div.nav-component-container-offline1 {
 
   .nav-component-container-online2 li:first-child {
     display: none;
+  }
+
+  .ah-profile-link .dropdown__trigger .dropdown__body li:first-child{
+    display: block;
+  }
+
+  .ah-profile-link .dropdown__trigger .dropdown__body {
+    left: -115px;
+}
+
+  .nav-component-container-online2 li{
+    padding: 0 15px;
   }
 
   .nav-component-container-offline2 li {

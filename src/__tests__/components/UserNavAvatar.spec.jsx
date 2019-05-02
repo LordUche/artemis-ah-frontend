@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import UserNavAvatar from '../../components/userNavAvartar';
+import { UserNavAvatar } from '../../components/userNavAvartar';
 
 describe('test the user avatar', () => {
   const userAvatar = shallow(<UserNavAvatar />);

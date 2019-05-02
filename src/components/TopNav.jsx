@@ -13,7 +13,7 @@ import { getNotificationAction, notifyPopup } from '../redux/actions/notificatio
 import Logo from './logo';
 
 // Components
-import UserNavAvatar from './userNavAvartar';
+import AHUserNavAvatar from './userNavAvartar';
 import Hamburger from './Hamburger';
 import AHLoginModal from '../views/LoginModal';
 import AHSignUpModal from '../views/SignUpView';
@@ -151,7 +151,7 @@ class TopNav extends Component {
               </NavLink>
             </li>
             <li>
-              <UserNavAvatar
+              <AHUserNavAvatar
                 username={username}
                 imgSrc={image}
                 customImageClassName="ah-profile-images"
