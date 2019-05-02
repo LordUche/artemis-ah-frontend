@@ -27,3 +27,24 @@
     }
   }
 }
+
+@media screen and (max-width: 805px) {
+  .pagination {
+    & [class^="page__arrow"] {
+      font-size: 5rem;
+      margin: 1.5rem 2rem;
+    }
+
+    & p {
+      font-size: 1.6rem;
+    }
+
+    & > .page__number {
+      margin-top: 2rem;
+
+      & > p {
+        font-size: 1.8rem;
+      }
+    }
+  }
+}

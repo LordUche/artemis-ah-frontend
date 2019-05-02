@@ -1,9 +1,5 @@
 import {
-  get,
-  post,
-  put,
-  patch,
-  delete as axiosDelete
+  get, post, put, patch, delete as axiosDelete
 } from 'axios';
 import BASE_URL from './index';
 import {
@@ -57,15 +53,17 @@ export const fetchUserDetails = (username, token, dispatch) => get(`profiles/${u
 /**
  * @param {string} username Username of the user.
  * @param {function} dispatch Function to dispatch actions to redux store.
+ * @param {number} pageToDisplay The page to display while paginating.
  * @returns {Promise} A promise to fetch.
  */
-export const fetchUserArticles = (username, dispatch) => {
+export const fetchUserArticles = (username, dispatch, pageToDisplay = 1) => {
   dispatch({ type: PROFILE_ARTICLES_FETCHING });
 
   return get('articles', {
     baseURL: BASE_URL,
     params: {
-      author: username
+      author: username,
+      page: pageToDisplay
     }
   })
     .then(response => response.data)
@@ -138,7 +136,7 @@ export const followUser = (authToken, username, dispatch) => {
   return post(`profiles/${username}/follow`, null, {
     baseURL: BASE_URL,
     headers: {
-      authorization: `Bearer ${authToken}`,
+      authorization: `Bearer ${authToken}`
     }
   })
     .then(response => response.data)
@@ -162,7 +160,7 @@ export const unfollowUser = (authToken, username, dispatch) => {
   return axiosDelete(`profiles/${username}/follow`, {
     baseURL: BASE_URL,
     headers: {
-      authorization: `Bearer ${authToken}`,
+      authorization: `Bearer ${authToken}`
     }
   })
     .then(response => response.data)
