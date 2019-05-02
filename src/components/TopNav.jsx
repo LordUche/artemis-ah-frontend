@@ -8,12 +8,8 @@ import dotenv from 'dotenv';
 import Pusher from 'pusher-js';
 import HelperUtils from '../utils/helperUtils';
 import { createArticleIcon, notificationIcon } from '../assets/img__func/icons_svg';
-import Notifications from './Notifications';
-import {
-  getNotificationAction,
-  newNotificationAction,
-  notifyPopup
-} from '../redux/actions/notificationAction';
+import NotificationComp from './Notifications';
+import { getNotificationAction, notifyPopup } from '../redux/actions/notificationAction';
 import Logo from './logo';
 
 // Components
@@ -41,11 +37,13 @@ class TopNav extends Component {
 
   componentDidMount = () => {
     const { token, dispatch } = this.props;
-    getNotificationAction(token, dispatch);
+    setTimeout(() => {
+      getNotificationAction(token, dispatch);
+    }, 1000);
   };
 
   componentWillMount = () => {
-    const { dispatch } = this.props;
+    const { dispatch, token } = this.props;
 
     // Instantiate Pusher
     const pusher = new Pusher(process.env.PUSHER_APP_KEY, {
@@ -54,7 +52,6 @@ class TopNav extends Component {
     });
 
     // Get users id from token
-    const token = localStorage.getItem('authorsHavenToken') || sessionStorage.getItem('authorsHavenToken');
     const userObject = HelperUtils.verifyToken(token);
     const { id } = userObject;
 
@@ -69,9 +66,8 @@ class TopNav extends Component {
           notifyPopup(`Notification set to ${permission}`);
         });
       }
-
-      newNotificationAction(data, dispatch);
       notifyPopup(title, message);
+      getNotificationAction(token, dispatch);
     });
   };
 
@@ -177,11 +173,11 @@ class TopNav extends Component {
                     {notificationsData.map((notify, index) => {
                       const key = index;
                       return (
-                        <Notifications
+                        <NotificationComp
                           key={key}
                           message={notify.message}
-                          title={notify.title ? notify.title : 'Authors Haven'}
-                          type={notify.type}
+                          title={notify.title}
+                          time={notify.updatedAt}
                           url={notify.url}
                         />
                       );
@@ -345,8 +341,6 @@ export const mapStateToProps = ({ auth, user, notifications }) => {
   };
 };
 
-export default connect(
-  mapStateToProps
-)(TopNav);
+export default connect(mapStateToProps)(TopNav);
 
 export { TopNav };
