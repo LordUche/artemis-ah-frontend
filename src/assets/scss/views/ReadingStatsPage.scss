@@ -1,0 +1,54 @@
+.reading-stats {
+    padding-bottom: 20px;
+
+    .settings_section_body {
+        .top {
+            margin-top: 20px;
+
+            .header {
+                font-size: 25px;
+                float: left;
+            }
+
+            .stat {
+                font-size: 12px;
+                margin-left: 40px;
+                color: #aaa;
+                text-align: right;
+                float: right;
+
+                span {
+                    font-weight: bold;
+                    font-size: 14px;
+                    color: #000000;
+                }
+            }
+
+            &:after {
+                content: '';
+                display: block;
+                clear: both;
+            }
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+
+        .chart-option {
+            margin-top: 10px;
+            width: 100%;
+
+            select {
+                float: right;
+                padding: 5px 35px 5px 5px;
+            }
+
+            &:after {
+                content: '';
+                display: block;
+                clear: both;
+            }
+        }
+    }
+}
