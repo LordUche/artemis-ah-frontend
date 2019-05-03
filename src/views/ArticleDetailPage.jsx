@@ -25,7 +25,6 @@ import CommentsComponent from '../components/Comment';
 import defaultClap from '../assets/img/defaultClap.svg';
 import hasClapped from '../assets/img/clap.svg';
 
-
 // Actions
 import {
   gettingArticleAction,
@@ -35,7 +34,6 @@ import {
   removeBookmarkAction,
   bookmarkArticleAction,
   articleClapAction
-
 } from '../redux/actions/articleActions';
 
 /**
@@ -45,7 +43,9 @@ import {
  */
 export class ArticleDetailPage extends Component {
   state = {
-    userRated: false
+    userRated: false,
+    selectedText: 'N/A',
+    highlightIndex: 0
   };
 
   /**
@@ -99,7 +99,7 @@ export class ArticleDetailPage extends Component {
   }
 
   closeCommentBox = () => {
-    this.setState({ highlighted: false });
+    this.setState({ highlighted: false, selectedText: 'N/A', highlightIndex: 0 });
   };
 
   rateArticle = (event) => {
@@ -111,9 +111,7 @@ export class ArticleDetailPage extends Component {
   };
 
   userClap = () => {
-    const {
-      match, articleClap, token
-    } = this.props;
+    const { match, articleClap, token } = this.props;
     const { articleSlug } = match.params;
     articleClap(articleSlug, token);
   };
@@ -134,7 +132,9 @@ export class ArticleDetailPage extends Component {
       token
     } = this.props;
 
-    const { userRated } = this.state;
+    const {
+      userRated, highlighted, selectedText, highlightIndex
+    } = this.state;
 
     const {
       title,
@@ -166,7 +166,8 @@ export class ArticleDetailPage extends Component {
       .map((val, index) => {
         const i = index;
         const rateValue = index + 1;
-        const filled = rateValue <= averageRating && userHasRated ? 'filled' : '';
+        const ratedClass = userHasRated ? 'rated' : '';
+        const filled = rateValue <= averageRating && userHasRated ? 'filled' : ratedClass;
         return (
           <i
             role="presentation"
@@ -188,7 +189,6 @@ export class ArticleDetailPage extends Component {
 
     const shareUrl = window.location.href;
     const mailBody = `Checkout this interesting article from AuthorsHaven - ${shareUrl}`;
-    const { highlighted } = this.state;
 
     return (
       <Fragment>
@@ -279,6 +279,12 @@ export class ArticleDetailPage extends Component {
                         Comment
                       </span>
                     )}
+                    onHighlightPop={(highlightedText) => {
+                      this.setState({
+                        selectedText: highlightedText,
+                        highlightIndex: body.indexOf(highlightedText)
+                      });
+                    }}
                   >
                     <article className="article_detail_body_segment">{section}</article>
                   </Highlight>
@@ -312,11 +318,24 @@ export class ArticleDetailPage extends Component {
             </div>
             <aside className="article_detail_aside">
               {isLoggedIn && (
-                <div className="article_detail_aside_clap" onClick={this.userClap} role="presentation">
-                  {clap
-                    ? <img src={hasClapped} alt="clap icon" className="article_detail_aside_clap_img" />
-                    : <img src={defaultClap} alt="clap icon" className="article_detail_aside_clap_img" />
-                  }
+                <div
+                  className="article_detail_aside_clap"
+                  onClick={this.userClap}
+                  role="presentation"
+                >
+                  {clap ? (
+                    <img
+                      src={hasClapped}
+                      alt="clap icon"
+                      className="article_detail_aside_clap_img"
+                    />
+                  ) : (
+                    <img
+                      src={defaultClap}
+                      alt="clap icon"
+                      className="article_detail_aside_clap_img"
+                    />
+                  )}
                   <p className="article_detail_aside_clap_text">{totalClaps}</p>
                 </div>
               )}
@@ -401,6 +420,8 @@ export class ArticleDetailPage extends Component {
             isLoggedIn
             token={token}
             closeComment={this.closeCommentBox}
+            selectedText={selectedText}
+            highlightIndex={highlightIndex}
           />
         )}
       </Fragment>
