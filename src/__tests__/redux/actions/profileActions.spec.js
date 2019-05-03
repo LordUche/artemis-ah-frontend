@@ -10,20 +10,50 @@ describe('Testing profile action', () => {
     const token = 'token_ghdasdhgddkjashjhjksadhj_token';
     const updatedBio = 'Go on fam again!!! Wooohooo!!!';
     const updatedUsername = 'abcd';
+    const updatedLastname = 'abcd';
+    const updatedFirstname = 'abcd';
     let selectedImage = 'image.jpg';
     const dispatch = jest.fn();
-    updateUserDetails(token, updatedBio, updatedUsername, selectedImage, dispatch);
-    updateUserDetails(token, updatedBio, updatedUsername, selectedImage = false, dispatch);
+    updateUserDetails(
+      token, updatedBio, updatedUsername, updatedFirstname, updatedLastname, selectedImage, dispatch
+    );
+    updateUserDetails(
+      token,
+      updatedBio,
+      updatedUsername,
+      updatedFirstname,
+      updatedLastname,
+      selectedImage = false,
+      dispatch
+    );
   });
 
   it('should update profile', () => {
     const token = 'token_ghdasdhgddkjashjhjksadhj_token';
     const updatedBio = 'Go on fam again!!! Wooohooo!!!';
     const updatedUsername = 'abcd';
+    const updatedLastname = 'abcd';
+    const updatedFirstname = 'abcd';
     let uploadedImageUrl = 'image.jpg';
     const dispatch = jest.fn();
-    saveUserDetails(token, updatedBio, updatedUsername, uploadedImageUrl, dispatch);
-    saveUserDetails(token, updatedBio, updatedUsername, uploadedImageUrl = false, dispatch);
+    saveUserDetails(
+      token,
+      updatedBio,
+      updatedUsername,
+      updatedFirstname,
+      updatedLastname,
+      uploadedImageUrl,
+      dispatch
+    );
+    saveUserDetails(
+      token,
+      updatedBio,
+      updatedUsername,
+      updatedFirstname,
+      updatedLastname,
+      uploadedImageUrl = false,
+      dispatch
+    );
   });
 });
 

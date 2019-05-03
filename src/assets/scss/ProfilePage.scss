@@ -122,6 +122,23 @@ $color-white: #ffffff;
       &__fullname {
         font-weight: bold;
         font-size: 17px;
+
+        .profile_name_input{
+          background: none;
+          border: none;
+          border-radius: 0;
+          padding: 0 3px;
+          border-bottom: 2px solid #fff;
+          color: #fff;
+          outline: none;
+          font-size: 16px;
+          width: 130px;
+          margin-bottom: 5px;
+
+          &:first-of-type{
+            margin-right: 10px;
+          }
+        }
       }
 
       &__username {
@@ -133,7 +150,7 @@ $color-white: #ffffff;
         span {
           position: absolute;
           left: auto;
-          top: 2px;
+          // top: 2px;
           padding: 6px 3px;
           color: #5863f8;
           background: #fff;
@@ -150,8 +167,6 @@ $color-white: #ffffff;
           border-bottom: 2px solid #fff;
           color: #fff;
           outline: none;
-          font-size: 16px;
-          margin: 3px 0;
           font-size: 16px;
         }
       }
@@ -170,7 +185,7 @@ $color-white: #ffffff;
         padding: 3px 5px;
         border-radius: 5px;
         width: 510px;
-        height: 50px;
+        height: 45px;
       }
 
       &__btn-wrapper {

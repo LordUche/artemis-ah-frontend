@@ -1,0 +1,45 @@
+@import "./base.scss";
+
+.history_item{
+  cursor: pointer;
+  position: relative;
+  background: $white-color;
+  border-radius: 5px;
+  min-height: 100px;
+  padding: 70px 20px 20px;
+  font-size: 16px;
+  box-shadow: 2px 1px 10px rgba(0, 0, 0, 0.25);
+  margin: 40px 0;
+
+  &:nth-of-type(odd){
+    background: #E4EDFF;
+  }
+
+  .history_article_title{
+    position: absolute;
+    top: 20px;
+    left: -20px;
+    background: $primary-color;
+    color: $white-color;
+    padding: 5px 5vw;
+    box-shadow: 2px 1px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+  }
+
+  .history_time{
+    text-align: right;
+  }
+
+  .history_article_details{
+    font-size: 14px;
+
+    p:first-of-type{
+      color: #000;
+      margin-bottom: 10px;
+    }
+
+    p:last-of-type{
+      color: #4B4B4B;
+    }
+  }
+}

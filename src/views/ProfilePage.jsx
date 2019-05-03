@@ -64,6 +64,8 @@ export class ProfilePage extends Component {
       selectedImage: null,
       currentPage: 1,
       username: null,
+      firstname: null,
+      lastname: null,
     };
   }
 
@@ -152,9 +154,13 @@ export class ProfilePage extends Component {
 
     const { user, editState } = profile;
 
-    const { editMode, username } = this.state;
+    const {
+      editMode, username, firstname, lastname
+    } = this.state;
 
     const usernameValue = username === null ? user.username : username;
+    const firstnameValue = firstname === null ? user.firstname : firstname;
+    const lastnameValue = lastname === null ? user.lastname : lastname;
 
     if (user.contentState === CONTENT_STATE_FETCHING) {
       return <UserDetailsSkeletonScreen />;
@@ -200,12 +206,18 @@ export class ProfilePage extends Component {
             {this.getProfilePictureEditOverlay()}
           </div>
           <div className="profile-section__blue-bg__data">
-            <div className="profile-section__blue-bg__data__fullname">{user.fullname}</div>
+            {!editMode && <div className="profile-section__blue-bg__data__fullname">{user.fullname}</div>}
+            {editMode && (
+            <div className="profile-section__blue-bg__data__fullname">
+              <input className="profile_name_input" value={firstnameValue} name="firstname" onChange={this.handleNameChange} />
+              <input className="profile_name_input" value={lastnameValue} name="lastname" onChange={this.handleNameChange} />
+            </div>
+            )}
             {!editMode && <div className="profile-section__blue-bg__data__username">{`@${user.username}`}</div>}
             {editMode && (
             <div className="profile-section__blue-bg__data__username">
               <span>@</span>
-              <input id="profile_username_input" value={usernameValue} name="username" onChange={this.handleUsernameChange} />
+              <input id="profile_username_input" value={usernameValue} name="username" onChange={this.handleNameChange} />
             </div>
             )}
             <div
@@ -629,18 +641,18 @@ is not following anyone.
   }
 
   /**
-   * @method handleUsernameChange
+   * @method handleNameChange
    * @param {object} e event object
    * @returns {undefined}
    */
-  handleUsernameChange = (e) => {
-    const { value } = e.target;
-    const invalidUsername = value.match(/\W/g);
-    if (invalidUsername) {
-      notifyUser(toast('Character not allowed in username', { className: 'error-toast' }));
+  handleNameChange = (e) => {
+    const { value, name } = e.target;
+    const invalidname = value.match(/\W/g);
+    if (invalidname) {
+      notifyUser(toast('Character not allowed', { className: 'error-toast' }));
     } else {
       this.setState({
-        username: e.target.value
+        [name]: e.target.value
       });
     }
   }
@@ -735,14 +747,24 @@ is not following anyone.
   saveUpdate() {
     const { dispatch, user } = this.props;
 
-    const { selectedImage, username } = this.state;
+    const {
+      selectedImage, username, firstname, lastname
+    } = this.state;
 
     const newUsername = username || user.username;
+    const newFirstname = firstname || user.firstname;
+    const newLastname = lastname || user.lastname;
+
+    if (newLastname.length < 2 || newFirstname.length < 2) {
+      return notifyUser(toast('First Name and Last Name must be 2 characters or more', { className: 'error-toast' }));
+    }
 
     updateUserDetails(
       user.authToken,
       this.aboutUserElement.innerText,
       newUsername,
+      newFirstname,
+      newLastname,
       selectedImage,
       dispatch
     );
@@ -882,13 +904,16 @@ const state2props = (state) => {
   const {
     auth, user, profile, article
   } = state;
-  const { newUser, username, firstname } = user;
+  const {
+    newUser, username, firstname, lastname
+  } = user;
   return {
     user: {
       isLoggedIn: auth.isLoggedIn,
       authToken: auth.token,
       username,
-      firstname
+      firstname,
+      lastname
     },
     profile,
     isDeleteModalOpen: article.confirmationModal,

@@ -43,6 +43,8 @@ import {
 export const getInitialState = () => ({
   user: {
     fullname: null,
+    lastname: null,
+    firstname: null,
     username: null,
     about: null,
     profilePic: null,
@@ -86,8 +88,9 @@ export default (state = getInitialState(), { type, data }) => {
     // User details.
     case PROFILE_USER_DETAILS_FETCHED:
       newState.user = {
-        fullname: `${data.user.firstname} ${data.user.lastname}`,
+        fullname: `${data.user.firstname || ''} ${data.user.lastname || ''}`,
         firstname: data.user.firstname,
+        lastname: data.user.lastname,
         username: data.user.username,
         about: data.user.bio,
         profilePic: data.user.image,
@@ -181,6 +184,9 @@ export default (state = getInitialState(), { type, data }) => {
     case PROFILE_DETAILS_UPDATED:
       newState.editState = CONTENT_STATE_UPDATED;
       newState.user.username = data.username;
+      newState.user.fullname = `${data.firstname || ''} ${data.lastname || ''}`;
+      newState.user.firstname = data.firstname;
+      newState.user.lastname = data.lastname;
       newState.user.about = data.bio;
       newState.user.profilePic = data.image;
       return newState;
