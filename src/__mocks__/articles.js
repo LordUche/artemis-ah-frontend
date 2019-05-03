@@ -10,6 +10,11 @@ const getMockArticles = number => Array(number)
     return {
       Tag: { name: 'Technology' },
       articleAuthor: 'ayo',
+      User: {
+        firstname: 'ayo',
+        lastname: 'abc',
+        username: 'jfbh'
+      },
       body: 'Ok, we have, the following;↵1.  Adaeze↵2. Damola↵3. Ayo↵4. Daniel↵5. Chukwuemeka↵6. Christopher',
       coverUrl: 'https://res.cloudinary.com/artemisah/image/upload/v1556142399/kiij6e6pbp6eqmwcursg.png',
       createdAt: '2019-04-24T11:43:50.353Z',

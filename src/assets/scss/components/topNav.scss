@@ -48,6 +48,11 @@
 
 .ah-profile-link {
   padding-right: 50px;
+  color: #5863f8;
+  font-weight: 600;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
 
   .dropdown__trigger{
     padding: 0;
@@ -170,6 +175,23 @@ div.nav-component-container-offline1 {
   #hide-angle-down {
     display: none;
   }
+
+  .dropdown__trigger > #explore {
+    visibility: hidden;
+    position: relative;
+    width: 20px;
+
+    > i{
+      visibility: visible;
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      margin-left: -50px;
+      padding-left: 50px;
+      display: flex;
+      align-items: center;
+    }
+  }
   .nav-component-container-offline2 {
     padding-right: 0px;
   }
@@ -234,8 +256,11 @@ div.nav-component-container-offline1 {
 
   .ah-profile-link .dropdown__trigger .dropdown__body {
     left: -115px;
-}
 
+    li > span{
+      padding: 15px 35px;
+    }
+}
   .nav-component-container-online2 li{
     padding: 0 15px;
   }

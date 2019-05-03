@@ -9,6 +9,7 @@ import NavDropdown from './NavDropdown';
 import AHLoginModal from '../views/LoginModal';
 import Hamburger from './Hamburger';
 import Button from './Button';
+
 /**
  * @description Hero - Hero component for Landing Page view
  * @param {object} e event object
@@ -93,29 +94,47 @@ class Hero extends Component {
               </Link>
             </Router>
             <Hamburger open={showResponsiveNav} toggleMenu={this.toggleResponsiveNav}>
-              <li>
-                <span
-                  id="login-link"
-                  className="link_lookalike"
-                  role="presentation"
-                  onClick={revealLoginModal}
-                >
+              {!isLoggedIn && (
+              <Fragment>
+                <li>
+                  <span
+                    id="login-link"
+                    className="link_lookalike"
+                    role="presentation"
+                    onClick={revealLoginModal}
+                  >
                   Login
-                </span>
-              </li>
-              <li>
-                <span
-                  id="signup-link"
-                  className="link_lookalike"
-                  role="presentation"
-                  onClick={toggleSignUpModal}
-                >
+                  </span>
+                </li>
+                <li>
+                  <span
+                    id="signup-link"
+                    className="link_lookalike"
+                    role="presentation"
+                    onClick={toggleSignUpModal}
+                  >
                   Register
-                </span>
-              </li>
+                  </span>
+                </li>
+              </Fragment>
+              )}
+              {isLoggedIn && (
+              <Fragment>
+                <li>
+                  <span
+                    id="profile-link"
+                    className="link_lookalike"
+                    role="presentation"
+                    onClick={revealLoginModal}
+                  >
+                  Profile
+                  </span>
+                </li>
+              </Fragment>
+              )}
               <li>
                 <Router>
-                  <Link to="./register">Explore</Link>
+                  <Link to="/explore">Explore</Link>
                 </Router>
               </li>
             </Hamburger>
@@ -164,6 +183,20 @@ class Hero extends Component {
                         onClick={toggleSignUpModal}
                       >
                         Register
+                      </span>
+                    </li>
+                  </Fragment>
+                )}
+                {isLoggedIn && (
+                  <Fragment>
+                    <li>
+                      <span
+                        id="profile-link"
+                        className="link_lookalike"
+                        role="presentation"
+                        onClick={revealLoginModal}
+                      >
+                        Profile
                       </span>
                     </li>
                   </Fragment>

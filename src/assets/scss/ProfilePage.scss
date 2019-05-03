@@ -122,12 +122,53 @@ $color-white: #ffffff;
       &__fullname {
         font-weight: bold;
         font-size: 17px;
+
+        .profile_name_input{
+          background: none;
+          border: none;
+          border-radius: 0;
+          padding: 0 3px;
+          border-bottom: 2px solid #fff;
+          color: #fff;
+          outline: none;
+          font-size: 16px;
+          width: 130px;
+          margin-bottom: 5px;
+
+          &:first-of-type{
+            margin-right: 10px;
+          }
+        }
       }
 
       &__username {
-        font-size: 13px;
+        font-size: 12px;
         line-height: 100%;
         color: #d0d3ff;
+        position: relative;
+
+        span {
+          position: absolute;
+          left: auto;
+          // top: 2px;
+          padding: 6px 3px;
+          color: #5863f8;
+          background: #fff;
+          border-radius: 5px 5px 0 0;
+          font-size: 16px;
+          font-weight: bold;
+        }
+
+        #profile_username_input {
+          background: none;
+          border: none;
+          border-radius: 0;
+          padding: 0 3px 0 25px;
+          border-bottom: 2px solid #fff;
+          color: #fff;
+          outline: none;
+          font-size: 16px;
+        }
       }
 
       &__about {
@@ -144,7 +185,7 @@ $color-white: #ffffff;
         padding: 3px 5px;
         border-radius: 5px;
         width: 510px;
-        height: 62px;
+        height: 45px;
       }
 
       &__btn-wrapper {

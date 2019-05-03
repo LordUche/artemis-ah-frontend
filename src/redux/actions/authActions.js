@@ -8,7 +8,8 @@ import {
   CLEAR_AUTH_ERROR,
   SIGN_UP,
   SIGN_UP_ERROR,
-  LOGOUT_USER
+  LOGOUT_USER,
+  RESET_NEW_USER
 } from '../actionTypes';
 
 /**
@@ -43,13 +44,14 @@ export async function signUp(values) {
  * @returns {undefined}
  */
 export const storeInLocal = ({
-  bio, email, token, username, image
+  bio, email, token, username, image, newUser
 }, localStorage) => {
   localStorage.authorsHavenUsername = username;
   localStorage.authorsHavenEmail = email;
   localStorage.authorsHavenBio = bio;
   localStorage.authorsHavenImage = image;
   localStorage.authorsHavenToken = token;
+  localStorage.authorsHavenNewUser = newUser || false;
 };
 
 /**
@@ -59,13 +61,14 @@ export const storeInLocal = ({
  * @returns {undefined}
  */
 export const storeInSession = ({
-  bio, email, token, username, image
+  bio, email, token, username, image, newUser
 }, sessionStorage) => {
   sessionStorage.authorsHavenUsername = username;
   sessionStorage.authorsHavenEmail = email;
   sessionStorage.authorsHavenBio = bio;
   sessionStorage.authorsHavenImage = image;
   sessionStorage.authorsHavenToken = token;
+  sessionStorage.authorsHavenNewUser = newUser || false;
 };
 
 /**
@@ -80,11 +83,13 @@ export const removeFromStorage = (localStorage, sessionStorage) => {
   delete localStorage.authorsHavenBio;
   delete localStorage.authorsHavenImage;
   delete localStorage.authorsHavenToken;
+  delete localStorage.authorsHavenNewUser;
   delete sessionStorage.authorsHavenUsername;
   delete sessionStorage.authorsHavenEmail;
   delete sessionStorage.authorsHavenBio;
   delete sessionStorage.authorsHavenImage;
   delete sessionStorage.authorsHavenToken;
+  delete sessionStorage.authorsHavenNewUser;
 };
 
 /**
@@ -139,6 +144,12 @@ export const socialLoginUserAction = (user) => {
  * @returns {object} action
  */
 export const loadingAuthAction = () => ({ type: AUTH_LOADING });
+
+/**
+ * @description function for dispatching action to update newUser field in store to false
+ * @returns {object} action
+ */
+export const resetNewUserAction = () => ({ type: RESET_NEW_USER });
 
 /**
  * @description function for clearing auth errors

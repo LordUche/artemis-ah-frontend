@@ -22,7 +22,10 @@ import {
   DELETED_BOOKMARK,
   ERROR_GETTING_BOOKMARKS,
   ERROR_DELETING_BOOKMARKS,
-  GOT_BOOKMARKS
+  GOT_BOOKMARKS,
+  HISTORY_LOADING,
+  GOT_HISTORY,
+  ERROR_GETTING_HISTORY
 } from '../actionTypes';
 
 export const initialState = {
@@ -43,7 +46,8 @@ export const initialState = {
   isRating: '',
   ratingData: { rating: 0 },
   bookmarkedArticles: [],
-  bookmarkDeleted: {}
+  bookmarkDeleted: {},
+  userHistory: []
 };
 
 /**
@@ -221,6 +225,25 @@ const articleReducer = (state = initialState, { type, payload }) => {
         errors: {},
         loading: true,
         deletedBookmark: {}
+      };
+    case HISTORY_LOADING:
+      return {
+        ...state,
+        errors: {},
+        loading: true,
+      };
+    case GOT_HISTORY:
+      return {
+        ...state,
+        errors: {},
+        userHistory: payload.reverse(),
+        loading: false
+      };
+    case ERROR_GETTING_HISTORY:
+      return {
+        ...state,
+        errors: payload,
+        loading: false
       };
     default:
       return state;

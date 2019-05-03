@@ -297,7 +297,8 @@ describe('Test the profile page.', () => {
           user={userdata}
           profile={{
             user: { contentState: CONTENT_STATE_FETCHING_FAILED },
-            tabContent: { 'tab.articles': { totalArticles: 60, limit: 20 } }
+            tabContent: { 'tab.articles': { totalArticles: 60, limit: 20 } },
+            errors: []
           }}
           isDeleteModalOpen={{ confirmationModal: true }}
           closeDeleteModal={jest.fn()}
@@ -332,7 +333,8 @@ describe('Test Pagination feature for Profile page', () => {
               fullname: 'Christopher James',
               contentState: 'content.state.fetched'
             },
-            tabContent: { 'tab.articles': { count: 60, limit: 20 } }
+            tabContent: { 'tab.articles': { count: 60, limit: 20 } },
+            errors: []
           }}
         />
       </BrowserRouter>

@@ -20,6 +20,8 @@ import {
   ratingArticleAction,
   editArticle,
   filterArticles,
+  historyLoadingAction,
+  getHistoryAction,
 } from '../../../redux/actions/articleActions';
 
 import {
@@ -35,6 +37,9 @@ import {
   GOT_BOOKMARKS,
   GET_ARTICLES,
   GET_ARTICLES_ERROR,
+  HISTORY_LOADING,
+  GOT_HISTORY,
+  ERROR_GETTING_HISTORY
 } from '../../../redux/actionTypes';
 import getMockArticles from '../../../__mocks__/articles';
 
@@ -568,7 +573,7 @@ describe('Test bookmark actions', () => {
   });
 });
 
-describe('Bookmark feature', () => {
+describe('Test history actions', () => {
   beforeEach(() => {
     moxios.install();
   });
@@ -577,6 +582,61 @@ describe('Bookmark feature', () => {
     moxios.uninstall();
   });
 
+  it('should return history when the user has some', async () => {
+    const mockResponse = {
+      history: getMockArticles(8)
+    };
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const { type, payload } = await getHistoryAction(mockToken);
+    expect(type).toEqual(GOT_HISTORY);
+    expect(payload).toEqual(mockResponse.history);
+  });
+
+  it('should return empty array when the user has no history', async () => {
+    const mockResponse = {
+      message: 'You have no history'
+    };
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const { type, payload } = await getHistoryAction(mockToken);
+    expect(type).toEqual(GOT_HISTORY);
+    expect(payload).toEqual([]);
+  });
+
+  it('should return an error when there was an error getting history', async () => {
+    const mockResponse = {
+      message: 'Server Error'
+    };
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500, response: mockResponse });
+    });
+    const { type, payload } = await getHistoryAction(mockToken);
+    expect(type).toEqual(ERROR_GETTING_HISTORY);
+    expect(payload.message).toEqual(mockResponse.message);
+  });
+  it('should dispatch the HISTORY_LOADING type action when bookmark operations are going on', () => {
+    const { type } = historyLoadingAction();
+    expect(type).toEqual(HISTORY_LOADING);
+  });
+});
+
+describe('Bookmark feature', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
   it('Should bookmark an article', async () => {
     const expectedResponse = {
       message: 'Bookmarked successfully'

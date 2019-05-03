@@ -6,7 +6,9 @@ import {
   loginUserAction,
   socialLoginUserAction,
   signUp,
-  removeFromStorage
+  removeFromStorage,
+  resetNewUserAction,
+  logoutUserAction
 } from '../../../redux/actions/authActions';
 
 import HelperUtils from '../../../utils/helperUtils';
@@ -209,5 +211,26 @@ describe('dispatching loading state action ', () => {
 describe('dispatching clear auth errors action ', () => {
   it('the clear auth error action is dispatched', () => {
     expect(clearAuthErrorAction()).toEqual({ type: 'CLEAR_AUTH_ERROR' });
+  });
+});
+
+describe('dispatching logout action ', () => {
+  it('the LOGOUT_USER action is dispatched', () => {
+    let result;
+    /**
+     * @param {object} action
+     * @returns {object} action
+     */
+    const mockDispatch = (action) => {
+      result = action;
+    };
+    logoutUserAction(mockDispatch);
+    expect(result).toEqual({ type: 'LOGOUT_USER' });
+  });
+});
+
+describe('reset new user action ', () => {
+  it('the RESET_NEW_USER action is dispatched', () => {
+    expect(resetNewUserAction()).toEqual({ type: 'RESET_NEW_USER' });
   });
 });

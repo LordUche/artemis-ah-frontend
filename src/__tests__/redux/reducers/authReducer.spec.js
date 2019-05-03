@@ -116,12 +116,25 @@ describe('auth reducer', () => {
       }
     });
   });
-  it("should clear the state's errormessages field when clear auth error action is dispatched", () => {
+  it("should clear the state's error messages field when clear auth error action is dispatched", () => {
     const mockLocalStorage = {};
     const mockSessionStorage = {};
     const state = authReducer(initialState(mockLocalStorage, mockSessionStorage), {
       type: 'CLEAR_AUTH_ERROR'
     });
     expect(state.errorMessages).toEqual([]);
+  });
+
+
+  it("updates the state's token and isLoggedIn fields when Logout action is dispatched", () => {
+    const mockState = {
+      token: 'abcd',
+      isLoggedIn: true,
+    };
+    const state = authReducer(mockState, {
+      type: 'LOGOUT_USER'
+    });
+    expect(state.token).toEqual('');
+    expect(state.isLoggedIn).toEqual(false);
   });
 });

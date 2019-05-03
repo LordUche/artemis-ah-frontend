@@ -35,7 +35,10 @@ import {
   GOT_BOOKMARKS,
   ERROR_GETTING_BOOKMARKS,
   ARTICLE_CLAP,
-  ARTICLE_CLAP_ERROR
+  ARTICLE_CLAP_ERROR,
+  HISTORY_LOADING,
+  GOT_HISTORY,
+  ERROR_GETTING_HISTORY
 } from '../actionTypes';
 import notifyUser from '../../utils/Toast';
 
@@ -456,6 +459,39 @@ const articleClapAction = async (slug, token) => {
   }
 };
 
+/**
+ * @method historyLoading
+ * @description Method to trigger loading state when fetching history
+ * @returns {object} action
+ */
+const historyLoadingAction = () => ({ type: HISTORY_LOADING });
+
+/**
+ * @method getHistoryAction
+ * @description Method to get user's history
+ * @param {string} token user's token
+ * @returns {object} action
+ */
+const getHistoryAction = async (token) => {
+  try {
+    const response = await get(`${BASE_URL}/users/stats`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return {
+      type: GOT_HISTORY,
+      payload: response.data.history || []
+    };
+  } catch (error) {
+    return {
+      type: ERROR_GETTING_HISTORY,
+      payload: error.response.data
+    };
+  }
+};
+
 export {
   fetchTagsAction,
   createArticleAction,
@@ -478,4 +514,6 @@ export {
   bookmarkLoadingAction,
   filterArticles,
   articleClapAction,
+  historyLoadingAction,
+  getHistoryAction
 };

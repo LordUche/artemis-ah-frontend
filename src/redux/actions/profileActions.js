@@ -28,6 +28,21 @@ import {
 } from '../actionTypes';
 
 /**
+ * @description function for updating platform data in localStorage and sessionStorage
+ * @param {object} storage the storage to be updated ( to be mocked for testing )
+ * @param {object} data the new data
+ * @returns {undefined}
+ */
+export const updateStorage = (storage, {
+  email, bio, username, image
+}) => {
+  storage.authorsHavenUsername = username;
+  storage.authorsHavenEmail = email;
+  storage.authorsHavenBio = bio;
+  storage.authorsHavenImage = image;
+};
+
+/**
  * @param {string} username Username of the user.
  * @param {string} token Authorization token.
  * @param {function} dispatch Function to dispatch actions to redux store.
@@ -188,13 +203,21 @@ const uploadImage = (file) => {
 /**
  * @param {*} token The user's authorization token
  * @param {*} updatedBio The updated bio of the user
+ * @param {*} newUsername The updated username of the user
+ * @param {*} newFirstname The updated first name of the user
+ * @param {*} newLastname The updated last name of the user
  * @param {*} uploadedImageUrl The cloudinary image url of the uploaded image.
  * @param {*} dispatch Function to dispatch actions to redux store.
  * @returns {undefined}
  */
-export const saveUserDetails = (token, updatedBio, uploadedImageUrl, dispatch) => {
+export const saveUserDetails = (
+  token, updatedBio, newUsername, newFirstname, newLastname, uploadedImageUrl, dispatch
+) => {
   const postData = {
-    bio: updatedBio
+    bio: updatedBio,
+    username: newUsername,
+    firstname: newFirstname,
+    lastname: newLastname
   };
   if (uploadedImageUrl) {
     postData.image = uploadedImageUrl;
@@ -208,37 +231,47 @@ export const saveUserDetails = (token, updatedBio, uploadedImageUrl, dispatch) =
   })
     .then(response => response.data.user)
     .then((data) => {
+      const storage = localStorage.authorsHavenToken ? localStorage : sessionStorage;
+      updateStorage(storage, data);
       dispatch({
         type: PROFILE_DETAILS_UPDATED,
         data
       });
     })
-    .catch(() => {
-      dispatch({ type: PROFILE_DETAILS_UPDATE_ERROR });
+    .catch((err) => {
+      const data = err.response ? err.response.data.message : 'Could not update profile right now, please try again later';
+      dispatch({ type: PROFILE_DETAILS_UPDATE_ERROR, data });
     });
 };
 
 /**
  * @param {*} token The user's authorization token
  * @param {*} updatedBio The updated bio of the user
+ * @param {*} newUsername The updated username of the user
+ * @param {*} newFirstname The updated first name of the user
+ * @param {*} newLastname The updated last name of the user
  * @param {File} selectedImage The image the user selected on their browser.
  * @param {*} dispatch Function to dispatch actions to redux store.
  * @returns {Promise} A promise to update the user's profile.
  */
-export const updateUserDetails = (token, updatedBio, selectedImage, dispatch) => {
+export const updateUserDetails = (
+  token, updatedBio, newUsername, newFirstname, newLastname, selectedImage, dispatch
+) => {
   dispatch({ type: PROFILE_DETAILS_UPDATING });
 
   if (selectedImage) {
     uploadImage(selectedImage)
       .then(response => response.data.secure_url)
       .then((secureUrl) => {
-        saveUserDetails(token, updatedBio, secureUrl, dispatch);
+        saveUserDetails(
+          token, updatedBio, newUsername, newFirstname, newLastname, secureUrl, dispatch
+        );
       })
       .catch(() => {
         dispatch({ type: PROFILE_DETAILS_UPDATE_ERROR });
       });
   } else {
-    saveUserDetails(token, updatedBio, null, dispatch);
+    saveUserDetails(token, updatedBio, newUsername, newFirstname, newLastname, null, dispatch);
   }
 };
 

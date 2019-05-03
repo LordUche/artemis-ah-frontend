@@ -1,6 +1,5 @@
 import React from 'react';
 import { string, func } from 'prop-types';
-import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 // Components
@@ -19,7 +18,7 @@ export const UserNavAvatar = (props) => {
     username, imgSrc, customImageClassName, customLinkClassName, dispatch
   } = props;
   return (
-    <NavLink to="/profile" className={customLinkClassName}>
+    <div to="/profile" className={customLinkClassName}>
       <img src={imgSrc} alt="profile avatar" className={customImageClassName} />
       &nbsp;
       <NavDropdown parentLinkName={username} icon="angle-down">
@@ -36,7 +35,7 @@ export const UserNavAvatar = (props) => {
           </span>
         </li>
       </NavDropdown>
-    </NavLink>
+    </div>
   );
 };
 
