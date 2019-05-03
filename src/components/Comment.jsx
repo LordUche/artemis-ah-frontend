@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import {
-  objectOf, string, func, arrayOf, object, bool
+  objectOf, string, func, arrayOf, object, bool, array as arrayProp
 } from 'prop-types';
+import Modal from './Modal';
 import notifyUser from '../utils/Toast';
 
 // Import actions
@@ -19,8 +20,12 @@ import {
   postToggleCommentLikeAction,
   editComment,
   editCommentLoading,
-  clearEditComment
+  clearEditComment,
+  editHistoryCommentLoading,
+  getCommentEditHistory
 } from '../redux/actions/commentActions';
+
+import HelperUtils from '../utils/helperUtils';
 
 // Import components
 import Button from './Button';
@@ -37,7 +42,8 @@ export class Comment extends Component {
     comment: '',
     showPost: false,
     editedComment: '',
-    showEditCommentTextarea: ''
+    showEditCommentTextarea: '',
+    showEditHistoryModal: false
   };
 
   /**
@@ -219,6 +225,79 @@ export class Comment extends Component {
   };
 
   /**
+   * @method triggerEditHistoryModal
+   * @description handles open edit comment history modal
+   * @param {number} commentId
+   * @param {string} firstname
+   * @param {string} lastname
+   * @returns {*} actions
+   */
+  triggerEditHistoryModal = (commentId, firstname, lastname) => {
+    this.setState({ showEditHistoryModal: true, firstname, lastname });
+    const { slug } = this.props;
+
+    this.fetchCommentEditHistory(slug.articleSlug, commentId);
+  };
+
+  closeEditHistoryModal = () => {
+    this.setState({ showEditHistoryModal: false });
+  };
+  /**
+   * @method fetchCommentEditHistory
+   * @description handles get comment history
+   * @param {string} slug
+   * @param {number} commentId
+   * @returns {*} actions
+   */
+
+  fetchCommentEditHistory = (slug, commentId) => {
+    const { editHistoryCommentLoadingAction, getCommentEditHistoryAction, token } = this.props;
+    editHistoryCommentLoadingAction();
+    getCommentEditHistoryAction(slug, commentId, token);
+  };
+
+  /**
+   * @method getEditCommentHistory
+   * @description handles the get edit comment history
+   * @returns {*} actions
+   */
+  showEditCommentHistory = () => {
+    const { commentHistory, commentEditHistoryLoading } = this.props;
+    return (
+      <Modal
+        modalHeader="Edit History"
+        onClose={this.closeEditHistoryModal}
+        customClass="edit_history_modal"
+      >
+        {commentHistory.length > 0
+          && !commentEditHistoryLoading
+          && commentHistory.map((editHistory, index) => (
+            <div key={index.toString()} className="edit_comment_history_card">
+              <div className="edited_comment_card__main__body">
+                <p>{`${moment(editHistory.createdAt).format('lll')}`}</p>
+              </div>
+              <span>{editHistory.comment}</span>
+            </div>
+          ))}
+        {commentHistory.length < 1 && !commentEditHistoryLoading && (
+          <div className="no__edit__history">
+            <span>You have no comment edit history</span>
+          </div>
+        )}
+        {commentEditHistoryLoading && (
+          <div className="edit__history--loading">
+            <img
+              src="https://res.cloudinary.com/shaolinmkz/image/upload/v1556822150/authors-haven/loading_txt.gif"
+              alt="loading"
+            />
+          </div>
+        )}
+      </Modal>
+    );
+  };
+
+  /**
+   * @method toggleLike
    * @param {number} id
    * @returns {undefined}
    */
@@ -240,9 +319,11 @@ export class Comment extends Component {
    */
   displayComments = () => {
     const { showEditCommentTextarea } = this.state;
-    const { articleComments, username, isLoggedIn } = this.props;
-    let comments = '';
+    const {
+      articleComments, username, isLoggedIn, token
+    } = this.props;
 
+    let comments = '';
     if (!articleComments[0]) comments = <div className="no_comment">No comment available</div>;
     else {
       comments = articleComments.map((SingleComment, index) => {
@@ -254,7 +335,7 @@ export class Comment extends Component {
         ));
         const { User, hasLiked, updatedAt } = SingleComment;
         return (
-          <Fragment>
+          <Fragment key={`${index.toString()}-${SingleComment.id}`}>
             <div key={index.toString()} className="comment_card">
               <span className="item comment_card__image">
                 <img src={User.image} alt="user" />
@@ -299,6 +380,22 @@ export class Comment extends Component {
                         <span>Edit</span>
                       </i>
                   )}
+                  {(HelperUtils.verifyToken(token).isAdmin
+                    || username === SingleComment.User.username)
+                    && isLoggedIn && (
+                      <i
+                        className="fas fa-history view_comment_history_toggle"
+                        title="view your comment edit history"
+                        role="presentation"
+                        onClick={() => {
+                          this.triggerEditHistoryModal(
+                            SingleComment.id,
+                            SingleComment.User.firstname,
+                            SingleComment.User.lastname
+                          );
+                        }}
+                      />
+                  )}
                 </div>
               </span>
             </div>
@@ -332,7 +429,7 @@ export class Comment extends Component {
    * @returns {HTMLElement} comments
    */
   render() {
-    const { showPost } = this.state;
+    const { showPost, showEditHistoryModal } = this.state;
     const { errors, clearPostedValue } = this.props;
     if (errors.message) {
       notifyUser(toast(`${errors.message}`, { className: 'error-toast' }));
@@ -360,6 +457,7 @@ export class Comment extends Component {
           <h2>Comments</h2>
           <div>{this.displayComments()}</div>
         </div>
+        {showEditHistoryModal && this.showEditCommentHistory()}
         <AHfooter />
       </div>
     );
@@ -383,9 +481,13 @@ Comment.propTypes = {
   editLoading: bool,
   edited: bool,
   clearEditCommentAction: func,
+  editHistoryCommentLoadingAction: func,
+  getCommentEditHistoryAction: func,
+  commentHistory: arrayProp,
+  commentEditHistoryLoading: bool,
+  token: string,
   toggleCommentLike: func.isRequired,
   postToggleCommentLike: func.isRequired,
-  token: string,
   highlighted: bool,
   closeComment: func
 };
@@ -397,6 +499,10 @@ Comment.defaultProps = {
   clearEditCommentAction: () => false,
   editLoading: false,
   edited: false,
+  editHistoryCommentLoadingAction: () => 'do nothing',
+  getCommentEditHistoryAction: () => 'do nothing',
+  commentHistory: ['do nothing'],
+  commentEditHistoryLoading: false,
   highlighted: false,
   closeComment: () => false
 };
@@ -406,11 +512,19 @@ Comment.defaultProps = {
  * @param {*} state
  * @returns {object} state
  */
-export const mapStateToProps = ({ comments, user }) => {
+export const mapStateToProps = ({ comments, user, auth }) => {
   const {
-    articleComments, errors, posted, loading, editLoading, edited
+    articleComments,
+    errors,
+    posted,
+    loading,
+    editLoading,
+    edited,
+    commentHistory,
+    commentEditHistoryLoading
   } = comments;
   const { username } = user;
+  const { token } = auth;
   return {
     articleComments,
     errors,
@@ -418,7 +532,10 @@ export const mapStateToProps = ({ comments, user }) => {
     loading,
     username,
     editLoading,
-    edited
+    edited,
+    commentHistory,
+    commentEditHistoryLoading,
+    token
   };
 };
 
@@ -436,6 +553,8 @@ export const mapDispatchToProps = dispatch => bindActionCreators(
     editCommentAction: editComment,
     editCommentLoadingAction: editCommentLoading,
     clearEditCommentAction: clearEditComment,
+    editHistoryCommentLoadingAction: editHistoryCommentLoading,
+    getCommentEditHistoryAction: getCommentEditHistory,
     toggleCommentLike: toggleCommentLikeAction,
     postToggleCommentLike: postToggleCommentLikeAction
   },
