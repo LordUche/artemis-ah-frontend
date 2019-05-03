@@ -47,11 +47,13 @@ export const getComments = async (slug, token) => {
  * @param {string} slug
  * @param {string} comment
  * @param {string} highlighted
+ * @param {number} index
+ *
  * @returns {object} comments
  */
-export const postComment = async (slug, { comment }, highlighted = 'N/A') => {
+export const postComment = async (slug, { comment }, highlighted = 'N/A', index = 0) => {
   const commentUrl = highlighted === 'N/A' ? 'comment' : 'highlight';
-  const commentBody = highlighted === 'N/A' ? { comment } : Object.assign({ comment }, { highlighted, index: 0 });
+  const commentBody = { comment, index, highlighted };
 
   try {
     const request = await post(`${BASE_URL}/articles/${slug}/${commentUrl}`, commentBody, {

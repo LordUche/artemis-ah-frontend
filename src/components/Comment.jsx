@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import {
-  objectOf, string, func, arrayOf, object, bool
+  objectOf, string, func, arrayOf, object, bool, number
 } from 'prop-types';
 import notifyUser from '../utils/Toast';
 
@@ -82,7 +82,7 @@ export class Comment extends Component {
             minLength="2"
             required
           />
-          <span className="error">{errors.comment}</span>
+          <span className="error">{errors ? errors.comment : ''}</span>
           <Button
             customClass="comment_box__form__cancel"
             btnText="Cancel"
@@ -211,11 +211,17 @@ export class Comment extends Component {
    */
   handleSubmit = (e) => {
     const {
-      postArticleComment, loadingPost, slug, selectedText, closeComment
+      postArticleComment,
+      loadingPost,
+      slug,
+      selectedText,
+      closeComment,
+      highlightIndex
     } = this.props;
     e.preventDefault();
+    console.log(highlightIndex, selectedText);
     loadingPost();
-    postArticleComment(slug.articleSlug, this.state, selectedText);
+    postArticleComment(slug.articleSlug, this.state, selectedText, highlightIndex);
     closeComment();
     this.setState({ showPost: false });
   };
@@ -400,7 +406,8 @@ Comment.propTypes = {
   token: string,
   highlighted: bool,
   closeComment: func,
-  selectedText: string
+  selectedText: string,
+  highlightIndex: number
 };
 
 Comment.defaultProps = {
@@ -412,7 +419,8 @@ Comment.defaultProps = {
   edited: false,
   highlighted: false,
   closeComment: () => false,
-  selectedText: 'N/A'
+  selectedText: 'N/A',
+  highlightIndex: 0
 };
 
 /**

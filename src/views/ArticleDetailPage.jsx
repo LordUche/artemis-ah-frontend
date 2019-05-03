@@ -44,7 +44,8 @@ import {
 export class ArticleDetailPage extends Component {
   state = {
     userRated: false,
-    selectedText: 'N/A'
+    selectedText: 'N/A',
+    highlightIndex: 0
   };
 
   /**
@@ -98,7 +99,7 @@ export class ArticleDetailPage extends Component {
   }
 
   closeCommentBox = () => {
-    this.setState({ highlighted: false, selectedText: 'N/A' });
+    this.setState({ highlighted: false, selectedText: 'N/A', highlightIndex: 0 });
   };
 
   rateArticle = (event) => {
@@ -131,7 +132,9 @@ export class ArticleDetailPage extends Component {
       token
     } = this.props;
 
-    const { userRated, highlighted, selectedText } = this.state;
+    const {
+      userRated, highlighted, selectedText, highlightIndex
+    } = this.state;
 
     const {
       title,
@@ -277,7 +280,10 @@ export class ArticleDetailPage extends Component {
                       </span>
                     )}
                     onHighlightPop={(highlightedText) => {
-                      this.setState({ selectedText: highlightedText });
+                      this.setState({
+                        selectedText: highlightedText,
+                        highlightIndex: body.indexOf(highlightedText)
+                      });
                     }}
                   >
                     <article className="article_detail_body_segment">{section}</article>
@@ -415,6 +421,7 @@ export class ArticleDetailPage extends Component {
             token={token}
             closeComment={this.closeCommentBox}
             selectedText={selectedText}
+            highlightIndex={highlightIndex}
           />
         )}
       </Fragment>
