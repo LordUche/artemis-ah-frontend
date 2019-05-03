@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import {
-  objectOf, string, func, arrayOf, object, number, bool, array as arrayProp
+  objectOf, string, func, arrayOf, object, bool, number, array as arrayProp
 } from 'prop-types';
 import Modal from './Modal';
 import notifyUser from '../utils/Toast';
