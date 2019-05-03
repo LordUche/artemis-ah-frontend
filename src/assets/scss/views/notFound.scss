@@ -1,0 +1,25 @@
+#not_found_wrapper {
+  text-align: center;
+}
+
+.not_foung_image {
+  width: 80%;
+}
+.not_found_text {
+  color: $primary-color;
+  font-size: 200%;
+  margin-top: -120px;;
+}
+
+.fixed_footer{
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+}
+
+span.explore_link_nf {
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 155%;
+}
