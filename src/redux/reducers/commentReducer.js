@@ -9,7 +9,9 @@ import {
   EDIT_COMMENT,
   EDIT_COMMENT_ERROR,
   EDIT_LOADING,
-  CLEAR_EDITED
+  CLEAR_EDITED,
+  GET_EDIT_COMMENT_HISTORY,
+  GET_COMMENT_EDIT_HISTORY_LOADING
 } from '../actionTypes';
 
 export const initialState = {
@@ -18,7 +20,9 @@ export const initialState = {
   posted: false,
   loading: false,
   edited: false,
-  editLoading: false
+  editLoading: false,
+  commentHistory: [],
+  commentEditHistoryLoading: false
 };
 
 /**
@@ -49,6 +53,12 @@ export const commentReducer = (state = initialState, { type, payload }) => {
         ...state,
         articleComments: payload,
         errors: {}
+      };
+    case GET_EDIT_COMMENT_HISTORY:
+      return {
+        ...state,
+        commentHistory: payload,
+        commentEditHistoryLoading: false
       };
     case EDIT_COMMENT:
       return {
@@ -113,6 +123,11 @@ export const commentReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         edited: false
+      };
+    case GET_COMMENT_EDIT_HISTORY_LOADING:
+      return {
+        ...state,
+        commentEditHistoryLoading: true
       };
     default:
       return state;

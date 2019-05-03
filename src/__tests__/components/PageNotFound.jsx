@@ -6,7 +6,7 @@ describe('Test page not found component', () => {
   it('it should render a page with the correct content', (done) => {
     const page = shallow(<PageNotFound />);
 
-    expect(page.find('.msg').text()).toBe('The requested page was not found.');
+    expect(page.find('#not_found_wrapper').exists()).toBe(true);
 
     done();
   });

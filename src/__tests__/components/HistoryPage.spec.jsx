@@ -1,16 +1,19 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { HistoryPage } from '../../views/HistoryPage';
-// import getMockArticles from '../../__mocks__/articles';
+import getMockArticles from '../../__mocks__/articles';
 
 
 describe('History Page Component', () => {
   const mockFunction = jest.fn();
   const mockHistoryLoading = jest.fn();
   const mockGetHistory = jest.fn();
+  const mockUserHistory = Array(31)
+    .fill(undefined)
+    .map(() => ({ Article: getMockArticles(1)[0] }));
   const mockProps = {
     isLoggedIn: true,
-    userHistory: [],
+    userHistory: mockUserHistory,
     loading: false,
     errors: {},
     clearErrors: mockFunction,
@@ -39,14 +42,14 @@ describe('History Page Component', () => {
     expect(historyPage.find('ProfileOptionCard').exists()).toBe(true);
   });
 
-  // it('should not render the pagination component if history is less than 15', () => {
-  //   const singlePagehistoryPage = shallow(
-  //     <HistoryPage
-  //       {...{ ...mockProps, userHistory: getMockArticles(14) }}
-  //     />
-  //   );
-  //   expect(singlePagehistoryPage.find('Pagination').exists()).toBe(false);
-  // });
+  it('should not render the pagination component if history is less than 15', () => {
+    const singlePagehistoryPage = shallow(
+      <HistoryPage
+        {...{ ...mockProps, userHistory: [] }}
+      />
+    );
+    expect(singlePagehistoryPage.find('Pagination').exists()).toBe(false);
+  });
   it('should render informative text if user has no history', () => {
     const nohistoryPage = shallow(
       <HistoryPage
@@ -79,5 +82,37 @@ describe('History Page Component', () => {
     expect(historyPage.state('showSignUpModal')).toBe(true);
     historyPage.instance().toggleSignUpModal();
     expect(historyPage.state('showSignUpModal')).toBe(false);
+  });
+  it('should update the current page when handle pagination function is called', () => {
+    /**
+     * @description function for returning a mock event object
+     * @param {string} id event target id
+     * @returns {object} event
+     */
+    const mockPageClickEvent = id => ({
+      preventDefault: () => 'prevented default',
+      target: {
+        id
+      },
+      currentTarget: {
+        dataset: {
+          page: 2
+        }
+      }
+    });
+    historyPage.instance().handlePagination(mockPageClickEvent('first-page'));
+    expect(historyPage.state('currentPage')).toEqual(1);
+
+    historyPage.instance().handlePagination(mockPageClickEvent('last-page'));
+    expect(historyPage.state('currentPage')).toEqual(3);
+
+    historyPage.instance().handlePagination(mockPageClickEvent('next-page'));
+    expect(historyPage.state('currentPage')).toEqual(2);
+
+    historyPage.instance().handlePagination(mockPageClickEvent('previous-page'));
+    expect(historyPage.state('currentPage')).toEqual(2);
+
+    historyPage.instance().handlePagination(mockPageClickEvent('default'));
+    expect(historyPage.state('currentPage')).toEqual(1);
   });
 });
