@@ -9,20 +9,9 @@
   height: 100vh;
 }
 
-#notification-triangle,
-#notification-triangle2 {
-  color: rgb(255, 255, 255);
-  font-size: 5em;
-  position: absolute;
-  top: 57px;
-  right: 218px;
-  z-index: 1000;
-  text-shadow: -1px -1px 0 $primary-color, 1px -1px 0 $primary-color, 1px -1px 0 $primary-color, 1px -1px 0 $primary-color;
-}
-
 #notify-div-wrapper {
   position: relative;
-  right: 0;
+  right: 10%;
 }
 
 .notifications-div {
@@ -113,18 +102,11 @@
 }
 
 @media (max-width: 768px) {
-  #notification-triangle,
-  #notification-triangle2 {
-    top: 59px;
-    right: 143px;
+  #notify-div-wrapper {
+    right: 0;
   }
 }
 @media (max-width: 400px) {
-  #notification-triangle,
-  #notification-triangle2 {
-    top: 37px;
-    right: 128px;
-  }
   .notifications-div {
     top: 70px;
   }

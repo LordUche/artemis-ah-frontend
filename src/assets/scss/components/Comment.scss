@@ -158,18 +158,18 @@
   min-height: 300px;
 }
 .edit_comment_history_card {
-    border-radius: 1em;
-    border: 1px solid $primary-color;
-    padding:  1em 0 1em 0;
-    margin: 1em 0;
-    background: #f3f3f3;
+  border-radius: 1em;
+  border: 1px solid $primary-color;
+  padding: 1em 0 1em 0;
+  margin: 1em 0;
+  background: #f3f3f3;
 
-  .edited_comment_card__main__body{
+  .edited_comment_card__main__body {
     font-size: 1em;
     color: white;
     padding-left: 1em;
 
-    p{
+    p {
       width: 130px;
       background: $primary-color;
       text-align: center;
@@ -185,9 +185,9 @@
     padding: 0 1em 0 1em;
   }
 }
-.edit__history--loading{
+.edit__history--loading {
   text-align: center;
-  
+
   > img {
     width: 50%;
   }
@@ -218,6 +218,36 @@
 
   & > p {
     margin-left: 2.5rem;
+  }
+}
+
+.successfully-saved__hide-background {
+  background: white;
+}
+
+.successfully-saved {
+  background: #ffe68e;
+  border-radius: 1em;
+  transition: background 4s ease-in-out;
+}
+
+#successfully-saved {
+  animation: fadeOut 8s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    background: #ffe68e;
+  }
+  59% {
+    background: #fce9a5;
+  }
+  99% {
+    background: rgb(250, 236, 186);
+  }
+  100% {
+    background: white;
   }
 }
 
@@ -268,7 +298,7 @@
     grid-template-columns: 25% 75%;
   }
 
-  .edit_comment_history_card{
+  .edit_comment_history_card {
     text-align: center;
   }
 }

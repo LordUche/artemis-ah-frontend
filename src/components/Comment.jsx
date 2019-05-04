@@ -5,7 +5,14 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import {
-  objectOf, string, func, arrayOf, object, bool, number, array as arrayProp
+  objectOf,
+  string,
+  func,
+  arrayOf,
+  object,
+  bool,
+  number,
+  array as arrayProp
 } from 'prop-types';
 import Modal from './Modal';
 import notifyUser from '../utils/Toast';
@@ -331,6 +338,7 @@ export class Comment extends Component {
     } = this.props;
 
     let comments = '';
+
     if (!articleComments[0]) comments = <div className="no_comment">No comment available</div>;
     else {
       comments = articleComments.map((SingleComment, index) => {
@@ -340,11 +348,12 @@ export class Comment extends Component {
             <br />
           </span>
         ));
+
         const { User, hasLiked, updatedAt } = SingleComment;
         const articleIsHighlighted = SingleComment.highlighted !== 'N/A';
         return (
           <Fragment key={`${index.toString()}-${SingleComment.id}`}>
-            <div key={index.toString()} className="comment_card">
+            <div key={index.toString()} className={`comment_card ${SingleComment.backgroundColor}`} id={`${SingleComment.backgroundColor}`}>
               <span className="item comment_card__image">
                 <img src={User.image} alt="user" />
               </span>
@@ -391,6 +400,7 @@ export class Comment extends Component {
                         role="presentation"
                         onClick={() => {
                           this.toggleEditComment(SingleComment.id, SingleComment.comment);
+                          this.setState({ editedCommentId: SingleComment.id });
                         }}
                       >
                         <span>Edit</span>

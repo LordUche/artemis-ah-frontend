@@ -43,6 +43,8 @@ export const commentReducer = (state = initialState, { type, payload }) => {
     const editedCommentInStore = state.articleComments.find(obj => obj.id === payload.id);
     const index = state.articleComments.findIndex(obj => obj.id === payload.id);
     const updatedComment = { ...editedCommentInStore, ...payload };
+    updatedComment.isEdited = true;
+    updatedComment.backgroundColor = 'successfully-saved';
     oldComments[index] = updatedComment;
     newArticleComment = oldComments.filter(comment => comment.id);
   }
