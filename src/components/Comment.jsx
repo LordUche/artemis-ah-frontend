@@ -353,7 +353,7 @@ export class Comment extends Component {
         const articleIsHighlighted = SingleComment.highlighted !== 'N/A';
         return (
           <Fragment key={`${index.toString()}-${SingleComment.id}`}>
-            <div key={index.toString()} className={`comment_card ${SingleComment.backgroundColor}`} id={`${SingleComment.backgroundColor}`}>
+            <div key={index.toString()} className={`comment_card ${SingleComment.backgroundColor}`}>
               <span className="item comment_card__image">
                 <img src={User.image} alt="user" />
               </span>

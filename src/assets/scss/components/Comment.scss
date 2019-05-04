@@ -221,22 +221,15 @@
   }
 }
 
-.successfully-saved__hide-background {
-  background: white;
-}
 
-.successfully-saved {
-  background: #ffe68e;
+.successfully-saved-1 {
+  animation: fadeOut1 8s;
   border-radius: 1em;
   transition: background 4s ease-in-out;
-}
-
-#successfully-saved {
-  animation: fadeOut 8s;
   animation-fill-mode: forwards;
 }
 
-@keyframes fadeOut {
+@keyframes fadeOut1 {
   0% {
     background: #ffe68e;
   }
@@ -245,6 +238,28 @@
   }
   99% {
     background: rgb(250, 236, 186);
+  }
+  100% {
+    background: white;
+  }
+}
+
+.successfully-saved-2 {
+  animation: fadeOut2 8.1s;
+  border-radius: 1em;
+  transition: background 4.1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut2 {
+  0% {
+    background: #fde487;
+  }
+  58% {
+    background: #fce8a0;
+  }
+  98% {
+    background: rgb(252, 240, 196);
   }
   100% {
     background: white;

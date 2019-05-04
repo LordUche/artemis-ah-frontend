@@ -22,7 +22,8 @@ export const initialState = {
   edited: false,
   editLoading: false,
   commentHistory: [],
-  commentEditHistoryLoading: false
+  commentEditHistoryLoading: false,
+  count: 1
 };
 
 /**
@@ -37,14 +38,16 @@ export const commentReducer = (state = initialState, { type, payload }) => {
     chosenComment = articleComments.find(c => c.id === id);
     remainingComments = articleComments.filter(c => c.id !== id);
   }
-  let newArticleComment;
+  let newArticleComment, newCount = state.count;
   if (type === EDIT_COMMENT) {
+    newCount = newCount > 1 ? 1 : 2;
     const oldComments = state.articleComments;
+    oldComments.forEach(data => delete data.backgroundColor);
     const editedCommentInStore = state.articleComments.find(obj => obj.id === payload.id);
     const index = state.articleComments.findIndex(obj => obj.id === payload.id);
     const updatedComment = { ...editedCommentInStore, ...payload };
     updatedComment.isEdited = true;
-    updatedComment.backgroundColor = 'successfully-saved';
+    updatedComment.backgroundColor = `successfully-saved-${newCount}`;
     oldComments[index] = updatedComment;
     newArticleComment = oldComments.filter(comment => comment.id);
   }
@@ -67,7 +70,8 @@ export const commentReducer = (state = initialState, { type, payload }) => {
         ...state,
         articleComments: newArticleComment,
         editLoading: false,
-        edited: true
+        edited: true,
+        count: newCount
       };
     case POST_COMMENT:
       return {
@@ -107,7 +111,8 @@ export const commentReducer = (state = initialState, { type, payload }) => {
     case TOGGLE_COMMENT_LIKE:
       chosenComment.hasLiked = !chosenComment.hasLiked;
       chosenComment.totalLikes = chosenComment.hasLiked
-        ? chosenComment.totalLikes + 1 : chosenComment.totalLikes - 1;
+        ? chosenComment.totalLikes + 1
+        : chosenComment.totalLikes - 1;
       return {
         ...state,
         articleComments: [...remainingComments, chosenComment].sort((a, b) => b.id - a.id)
@@ -115,11 +120,15 @@ export const commentReducer = (state = initialState, { type, payload }) => {
     case LIKE_COMMENT_ERROR:
       chosenComment.hasLiked = !chosenComment.hasLiked;
       chosenComment.totalLikes = chosenComment.hasLiked
-        ? chosenComment.totalLikes + 1 : chosenComment.totalLikes - 1;
+        ? chosenComment.totalLikes + 1
+        : chosenComment.totalLikes - 1;
       return {
         ...state,
         articleComments: [...remainingComments, chosenComment].sort((a, b) => b.id - a.id),
-        errors: { message: 'Cannot perform action right now, please check your connection and try again later' }
+        errors: {
+          message:
+            'Cannot perform action right now, please check your connection and try again later'
+        }
       };
     case CLEAR_EDITED:
       return {
