@@ -309,7 +309,19 @@ export class ProfilePage extends Component {
           );
         }
 
-        return <Button onClick={() => this.startEditProfile()} btnText="Edit Profile" />;
+        return (
+          <Button
+            onClick={() => {
+              this.startEditProfile();
+              this.setState({
+                username: profile.user.username,
+                firstname: profile.user.firstname,
+                lastname: profile.user.lastname
+              });
+            }}
+            btnText="Edit Profile"
+          />
+        );
       }
 
       const { dispatch } = this.props;
@@ -754,6 +766,8 @@ is not following anyone.
     const newUsername = username || user.username;
     const newFirstname = firstname || user.firstname;
     const newLastname = lastname || user.lastname;
+
+    console.log(newUsername, newFirstname, newLastname);
 
     if (newLastname.length < 2 || newFirstname.length < 2) {
       return notifyUser(toast('First Name and Last Name must be 2 characters or more', { className: 'error-toast' }));
