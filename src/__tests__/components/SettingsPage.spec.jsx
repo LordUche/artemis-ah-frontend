@@ -1,11 +1,21 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import moxios from 'moxios';
+import { createStore, applyMiddleware } from 'redux';
+import ReduxPromise from 'redux-promise';
+import reducers from '../../redux/reducers';
 import { Settings, mapStateToProps } from '../../views/SettingsPage';
 import {
   CONTENT_STATE_UPDATING,
 } from '../../constants/profileConstants';
 import { PROFILE_DETAILS_UPDATING } from '../../redux/actionTypes';
+import HelperUtils from '../../utils/helperUtils';
+
+const settingInstance = new Settings();
+
+const store = createStore(reducers, applyMiddleware(ReduxPromise));
 
 describe('Settings Page Component', () => {
   const mockDispatch = jest.fn();
@@ -16,7 +26,7 @@ describe('Settings Page Component', () => {
     inAppNotification: false,
     emailNotification: false,
     username: 'abcd',
-    token: 'zxcvbnm',
+    token: HelperUtils.generateToken({ username: 'user101', email: 'user101@yahoo.com' }),
     history: {
       push: url => mockHistoryObject.push(url)
     }
@@ -79,6 +89,7 @@ describe('Settings Page Component', () => {
     );
     expect(loadingSettingsPage.find('Button').prop('isDisabled')).toEqual(true);
   });
+
   it('maps the right props to the component from the store', () => {
     const mockStore = {
       auth: {
@@ -96,6 +107,7 @@ describe('Settings Page Component', () => {
         editState: 'Loading'
       }
     };
+
 
     const settingsPageProps = mapStateToProps(mockStore);
     expect(settingsPageProps.isLoggedIn).toEqual(mockStore.auth.isLoggedIn);
@@ -151,5 +163,75 @@ describe('Notification Settings', () => {
     });
     settingsPage.find('form#notification-settings-form').simulate('submit', mockEvent);
     expect(mockStore[1].type).toEqual(PROFILE_DETAILS_UPDATING);
+  });
+});
+
+describe('Pasword Change', () => {
+  const mockDispatch = jest.fn();
+  const mockHistoryObject = [];
+  const mockProps = {
+    dispatch: mockDispatch,
+    isLoggedIn: true,
+    inAppNotification: false,
+    emailNotification: false,
+    username: 'abcd',
+    token: 'zxcvbnm',
+    history: {
+      push: url => mockHistoryObject.push(url)
+    }
+  };
+  it('test the handle password change method', () => {
+    const e = {
+      target: {
+        name: 'newPassword',
+        value: 'asdf;lkj'
+      }
+    };
+
+    settingInstance.handlePasswordChange(e);
+  });
+  it('test the handle password change submit method 1', (done) => {
+    const loadingSettingsPage = mount(
+      <Provider store={store}>
+        <BrowserRouter>
+          <Settings {...{ ...mockProps, editState: CONTENT_STATE_UPDATING }} />
+        </BrowserRouter>
+      </Provider>
+    );
+    loadingSettingsPage.find('#Password').simulate('click');
+    loadingSettingsPage.find('input[name="currentPassword"]').simulate('change');
+    loadingSettingsPage.find('input[name="newPassword"]').simulate('change');
+    loadingSettingsPage.find('input[name="confirmPassword"]').simulate('change');
+    loadingSettingsPage.find('#settings_section_notification_password_btn').simulate('submit');
+    done();
+  });
+  it('test the handle password change submit method 2', (done) => {
+    const loadingSettingsPage = mount(
+      <Provider store={store}>
+        <BrowserRouter>
+          <Settings {...{ ...mockProps, token: HelperUtils.generateToken({ username: 'user101', email: 'user101@yahoo.com' }) }} />
+        </BrowserRouter>
+      </Provider>
+    );
+    loadingSettingsPage.find('#Password').simulate('click');
+    loadingSettingsPage.setState({ currentPassword: '12345678910', newPassword: '123456789', confirmPassword: '123456789' });
+    loadingSettingsPage.find('#settings_section_notification_password_btn').simulate('submit');
+    done();
+  });
+  it('should test if password supplied is uniform', (done) => {
+    const e = {
+      preventDefault: jest.fn(),
+      target: (
+        <form>
+          <input type="text" />
+        </form>
+      )
+    };
+    const { state } = settingInstance;
+    state.newPassword = 'asdf;lkj';
+    state.confirmPassword = '12345678';
+
+    settingInstance.handlePasswordChangeSubmit(e);
+    done();
   });
 });

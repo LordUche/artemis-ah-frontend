@@ -22,6 +22,7 @@ import {
   filterArticles,
   historyLoadingAction,
   getHistoryAction,
+  articleClapAction
 } from '../../../redux/actions/articleActions';
 
 import {
@@ -728,5 +729,39 @@ describe('Rate article feature', () => {
     const { type, payload } = editArticle({ cardData: 'data' });
     expect(type).toEqual('EDIT_ARTICLE');
     expect(payload).toEqual({ cardData: 'data' });
+  });
+});
+
+describe('Article clap', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should clap on an article', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const result = await articleClapAction('slug', 'token');
+    expect(result.type).toEqual('ARTICLE_CLAP');
+  });
+
+  it('should throw an error while trying to clap on an article', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponse });
+    });
+    const result = await articleClapAction('slug', 'token');
+    expect(result.type).toEqual('ARTICLE_CLAP_ERROR');
   });
 });

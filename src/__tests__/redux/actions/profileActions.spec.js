@@ -1,9 +1,22 @@
 import 'babel-polyfill';
 import moxios from 'moxios';
 import {
-  updateUserDetails, saveUserDetails, updateUserNotificationDetails, updateStorage
+  updateUserDetails,
+  saveUserDetails,
+  updateUserNotificationDetails,
+  updateStorage,
+  fetchUserDetails,
+  fetchUserArticles,
+  fetchUserFollowers,
+  fetchUserFollowing,
+  unfollowUser,
+  followUser
 } from '../../../redux/actions/profileActions';
-import { PROFILE_DETAILS_UPDATING, PROFILE_DETAILS_UPDATED, PROFILE_DETAILS_UPDATE_ERROR } from '../../../redux/actionTypes';
+import {
+  PROFILE_DETAILS_UPDATING,
+  PROFILE_DETAILS_UPDATED,
+  PROFILE_DETAILS_UPDATE_ERROR
+} from '../../../redux/actionTypes';
 
 describe('Testing profile action', () => {
   it('should update profile', () => {
@@ -15,7 +28,13 @@ describe('Testing profile action', () => {
     let selectedImage = 'image.jpg';
     const dispatch = jest.fn();
     updateUserDetails(
-      token, updatedBio, updatedUsername, updatedFirstname, updatedLastname, selectedImage, dispatch
+      token,
+      updatedBio,
+      updatedUsername,
+      updatedFirstname,
+      updatedLastname,
+      selectedImage,
+      dispatch
     );
     updateUserDetails(
       token,
@@ -23,7 +42,7 @@ describe('Testing profile action', () => {
       updatedUsername,
       updatedFirstname,
       updatedLastname,
-      selectedImage = false,
+      (selectedImage = false),
       dispatch
     );
   });
@@ -51,7 +70,7 @@ describe('Testing profile action', () => {
       updatedUsername,
       updatedFirstname,
       updatedLastname,
-      uploadedImageUrl = false,
+      (uploadedImageUrl = false),
       dispatch
     );
   });
@@ -142,5 +161,81 @@ describe('updating data in storage', () => {
     expect(mockLocalStorage.authorsHavenEmail).toEqual(mockData.email);
     expect(mockLocalStorage.authorsHavenBio).toEqual(mockData.bio);
     expect(mockLocalStorage.authorsHavenImage).toEqual(mockData.image);
+  });
+});
+
+describe('Profile action catch block', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should throw an error while trying to fetch user details', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponse });
+    });
+    await fetchUserDetails('username', 'token', jest.fn());
+  });
+
+  it('should throw an error while trying to fetch user articles', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponse });
+    });
+    await fetchUserArticles('username', jest.fn(), 1);
+  });
+
+  it('should throw an error while trying to fetch user followers', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponse });
+    });
+    await fetchUserFollowers('username', jest.fn());
+  });
+
+  it('should throw an error while trying to fetch user following', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponse });
+    });
+    await fetchUserFollowing('username', jest.fn());
+  });
+
+  it('should throw an error while trying to follower a user', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponse });
+    });
+    await followUser('authToken', 'username', jest.fn());
+  });
+
+  it('should throw an error while trying to unfollow a user', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponse });
+    });
+    await unfollowUser('authToken', 'username', jest.fn());
   });
 });

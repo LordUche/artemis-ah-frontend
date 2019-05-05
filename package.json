@@ -9,7 +9,7 @@
     "serve": " npm run build && npm run start",
     "start:dev": "webpack-dev-server --mode development --open --env.NODE_ENV=local",
     "heroku-postbuild": "rm -rf dist && NPM_CONFIG_PRODUCTION=false npm run build",
-    "test": "jest ./src/__tests__ --coverage --no-cache -u --forceExit",
+    "test": "jest ./src/__tests__ --coverage --no-cache -u --detectOpenHandles --forceExit",
     "nightwatch": "nightwatch -c tests/nightwatch.conf.js -e"
   },
   "repository": {
@@ -33,6 +33,7 @@
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
     "babel-polyfill": "^6.26.0",
+    "bcryptjs": "^2.4.3",
     "css-loader": "^2.1.1",
     "dotenv": "^7.0.0",
     "dotenv-webpack": "^1.7.0",
