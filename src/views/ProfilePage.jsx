@@ -767,8 +767,6 @@ is not following anyone.
     const newFirstname = firstname || user.firstname;
     const newLastname = lastname || user.lastname;
 
-    console.log(newUsername, newFirstname, newLastname);
-
     if (newLastname.length < 2 || newFirstname.length < 2) {
       return notifyUser(toast('First Name and Last Name must be 2 characters or more', { className: 'error-toast' }));
     }
