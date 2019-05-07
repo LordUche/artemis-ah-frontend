@@ -309,7 +309,19 @@ export class ProfilePage extends Component {
           );
         }
 
-        return <Button onClick={() => this.startEditProfile()} btnText="Edit Profile" />;
+        return (
+          <Button
+            onClick={() => {
+              this.startEditProfile();
+              this.setState({
+                username: profile.user.username,
+                firstname: profile.user.firstname,
+                lastname: profile.user.lastname
+              });
+            }}
+            btnText="Edit Profile"
+          />
+        );
       }
 
       const { dispatch } = this.props;

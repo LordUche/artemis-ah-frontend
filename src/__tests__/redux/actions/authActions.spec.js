@@ -8,7 +8,9 @@ import {
   signUp,
   removeFromStorage,
   resetNewUserAction,
-  logoutUserAction
+  logoutUserAction,
+  confirmUserPassword,
+  changeExistingPassword
 } from '../../../redux/actions/authActions';
 
 import HelperUtils from '../../../utils/helperUtils';
@@ -62,9 +64,7 @@ describe('user sign-up', () => {
 
     const expectedResponse = {
       errors: {
-        email: [
-          'Email is invalid.'
-        ]
+        email: ['Email is invalid.']
       }
     };
 
@@ -232,5 +232,81 @@ describe('dispatching logout action ', () => {
 describe('reset new user action ', () => {
   it('the RESET_NEW_USER action is dispatched', () => {
     expect(resetNewUserAction()).toEqual({ type: 'RESET_NEW_USER' });
+  });
+});
+
+describe('CHANGE PASSWORD', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should test the confirm User Password async function for success', async (done) => {
+    const name = 'shaolinmkz';
+    const password = '123456789';
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: { name, password } });
+    });
+
+    await confirmUserPassword(name, password);
+    done();
+  });
+
+  it('should test the confirm User Password async function for error', async (done) => {
+    const name = 'invalid';
+    const password = 'invalid';
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: { name, password } });
+    });
+
+    await confirmUserPassword(name, password);
+    done();
+  });
+
+  it('should test the change Existing Password async function for success', async (done) => {
+    const newPassword = 'shaolinmkz';
+    const confirmPassword = '123456789';
+    const email = 'email@email.com';
+    const hash = 'hßœ™¡∞∞∞¥§¨•ª3eh.`ßß∂≈∂´∫∫¥∫∆∑∂∂œ∂ß¬¬øπø“π¬…ß∑œ∑';
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: {
+          newPassword, confirmPassword, email, hash
+        }
+      });
+    });
+
+    await changeExistingPassword(newPassword, confirmPassword, email, hash);
+    done();
+  });
+
+  it('should test the change Existing Password async function for error', async (done) => {
+    const newPassword = 'invalid';
+    const confirmPassword = 'invalid';
+    const email = 'invalid';
+    const hash = 'invalid';
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 400,
+        response: {
+          newPassword, confirmPassword, email, hash
+        }
+      });
+    });
+
+    await changeExistingPassword(newPassword, confirmPassword, email, hash);
+    done();
   });
 });

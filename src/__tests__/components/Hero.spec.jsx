@@ -148,6 +148,7 @@ describe('Hero hamburger menu', () => {
       hideLoginModal={mockHideLoginModal}
       revealLoginModal={mockRevealLoginModal}
       smoothScrollListener={mockSmoothScrollListener}
+      history={{ push: jest.fn() }}
     />
   );
 
@@ -162,5 +163,35 @@ describe('Hero hamburger menu', () => {
   it('should show the menu when the hamburger icon is clicked', () => {
     hero.find('i#hamburger').simulate('click');
     expect(hero.state('showResponsiveNav')).toEqual(true);
+  });
+
+  it('should click the food filter drop down', () => {
+    expect(hero.find('#food-filter').exists()).toBe(true);
+    hero.find('#food-filter').simulate('click');
+  });
+
+  it('should click the technology filter drop down', () => {
+    expect(hero.find('#technology-filter').exists()).toBe(true);
+    hero.find('#technology-filter').simulate('click');
+  });
+
+  it('should click the health filter drop down', () => {
+    expect(hero.find('#health-filter').exists()).toBe(true);
+    hero.find('#health-filter').simulate('click');
+  });
+
+  it('should click the finance filter drop down', () => {
+    expect(hero.find('#finance-filter').exists()).toBe(true);
+    hero.find('#finance-filter').simulate('click');
+  });
+
+  it('should click the art filter drop down', () => {
+    expect(hero.find('#art-filter').exists()).toBe(true);
+    hero.find('#art-filter').simulate('click');
+  });
+
+  it('should click the create article button on the hero', () => {
+    expect(hero.find('#create_article--button').exists()).toBe(true);
+    hero.find('#create_article--button').simulate('click');
   });
 });

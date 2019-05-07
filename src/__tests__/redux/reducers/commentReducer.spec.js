@@ -189,4 +189,15 @@ describe('Comment Reducer', () => {
       type: 'CLEAR_EDITED'
     });
   });
+  it('Should test the get edit comment history type', () => {
+    commentReducer(state, {
+      type: 'GET_EDIT_COMMENT_HISTORY', payload: [{ history: 'empty history' }]
+    });
+  });
+
+  it('Should test the get edit comment history loading type', () => {
+    commentReducer(state, {
+      type: 'GET_COMMENT_EDIT_HISTORY_LOADING'
+    });
+  });
 });

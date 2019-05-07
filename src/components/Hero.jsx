@@ -155,6 +155,7 @@ class Hero extends Component {
               btnText="Start Writing"
               customClass="btn btn-write"
               btnType="button"
+              btnId="create_article--button"
               onClick={isLoggedIn ? () => history.push('./create-article') : revealLoginModal}
             />
           </div>
@@ -204,9 +205,8 @@ class Hero extends Component {
                 <NavDropdown parentLinkName="Explore">
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Food')}
+                      role="presentation"
+                      id="food-filter"
                       onClick={() => history.push('./explore/Food')}
                     >
                       <span className="link_lookalike">Food</span>
@@ -214,9 +214,8 @@ class Hero extends Component {
                   </li>
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Technology')}
+                      role="presentation"
+                      id="technology-filter"
                       onClick={() => history.push('./explore/Technology')}
                     >
                       <span className="link_lookalike">Technology</span>
@@ -224,19 +223,17 @@ class Hero extends Component {
                   </li>
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Health')}
-                      onClick={() => history.push('./explore/Technology')}
+                      role="presentation"
+                      id="health-filter"
+                      onClick={() => history.push('./explore/Health')}
                     >
                       <span className="link_lookalike">Health</span>
                     </div>
                   </li>
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Finance')}
+                      role="presentation"
+                      id="finance-filter"
                       onClick={() => history.push('./explore/Finance')}
                     >
                       <span className="link_lookalike">Finance</span>
@@ -244,9 +241,8 @@ class Hero extends Component {
                   </li>
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Arts')}
+                      role="presentation"
+                      id="art-filter"
                       onClick={() => history.push('./explore/Arts')}
                     >
                       <span className="link_lookalike">Arts</span>

@@ -61,7 +61,7 @@ const App = () => (
       transition={Bounce}
       className="toast-container"
       toastClassName="default-toast"
-      autoClose={4000}
+      autoClose={5000}
       position="top-right"
     />
   </Provider>

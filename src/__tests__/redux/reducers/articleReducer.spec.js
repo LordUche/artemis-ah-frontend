@@ -308,5 +308,34 @@ describe('Test for Article Reducer', () => {
       expect(mockState.bookmarkDeleted).toEqual(mockArticle);
       expect(mockState.bookmarkedArticles).toEqual([]);
     });
+
+    it('test type ARTICLE_CLAP', () => {
+      const mockState1 = articleReducer(initialState, { type: 'ARTICLE_CLAP', payload: { message: 'you just clapped' } });
+      expect(mockState1.clapMsg).toEqual({ message: 'you just clapped' });
+      initialState.articleGotten.clap = true;
+      const mockState2 = articleReducer(initialState, { type: 'ARTICLE_CLAP', payload: { message: 'you just unclapped' } });
+      expect(mockState2.clapMsg).toEqual({ message: 'you just unclapped' });
+    });
+
+    it('test type RATED_ARTICLE', () => {
+      const mockState1 = articleReducer(initialState, { type: 'RATED_ARTICLE', payload: { data: '4 stars' } });
+      expect(mockState1.ratingData).toEqual({ data: '4 stars' });
+    });
+
+    it('test type RATING_ARTICLE', () => {
+      const mockState1 = articleReducer(initialState, { type: 'RATING_ARTICLE' });
+      expect(mockState1.isRating).toEqual('Rating article...');
+    });
+
+    it('test type RATING_ARTICLE_ERROR', () => {
+      const mockState1 = articleReducer(initialState, { type: 'RATING_ARTICLE_ERROR', payload: 'this is an error' });
+      expect(mockState1.errors).toEqual('this is an error');
+    });
+
+    it('test HISTORY types', () => {
+      articleReducer(initialState, { type: 'HISTORY_LOADING' });
+      articleReducer(initialState, { type: 'GOT_HISTORY', payload: ['2', 3, 4] });
+      articleReducer(initialState, { type: 'ERROR_GETTING_HISTORY', payload: 'this is an error' });
+    });
   });
 });

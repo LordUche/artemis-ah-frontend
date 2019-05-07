@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import readingTime from 'reading-time';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 import { post } from 'axios';
 import 'regenerator-runtime';
 
@@ -71,6 +72,17 @@ class HelperUtils {
     } catch (error) {
       return 'Image could not be uploaded';
     }
+  }
+
+  /**
+   * @method hashPasswordOrEmail
+   * @description Hashes a users password
+   * @param {string} passwordOrEmail The users password
+   * @returns {string} The resulting hashed password
+   */
+  static hashPasswordOrEmail(passwordOrEmail) {
+    const hash = bcrypt.hashSync(passwordOrEmail, 8);
+    return hash;
   }
 }
 

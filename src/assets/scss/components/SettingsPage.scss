@@ -1,29 +1,28 @@
-@import '../base.scss';
+@import "../base.scss";
 
-.settings_section{
+.settings_section {
   padding: 0px 4%;
-  &_nav_list{
+  &_nav_list {
     display: flex;
     list-style-type: none;
     border-bottom: 1px solid #000000;
 
-
-    li{
+    li {
       margin: 20px 30px;
-      color: #AAAAAA;
+      color: #aaaaaa;
       font-size: 18px;
       cursor: pointer;
 
-      svg{
+      svg {
         display: none;
       }
 
-      &.active{
+      &.active {
         color: #000000;
         font-weight: bold;
         position: relative;
 
-        svg{
+        svg {
           display: block;
           height: 40px;
           width: 40px;
@@ -36,7 +35,7 @@
           z-index: 3;
         }
 
-        &::after{
+        &::after {
           position: absolute;
           content: "";
           width: 5px;
@@ -53,8 +52,8 @@
     }
   }
 
-  &_notification{
-    &_btn{
+  &_notification {
+    &_btn {
       background: $primary-color;
       color: #ffffff;
       display: block;
@@ -62,52 +61,76 @@
       margin: 40px 7% 100px auto;
       padding: 10px 30px;
     }
-    &_item{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 7%;
-    padding: 20px 0;
+    &_item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 7%;
+      padding: 20px 0;
 
-    &:first-of-type{
-      border-bottom: 1px solid #EBEBEB;
-    }
-
-    &_text{
-      h6{
-        font-size: 16px;
-        color: #000000;
+      &:first-of-type {
+        border-bottom: 1px solid #ebebeb;
       }
-      p {
-        font-size: 14px;
-        margin: 3px 0;
-        color: #B4B4B4;
+
+      &_text {
+        h6 {
+          font-size: 16px;
+          color: #000000;
+        }
+        p {
+          font-size: 14px;
+          margin: 3px 0;
+          color: #b4b4b4;
+        }
+      }
+
+      input {
+        width: 20px;
+        height: 20px;
       }
     }
-
-    input{
-      width: 20px;
-      height: 20px;
-    }
-  }
   }
 }
 
-.error-toast{
+.red_required_star {
+  color: red;
+}
+.change_existing_password_input {
+  width: 50%;
+}
+
+.change_existing_password_form {
+  padding-top: 3em;
+
+  h2 {
+    padding-bottom: 1em;
+  }
+}
+
+.change_existing_password_form > div {
+  display: block;
+  padding: 2em 0 1em 10em;
+}
+
+#settings_section_notification_password_btn {
+  display: inline-block;
+  margin-left: 6.7em;
+}
+
+.error-toast {
   background: $red-color;
   color: $white-color;
   font-size: 16px;
 }
 
-@media screen and (max-width: 1000px){
-  .settings_section{
+@media screen and (max-width: 1000px) {
+  .settings_section {
     &_nav_list li {
-    font-size: 14px;
-    margin: 20px 10px;
+      font-size: 14px;
+      margin: 20px 10px;
 
-      &.active{
-         
-        svg{
+      &.active {
+        svg {
           top: 14px;
         }
       }
@@ -115,24 +138,51 @@
   }
 }
 
-@media screen and (max-width: 430px){
-  .settings_section{
+@media (max-width: 768px) {
+  .change_existing_password_input {
+    width: 80%;
+  }
+}
+@media (max-width: 500px) {
+  .change_existing_password_input {
+    width: 70%;
+  }
+
+  .change_existing_password_form > div {
+    padding: 2em 0 1em 2em;
+  }
+  
+  #settings_section_notification_password_btn {
+    margin-left: 1.5em;
+  }
+}
+
+@media (max-width: 400px) {
+  .change_existing_password_form > div {
+    padding: 0.5em 0 0.5em 2em;
+  }
+  .change_existing_password_input {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .settings_section {
     &_nav_list li {
-    font-size: 10px;
-    margin: 20px 8px;
-      &.active{
-          
-        svg{
+      font-size: 10px;
+      margin: 20px 8px;
+      &.active {
+        svg {
           top: 9px;
-          right:0.5px;
+          right: 0.5px;
         }
       }
     }
-    &_notification_item_text{
-      h6{
+    &_notification_item_text {
+      h6 {
         font-size: 14px;
       }
-      p{
+      p {
         font-size: 10px;
       }
     }

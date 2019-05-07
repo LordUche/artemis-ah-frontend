@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import { post } from 'axios';
+import { post, patch } from 'axios';
 import BASE_URL from './index';
 import {
   LOGIN_ERROR,
@@ -35,7 +35,6 @@ export async function signUp(values) {
     };
   }
 }
-
 
 /**
  * @description function for storing platform data in localStorage
@@ -126,6 +125,43 @@ export const loginUserAction = async ({ name, password, rememberMe }) => {
       type: LOGIN_ERROR,
       payload: err.response.data
     };
+  }
+};
+
+/**
+ * @description function to verify user before changing password
+ * @param {string} name
+ * @param {string} password
+ * @returns {object} action
+ */
+export const confirmUserPassword = async (name, password) => {
+  try {
+    const response = await post(`${BASE_URL}/users/login`, { name, password });
+    return response.status;
+  } catch (err) {
+    const { data } = err.response;
+    return data;
+  }
+};
+
+/**
+ * @description function to verify user before changing password
+ * @param {string} newPassword
+ * @param {string} confirmPassword
+ * @param {string} email
+ * @param {string} hash
+ * @returns {object} action
+ */
+export const changeExistingPassword = async (newPassword, confirmPassword, email, hash) => {
+  try {
+    const response = await patch(`${BASE_URL}/users/reset-password?email=${email}&hash=${hash}`, {
+      newPassword,
+      confirmPassword
+    });
+    return ['Password Updated Successfully', response.status];
+  } catch (err) {
+    const { data } = err.response;
+    return data;
   }
 };
 
