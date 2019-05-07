@@ -267,8 +267,8 @@ export class ArticleDetailPage extends Component {
             <article
               className={`article_detail_body ${!isLoggedIn && 'article_detail_body_no_auth'}`}
             >
-              {body.split('\n').map(section => (
-                <Fragment>
+              {body.split('\n').map((section, index) => (
+                <Fragment key={index.toString()}>
                   <Highlight
                     popoverItems={itemClass => (
                       <span

@@ -168,7 +168,6 @@ class TopNav extends Component {
                 onClick={this.handleNotificationClick}
               >
                 <div id="notify-div-wrapper">
-                  <i className="fas fa-caret-up" id="notification-triangle" />
                   <div className="notifications-div" id="notifications-div">
                     {notificationsData.map((notify, index) => {
                       const key = index;
@@ -193,7 +192,6 @@ class TopNav extends Component {
                 role="presentation"
               >
                 <div id="notify-div-wrapper">
-                  <i className="fas fa-caret-up" id="notification-triangle" />
                   <div className="notifications-div" id="notifications-div">
                     <span className="notifications-div-item" style={{ cursor: 'auto' }}>
                       <p className="notifications-div-item-info">
