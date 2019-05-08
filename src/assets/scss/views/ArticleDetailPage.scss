@@ -204,6 +204,7 @@
         &.filled,
         &:hover ~ & {
           font-weight: 600;
+          fill: #f8b858;
         }
 
         &s {
@@ -346,10 +347,6 @@
       }
     }
   }
-}
-
-i.far.fa-star.article_detail_rating_star {
-  font-weight: 100;
 }
 
 @keyframes skeleton-card {
