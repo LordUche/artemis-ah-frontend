@@ -9,6 +9,7 @@ import NavDropdown from './NavDropdown';
 import AHLoginModal from '../views/LoginModal';
 import Hamburger from './Hamburger';
 import Button from './Button';
+
 /**
  * @description Hero - Hero component for Landing Page view
  * @param {object} e event object
@@ -93,29 +94,47 @@ class Hero extends Component {
               </Link>
             </Router>
             <Hamburger open={showResponsiveNav} toggleMenu={this.toggleResponsiveNav}>
-              <li>
-                <span
-                  id="login-link"
-                  className="link_lookalike"
-                  role="presentation"
-                  onClick={revealLoginModal}
-                >
+              {!isLoggedIn && (
+              <Fragment>
+                <li>
+                  <span
+                    id="login-link"
+                    className="link_lookalike"
+                    role="presentation"
+                    onClick={revealLoginModal}
+                  >
                   Login
-                </span>
-              </li>
-              <li>
-                <span
-                  id="signup-link"
-                  className="link_lookalike"
-                  role="presentation"
-                  onClick={toggleSignUpModal}
-                >
+                  </span>
+                </li>
+                <li>
+                  <span
+                    id="signup-link"
+                    className="link_lookalike"
+                    role="presentation"
+                    onClick={toggleSignUpModal}
+                  >
                   Register
-                </span>
-              </li>
+                  </span>
+                </li>
+              </Fragment>
+              )}
+              {isLoggedIn && (
+              <Fragment>
+                <li>
+                  <span
+                    id="profile-link"
+                    className="link_lookalike"
+                    role="presentation"
+                    onClick={revealLoginModal}
+                  >
+                  Profile
+                  </span>
+                </li>
+              </Fragment>
+              )}
               <li>
                 <Router>
-                  <Link to="./register">Explore</Link>
+                  <Link to="/explore">Explore</Link>
                 </Router>
               </li>
             </Hamburger>
@@ -136,6 +155,7 @@ class Hero extends Component {
               btnText="Start Writing"
               customClass="btn btn-write"
               btnType="button"
+              btnId="create_article--button"
               onClick={isLoggedIn ? () => history.push('./create-article') : revealLoginModal}
             />
           </div>
@@ -168,12 +188,25 @@ class Hero extends Component {
                     </li>
                   </Fragment>
                 )}
+                {isLoggedIn && (
+                  <Fragment>
+                    <li>
+                      <span
+                        id="profile-link"
+                        className="link_lookalike"
+                        role="presentation"
+                        onClick={revealLoginModal}
+                      >
+                        Profile
+                      </span>
+                    </li>
+                  </Fragment>
+                )}
                 <NavDropdown parentLinkName="Explore">
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Food')}
+                      role="presentation"
+                      id="food-filter"
                       onClick={() => history.push('./explore/Food')}
                     >
                       <span className="link_lookalike">Food</span>
@@ -181,9 +214,8 @@ class Hero extends Component {
                   </li>
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Technology')}
+                      role="presentation"
+                      id="technology-filter"
                       onClick={() => history.push('./explore/Technology')}
                     >
                       <span className="link_lookalike">Technology</span>
@@ -191,19 +223,17 @@ class Hero extends Component {
                   </li>
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Health')}
-                      onClick={() => history.push('./explore/Technology')}
+                      role="presentation"
+                      id="health-filter"
+                      onClick={() => history.push('./explore/Health')}
                     >
                       <span className="link_lookalike">Health</span>
                     </div>
                   </li>
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Finance')}
+                      role="presentation"
+                      id="finance-filter"
                       onClick={() => history.push('./explore/Finance')}
                     >
                       <span className="link_lookalike">Finance</span>
@@ -211,9 +241,8 @@ class Hero extends Component {
                   </li>
                   <li>
                     <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyPress={() => history.push('./explore/Arts')}
+                      role="presentation"
+                      id="art-filter"
                       onClick={() => history.push('./explore/Arts')}
                     >
                       <span className="link_lookalike">Arts</span>

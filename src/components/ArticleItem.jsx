@@ -42,7 +42,7 @@ export const ArticleItem = ({
     <div className="article-item">
       <div className="article-item__image-wrapper">
         <img src={coverUrl} alt="" />
-        <span className="tag">{tag}</span>
+        <span className="tag" onClick={() => document.location.assign(`/explore/${tag}`)} role="presentation">{tag}</span>
         <div className="stats-wrapper">
           <span>
             <i className="fa fa-star" />

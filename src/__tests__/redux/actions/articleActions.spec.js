@@ -14,7 +14,15 @@ import {
   bookmarkLoadingAction,
   deleteBookmarkAction,
   getBookmarksAction,
+  bookmarkArticleAction,
+  removeBookmarkAction,
+  rateArticleAction,
+  ratingArticleAction,
+  editArticle,
   filterArticles,
+  historyLoadingAction,
+  getHistoryAction,
+  articleClapAction
 } from '../../../redux/actions/articleActions';
 
 import {
@@ -30,9 +38,11 @@ import {
   GOT_BOOKMARKS,
   GET_ARTICLES,
   GET_ARTICLES_ERROR,
+  HISTORY_LOADING,
+  GOT_HISTORY,
+  ERROR_GETTING_HISTORY
 } from '../../../redux/actionTypes';
 import getMockArticles from '../../../__mocks__/articles';
-
 
 describe('Test get all articles action', () => {
   beforeEach(() => {
@@ -58,7 +68,8 @@ describe('Test get all articles action', () => {
           User: {
             username: 'deedenedash',
             bio: 'n/a',
-            image: 'https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/iReporter/avatar.png'
+            image:
+              'https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/iReporter/avatar.png'
           },
           Tag: {
             name: 'Food'
@@ -560,5 +571,197 @@ describe('Test bookmark actions', () => {
   it('should dispatch the BOOKMARK_LOADING type action when bookmark operations are going on', () => {
     const { type } = bookmarkLoadingAction();
     expect(type).toEqual(BOOKMARK_LOADING);
+  });
+});
+
+describe('Test history actions', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should return history when the user has some', async () => {
+    const mockResponse = {
+      history: getMockArticles(8)
+    };
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const { type, payload } = await getHistoryAction(mockToken);
+    expect(type).toEqual(GOT_HISTORY);
+    expect(payload).toEqual(mockResponse.history);
+  });
+
+  it('should return empty array when the user has no history', async () => {
+    const mockResponse = {
+      message: 'You have no history'
+    };
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const { type, payload } = await getHistoryAction(mockToken);
+    expect(type).toEqual(GOT_HISTORY);
+    expect(payload).toEqual([]);
+  });
+
+  it('should return an error when there was an error getting history', async () => {
+    const mockResponse = {
+      message: 'Server Error'
+    };
+    const mockToken = 'abcd';
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 500, response: mockResponse });
+    });
+    const { type, payload } = await getHistoryAction(mockToken);
+    expect(type).toEqual(ERROR_GETTING_HISTORY);
+    expect(payload.message).toEqual(mockResponse.message);
+  });
+  it('should dispatch the HISTORY_LOADING type action when bookmark operations are going on', () => {
+    const { type } = historyLoadingAction();
+    expect(type).toEqual(HISTORY_LOADING);
+  });
+});
+
+describe('Bookmark feature', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+  it('Should bookmark an article', async () => {
+    const expectedResponse = {
+      message: 'Bookmarked successfully'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const result = await bookmarkArticleAction();
+    expect(result.type).toEqual('ARTICLE_BOOKMARK_ADDED');
+  });
+
+  it('Should fail when trying to bookmark an article', async () => {
+    const expectedResponse = {
+      message: 'Bookmark failed'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: expectedResponse });
+    });
+    const result = await bookmarkArticleAction();
+    expect(result.type).toEqual('ARTICLE_BOOKMARK_ADD_ERROR');
+  });
+
+  it('Should remove bookmark from an article', async () => {
+    const expectedResponse = {
+      message: 'Remove bookmark successfully'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const result = await removeBookmarkAction();
+    expect(result.type).toEqual('ARTICLE_BOOKMARK_REMOVED');
+  });
+
+  it('Should fail when trying to remove bookmark from an article', async () => {
+    const expectedResponse = {
+      message: 'Remove bookmark failed'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: expectedResponse });
+    });
+    const result = await removeBookmarkAction();
+    expect(result.type).toEqual('ARTICLE_BOOKMARK_REMOVE_ERROR');
+  });
+});
+
+describe('Rate article feature', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('Should rate an article', async () => {
+    const expectedResponse = {
+      message: 'Rating successfully'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const result = await rateArticleAction();
+    expect(result.type).toEqual('RATED_ARTICLE');
+  });
+
+  it('Should return an error while rating an article', async () => {
+    const expectedResponse = {
+      message: 'Rating unsuccessfully'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: expectedResponse });
+    });
+    const result = await rateArticleAction();
+    expect(result.type).toEqual('RATING_ARTICLE_ERROR');
+  });
+
+  it('should dispatch the RATING_ARTICLE type action when rating action is operational', () => {
+    const { type } = ratingArticleAction();
+    expect(type).toEqual('RATING_ARTICLE');
+  });
+
+  it('should dispatch the RATING_ARTICLE type action when rating action is operational', () => {
+    const { type, payload } = editArticle({ cardData: 'data' });
+    expect(type).toEqual('EDIT_ARTICLE');
+    expect(payload).toEqual({ cardData: 'data' });
+  });
+});
+
+describe('Article clap', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it('should clap on an article', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: mockResponse });
+    });
+    const result = await articleClapAction('slug', 'token');
+    expect(result.type).toEqual('ARTICLE_CLAP');
+  });
+
+  it('should throw an error while trying to clap on an article', async () => {
+    const mockResponse = {
+      data: 'mock data'
+    };
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: mockResponse });
+    });
+    const result = await articleClapAction('slug', 'token');
+    expect(result.type).toEqual('ARTICLE_CLAP_ERROR');
   });
 });

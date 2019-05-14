@@ -18,6 +18,9 @@ import {
   resetProfile
 } from '../redux/actions/profileActions';
 import {
+  resetNewUserAction
+} from '../redux/actions/authActions';
+import {
   closeArticleDeleteModalAction,
   deleteArticleAction
 } from '../redux/actions/articleActions';
@@ -59,7 +62,10 @@ export class ProfilePage extends Component {
       editMode: false,
       activeTab: TAB_ARTICLES,
       selectedImage: null,
-      currentPage: 1
+      currentPage: 1,
+      username: null,
+      firstname: null,
+      lastname: null,
     };
   }
 
@@ -148,7 +154,13 @@ export class ProfilePage extends Component {
 
     const { user, editState } = profile;
 
-    const { editMode } = this.state;
+    const {
+      editMode, username, firstname, lastname
+    } = this.state;
+
+    const usernameValue = username === null ? user.username : username;
+    const firstnameValue = firstname === null ? user.firstname : firstname;
+    const lastnameValue = lastname === null ? user.lastname : lastname;
 
     if (user.contentState === CONTENT_STATE_FETCHING) {
       return <UserDetailsSkeletonScreen />;
@@ -194,8 +206,20 @@ export class ProfilePage extends Component {
             {this.getProfilePictureEditOverlay()}
           </div>
           <div className="profile-section__blue-bg__data">
-            <div className="profile-section__blue-bg__data__fullname">{user.fullname}</div>
-            <div className="profile-section__blue-bg__data__username">{`@${user.username}`}</div>
+            {!editMode && <div className="profile-section__blue-bg__data__fullname">{user.fullname}</div>}
+            {editMode && (
+            <div className="profile-section__blue-bg__data__fullname">
+              <input className="profile_name_input" value={firstnameValue} name="firstname" onChange={this.handleNameChange} />
+              <input className="profile_name_input" value={lastnameValue} name="lastname" onChange={this.handleNameChange} />
+            </div>
+            )}
+            {!editMode && <div className="profile-section__blue-bg__data__username">{`@${user.username}`}</div>}
+            {editMode && (
+            <div className="profile-section__blue-bg__data__username">
+              <span>@</span>
+              <input id="profile_username_input" value={usernameValue} name="username" onChange={this.handleNameChange} />
+            </div>
+            )}
             <div
               {...aboutProps}
               ref={(ref) => {
@@ -285,7 +309,19 @@ export class ProfilePage extends Component {
           );
         }
 
-        return <Button onClick={() => this.startEditProfile()} btnText="Edit Profile" />;
+        return (
+          <Button
+            onClick={() => {
+              this.startEditProfile();
+              this.setState({
+                username: profile.user.username,
+                firstname: profile.user.firstname,
+                lastname: profile.user.lastname
+              });
+            }}
+            btnText="Edit Profile"
+          />
+        );
       }
 
       const { dispatch } = this.props;
@@ -617,6 +653,23 @@ is not following anyone.
   }
 
   /**
+   * @method handleNameChange
+   * @param {object} e event object
+   * @returns {undefined}
+   */
+  handleNameChange = (e) => {
+    const { value, name } = e.target;
+    const invalidname = value.match(/\W/g);
+    if (invalidname) {
+      notifyUser(toast('Character not allowed', { className: 'error-toast' }));
+    } else {
+      this.setState({
+        [name]: e.target.value
+      });
+    }
+  }
+
+  /**
    * @method handlePagination
    * @description Handles pagination
    * @param {object} event React synthetic object
@@ -706,9 +759,27 @@ is not following anyone.
   saveUpdate() {
     const { dispatch, user } = this.props;
 
-    const { selectedImage } = this.state;
+    const {
+      selectedImage, username, firstname, lastname
+    } = this.state;
 
-    updateUserDetails(user.authToken, this.aboutUserElement.innerText, selectedImage, dispatch);
+    const newUsername = username || user.username;
+    const newFirstname = firstname || user.firstname;
+    const newLastname = lastname || user.lastname;
+
+    if (newLastname.length < 2 || newFirstname.length < 2) {
+      return notifyUser(toast('First Name and Last Name must be 2 characters or more', { className: 'error-toast' }));
+    }
+
+    updateUserDetails(
+      user.authToken,
+      this.aboutUserElement.innerText,
+      newUsername,
+      newFirstname,
+      newLastname,
+      selectedImage,
+      dispatch
+    );
   }
 
   /**
@@ -732,7 +803,7 @@ is not following anyone.
     }
 
     const {
-      profile, isDeleteModalOpen, closeDeleteModal, deleteArticle
+      profile, isDeleteModalOpen, closeDeleteModal, deleteArticle, dispatch, newUser, resetNewUser
     } = this.props;
     const { currentPage } = this.state;
     const { user, tabContent } = profile;
@@ -742,6 +813,17 @@ is not following anyone.
       localStorage.removeItem('reload');
       notifyUser(toast(localStorage.getItem('articleEditMessage')));
       localStorage.removeItem('articleEditMessage');
+    }
+    const { errors } = profile;
+    if (errors.length > 0) {
+      notifyUser(toast(`${errors[0].message}`, { className: 'error-toast' }));
+      dispatch(resetEditState());
+    }
+
+    if (newUser && user.contentState === CONTENT_STATE_FETCHED) {
+      notifyUser(toast(`Hello ${user.firstname || 'there'}!, Welcome to Author's Haven. We're glad to have you on board.`));
+      setTimeout(() => notifyUser(toast('Personalize your account by clicking the Edit Profile Button')), 4000);
+      resetNewUser();
     }
 
     return user.contentState === CONTENT_STATE_FETCHING_FAILED ? (
@@ -802,7 +884,9 @@ ProfilePage.propTypes = {
   history: objectProp.isRequired,
   isDeleteModalOpen: bool.isRequired,
   closeDeleteModal: funcProp.isRequired,
-  deleteArticle: funcProp.isRequired
+  deleteArticle: funcProp.isRequired,
+  newUser: bool.isRequired,
+  resetNewUser: funcProp.isRequired
 };
 
 /**
@@ -815,7 +899,8 @@ const matchDispatchToProps = (dispatch) => {
   const actions = bindActionCreators(
     {
       closeDeleteModal: closeArticleDeleteModalAction,
-      deleteArticle: deleteArticleAction
+      deleteArticle: deleteArticleAction,
+      resetNewUser: resetNewUserAction
     },
     dispatch
   );
@@ -831,14 +916,20 @@ const state2props = (state) => {
   const {
     auth, user, profile, article
   } = state;
+  const {
+    newUser, username, firstname, lastname
+  } = user;
   return {
     user: {
       isLoggedIn: auth.isLoggedIn,
       authToken: auth.token,
-      username: user.username
+      username,
+      firstname,
+      lastname
     },
     profile,
-    isDeleteModalOpen: article.confirmationModal
+    isDeleteModalOpen: article.confirmationModal,
+    newUser
   };
 };
 

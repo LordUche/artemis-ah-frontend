@@ -1,4 +1,6 @@
-import { LOGIN_USER, SIGN_UP, PROFILE_DETAILS_UPDATED } from '../actionTypes';
+import {
+  LOGIN_USER, SIGN_UP, PROFILE_DETAILS_UPDATED, RESET_NEW_USER
+} from '../actionTypes';
 
 /**
  * @description function to return initial state
@@ -10,7 +12,8 @@ export const initialState = (localStorage, sessionStorage) => ({
   username: localStorage.authorsHavenUsername || sessionStorage.authorsHavenUsername || '',
   email: localStorage.authorsHavenEmail || sessionStorage.authorsHavenEmail || '',
   bio: localStorage.authorsHavenBio || sessionStorage.authorsHavenBio || '',
-  image: localStorage.authorsHavenImage || sessionStorage.authorsHavenImage || ''
+  image: localStorage.authorsHavenImage || sessionStorage.authorsHavenImage || '',
+  newUser: localStorage.authorsHavenNewUser || sessionStorage.authorsHavenNewUser || false
 });
 
 /**
@@ -33,7 +36,15 @@ const userReducer = (state = initialState(localStorage, sessionStorage),
         username: payload.username,
         email: payload.email,
         bio: payload.bio,
-        image: payload.image
+        image: payload.image,
+        newUser: payload.newUser || false
+      };
+    case RESET_NEW_USER:
+      delete localStorage.authorsHavenNewUser;
+      delete sessionStorage.authorsHavenNewUser;
+      return {
+        ...state,
+        newUser: false
       };
     case PROFILE_DETAILS_UPDATED:
       return {

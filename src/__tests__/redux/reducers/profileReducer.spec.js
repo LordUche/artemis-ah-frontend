@@ -251,6 +251,11 @@ describe('Test profile reducer', () => {
     it('It should set state to updated', (done) => {
       state = profileReducer(state, {
         type: PROFILE_DETAILS_UPDATED,
+        data: {
+          username: 'abc',
+          bio: 'zxcv',
+          image: 'djhfgfgh.png'
+        }
       });
 
       expect(state.editState).toBe(CONTENT_STATE_UPDATED);

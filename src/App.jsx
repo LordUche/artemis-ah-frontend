@@ -19,7 +19,7 @@ import Landing from './views/LandingPage';
 import ProfileView from './views/ProfilePage';
 import BookmarksPage from './views/BookmarkPage';
 import ReadingStatsPage from './views/ReadingStatsPage';
-import HistoryPage from './views/HistoryPage';
+import AHHistoryPage from './views/HistoryPage';
 import SettingsPage from './views/SettingsPage';
 import PageNotFound from './views/PageNotFound';
 import CreateArticle from './views/CreateArticle';
@@ -46,7 +46,7 @@ const App = () => (
         <Route exact path="/edit-article" component={EditArticle} />
         <Route exact path="/bookmarks" component={BookmarksPage} />
         <Route exact path="/settings" component={SettingsPage} />
-        <Route exact path="/history" component={HistoryPage} />
+        <Route exact path="/history" component={AHHistoryPage} />
         <Route exact path="/reading-stats" component={ReadingStatsPage} />
         <Route exact path="/explore" component={ExplorePage} />
         <Route exact path="/explore/:tag" component={ExplorePage} />
@@ -61,7 +61,7 @@ const App = () => (
       transition={Bounce}
       className="toast-container"
       toastClassName="default-toast"
-      autoClose={4000}
+      autoClose={5000}
       position="top-right"
     />
   </Provider>

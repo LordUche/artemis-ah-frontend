@@ -270,13 +270,14 @@
     & > .category {
       background: #ffffff;
       color: #000000;
-      padding: 1rem 2rem;
-      font-size: 1.6rem;
-      max-width: 12rem;
       position: absolute;
-      top: 1.5rem;
-      left: -2rem;
-      min-height: 4.2rem;
+      top: 10px;
+      left: -10px;
+      padding: 5px 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+      font-size: 14px;
+      min-height: 2.7rem;
+      cursor: pointer;
     }
 
     & > .title {

@@ -55,4 +55,29 @@ describe('user reducer', () => {
     });
     expect(state.email).toEqual('qwerty@yahoo.com');
   });
+
+  it('Updates newUser field when RESET_NEW_USER is dispatched', () => {
+    const mockState = {
+      newUser: true
+    };
+    const state = userReducer(mockState, {
+      type: 'RESET_NEW_USER',
+    });
+    expect(state.newUser).toEqual(false);
+  });
+  it('Updates user data when PROFILE_DETAILS_UPDATED is dispatched', () => {
+    const mockState = {};
+    const mockData = {
+      image: 'abc.jpg',
+      username: 'hfhfh',
+      bio: 'uwuehyrh'
+    };
+    const state = userReducer(mockState, {
+      type: 'PROFILE_DETAILS_UPDATED',
+      data: mockData
+    });
+    expect(state.image).toEqual(mockData.image);
+    expect(state.username).toEqual(mockData.username);
+    expect(state.bio).toEqual(mockData.bio);
+  });
 });

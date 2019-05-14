@@ -204,6 +204,21 @@
         &.filled,
         &:hover ~ & {
           font-weight: 600;
+          fill: #f8b858;
+        }
+
+        &s {
+          margin: 10px 0;
+          direction: rtl;
+        }
+      }
+      &_star.rated {
+        cursor: default;
+
+        &:hover,
+        &.filled,
+        &:hover ~ & {
+          font-weight: unset;
         }
 
         &s {

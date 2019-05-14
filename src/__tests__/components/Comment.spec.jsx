@@ -323,14 +323,18 @@ describe('Edit comment', () => {
     const user = {
       username: ''
     };
-    expect(mapStateToProps({ comments, user })).toEqual({
+    const auth = {
+      token: ''
+    };
+    expect(mapStateToProps({ comments, user, auth })).toEqual({
       articleComments: '',
       errors: '',
       posted: '',
       loading: '',
       editLoading: '',
       edited: '',
-      username: ''
+      username: '',
+      token: ''
     });
   });
   it('should mock mapDispatchToProps', () => {
@@ -361,5 +365,90 @@ describe('Edit comment', () => {
     );
     CommentComponentII.setProps({ edited: true });
     CommentComponentII.instance().editComment();
+  });
+
+  it('should test the get edit history feature', () => {
+    const CommentComponent = mount(
+      <BrowserRouter>
+        <Comment
+          slug={slug}
+          getArticleComments={mockFunction}
+          postArticleComment={mockFunction}
+          loadingPost={false}
+          loading={false}
+          clearPostedValue={mockFunction}
+          isLoggedIn
+          username="deedee"
+          articleComments={articleComments}
+          errors={error}
+          posted={false}
+          editCommentAction={mockFunction}
+        />
+      </BrowserRouter>
+    );
+
+    const showHistoryButton = CommentComponent.find('i.view_comment_history_toggle');
+    expect(showHistoryButton.exists()).toEqual(true);
+    showHistoryButton.simulate('click');
+  });
+
+  it('should test the get edit history modal', () => {
+    const CommentComponent = mount(
+      <BrowserRouter>
+        <Comment
+          slug={slug}
+          getArticleComments={mockFunction}
+          postArticleComment={mockFunction}
+          loadingPost={false}
+          loading={false}
+          clearPostedValue={mockFunction}
+          isLoggedIn
+          username="deedee"
+          articleComments={articleComments}
+          errors={error}
+          posted={false}
+          editCommentAction={mockFunction}
+          commentEditHistoryLoading
+        />
+      </BrowserRouter>
+    );
+
+    const showHistoryButton = CommentComponent.find('i.view_comment_history_toggle');
+    expect(showHistoryButton.exists()).toEqual(true);
+    showHistoryButton.simulate('click');
+  });
+
+  it('should test the get edit history modal', () => {
+    const CommentComponent = mount(
+      <BrowserRouter>
+        <Comment
+          slug={slug}
+          getArticleComments={mockFunction}
+          postArticleComment={mockFunction}
+          loadingPost={false}
+          loading={false}
+          clearPostedValue={mockFunction}
+          isLoggedIn
+          username="deedee"
+          articleComments={articleComments}
+          errors={error}
+          posted={false}
+          editCommentAction={mockFunction}
+          commentHistory={[]}
+          commentEditHistoryLoading={false}
+        />
+      </BrowserRouter>
+    );
+
+    const showHistoryButton = CommentComponent.find('i.view_comment_history_toggle');
+    expect(showHistoryButton.exists()).toEqual(true);
+    showHistoryButton.simulate('click');
+
+    const closeHistoryModal = CommentComponent.find('.edit_history_modal');
+    expect(closeHistoryModal.exists()).toEqual(true);
+    closeHistoryModal.simulate('click');
+
+    const comment = new Comment();
+    comment.closeEditHistoryModal();
   });
 });

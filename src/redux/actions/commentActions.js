@@ -14,7 +14,9 @@ import {
   EDIT_COMMENT,
   EDIT_COMMENT_ERROR,
   EDIT_LOADING,
-  CLEAR_EDITED
+  CLEAR_EDITED,
+  GET_EDIT_COMMENT_HISTORY,
+  GET_COMMENT_EDIT_HISTORY_LOADING
 } from '../actionTypes';
 
 import BASE_URL from './index';
@@ -42,24 +44,50 @@ export const getComments = async (slug, token) => {
 };
 
 /**
+ * @function getCommentEditHistory
+ * @description Retrieves comments for a particular article
+ * @param {string} slug
+ * @param {number} commentId
+ * @param {string} token
+ * @returns {object} comment hstory
+ */
+export const getCommentEditHistory = async (slug, commentId, token) => {
+  const request = await get(
+    `${BASE_URL}/articles/${slug}/comment/${commentId}/history`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+  const { history } = request.data;
+  return {
+    type: GET_EDIT_COMMENT_HISTORY,
+    payload: history
+  };
+};
+
+/**
  * @function postComment
  * @description Posts a comment to a particular article
  * @param {string} slug
  * @param {string} comment
+ * @param {string} highlighted
+ * @param {number} index
+ *
  * @returns {object} comments
  */
-export const postComment = async (slug, { comment }) => {
+export const postComment = async (slug, { comment }, highlighted = 'N/A', index = 0) => {
+  const commentUrl = highlighted === 'N/A' ? 'comment' : 'highlight';
+  const commentBody = { comment, index, highlighted };
+
   try {
-    const request = await post(
-      `${BASE_URL}/articles/${slug}/comment`,
-      { comment },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authorsHavenToken')
-            || sessionStorage.getItem('authorsHavenToken')}`
-        }
+    const request = await post(`${BASE_URL}/articles/${slug}/${commentUrl}`, commentBody, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('authorsHavenToken')
+          || sessionStorage.getItem('authorsHavenToken')}`
       }
-    );
+    });
     const postedComment = request.data.userComment;
 
     return {
@@ -107,6 +135,11 @@ export const editComment = async (slug, comment, commentId) => {
     };
   }
 };
+
+/**
+ * @returns {boolean} loading
+ */
+export const editHistoryCommentLoading = () => ({ type: GET_COMMENT_EDIT_HISTORY_LOADING });
 
 /**
  * @returns {boolean} loadIng
